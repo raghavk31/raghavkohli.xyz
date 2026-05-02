@@ -51,7 +51,7 @@ const CONTENT = {
         // "images/iclei/malaysia.jpg",
         // "images/iclei/workshop.jpg",
       ],
-      coverImage: "", "images/ICLEI/Screenshot 2026-04-22 134308.png",
+      coverImage: "", // "images/iclei/cover.jpg"
     },
 
     {
