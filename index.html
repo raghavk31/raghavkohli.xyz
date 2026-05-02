@@ -63,29 +63,60 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; ju
 /* PROJECT CARD */
 .project-card { display: grid; grid-template-columns: 110px 240px 1fr; gap: 0 64px; padding: 40px 52px; border-bottom: 1px solid var(--rule); align-items: start; transition: background 0.25s; cursor: pointer; }
 .project-card:hover { background: #FAFAFA; }
-.project-card:last-child { border-bottom: none; }
 .project-card:hover .p-title { color: var(--red); }
+.project-card.active { background: #FAFAFA; }
+.project-card.active .p-title { color: var(--red); }
 .p-year { font-family: var(--fm); font-size: 9px; letter-spacing: 1px; color: var(--dim); padding-top: 6px; }
 .p-title { font-family: var(--fd); font-size: 30px; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px; transition: color 0.25s; }
 .p-role { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
 .p-desc { font-size: 13px; font-weight: 300; line-height: 1.85; color: var(--mid); padding-top: 5px; }
 
-/* PROJECT DETAIL PANEL */
-.project-detail { display: none; grid-column: 1 / -1; padding: 0 52px 40px 52px; }
-.project-detail.open { display: block; }
-.detail-inner { border-top: 1px solid var(--rule); padding-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
-.detail-highlights { }
-.detail-highlights h4 { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 16px; }
-.detail-highlights ul { list-style: none; }
-.detail-highlights ul li { font-size: 13px; font-weight: 300; color: var(--mid); line-height: 1.7; padding: 6px 0; border-bottom: 1px solid var(--rule); }
-.detail-highlights ul li:last-child { border-bottom: none; }
-.detail-highlights ul li::before { content: '/ '; color: var(--red); font-weight: 600; }
-.detail-images { }
-.detail-images h4 { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 16px; }
-.image-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.image-slot { background: #F5F5F5; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.image-slot img { width: 100%; height: 100%; object-fit: cover; }
-.image-placeholder { font-family: var(--fm); font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); text-align: center; padding: 16px; }
+/* EXPANDED PANEL */
+.project-panel { display: none; border-bottom: 1px solid var(--rule); }
+.project-panel.open { display: block; }
+
+.panel-inner { display: grid; grid-template-columns: 320px 1fr; min-height: 400px; }
+
+.panel-left { padding: 40px 40px 40px 52px; border-right: 1px solid var(--rule); position: sticky; top: 0; align-self: start; }
+.panel-left h3 { font-family: var(--fd); font-size: 28px; font-weight: 400; color: var(--black); margin-bottom: 6px; line-height: 1; }
+.panel-left .p-role-detail { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
+.panel-desc { font-size: 13px; font-weight: 300; line-height: 1.85; color: var(--mid); margin-bottom: 24px; }
+.panel-highlights { list-style: none; border-top: 1px solid var(--rule); padding-top: 16px; }
+.panel-highlights li { font-size: 12px; font-weight: 300; color: var(--mid); line-height: 1.6; padding: 7px 0; border-bottom: 1px solid var(--rule); padding-left: 12px; position: relative; }
+.panel-highlights li:last-child { border-bottom: none; }
+.panel-highlights li::before { content: '/'; position: absolute; left: 0; color: var(--red); font-weight: 600; }
+
+.panel-right { padding: 40px 52px 40px 40px; }
+.panel-right-label { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
+
+/* IMAGE GRID */
+.image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.image-thumb { aspect-ratio: 4/3; overflow: hidden; cursor: pointer; background: #F0F0F0; position: relative; }
+.image-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, opacity 0.2s; }
+.image-thumb:hover img { transform: scale(1.03); }
+.image-thumb.placeholder-thumb { display: flex; align-items: center; justify-content: center; background: #F5F5F5; cursor: default; }
+.placeholder-text { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); text-align: center; padding: 12px; }
+
+/* LIGHTBOX */
+.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.95); flex-direction: column; }
+.lightbox.open { display: flex; }
+.lightbox-top { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; }
+.lightbox-title { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
+.lightbox-close { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); cursor: pointer; background: none; border: none; transition: color 0.2s; }
+.lightbox-close:hover { color: #fff; }
+.lightbox-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 80px; position: relative; overflow: hidden; }
+.lightbox-main img { max-height: 65vh; max-width: 100%; object-fit: contain; }
+.lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.4); font-size: 32px; cursor: pointer; padding: 20px; transition: color 0.2s; font-family: var(--fb); }
+.lightbox-prev:hover, .lightbox-next:hover { color: #fff; }
+.lightbox-prev { left: 0; }
+.lightbox-next { right: 0; }
+.lightbox-strip { padding: 16px 40px 32px; display: flex; gap: 8px; overflow-x: auto; justify-content: center; }
+.lightbox-strip::-webkit-scrollbar { height: 2px; }
+.lightbox-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+.strip-thumb { width: 64px; height: 48px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.2s; flex-shrink: 0; }
+.strip-thumb.active { opacity: 1; outline: 1px solid #fff; }
+.strip-thumb:hover { opacity: 0.8; }
+.lightbox-counter { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; color: rgba(255,255,255,0.3); text-align: center; padding-bottom: 8px; }
 
 /* CONTACT */
 .screen-contact { border-bottom: none; }
@@ -202,7 +233,64 @@ document.getElementById('work-count').textContent = `${featured.length} projects
 
 const list = document.getElementById('projects-list');
 
+// ── LIGHTBOX ────────────────────────────────────────────
+const lb = document.createElement('div');
+lb.className = 'lightbox';
+lb.innerHTML = `
+  <div class="lightbox-top">
+    <span class="lightbox-title" id="lb-title"></span>
+    <button class="lightbox-close" id="lb-close">Close ✕</button>
+  </div>
+  <div class="lightbox-main">
+    <button class="lightbox-prev" id="lb-prev">‹</button>
+    <img id="lb-img" src="" alt="">
+    <button class="lightbox-next" id="lb-next">›</button>
+  </div>
+  <div class="lightbox-counter" id="lb-counter"></div>
+  <div class="lightbox-strip" id="lb-strip"></div>
+`;
+document.body.appendChild(lb);
+
+let lbImages = [], lbIndex = 0;
+
+function openLightbox(images, index, title) {
+  lbImages = images;
+  lbIndex = index;
+  document.getElementById('lb-title').textContent = title;
+  lb.classList.add('open');
+  renderLightbox();
+}
+
+function renderLightbox() {
+  document.getElementById('lb-img').src = lbImages[lbIndex];
+  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  const strip = document.getElementById('lb-strip');
+  strip.innerHTML = lbImages.map((src, i) =>
+    `<img class="strip-thumb ${i === lbIndex ? 'active' : ''}" src="${src}" data-i="${i}">`
+  ).join('');
+  strip.querySelectorAll('.strip-thumb').forEach(t =>
+    t.addEventListener('click', () => { lbIndex = +t.dataset.i; renderLightbox(); })
+  );
+  // Scroll active thumb into view
+  const active = strip.querySelector('.strip-thumb.active');
+  if (active) active.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+}
+
+document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
+document.getElementById('lb-prev').addEventListener('click', () => { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLightbox(); });
+document.getElementById('lb-next').addEventListener('click', () => { lbIndex = (lbIndex + 1) % lbImages.length; renderLightbox(); });
+lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLightbox(); }
+  if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; renderLightbox(); }
+  if (e.key === 'Escape') lb.classList.remove('open');
+});
+
+// ── PROJECTS ────────────────────────────────────────────
 featured.forEach(p => {
+  const realImages = p.images.filter(Boolean);
+
   // Card row
   const card = document.createElement('div');
   card.className = 'project-card reveal';
@@ -212,52 +300,64 @@ featured.forEach(p => {
       <div class="p-title">${p.title}</div>
       <div class="p-role">${p.role}</div>
     </div>
-    <p class="p-desc">${p.description}</p>
+    <p class="p-desc">${p.tagline}</p>
   `;
 
-  // Detail panel
-  const detail = document.createElement('div');
-  detail.className = 'project-detail';
-  detail.style.gridColumn = '1 / -1';
+  // Expanded panel
+  const panel = document.createElement('div');
+  panel.className = 'project-panel';
 
-  // Build image slots
-  const imageCount = Math.max(p.images.length, 4);
-  let imageHTML = '';
-  for (let i = 0; i < Math.min(imageCount, 4); i++) {
-    if (p.images[i]) {
-      imageHTML += `<div class="image-slot"><img src="${p.images[i]}" alt="${p.title} ${i+1}" loading="lazy"></div>`;
-    } else {
-      imageHTML += `<div class="image-slot"><div class="image-placeholder">Add image<br>${p.id}-${i+1}.jpg</div></div>`;
-    }
-  }
+  // Build image grid (up to 30)
+  const gridHTML = realImages.length > 0
+    ? realImages.slice(0, 30).map((src, i) => `
+        <div class="image-thumb" data-index="${i}">
+          <img src="${src}" alt="${p.title} ${i+1}" loading="lazy">
+        </div>`).join('')
+    : `<div class="image-thumb placeholder-thumb"><div class="placeholder-text">Images<br>coming soon</div></div>
+       <div class="image-thumb placeholder-thumb"><div class="placeholder-text">Images<br>coming soon</div></div>
+       <div class="image-thumb placeholder-thumb"><div class="placeholder-text">Images<br>coming soon</div></div>`;
 
-  detail.innerHTML = `
-    <div class="detail-inner">
-      <div class="detail-highlights">
-        <h4>Highlights</h4>
-        <ul>${p.highlights.map(h => `<li>${h}</li>`).join('')}</ul>
+  panel.innerHTML = `
+    <div class="panel-inner">
+      <div class="panel-left">
+        <h3>${p.title}</h3>
+        <div class="p-role-detail">${p.role} &nbsp;·&nbsp; ${p.year}</div>
+        <p class="panel-desc">${p.description}</p>
+        <ul class="panel-highlights">
+          ${p.highlights.map(h => `<li>${h}</li>`).join('')}
+        </ul>
       </div>
-      <div class="detail-images">
-        <h4>Images — drop files in /images/${p.id}/</h4>
-        <div class="image-grid">${imageHTML}</div>
+      <div class="panel-right">
+        <div class="panel-right-label">${realImages.length > 0 ? realImages.length + ' images — click to expand' : 'Images coming soon'}</div>
+        <div class="image-grid">${gridHTML}</div>
       </div>
     </div>
   `;
 
-  // Wrap card + detail in a container
-  const wrapper = document.createElement('div');
-  wrapper.style.borderBottom = '1px solid #E8E8E8';
+  // Image click → lightbox
+  if (realImages.length > 0) {
+    panel.querySelectorAll('.image-thumb').forEach(thumb => {
+      thumb.addEventListener('click', () => {
+        openLightbox(realImages, +thumb.dataset.index, p.title);
+      });
+    });
+  }
 
-  // Toggle detail on click
-  card.style.borderBottom = 'none';
+  // Card click → toggle panel
+  const wrapper = document.createElement('div');
   card.addEventListener('click', () => {
-    const isOpen = detail.classList.contains('open');
-    document.querySelectorAll('.project-detail').forEach(d => d.classList.remove('open'));
-    if (!isOpen) detail.classList.add('open');
+    const isOpen = panel.classList.contains('open');
+    document.querySelectorAll('.project-panel').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
+    if (!isOpen) {
+      panel.classList.add('open');
+      card.classList.add('active');
+      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
   });
 
   wrapper.appendChild(card);
-  wrapper.appendChild(detail);
+  wrapper.appendChild(panel);
   list.appendChild(wrapper);
 });
 
