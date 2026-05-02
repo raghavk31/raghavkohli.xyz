@@ -45,9 +45,9 @@ const CONTENT = {
         "US–South Asia Mayoral Platform for Clean Energy",
       ],
       // Add image paths here as you collect them
-      // Example: "images/ICLEI/Screenshot 2026-04-22 134308.png"
+      // Example: "images/iclei/malaysia-plan.jpg"
       images: [
-        "images/ICLEI/Screenshot 2026-04-22 134308.png",
+        // "images/iclei/cover.jpg",
         // "images/iclei/malaysia.jpg",
         // "images/iclei/workshop.jpg",
       ],
