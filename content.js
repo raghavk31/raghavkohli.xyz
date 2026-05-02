@@ -81,30 +81,6 @@ const CONTENT = {
     },
 
     {
-      id: "studio-commons",
-      title: "Studio Commons",
-      subtitle: "Climate Consulting Practice",
-      role: "Co-founder",
-      year: "2020 – 2024",
-      location: "Bengaluru",
-      featured: true,
-      category: "climate",
-      tagline: "Climate resilience and urban greening for Indian cities",
-      description: "Co-developed Climate Resilient City Action Plans for Ahmedabad & Vadodara. Designed Urban Greening Policy framework for Ahmedabad Municipal Corporation. Led Clean Air programmes in Jharkhand and Punjab.",
-      highlights: [
-        "CRCAP — Ahmedabad & Vadodara",
-        "Urban Greening Policy — Ahmedabad Municipal Corporation",
-        "Clean Air Jharkhand — with Asar Social Impact Advisors",
-        "Clean Air Punjab — with Asar Social Impact Advisors",
-      ],
-      images: [
-        // "images/studio-commons/crcap.jpg",
-        // "images/studio-commons/greening.jpg",
-      ],
-      coverImage: "", // "images/studio-commons/cover.jpg"
-    },
-
-    {
       id: "perspectives",
       title: "Perspectives",
       subtitle: "Community Platform",
@@ -132,53 +108,31 @@ const CONTENT = {
     },
 
     {
-      id: "cept-living-heritage",
-      title: "Living Heritage",
-      subtitle: "CEPT University — Student Excellence Award",
-      role: "Urban Design Studio",
-      year: "2018",
+      id: "cept",
+      title: "CEPT University",
+      subtitle: "Centre for Environmental Planning & Technology",
+      role: "Bachelor of Urban Design",
+      year: "2017 – 2022",
       location: "Ahmedabad",
       featured: true,
       category: "design",
-      tagline: "Co-designing to revive historical identity",
-      description: "Winner, CEPT Student Excellence Award. Developed a community-led design framework to activate living heritage through resident participation across landscape, governance, and spatial intervention.",
+      tagline: "Five years of urban design education and practice",
+      description: "Bachelor of Urban Design from CEPT University, Ahmedabad. Winner, CEPT Student Excellence Award. Five years of urban design studios, research, and hands-on fieldwork across Indian cities.",
       highlights: [
         "CEPT Student Excellence Award winner",
-        "Community-led heritage activation",
-        "Landscape, governance, and spatial intervention",
-        "Resident participation framework",
+        "Living Heritage: Co-designing to Revive Historical Identity",
+        "Reverse Effekt — ethnographic study across 12 Koliwada communities",
+        "Generative Techniques for Urban Placemaking — Mumbai Eastern Waterfront",
+        "Summer School: Academy of Architecture, Amsterdam (2019)",
+        "Workshop: Earthen Materials & Construction, Hunnarshala Bhuj (2017)",
       ],
       images: [
-        // "images/cept/living-heritage-drawings.jpg",
-        // "images/cept/living-heritage-model.jpg",
-        // "images/cept/living-heritage-community.jpg",
+        // "images/cept/studio.jpg",
+        // "images/cept/fieldwork.jpg",
+        // "images/cept/drawings.jpg",
+        // "images/cept/model.jpg",
       ],
-      coverImage: "", // "images/cept/living-heritage-cover.jpg"
-    },
-
-    {
-      id: "cept-reverse-effekt",
-      title: "Reverse Effekt",
-      subtitle: "CEPT University — Thesis Research",
-      role: "Ethnographic Study",
-      year: "2022",
-      location: "Mumbai",
-      featured: true,
-      category: "design",
-      tagline: "Five months embedded in Mumbai's fishing villages",
-      description: "Five-month ethnographic study embedded across 12 communities in Mumbai's Koliwada fishing villages. Surfaced invisible territorial systems maintained through storytelling. Led to a participatory design framework.",
-      highlights: [
-        "12 Koliwada communities over 5 months",
-        "Invisible territorial systems surfaced through storytelling",
-        "Participatory design framework",
-        "CEPT thesis research",
-      ],
-      images: [
-        // "images/cept/reverse-effekt-fieldwork.jpg",
-        // "images/cept/reverse-effekt-maps.jpg",
-        // "images/cept/reverse-effekt-drawings.jpg",
-      ],
-      coverImage: "", // "images/cept/reverse-effekt-cover.jpg"
+      coverImage: "", // "images/cept/cover.jpg"
     },
 
   ],
