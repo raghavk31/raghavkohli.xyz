@@ -47,7 +47,7 @@ const CONTENT = {
       // Add image paths here as you collect them
       // Example: "images/iclei/malaysia-plan.jpg"
       images: [
-        "images/ICLEI/Screenshot 2026-04-22 134308.png",
+        "images/ICLEI/placeholder.png",
         // "images/iclei/malaysia.jpg",
         // "images/iclei/workshop.jpg",
       ],
