@@ -162,6 +162,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; ju
 .conv-recording:hover { color: var(--black); }
 .persp-empty { padding: 48px 52px; font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); }
 .persp-count { padding: 16px 52px; border-top: 1px solid var(--rule); font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
+
+/* ── FLOATING HERO IMAGES ── */
+.hero-canvas { position: absolute; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+.float-img { position: absolute; opacity: 0; will-change: transform, opacity; }
+.float-img img { display: block; object-fit: cover; filter: grayscale(15%); }
+.screen-hero > *:not(.hero-canvas) { position: relative; z-index: 1; }
+
 .screen-contact { border-bottom: none; }
 .contact-headline { font-family: var(--fd); font-size: clamp(60px, 9vw, 120px); font-weight: 400; line-height: 0.9; letter-spacing: -2px; color: var(--black); position: absolute; top: 50%; transform: translateY(-50%); }
 .contact-headline em { font-style: italic; }
@@ -192,6 +199,7 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
 
 <!-- HERO -->
 <section class="screen screen-hero">
+  <div class="hero-canvas" id="hero-canvas"></div>
   <div class="hero-top">
     <div class="hero-overline" id="hero-overline"></div>
     <h1 class="hero-name" id="hero-name"></h1>
@@ -358,11 +366,6 @@ featured.forEach(project => {
     viewer.innerHTML = `
       <div class="persp-hero">${statsHTML}</div>
       <div class="persp-archive">
-        <div class="persp-filters">
-          <span class="persp-filters-label">Filter</span>
-          ${formats.map(f => `<button class="filter-btn ${f === 'All' ? 'active' : ''}" data-format="${f}">${f}</button>`).join('')}
-          <input class="persp-search" type="text" placeholder="Search conversations...">
-        </div>
         <div class="persp-grid" id="conv-grid"></div>
         <div class="persp-count" id="conv-count"></div>
       </div>
@@ -402,34 +405,6 @@ featured.forEach(project => {
     }
 
     renderConversations(project.conversations);
-
-    let activeFormat = 'All';
-    let searchQuery = '';
-
-    function applyFilters() {
-      let filtered = project.conversations;
-      if (activeFormat !== 'All') filtered = filtered.filter(c => c.format === activeFormat);
-      if (searchQuery) filtered = filtered.filter(c =>
-        c.title.toLowerCase().includes(searchQuery) ||
-        c.description.toLowerCase().includes(searchQuery) ||
-        c.initiator.toLowerCase().includes(searchQuery)
-      );
-      renderConversations(filtered);
-    }
-
-    viewer.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        viewer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        activeFormat = btn.dataset.format;
-        applyFilters();
-      });
-    });
-
-    viewer.querySelector('.persp-search').addEventListener('input', e => {
-      searchQuery = e.target.value.toLowerCase();
-      applyFilters();
-    });
 
     row.addEventListener('click', () => {
       const isOpen = viewer.classList.contains('open');
@@ -569,6 +544,87 @@ const io = new IntersectionObserver(
   { threshold: 0.06 }
 );
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+// ── FLOATING HERO IMAGES ──────────────────────────────────
+const heroImages = (CONTENT.heroImages || []).filter(Boolean);
+const canvas = document.getElementById('hero-canvas');
+
+if (heroImages.length > 0) {
+  const hero = document.querySelector('.screen-hero');
+  const sizes = [
+    { w: 280, h: 200 },
+    { w: 220, h: 300 },
+    { w: 340, h: 240 },
+    { w: 200, h: 260 },
+    { w: 300, h: 200 },
+  ];
+
+  // Create pool of floating elements
+  const pool = heroImages.map((src, i) => {
+    const div = document.createElement('div');
+    div.className = 'float-img';
+    const size = sizes[i % sizes.length];
+    div.style.width = size.w + 'px';
+    div.style.height = size.h + 'px';
+    const img = document.createElement('img');
+    img.src = src;
+    img.width = size.w;
+    img.height = size.h;
+    div.appendChild(img);
+    canvas.appendChild(div);
+    return { el: div, w: size.w, h: size.h };
+  });
+
+  function randomBetween(a, b) { return a + Math.random() * (b - a); }
+
+  function floatImage(item) {
+    const hw = hero.offsetWidth;
+    const hh = hero.offsetHeight;
+
+    // Random starting position (avoid centre where text is)
+    const zones = [
+      // top-left area
+      { x: [0, hw * 0.35], y: [0, hh * 0.4] },
+      // top-right area
+      { x: [hw * 0.55, hw - item.w], y: [0, hh * 0.4] },
+      // bottom-left area
+      { x: [0, hw * 0.35], y: [hh * 0.6, hh - item.h] },
+      // bottom-right area
+      { x: [hw * 0.55, hw - item.w], y: [hh * 0.55, hh - item.h] },
+    ];
+
+    const zone = zones[Math.floor(Math.random() * zones.length)];
+    const x = randomBetween(zone.x[0], zone.x[1]);
+    const y = randomBetween(zone.y[0], zone.y[1]);
+    const drift = { x: randomBetween(-40, 40), y: randomBetween(-30, 30) };
+    const duration = randomBetween(8000, 16000);
+    const delay = randomBetween(0, 4000);
+
+    item.el.style.left = x + 'px';
+    item.el.style.top = y + 'px';
+    item.el.style.transition = 'none';
+    item.el.style.opacity = '0';
+    item.el.style.transform = `translate(0,0)`;
+
+    setTimeout(() => {
+      item.el.style.transition = `opacity 2s ease, transform ${duration}ms ease`;
+      item.el.style.opacity = randomBetween(0.06, 0.18).toString();
+      item.el.style.transform = `translate(${drift.x}px, ${drift.y}px)`;
+
+      // Fade out and repeat
+      setTimeout(() => {
+        item.el.style.transition = 'opacity 2s ease';
+        item.el.style.opacity = '0';
+        setTimeout(() => floatImage(item), 2200);
+      }, duration - 2000);
+    }, delay);
+  }
+
+  // Stagger start times
+  pool.forEach((item, i) => {
+    setTimeout(() => floatImage(item), i * 1200);
+  });
+}
 
 </script>
 </body>
