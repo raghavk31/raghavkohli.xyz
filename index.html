@@ -9,7 +9,6 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
-
 :root {
   --white: #FFFFFF;
   --black: #0D0D0D;
@@ -17,34 +16,30 @@ html { scroll-behavior: smooth; }
   --dim:   #AAAAAA;
   --rule:  #E8E8E8;
   --red:   #B03A1C;
+  --bg:    #FAFAFA;
   --fd: 'Cormorant', Georgia, serif;
   --fb: 'DM Sans', Helvetica, sans-serif;
   --fm: 'DM Mono', monospace;
 }
-
 body { background: var(--white); color: var(--black); font-family: var(--fb); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 
-/* NAV */
+/* ── NAV ── */
 nav { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; justify-content: space-between; align-items: center; padding: 36px 52px; pointer-events: none; }
 .nav-logo { font-family: var(--fm); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--black); text-decoration: none; pointer-events: all; }
 .nav-links { display: flex; gap: 40px; list-style: none; pointer-events: all; }
 .nav-links a { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); text-decoration: none; transition: color 0.25s; }
 .nav-links a:hover { color: var(--black); }
 
-/* SCREEN */
+/* ── SCREENS ── */
 .screen { min-height: 100vh; padding: 52px; display: flex; flex-direction: column; justify-content: flex-end; position: relative; border-bottom: 1px solid var(--rule); }
-
-/* HERO */
 .screen-hero { justify-content: space-between; }
 .hero-top { padding-top: 80px; }
 .hero-overline { font-family: var(--fm); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; opacity: 0; animation: up 1s ease forwards 0.1s; }
 .hero-name { font-family: var(--fd); font-size: clamp(56px, 8.5vw, 112px); font-weight: 400; line-height: 0.92; letter-spacing: -2px; color: var(--black); opacity: 0; animation: up 1s ease forwards 0.3s; }
-.hero-name em { font-style: italic; font-weight: 400; }
+.hero-name em { font-style: italic; }
 .hero-bottom { display: flex; justify-content: space-between; align-items: flex-end; opacity: 0; animation: up 1s ease forwards 0.7s; }
 .hero-statement { font-family: var(--fd); font-size: 22px; font-weight: 400; font-style: italic; color: var(--mid); max-width: 500px; line-height: 1.4; }
 .hero-arrow { font-family: var(--fm); font-size: 9px; letter-spacing: 2.5px; color: var(--dim); }
-
-/* SECTION SCREENS */
 .section-label { font-family: var(--fm); font-size: 10px; letter-spacing: 3px; text-transform: uppercase; color: var(--dim); position: absolute; top: 52px; left: 52px; }
 .section-body { max-width: 820px; }
 .section-q { font-family: var(--fd); font-size: clamp(38px, 5vw, 72px); font-weight: 400; font-style: italic; line-height: 1.15; color: var(--black); margin-bottom: 32px; }
@@ -54,71 +49,119 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; ju
 .enter::after { content: '→'; font-family: var(--fb); }
 .enter:hover { gap: 24px; color: var(--red); }
 
-/* WORK */
+/* ── WORK SECTION ── */
 .screen-work { padding: 0; border-bottom: 1px solid var(--rule); min-height: unset; }
 .work-top { padding: 80px 52px 40px; border-bottom: 1px solid var(--rule); display: flex; justify-content: space-between; align-items: baseline; }
 .work-heading { font-family: var(--fd); font-size: clamp(40px, 5vw, 64px); font-weight: 400; font-style: italic; color: var(--black); letter-spacing: -1px; }
 .work-count { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); }
 
-/* PROJECT CARD */
-.project-card { display: grid; grid-template-columns: 110px 240px 1fr; gap: 0 64px; padding: 40px 52px; border-bottom: 1px solid var(--rule); align-items: start; transition: background 0.25s; cursor: pointer; }
-.project-card:hover { background: #FAFAFA; }
-.project-card:hover .p-title { color: var(--red); }
-.project-card.active { background: #FAFAFA; }
-.project-card.active .p-title { color: var(--red); }
-.p-year { font-family: var(--fm); font-size: 9px; letter-spacing: 1px; color: var(--dim); padding-top: 6px; }
-.p-title { font-family: var(--fd); font-size: 30px; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px; transition: color 0.25s; }
-.p-role { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
-.p-desc { font-size: 13px; font-weight: 300; line-height: 1.85; color: var(--mid); padding-top: 5px; }
+/* ── PROJECT ROW ── */
+.project-row { display: grid; grid-template-columns: 110px 240px 1fr; gap: 0 64px; padding: 36px 52px; border-bottom: 1px solid var(--rule); align-items: start; cursor: pointer; transition: background 0.2s; }
+.project-row:hover { background: var(--bg); }
+.project-row.active { background: var(--bg); }
+.project-row.active .pr-title { color: var(--red); }
+.pr-year { font-family: var(--fm); font-size: 9px; letter-spacing: 1px; color: var(--dim); padding-top: 6px; }
+.pr-title { font-family: var(--fd); font-size: 30px; font-weight: 400; color: var(--black); line-height: 1; margin-bottom: 6px; transition: color 0.25s; }
+.pr-role { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
+.pr-desc { font-size: 13px; font-weight: 300; line-height: 1.85; color: var(--mid); padding-top: 5px; }
 
-/* EXPANDED PANEL */
-.project-panel { display: none; border-bottom: 1px solid var(--rule); }
-.project-panel.open { display: block; }
+/* ── THREE-PANEL VIEWER ── */
+.project-viewer { display: none; border-bottom: 1px solid var(--rule); }
+.project-viewer.open { display: grid; grid-template-columns: 220px 280px 1fr; min-height: 80vh; }
 
-.panel-inner { display: grid; grid-template-columns: 320px 1fr; min-height: 400px; }
+/* Panel 1 — sub-project list */
+.viewer-list { border-right: 1px solid var(--rule); display: flex; flex-direction: column; }
+.viewer-list-header { padding: 24px 24px 16px; border-bottom: 1px solid var(--rule); }
+.viewer-list-title { font-family: var(--fd); font-size: 18px; font-weight: 400; color: var(--black); margin-bottom: 2px; }
+.viewer-list-sub { font-family: var(--fm); font-size: 8.5px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
+.viewer-list-items { flex: 1; overflow-y: auto; }
+.sub-item { padding: 14px 24px; border-bottom: 1px solid var(--rule); cursor: pointer; transition: background 0.15s; }
+.sub-item:last-child { border-bottom: none; }
+.sub-item:hover { background: var(--bg); }
+.sub-item.active { background: var(--white); }
+.sub-item.active .sub-item-title { color: var(--red); }
+.sub-item-title { font-size: 13px; font-weight: 400; color: var(--black); line-height: 1.3; margin-bottom: 2px; transition: color 0.2s; }
+.sub-item-count { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; color: var(--dim); }
+.viewer-list-empty { padding: 24px; font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); line-height: 1.8; }
 
-.panel-left { padding: 40px 40px 40px 52px; border-right: 1px solid var(--rule); position: sticky; top: 0; align-self: start; }
-.panel-left h3 { font-family: var(--fd); font-size: 28px; font-weight: 400; color: var(--black); margin-bottom: 6px; line-height: 1; }
-.panel-left .p-role-detail { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); margin-bottom: 20px; }
-.panel-desc { font-size: 13px; font-weight: 300; line-height: 1.85; color: var(--mid); margin-bottom: 24px; }
-.panel-highlights { list-style: none; border-top: 1px solid var(--rule); padding-top: 16px; }
-.panel-highlights li { font-size: 12px; font-weight: 300; color: var(--mid); line-height: 1.6; padding: 7px 0; border-bottom: 1px solid var(--rule); padding-left: 12px; position: relative; }
-.panel-highlights li:last-child { border-bottom: none; }
-.panel-highlights li::before { content: '/'; position: absolute; left: 0; color: var(--red); font-weight: 600; }
+/* Panel 2 — sub-project detail */
+.viewer-detail { border-right: 1px solid var(--rule); padding: 28px 28px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
+.detail-empty { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); line-height: 1.9; padding-top: 8px; }
+.detail-name { font-family: var(--fd); font-size: 22px; font-weight: 400; color: var(--black); line-height: 1.1; }
+.detail-body { font-size: 13px; font-weight: 300; line-height: 1.85; color: var(--mid); }
+.detail-video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; background: #000; }
+.detail-video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
 
-.panel-right { padding: 40px 52px 40px 40px; }
-.panel-right-label { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 20px; }
+/* Panel 3 — image grid */
+.viewer-images { padding: 28px; overflow-y: auto; background: var(--white); }
+.images-label { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-bottom: 16px; }
+.img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.img-thumb { aspect-ratio: 4/3; overflow: hidden; cursor: pointer; background: #F0F0F0; position: relative; }
+.img-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease; display: block; }
+.img-thumb:hover img { transform: scale(1.04); }
+.img-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #F5F5F5; }
+.img-placeholder span { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); text-align: center; padding: 8px; }
+.images-empty { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); line-height: 1.9; }
 
-/* IMAGE GRID */
-.image-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-.image-thumb { aspect-ratio: 4/3; overflow: hidden; cursor: pointer; background: #F0F0F0; position: relative; }
-.image-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s ease, opacity 0.2s; }
-.image-thumb:hover img { transform: scale(1.03); }
-.image-thumb.placeholder-thumb { display: flex; align-items: center; justify-content: center; background: #F5F5F5; cursor: default; }
-.placeholder-text { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); text-align: center; padding: 12px; }
-
-/* LIGHTBOX */
-.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.95); flex-direction: column; }
+/* ── LIGHTBOX ── */
+.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.96); flex-direction: column; }
 .lightbox.open { display: flex; }
-.lightbox-top { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; }
-.lightbox-title { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); }
-.lightbox-close { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.5); cursor: pointer; background: none; border: none; transition: color 0.2s; }
-.lightbox-close:hover { color: #fff; }
-.lightbox-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 80px; position: relative; overflow: hidden; }
-.lightbox-main img { max-height: 65vh; max-width: 100%; object-fit: contain; }
-.lightbox-prev, .lightbox-next { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.4); font-size: 32px; cursor: pointer; padding: 20px; transition: color 0.2s; font-family: var(--fb); }
-.lightbox-prev:hover, .lightbox-next:hover { color: #fff; }
-.lightbox-prev { left: 0; }
-.lightbox-next { right: 0; }
-.lightbox-strip { padding: 16px 40px 32px; display: flex; gap: 8px; overflow-x: auto; justify-content: center; }
-.lightbox-strip::-webkit-scrollbar { height: 2px; }
-.lightbox-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
-.strip-thumb { width: 64px; height: 48px; object-fit: cover; cursor: pointer; opacity: 0.4; transition: opacity 0.2s; flex-shrink: 0; }
-.strip-thumb.active { opacity: 1; outline: 1px solid #fff; }
-.strip-thumb:hover { opacity: 0.8; }
-.lightbox-counter { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; color: rgba(255,255,255,0.3); text-align: center; padding-bottom: 8px; }
+.lb-top { display: flex; justify-content: space-between; align-items: center; padding: 24px 40px; flex-shrink: 0; }
+.lb-label { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+.lb-close { font-family: var(--fm); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: rgba(255,255,255,0.4); cursor: pointer; background: none; border: none; transition: color 0.2s; }
+.lb-close:hover { color: #fff; }
+.lb-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: 0 72px; position: relative; min-height: 0; }
+.lb-main img { max-height: 100%; max-width: 100%; object-fit: contain; }
+.lb-arrow { position: absolute; top: 50%; transform: translateY(-50%); background: none; border: none; color: rgba(255,255,255,0.3); font-size: 36px; cursor: pointer; padding: 20px; transition: color 0.2s; font-family: var(--fb); line-height: 1; }
+.lb-arrow:hover { color: #fff; }
+.lb-prev { left: 0; }
+.lb-next { right: 0; }
+.lb-counter { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; color: rgba(255,255,255,0.25); text-align: center; padding: 10px 0 6px; flex-shrink: 0; }
+.lb-strip { padding: 8px 40px 28px; display: flex; gap: 6px; overflow-x: auto; justify-content: center; flex-shrink: 0; }
+.lb-strip::-webkit-scrollbar { height: 2px; }
+.lb-strip::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); }
+.lb-thumb { width: 56px; height: 42px; object-fit: cover; cursor: pointer; opacity: 0.35; transition: opacity 0.2s; flex-shrink: 0; }
+.lb-thumb.active { opacity: 1; outline: 1px solid rgba(255,255,255,0.6); }
+.lb-thumb:hover { opacity: 0.7; }
 
-/* CONTACT */
+/* ── PERSPECTIVES VIEWER ── */
+.persp-viewer { display: none; border-bottom: 1px solid var(--rule); }
+.persp-viewer.open { display: block; }
+
+.persp-hero { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: 1px solid var(--rule); }
+.persp-stat { padding: 48px 52px; border-right: 1px solid var(--rule); }
+.persp-stat:last-child { border-right: none; }
+.persp-stat-n { font-family: var(--fd); font-size: clamp(56px, 7vw, 88px); font-weight: 400; line-height: 1; color: var(--black); letter-spacing: -2px; margin-bottom: 10px; }
+.persp-stat-l { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); line-height: 1.7; }
+
+.persp-archive { padding: 0; }
+.persp-filters { padding: 24px 52px; border-bottom: 1px solid var(--rule); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.persp-filters-label { font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); margin-right: 8px; }
+.filter-btn { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; padding: 6px 16px; border: 1px solid var(--rule); color: var(--mid); background: none; cursor: pointer; transition: all 0.2s; }
+.filter-btn:hover { border-color: var(--black); color: var(--black); }
+.filter-btn.active { background: var(--black); color: var(--white); border-color: var(--black); }
+.persp-search { margin-left: auto; font-family: var(--fm); font-size: 9px; letter-spacing: 1px; padding: 6px 14px; border: 1px solid var(--rule); background: none; color: var(--black); outline: none; width: 200px; }
+.persp-search::placeholder { color: var(--dim); }
+.persp-search:focus { border-color: var(--black); }
+
+.persp-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); }
+.conv-card { background: var(--white); padding: 28px; cursor: pointer; transition: background 0.2s; display: flex; flex-direction: column; gap: 10px; }
+.conv-card:hover { background: var(--bg); }
+.conv-photo { aspect-ratio: 16/9; overflow: hidden; background: #F0F0F0; margin: -28px -28px 0; }
+.conv-photo img { width: 100%; height: 100%; object-fit: cover; }
+.conv-photo-empty { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+.conv-photo-empty span { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; text-transform: uppercase; color: var(--dim); }
+.conv-meta { display: flex; justify-content: space-between; align-items: center; }
+.conv-format { font-family: var(--fm); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--red); }
+.conv-date { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; color: var(--dim); }
+.conv-title { font-family: var(--fd); font-size: 18px; font-weight: 400; color: var(--black); line-height: 1.2; }
+.conv-desc { font-size: 12px; font-weight: 300; line-height: 1.7; color: var(--mid); }
+.conv-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 8px; border-top: 1px solid var(--rule); }
+.conv-initiator { font-family: var(--fm); font-size: 8.5px; letter-spacing: 1px; color: var(--dim); }
+.conv-recording { font-family: var(--fm); font-size: 8px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--red); text-decoration: none; }
+.conv-recording:hover { color: var(--black); }
+.persp-empty { padding: 48px 52px; font-family: var(--fm); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--dim); }
+.persp-count { padding: 16px 52px; border-top: 1px solid var(--rule); font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); }
 .screen-contact { border-bottom: none; }
 .contact-headline { font-family: var(--fd); font-size: clamp(60px, 9vw, 120px); font-weight: 400; line-height: 0.9; letter-spacing: -2px; color: var(--black); position: absolute; top: 50%; transform: translateY(-50%); }
 .contact-headline em { font-style: italic; }
@@ -128,19 +171,13 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; ju
 .c-val { font-size: 14px; font-weight: 300; color: var(--black); text-decoration: none; transition: color 0.2s; }
 .c-val:hover { color: var(--red); }
 .contact-byline { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); text-align: right; line-height: 2.2; }
-
-/* FOOTER */
 footer { padding: 24px 52px; display: flex; justify-content: space-between; border-top: 1px solid var(--rule); }
 .footer-note { font-family: var(--fm); font-size: 9px; letter-spacing: 1px; color: var(--dim); }
 
-/* REVEALS */
+/* ── REVEALS ── */
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s ease, transform 0.9s ease; }
 .reveal.in { opacity: 1; transform: none; }
-
-@keyframes up {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: none; }
-}
+@keyframes up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 </style>
 </head>
 <body>
@@ -165,7 +202,7 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
   </div>
 </section>
 
-<!-- CLIMATE SCREEN -->
+<!-- CLIMATE -->
 <section class="screen" id="climate">
   <span class="section-label">Climate</span>
   <div class="section-body reveal">
@@ -175,7 +212,7 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
   </div>
 </section>
 
-<!-- COMMUNITY SCREEN -->
+<!-- COMMUNITY -->
 <section class="screen" id="community">
   <span class="section-label">Community</span>
   <div class="section-body reveal">
@@ -209,176 +246,330 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
   <span class="footer-note" id="footer-right"></span>
 </footer>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <div class="lb-top">
+    <span class="lb-label" id="lb-label"></span>
+    <button class="lb-close" id="lb-close">Close ✕</button>
+  </div>
+  <div class="lb-main">
+    <button class="lb-arrow lb-prev" id="lb-prev">‹</button>
+    <img id="lb-img" src="" alt="">
+    <button class="lb-arrow lb-next" id="lb-next">›</button>
+  </div>
+  <div class="lb-counter" id="lb-counter"></div>
+  <div class="lb-strip" id="lb-strip"></div>
+</div>
+
 <script src="content.js"></script>
 <script>
-// ── RENDER FROM CONTENT ──────────────────────────────────
 
-// Nav + hero
+// ── POPULATE STATIC ELEMENTS ─────────────────────────────
 document.getElementById('nav-logo').textContent = CONTENT.name;
 document.getElementById('hero-overline').textContent = `${CONTENT.name} · ${CONTENT.title}`;
-
-const nameEl = document.getElementById('hero-name');
-CONTENT.hero.headline.forEach((word, i) => {
-  const line = document.createElement(i === CONTENT.hero.headline.length - 1 ? 'em' : 'span');
-  line.textContent = word;
-  line.style.display = 'block';
-  nameEl.appendChild(line);
-});
-
 document.getElementById('hero-statement').textContent = CONTENT.hero.statement;
-
-// Projects
-const featured = CONTENT.projects.filter(p => p.featured);
-document.getElementById('work-count').textContent = `${featured.length} projects`;
-
-const list = document.getElementById('projects-list');
-
-// ── LIGHTBOX ────────────────────────────────────────────
-const lb = document.createElement('div');
-lb.className = 'lightbox';
-lb.innerHTML = `
-  <div class="lightbox-top">
-    <span class="lightbox-title" id="lb-title"></span>
-    <button class="lightbox-close" id="lb-close">Close ✕</button>
-  </div>
-  <div class="lightbox-main">
-    <button class="lightbox-prev" id="lb-prev">‹</button>
-    <img id="lb-img" src="" alt="">
-    <button class="lightbox-next" id="lb-next">›</button>
-  </div>
-  <div class="lightbox-counter" id="lb-counter"></div>
-  <div class="lightbox-strip" id="lb-strip"></div>
-`;
-document.body.appendChild(lb);
-
-let lbImages = [], lbIndex = 0;
-
-function openLightbox(images, index, title) {
-  lbImages = images;
-  lbIndex = index;
-  document.getElementById('lb-title').textContent = title;
-  lb.classList.add('open');
-  renderLightbox();
-}
-
-function renderLightbox() {
-  document.getElementById('lb-img').src = lbImages[lbIndex];
-  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
-  const strip = document.getElementById('lb-strip');
-  strip.innerHTML = lbImages.map((src, i) =>
-    `<img class="strip-thumb ${i === lbIndex ? 'active' : ''}" src="${src}" data-i="${i}">`
-  ).join('');
-  strip.querySelectorAll('.strip-thumb').forEach(t =>
-    t.addEventListener('click', () => { lbIndex = +t.dataset.i; renderLightbox(); })
-  );
-  // Scroll active thumb into view
-  const active = strip.querySelector('.strip-thumb.active');
-  if (active) active.scrollIntoView({ inline: 'center', behavior: 'smooth' });
-}
-
-document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
-document.getElementById('lb-prev').addEventListener('click', () => { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLightbox(); });
-document.getElementById('lb-next').addEventListener('click', () => { lbIndex = (lbIndex + 1) % lbImages.length; renderLightbox(); });
-lb.addEventListener('click', e => { if (e.target === lb) lb.classList.remove('open'); });
-document.addEventListener('keydown', e => {
-  if (!lb.classList.contains('open')) return;
-  if (e.key === 'ArrowLeft') { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLightbox(); }
-  if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; renderLightbox(); }
-  if (e.key === 'Escape') lb.classList.remove('open');
-});
-
-// ── PROJECTS ────────────────────────────────────────────
-featured.forEach(p => {
-  const realImages = p.images.filter(Boolean);
-
-  // Card row
-  const card = document.createElement('div');
-  card.className = 'project-card reveal';
-  card.innerHTML = `
-    <div class="p-year">${p.year}</div>
-    <div>
-      <div class="p-title">${p.title}</div>
-      <div class="p-role">${p.role}</div>
-    </div>
-    <p class="p-desc">${p.tagline}</p>
-  `;
-
-  // Expanded panel
-  const panel = document.createElement('div');
-  panel.className = 'project-panel';
-
-  // Build image grid (up to 30)
-  const gridHTML = realImages.length > 0
-    ? realImages.slice(0, 30).map((src, i) => `
-        <div class="image-thumb" data-index="${i}">
-          <img src="${src}" alt="${p.title} ${i+1}" loading="lazy">
-        </div>`).join('')
-    : `<div class="image-thumb placeholder-thumb"><div class="placeholder-text">Images<br>coming soon</div></div>
-       <div class="image-thumb placeholder-thumb"><div class="placeholder-text">Images<br>coming soon</div></div>
-       <div class="image-thumb placeholder-thumb"><div class="placeholder-text">Images<br>coming soon</div></div>`;
-
-  panel.innerHTML = `
-    <div class="panel-inner">
-      <div class="panel-left">
-        <h3>${p.title}</h3>
-        <div class="p-role-detail">${p.role} &nbsp;·&nbsp; ${p.year}</div>
-        <p class="panel-desc">${p.description}</p>
-        <ul class="panel-highlights">
-          ${p.highlights.map(h => `<li>${h}</li>`).join('')}
-        </ul>
-      </div>
-      <div class="panel-right">
-        <div class="panel-right-label">${realImages.length > 0 ? realImages.length + ' images — click to expand' : 'Images coming soon'}</div>
-        <div class="image-grid">${gridHTML}</div>
-      </div>
-    </div>
-  `;
-
-  // Image click → lightbox
-  if (realImages.length > 0) {
-    panel.querySelectorAll('.image-thumb').forEach(thumb => {
-      thumb.addEventListener('click', () => {
-        openLightbox(realImages, +thumb.dataset.index, p.title);
-      });
-    });
-  }
-
-  // Card click → toggle panel
-  const wrapper = document.createElement('div');
-  card.addEventListener('click', () => {
-    const isOpen = panel.classList.contains('open');
-    document.querySelectorAll('.project-panel').forEach(d => d.classList.remove('open'));
-    document.querySelectorAll('.project-card').forEach(c => c.classList.remove('active'));
-    if (!isOpen) {
-      panel.classList.add('open');
-      card.classList.add('active');
-      setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
-    }
-  });
-
-  wrapper.appendChild(card);
-  wrapper.appendChild(panel);
-  list.appendChild(wrapper);
-});
-
-// Contact
-const ci = document.getElementById('contact-items');
-ci.innerHTML = `
+document.getElementById('footer-left').textContent = `© ${CONTENT.name} 2026`;
+document.getElementById('footer-right').textContent = CONTENT.location;
+document.getElementById('contact-byline').innerHTML = `Climate · Community · Cities<br>${CONTENT.name} · 2026`;
+document.getElementById('contact-items').innerHTML = `
   <div><span class="c-label">Email</span><a href="mailto:${CONTENT.email}" class="c-val">${CONTENT.email}</a></div>
   <div><span class="c-label">LinkedIn</span><a href="https://${CONTENT.linkedin}" class="c-val">${CONTENT.linkedin}</a></div>
   <div><span class="c-label">Based in</span><span class="c-val">${CONTENT.location}</span></div>
 `;
 
-document.getElementById('contact-byline').innerHTML = `Climate · Community · Cities<br>${CONTENT.name} · 2026`;
-document.getElementById('footer-left').textContent = `© ${CONTENT.name} 2026`;
-document.getElementById('footer-right').textContent = CONTENT.location;
+// Hero name
+const nameEl = document.getElementById('hero-name');
+CONTENT.hero.headline.forEach((word, i) => {
+  const el = document.createElement(i === CONTENT.hero.headline.length - 1 ? 'em' : 'span');
+  el.textContent = word;
+  el.style.display = 'block';
+  nameEl.appendChild(el);
+});
 
-// ── SCROLL REVEALS ───────────────────────────────────────
+// ── LIGHTBOX ─────────────────────────────────────────────
+const lb = document.getElementById('lightbox');
+let lbImages = [], lbIndex = 0, lbTitle = '';
+
+function openLightbox(images, index, title) {
+  lbImages = images; lbIndex = index; lbTitle = title;
+  lb.classList.add('open');
+  renderLb();
+}
+
+function renderLb() {
+  document.getElementById('lb-img').src = lbImages[lbIndex];
+  document.getElementById('lb-label').textContent = `${lbTitle}`;
+  document.getElementById('lb-counter').textContent = `${lbIndex + 1} / ${lbImages.length}`;
+  const strip = document.getElementById('lb-strip');
+  strip.innerHTML = lbImages.map((s, i) =>
+    `<img class="lb-thumb ${i === lbIndex ? 'active' : ''}" src="${s}" data-i="${i}">`
+  ).join('');
+  strip.querySelectorAll('.lb-thumb').forEach(t =>
+    t.addEventListener('click', () => { lbIndex = +t.dataset.i; renderLb(); })
+  );
+  strip.querySelector('.lb-thumb.active')?.scrollIntoView({ inline: 'center', behavior: 'smooth' });
+}
+
+document.getElementById('lb-close').addEventListener('click', () => lb.classList.remove('open'));
+document.getElementById('lb-prev').addEventListener('click', () => { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLb(); });
+document.getElementById('lb-next').addEventListener('click', () => { lbIndex = (lbIndex + 1) % lbImages.length; renderLb(); });
+lb.addEventListener('click', e => { if (e.target === lb || e.target === document.getElementById('lb-img').parentElement) return; });
+document.addEventListener('keydown', e => {
+  if (!lb.classList.contains('open')) return;
+  if (e.key === 'ArrowLeft') { lbIndex = (lbIndex - 1 + lbImages.length) % lbImages.length; renderLb(); }
+  if (e.key === 'ArrowRight') { lbIndex = (lbIndex + 1) % lbImages.length; renderLb(); }
+  if (e.key === 'Escape') lb.classList.remove('open');
+});
+
+// ── BUILD PROJECT LIST ────────────────────────────────────
+const featured = CONTENT.projects.filter(p => p.featured);
+document.getElementById('work-count').textContent = `${featured.length} projects`;
+const list = document.getElementById('projects-list');
+
+featured.forEach(project => {
+
+  // ── PERSPECTIVES gets its own treatment ──
+  if (project.id === 'perspectives') {
+
+    const row = document.createElement('div');
+    row.className = 'project-row reveal';
+    row.innerHTML = `
+      <div class="pr-year">${project.year}</div>
+      <div>
+        <div class="pr-title">${project.title}</div>
+        <div class="pr-role">${project.role}</div>
+      </div>
+      <p class="pr-desc">${project.description}</p>
+    `;
+
+    const viewer = document.createElement('div');
+    viewer.className = 'persp-viewer';
+
+    // Stats hero
+    const statsHTML = project.stats.map(s => `
+      <div class="persp-stat">
+        <div class="persp-stat-n">${s.number}</div>
+        <div class="persp-stat-l">${s.label}</div>
+      </div>`).join('');
+
+    // Formats for filter buttons
+    const formats = ['All', ...new Set(project.conversations.map(c => c.format))];
+
+    viewer.innerHTML = `
+      <div class="persp-hero">${statsHTML}</div>
+      <div class="persp-archive">
+        <div class="persp-filters">
+          <span class="persp-filters-label">Filter</span>
+          ${formats.map(f => `<button class="filter-btn ${f === 'All' ? 'active' : ''}" data-format="${f}">${f}</button>`).join('')}
+          <input class="persp-search" type="text" placeholder="Search conversations...">
+        </div>
+        <div class="persp-grid" id="conv-grid"></div>
+        <div class="persp-count" id="conv-count"></div>
+      </div>
+    `;
+
+    function formatDate(d) {
+      if (!d) return '';
+      const [y, m] = d.split('-');
+      const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      return `${months[+m - 1]} ${y}`;
+    }
+
+    function renderConversations(list) {
+      const grid = viewer.querySelector('#conv-grid');
+      const count = viewer.querySelector('#conv-count');
+      grid.innerHTML = list.length === 0
+        ? `<div class="persp-empty" style="grid-column:1/-1">No conversations found</div>`
+        : list.map(c => `
+          <div class="conv-card">
+            <div class="conv-photo">
+              ${c.photo
+                ? `<img src="${c.photo}" alt="${c.title}" loading="lazy">`
+                : `<div class="conv-photo-empty"><span>No photo</span></div>`}
+            </div>
+            <div class="conv-meta">
+              <span class="conv-format">${c.format}</span>
+              <span class="conv-date">${formatDate(c.date)}</span>
+            </div>
+            <div class="conv-title">${c.title}</div>
+            <div class="conv-desc">${c.description}</div>
+            <div class="conv-footer">
+              <span class="conv-initiator">↳ ${c.initiator}</span>
+              ${c.recording ? `<a class="conv-recording" href="${c.recording}" target="_blank">▶ Recording</a>` : ''}
+            </div>
+          </div>`).join('');
+      count.textContent = `${list.length} conversation${list.length !== 1 ? 's' : ''}`;
+    }
+
+    renderConversations(project.conversations);
+
+    let activeFormat = 'All';
+    let searchQuery = '';
+
+    function applyFilters() {
+      let filtered = project.conversations;
+      if (activeFormat !== 'All') filtered = filtered.filter(c => c.format === activeFormat);
+      if (searchQuery) filtered = filtered.filter(c =>
+        c.title.toLowerCase().includes(searchQuery) ||
+        c.description.toLowerCase().includes(searchQuery) ||
+        c.initiator.toLowerCase().includes(searchQuery)
+      );
+      renderConversations(filtered);
+    }
+
+    viewer.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        viewer.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFormat = btn.dataset.format;
+        applyFilters();
+      });
+    });
+
+    viewer.querySelector('.persp-search').addEventListener('input', e => {
+      searchQuery = e.target.value.toLowerCase();
+      applyFilters();
+    });
+
+    row.addEventListener('click', () => {
+      const isOpen = viewer.classList.contains('open');
+      document.querySelectorAll('.persp-viewer,.project-viewer').forEach(v => v.classList.remove('open'));
+      document.querySelectorAll('.project-row').forEach(r => r.classList.remove('active'));
+      if (!isOpen) {
+        viewer.classList.add('open');
+        row.classList.add('active');
+        setTimeout(() => viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+      }
+    });
+
+    const wrapper = document.createElement('div');
+    wrapper.appendChild(row);
+    wrapper.appendChild(viewer);
+    list.appendChild(wrapper);
+    return;
+  }
+  const row = document.createElement('div');
+  row.className = 'project-row reveal';
+  row.innerHTML = `
+    <div class="pr-year">${project.year}</div>
+    <div>
+      <div class="pr-title">${project.title}</div>
+      <div class="pr-role">${project.role}</div>
+    </div>
+    <p class="pr-desc">${project.description}</p>
+  `;
+
+  // ── Three-panel viewer ──
+  const viewer = document.createElement('div');
+  viewer.className = 'project-viewer';
+
+  // Panel 1: sub-project list
+  const hasSubprojects = project.subprojects && project.subprojects.length > 0;
+
+  const panel1 = document.createElement('div');
+  panel1.className = 'viewer-list';
+  panel1.innerHTML = `
+    <div class="viewer-list-header">
+      <div class="viewer-list-title">${project.title}</div>
+      <div class="viewer-list-sub">${project.subprojects?.length || 0} sub-projects</div>
+    </div>
+    <div class="viewer-list-items" id="list-${project.id}">
+      ${hasSubprojects
+        ? project.subprojects.map((sp, i) => `
+          <div class="sub-item ${i === 0 ? 'active' : ''}" data-project="${project.id}" data-index="${i}">
+            <div class="sub-item-title">${sp.title}</div>
+            <div class="sub-item-count">${sp.images?.filter(Boolean).length || 0} images</div>
+          </div>`).join('')
+        : `<div class="viewer-list-empty">Sub-projects<br>coming soon</div>`
+      }
+    </div>
+  `;
+
+  // Panel 2: sub-project detail
+  const panel2 = document.createElement('div');
+  panel2.className = 'viewer-detail';
+  panel2.id = `detail-${project.id}`;
+
+  // Panel 3: image grid
+  const panel3 = document.createElement('div');
+  panel3.className = 'viewer-images';
+  panel3.id = `images-${project.id}`;
+
+  function renderSubproject(sp) {
+    // Detail panel
+    panel2.innerHTML = `
+      <div class="detail-name">${sp.title}</div>
+      <div class="detail-body">${sp.description}</div>
+      ${sp.video ? `<div class="detail-video-wrap"><iframe src="${sp.video}" allowfullscreen></iframe></div>` : ''}
+    `;
+
+    // Image grid
+    const realImages = (sp.images || []).filter(Boolean);
+    panel3.innerHTML = `<div class="images-label">${realImages.length > 0 ? realImages.length + ' images — click to expand' : 'No images yet'}</div>`;
+
+    if (realImages.length > 0) {
+      const grid = document.createElement('div');
+      grid.className = 'img-grid';
+      realImages.forEach((src, i) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'img-thumb';
+        thumb.innerHTML = `<img src="${src}" alt="${sp.title} ${i+1}" loading="lazy">`;
+        thumb.addEventListener('click', () => openLightbox(realImages, i, sp.title));
+        grid.appendChild(thumb);
+      });
+      panel3.appendChild(grid);
+    } else {
+      panel3.innerHTML += `<div class="images-empty">Images coming soon.<br>Add paths to content.js</div>`;
+    }
+  }
+
+  // Load first sub-project by default
+  if (hasSubprojects) {
+    renderSubproject(project.subprojects[0]);
+  } else {
+    panel2.innerHTML = `<div class="detail-empty">Add sub-projects<br>in content.js</div>`;
+    panel3.innerHTML = `<div class="images-label">No images yet</div>`;
+  }
+
+  viewer.appendChild(panel1);
+  viewer.appendChild(panel2);
+  viewer.appendChild(panel3);
+
+  // Sub-project click
+  panel1.querySelectorAll('.sub-item').forEach(item => {
+    item.addEventListener('click', () => {
+      panel1.querySelectorAll('.sub-item').forEach(s => s.classList.remove('active'));
+      item.classList.add('active');
+      const sp = project.subprojects[+item.dataset.index];
+      renderSubproject(sp);
+    });
+  });
+
+  // Project row click — toggle viewer
+  row.addEventListener('click', () => {
+    const isOpen = viewer.classList.contains('open');
+    document.querySelectorAll('.project-viewer').forEach(v => v.classList.remove('open'));
+    document.querySelectorAll('.project-row').forEach(r => r.classList.remove('active'));
+    if (!isOpen) {
+      viewer.classList.add('open');
+      row.classList.add('active');
+      setTimeout(() => viewer.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+    }
+  });
+
+  const wrapper = document.createElement('div');
+  wrapper.appendChild(row);
+  wrapper.appendChild(viewer);
+  list.appendChild(wrapper);
+});
+
+// ── SCROLL REVEALS ────────────────────────────────────────
 const io = new IntersectionObserver(
   es => es.forEach(e => e.isIntersecting && e.target.classList.add('in')),
   { threshold: 0.06 }
 );
 document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
 </script>
 </body>
 </html>

@@ -11,7 +11,6 @@ const CONTENT = {
   location: "Bengaluru, India",
   email: "raghav.kohli.work@gmail.com",
   linkedin: "linkedin.com/in/raghavkohli31",
-  website: "raghavkohli.xyz",
 
   // ── HERO ──────────────────────────────────────────────────
   hero: {
@@ -20,119 +19,233 @@ const CONTENT = {
   },
 
   // ── PROJECTS ──────────────────────────────────────────────
-  // To add a project: copy one block, fill in your details.
-  // images: put your files in the /images folder, reference them here.
-  // Set featured: true to show on homepage, false to hide.
+  // Each project has sub-projects. Add as many sub-projects as you want.
+  // Sub-project minimum: title + description + images array
+  // Images: put files in /images/[project-id]/[subproject-id]/ and reference them here
+  // Videos: YouTube or Vimeo embed URL, e.g. "https://www.youtube.com/embed/VIDEOID"
 
   projects: [
 
+    // ── ICLEI ───────────────────────────────────────────────
     {
       id: "iclei",
       title: "ICLEI",
       subtitle: "Local Governments for Sustainability",
       role: "Project Officer, Climate & Energy",
       year: "2024",
-      location: "New Delhi",
-      featured: true,
       category: "climate",
-      tagline: "City-level climate strategy across South and Southeast Asia",
-      description: "Led development of the Malaysia Green City Action Plan across 5 municipalities. Authored multilateral policy briefs on Loss & Damage for international climate negotiations. Managed CapaCities — capacity building for local governments across South Asia.",
-      highlights: [
-        "Malaysia Green City Action Plan — 5 municipalities",
-        "Loss & Damage policy briefs for international negotiations",
-        "CapaCities — capacity building across South Asian cities",
-        "Udaipur Urban95 Child-Friendly Cities assessment",
-        "US–South Asia Mayoral Platform for Clean Energy",
+      featured: true,
+      description: "Led climate strategy and policy work across South and Southeast Asia.",
+      subprojects: [
+        {
+          id: "malaysia",
+          title: "Malaysia Green City Action Plan",
+          description: "City-level climate strategy spanning 5 municipalities, coordinated with national government counterparts.",
+          images: [
+            // "images/iclei/malaysia/cover.jpg",
+            // "images/iclei/malaysia/map.jpg",
+          ],
+          video: "", // "https://www.youtube.com/embed/VIDEOID"
+        },
+        {
+          id: "capacities",
+          title: "CapaCities",
+          description: "Capacity building programme for local government officials across South Asian cities.",
+          images: [
+            // "images/iclei/capacities/workshop.jpg",
+          ],
+          video: "",
+        },
+        {
+          id: "loss-damage",
+          title: "Loss & Damage",
+          description: "Multilateral policy briefs on Loss & Damage for international climate negotiations. Presented findings to High Level Committee.",
+          images: [
+            // "images/iclei/loss-damage/brief.jpg",
+          ],
+          video: "",
+        },
+        {
+          id: "urban95",
+          title: "Udaipur Urban95",
+          description: "Child-Friendly Cities assessment integrating child-sensitive spatial design into the municipal planning framework.",
+          images: [
+            // "images/iclei/urban95/cover.jpg",
+          ],
+          video: "",
+        },
+        {
+          id: "clean-energy",
+          title: "US–South Asia Mayoral Platform",
+          description: "Clean Energy platform facilitating dialogue between city leaders across two continents.",
+          images: [
+            // "images/iclei/clean-energy/event.jpg",
+          ],
+          video: "",
+        },
       ],
-      // Add image paths here as you collect them
-      // Example: "images/iclei/malaysia-plan.jpg"
-      images: [
-        "images/ICLEI/placeholder.png",
-        // "images/iclei/malaysia.jpg",
-        // "images/iclei/workshop.jpg",
-      ],
-      coverImage: "", // "images/iclei/cover.jpg"
     },
 
+    // ── NIUA ────────────────────────────────────────────────
     {
       id: "niua",
       title: "NIUA",
       subtitle: "National Institute of Urban Affairs, MoHUA India",
       role: "Climate Fellow, Climate Center for Cities",
       year: "2023",
-      location: "New Delhi",
-      featured: true,
       category: "climate",
-      tagline: "National climate policy research for Indian cities",
-      description: "Co-authored State of Cities: Towards Low Carbon and Resilient Pathways — national policy report covering 15+ Indian cities, published by the Ministry of Housing and Urban Affairs. Developed Nature-based Solutions Toolkit for urban local bodies across India.",
-      highlights: [
-        "State of Cities report — 15+ Indian cities, published by MoHUA",
-        "Compendium of Good Climate Practices across 15+ municipalities",
-        "Nature-based Solutions Toolkit for urban local bodies",
-        "Urban-20 (G20) Forum contributor",
-        "India Climate Dialogues",
+      featured: true,
+      description: "Climate policy research and toolkit development for Indian cities.",
+      subprojects: [
+        {
+          id: "state-of-cities",
+          title: "State of Cities",
+          description: "Towards Low Carbon and Resilient Pathways — national policy report covering 15+ Indian cities, published by the Ministry of Housing and Urban Affairs.",
+          images: [
+            // "images/niua/state-of-cities/cover.jpg",
+            // "images/niua/state-of-cities/spread.jpg",
+          ],
+          video: "",
+        },
+        {
+          id: "compendium",
+          title: "Compendium of Good Climate Practices",
+          description: "Researched and documented climate interventions across 15+ municipalities for national policy adoption.",
+          images: [
+            // "images/niua/compendium/cover.jpg",
+          ],
+          video: "",
+        },
+        {
+          id: "nbs-toolkit",
+          title: "Nature-based Solutions Toolkit",
+          description: "Practical NbS implementation guidance developed for urban local bodies across India.",
+          images: [
+            // "images/niua/nbs/cover.jpg",
+            // "images/niua/nbs/pages.jpg",
+          ],
+          video: "",
+        },
       ],
-      images: [
-        // "images/niua/report-cover.jpg",
-        // "images/niua/toolkit.jpg",
-        // "images/niua/g20.jpg",
-      ],
-      coverImage: "", // "images/niua/cover.jpg"
     },
 
+    // ── PERSPECTIVES ─────────────────────────────────────────
     {
       id: "perspectives",
       title: "Perspectives",
       subtitle: "Community Platform",
       role: "Co-founder",
       year: "2025 – Present",
-      location: "Bengaluru",
-      featured: true,
       category: "community",
-      tagline: "8 to 1,000+ members. Zero paid acquisition.",
-      description: "Grew from 8 to 1,000+ members entirely through word of mouth. Opened and managed a dedicated offline community space. Unlocked a home economy model for community hosting. Led product development, UX design, and user research.",
-      highlights: [
-        "8 to 1,000+ members — zero paid acquisition",
-        "Dedicated offline community space",
-        "Home economy model for community hosting",
-        "Product development and UX design from scratch",
-        "Ongoing user research and iteration",
+      featured: true,
+      description: "8 to 1,000+ members through word of mouth. A community built around structured human conversation.",
+
+      // ── SCALE STATS (shown in hero moment) ──
+      stats: [
+        { number: "200+", label: "Conversations hosted" },
+        { number: "1K+",  label: "Members, zero paid acquisition" },
+        { number: "3",    label: "Formats — Spheres, Circles, Home" },
       ],
-      images: [
-        // "images/perspectives/space.jpg",
-        // "images/perspectives/event.jpg",
-        // "images/perspectives/community.jpg",
-        // "images/perspectives/app.jpg",
+
+      // ── CONVERSATIONS ARCHIVE ──
+      // Add each conversation here. Filters are built automatically from the data.
+      // format options: "Sphere" / "Circle" / "Home" / "Special"
+      // recording: YouTube or Vimeo embed URL, leave "" if none
+      // photo: path to image, leave "" if none
+      conversations: [
+
+        // ── EXAMPLE ENTRIES — replace with real data ──
+        {
+          id: "conv-001",
+          title: "What does it mean to belong to a city?",
+          description: "A conversation about urban identity, belonging, and what makes a city feel like home.",
+          initiator: "Raghav Kohli",
+          date: "2025-03",
+          format: "Sphere",
+          photo: "", // "images/perspectives/conv-001.jpg"
+          recording: "", // "https://www.youtube.com/embed/VIDEOID"
+        },
+        {
+          id: "conv-002",
+          title: "On grief and growth",
+          description: "An intimate Sphere exploring how loss shapes identity and the relationships we build after.",
+          initiator: "Shreshtha",
+          date: "2025-04",
+          format: "Sphere",
+          photo: "",
+          recording: "",
+        },
+        {
+          id: "conv-003",
+          title: "Climate anxiety and what we do with it",
+          description: "How do people working in climate actually feel about the future? An honest conversation.",
+          initiator: "Raghav Kohli",
+          date: "2025-05",
+          format: "Circle",
+          photo: "",
+          recording: "",
+        },
+        {
+          id: "conv-004",
+          title: "Career pivots and the identity that follows",
+          description: "When you change what you do, who do you become? Hosted across three living rooms.",
+          initiator: "Avani",
+          date: "2025-06",
+          format: "Home",
+          photo: "",
+          recording: "",
+        },
+
+        // Add more conversations here following the same pattern...
+        // {
+        //   id: "conv-005",
+        //   title: "Conversation title",
+        //   description: "What this conversation was about.",
+        //   initiator: "Initiator name",
+        //   date: "2025-07",   // YYYY-MM format
+        //   format: "Sphere",
+        //   photo: "images/perspectives/conv-005.jpg",
+        //   recording: "",
+        // },
+
       ],
-      coverImage: "", // "images/perspectives/cover.jpg"
+
+      // Kept for compatibility — not used in Perspectives view
+      subprojects: [],
     },
 
+    // ── CEPT ────────────────────────────────────────────────
     {
       id: "cept",
       title: "CEPT University",
       subtitle: "Centre for Environmental Planning & Technology",
       role: "Bachelor of Urban Design",
       year: "2017 – 2022",
-      location: "Ahmedabad",
-      featured: true,
       category: "design",
-      tagline: "Five years of urban design education and practice",
-      description: "Bachelor of Urban Design from CEPT University, Ahmedabad. Winner, CEPT Student Excellence Award. Five years of urban design studios, research, and hands-on fieldwork across Indian cities.",
-      highlights: [
-        "CEPT Student Excellence Award winner",
-        "Living Heritage: Co-designing to Revive Historical Identity",
-        "Reverse Effekt — ethnographic study across 12 Koliwada communities",
-        "Generative Techniques for Urban Placemaking — Mumbai Eastern Waterfront",
-        "Summer School: Academy of Architecture, Amsterdam (2019)",
-        "Workshop: Earthen Materials & Construction, Hunnarshala Bhuj (2017)",
+      featured: true,
+      description: "Five years of urban design education, research, and fieldwork.",
+      subprojects: [
+        // Add your 10-15 studios here as you go
+        // {
+        //   id: "living-heritage",
+        //   title: "Living Heritage",
+        //   description: "Co-designing to Revive Historical Identity. Winner, CEPT Student Excellence Award.",
+        //   images: [
+        //     "images/cept/living-heritage/cover.jpg",
+        //     "images/cept/living-heritage/drawings.jpg",
+        //   ],
+        //   video: "",
+        // },
+        // {
+        //   id: "reverse-effekt",
+        //   title: "Reverse Effekt",
+        //   description: "Five-month ethnographic study across 12 Koliwada fishing villages in Mumbai.",
+        //   images: [
+        //     "images/cept/reverse-effekt/fieldwork.jpg",
+        //   ],
+        //   video: "",
+        // },
       ],
-      images: [
-        // "images/cept/studio.jpg",
-        // "images/cept/fieldwork.jpg",
-        // "images/cept/drawings.jpg",
-        // "images/cept/model.jpg",
-      ],
-      coverImage: "", // "images/cept/cover.jpg"
     },
 
   ],
