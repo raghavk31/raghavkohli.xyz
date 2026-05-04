@@ -189,18 +189,6 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
 /* ── EMBEDDED REPORT READER ── */
 .viewer-images.reader-mode { padding: 0; overflow: hidden; display: flex; flex-direction: column; }
 .er { display: flex; flex-direction: column; height: 100%; min-height: 0; }
-.er-tabs {
-  display: flex; flex-wrap: wrap; gap: 2px;
-  padding: 12px 16px; border-bottom: 1px solid var(--rule); flex-shrink: 0;
-}
-.er-tab {
-  font-family: var(--fm); font-size: 7.5px; letter-spacing: 1.5px;
-  text-transform: uppercase; padding: 5px 11px;
-  background: none; border: 1px solid var(--rule);
-  color: var(--dim); cursor: pointer; transition: all 0.18s;
-}
-.er-tab:hover { border-color: var(--black); color: var(--black); }
-.er-tab.active { color: var(--white); border-color: transparent; }
 .er-stage {
   flex: 1; display: flex; align-items: center; justify-content: center;
   padding: 20px 48px; position: relative; background: var(--bg);
@@ -208,9 +196,8 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
 }
 .er-img {
   max-width: 100%; max-height: 100%; object-fit: contain; display: block;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.10); transition: opacity 0.18s ease;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.10);
 }
-.er-img.fade { opacity: 0; }
 .er-nav {
   position: absolute; top: 50%; transform: translateY(-50%);
   background: var(--white); border: 1px solid var(--rule);
@@ -650,17 +637,6 @@ featured.forEach(project => {
     const er = document.createElement('div');
     er.className = 'er';
 
-    // Section tabs
-    const tabsDiv = document.createElement('div');
-    tabsDiv.className = 'er-tabs';
-    sections.forEach(sec => {
-      const btn = document.createElement('button');
-      btn.className = 'er-tab';
-      btn.textContent = sec.label;
-      btn.addEventListener('click', () => goEr(sec.start - 1));
-      tabsDiv.appendChild(btn);
-    });
-
     // Stage: large current image
     const stage = document.createElement('div');
     stage.className = 'er-stage';
@@ -696,30 +672,18 @@ featured.forEach(project => {
       strip.appendChild(t);
     });
 
-    er.append(tabsDiv, stage, bar, strip);
+    er.append(stage, bar, strip);
     container.appendChild(er);
 
     function goEr(idx) {
       idx = Math.max(0, Math.min(images.length - 1, idx));
-      img.classList.add('fade');
-      setTimeout(() => {
-        cur = idx;
-        img.src = images[cur];
-        img.classList.remove('fade');
-        syncEr();
-      }, 160);
+      cur = idx;
+      img.src = images[cur];
+      syncEr();
     }
 
     function syncEr() {
       count.textContent = `${String(cur + 1).padStart(2, '0')} / ${images.length}`;
-      // Update section tabs
-      tabsDiv.querySelectorAll('.er-tab').forEach((btn, i) => {
-        const s = sections[i];
-        const active = s && (cur + 1) >= s.start && (cur + 1) <= s.end;
-        btn.classList.toggle('active', active);
-        btn.style.background  = active ? 'var(--black)' : '';
-        btn.style.color       = active ? '#fff' : '';
-      });
       // Update filmstrip — scroll within strip only, never the page
       strip.querySelectorAll('.er-thumb').forEach((t, i) => t.classList.toggle('active', i === cur));
       const activeThumb = strip.querySelectorAll('.er-thumb')[cur];
