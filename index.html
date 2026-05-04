@@ -261,6 +261,18 @@ footer { padding: 24px 52px; display: flex; justify-content: space-between; bord
 .dci-num { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; color: var(--dim); flex-shrink: 0; }
 .dci-name { font-size: 12px; font-weight: 400; color: var(--black); transition: color 0.18s; flex: 1; }
 .dci-state { font-family: var(--fm); font-size: 7.5px; letter-spacing: 0.5px; color: var(--dim); }
+.detail-city-toggle {
+  font-family: var(--fm); font-size: 8px; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--dim); margin: 20px 0 0;
+  display: flex; justify-content: space-between; align-items: center;
+  cursor: pointer; user-select: none; padding-bottom: 8px;
+  border-bottom: 1px solid var(--rule);
+}
+.detail-city-toggle:hover { color: var(--black); }
+.detail-city-toggle .toggle-arrow { font-size: 10px; transition: transform 0.2s; }
+.detail-city-toggle.open .toggle-arrow { transform: rotate(180deg); }
+.detail-city-list { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+.detail-city-list.open { max-height: 600px; }
 </style>
 </head>
 <body>
@@ -564,12 +576,14 @@ featured.forEach(project => {
         });
         panel2.appendChild(sg);
       }
-      // City list
+      // City list — collapsible dropdown
       if (sp.cities && sp.cities.length) {
-        const lbl = document.createElement('div');
-        lbl.className = 'detail-city-label';
-        lbl.textContent = `${sp.cities.length} Cities`;
-        panel2.appendChild(lbl);
+        const toggle = document.createElement('div');
+        toggle.className = 'detail-city-toggle';
+        toggle.innerHTML = `<span>${sp.cities.length} Cities</span><span class="toggle-arrow">▾</span>`;
+
+        const cityList = document.createElement('div');
+        cityList.className = 'detail-city-list';
         sp.cities.forEach((city, i) => {
           const item = document.createElement('div');
           item.className = 'detail-city-item';
@@ -578,8 +592,16 @@ featured.forEach(project => {
             <span class="dci-name">${city.name}</span>
             <span class="dci-state">${city.state}</span>
           `;
-          panel2.appendChild(item);
+          cityList.appendChild(item);
         });
+
+        toggle.addEventListener('click', () => {
+          const isOpen = toggle.classList.toggle('open');
+          cityList.classList.toggle('open', isOpen);
+        });
+
+        panel2.appendChild(toggle);
+        panel2.appendChild(cityList);
       }
     } else {
       panel2.innerHTML = `
@@ -698,10 +720,13 @@ featured.forEach(project => {
         btn.style.background  = active ? 'var(--black)' : '';
         btn.style.color       = active ? '#fff' : '';
       });
-      // Update filmstrip
+      // Update filmstrip — scroll within strip only, never the page
       strip.querySelectorAll('.er-thumb').forEach((t, i) => t.classList.toggle('active', i === cur));
-      strip.querySelectorAll('.er-thumb')[cur]
-        ?.scrollIntoView({ inline: 'center', behavior: 'smooth', block: 'nearest' });
+      const activeThumb = strip.querySelectorAll('.er-thumb')[cur];
+      if (activeThumb) {
+        const target = activeThumb.offsetLeft - (strip.clientWidth / 2) + (activeThumb.offsetWidth / 2);
+        strip.scrollTo({ left: target, behavior: 'smooth' });
+      }
     }
 
     // Init — set first image without fade delay
