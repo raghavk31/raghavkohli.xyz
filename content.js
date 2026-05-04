@@ -1,32 +1,26 @@
-// ============================================================
-// RAGHAV KOHLI — CONTENT FILE
-// Edit this file to update your website. No design code needed.
-// ============================================================
-
 const CONTENT = {
 
-  // ── PERSONAL ──────────────────────────────────────────────
+  heroImages: [
+    // "images/hero/photo-1.jpg",
+    // "images/hero/photo-2.jpg",
+    // "images/hero/photo-3.jpg",
+    // "images/hero/photo-4.jpg",
+    // "images/hero/photo-5.jpg",
+  ],
+
   name: "Raghav Kohli",
   title: "Urban Designer · Climate Strategist",
   location: "Bengaluru, India",
   email: "raghav.kohli.work@gmail.com",
   linkedin: "linkedin.com/in/raghavkohli31",
 
-  // ── HERO ──────────────────────────────────────────────────
   hero: {
     headline: ["Cities", "Community", "Climate"],
     statement: "I went to the ground first — five months in Mumbai's fishing villages before I drew a single line.",
   },
 
-  // ── PROJECTS ──────────────────────────────────────────────
-  // Each project has sub-projects. Add as many sub-projects as you want.
-  // Sub-project minimum: title + description + images array
-  // Images: put files in /images/[project-id]/[subproject-id]/ and reference them here
-  // Videos: YouTube or Vimeo embed URL, e.g. "https://www.youtube.com/embed/VIDEOID"
-
   projects: [
 
-    // ── ICLEI ───────────────────────────────────────────────
     {
       id: "iclei",
       title: "ICLEI",
@@ -42,51 +36,41 @@ const CONTENT = {
           title: "Malaysia Green City Action Plan",
           description: "City-level climate strategy spanning 5 municipalities, coordinated with national government counterparts.",
           images: [
-            // "images/iclei/malaysia/cover.jpg",
-            // "images/iclei/malaysia/map.jpg",
+            "images/ICLEI/placeholder.png",
           ],
-          video: "", // "https://www.youtube.com/embed/VIDEOID"
+          video: "",
         },
         {
           id: "capacities",
           title: "CapaCities",
           description: "Capacity building programme for local government officials across South Asian cities.",
-          images: [
-            // "images/iclei/capacities/workshop.jpg",
-          ],
+          images: [],
           video: "",
         },
         {
           id: "loss-damage",
           title: "Loss & Damage",
-          description: "Multilateral policy briefs on Loss & Damage for international climate negotiations. Presented findings to High Level Committee.",
-          images: [
-            // "images/iclei/loss-damage/brief.jpg",
-          ],
+          description: "Multilateral policy briefs on Loss & Damage for international climate negotiations.",
+          images: [],
           video: "",
         },
         {
           id: "urban95",
           title: "Udaipur Urban95",
           description: "Child-Friendly Cities assessment integrating child-sensitive spatial design into the municipal planning framework.",
-          images: [
-            // "images/iclei/urban95/cover.jpg",
-          ],
+          images: [],
           video: "",
         },
         {
           id: "clean-energy",
           title: "US–South Asia Mayoral Platform",
           description: "Clean Energy platform facilitating dialogue between city leaders across two continents.",
-          images: [
-            // "images/iclei/clean-energy/event.jpg",
-          ],
+          images: [],
           video: "",
         },
       ],
     },
 
-    // ── NIUA ────────────────────────────────────────────────
     {
       id: "niua",
       title: "NIUA",
@@ -100,36 +84,27 @@ const CONTENT = {
         {
           id: "state-of-cities",
           title: "State of Cities",
-          description: "Towards Low Carbon and Resilient Pathways — national policy report covering 15+ Indian cities, published by the Ministry of Housing and Urban Affairs.",
-          images: [
-            // "images/niua/state-of-cities/cover.jpg",
-            // "images/niua/state-of-cities/spread.jpg",
-          ],
+          description: "Towards Low Carbon and Resilient Pathways — national policy report covering 15+ Indian cities, published by MoHUA.",
+          images: [],
           video: "",
         },
         {
           id: "compendium",
           title: "Compendium of Good Climate Practices",
           description: "Researched and documented climate interventions across 15+ municipalities for national policy adoption.",
-          images: [
-            // "images/niua/compendium/cover.jpg",
-          ],
+          images: [],
           video: "",
         },
         {
           id: "nbs-toolkit",
           title: "Nature-based Solutions Toolkit",
           description: "Practical NbS implementation guidance developed for urban local bodies across India.",
-          images: [
-            // "images/niua/nbs/cover.jpg",
-            // "images/niua/nbs/pages.jpg",
-          ],
+          images: [],
           video: "",
         },
       ],
     },
 
-    // ── PERSPECTIVES ─────────────────────────────────────────
     {
       id: "perspectives",
       title: "Perspectives",
@@ -139,22 +114,12 @@ const CONTENT = {
       category: "community",
       featured: true,
       description: "8 to 1,000+ members through word of mouth. A community built around structured human conversation.",
-
-      // ── SCALE STATS (shown in hero moment) ──
       stats: [
         { number: "200+", label: "Conversations hosted" },
         { number: "1K+",  label: "Members, zero paid acquisition" },
         { number: "3",    label: "Formats — Spheres, Circles, Home" },
       ],
-
-      // ── CONVERSATIONS ARCHIVE ──
-      // Add each conversation here. Filters are built automatically from the data.
-      // format options: "Sphere" / "Circle" / "Home" / "Special"
-      // recording: YouTube or Vimeo embed URL, leave "" if none
-      // photo: path to image, leave "" if none
       conversations: [
-
-        // ── EXAMPLE ENTRIES — replace with real data ──
         {
           id: "conv-001",
           title: "What does it mean to belong to a city?",
@@ -162,8 +127,8 @@ const CONTENT = {
           initiator: "Raghav Kohli",
           date: "2025-03",
           format: "Sphere",
-          photo: "", // "images/perspectives/conv-001.jpg"
-          recording: "", // "https://www.youtube.com/embed/VIDEOID"
+          photo: "",
+          recording: "",
         },
         {
           id: "conv-002",
@@ -195,26 +160,10 @@ const CONTENT = {
           photo: "",
           recording: "",
         },
-
-        // Add more conversations here following the same pattern...
-        // {
-        //   id: "conv-005",
-        //   title: "Conversation title",
-        //   description: "What this conversation was about.",
-        //   initiator: "Initiator name",
-        //   date: "2025-07",   // YYYY-MM format
-        //   format: "Sphere",
-        //   photo: "images/perspectives/conv-005.jpg",
-        //   recording: "",
-        // },
-
       ],
-
-      // Kept for compatibility — not used in Perspectives view
       subprojects: [],
     },
 
-    // ── CEPT ────────────────────────────────────────────────
     {
       id: "cept",
       title: "CEPT University",
@@ -225,24 +174,11 @@ const CONTENT = {
       featured: true,
       description: "Five years of urban design education, research, and fieldwork.",
       subprojects: [
-        // Add your 10-15 studios here as you go
         // {
         //   id: "living-heritage",
         //   title: "Living Heritage",
         //   description: "Co-designing to Revive Historical Identity. Winner, CEPT Student Excellence Award.",
-        //   images: [
-        //     "images/cept/living-heritage/cover.jpg",
-        //     "images/cept/living-heritage/drawings.jpg",
-        //   ],
-        //   video: "",
-        // },
-        // {
-        //   id: "reverse-effekt",
-        //   title: "Reverse Effekt",
-        //   description: "Five-month ethnographic study across 12 Koliwada fishing villages in Mumbai.",
-        //   images: [
-        //     "images/cept/reverse-effekt/fieldwork.jpg",
-        //   ],
+        //   images: [],
         //   video: "",
         // },
       ],
