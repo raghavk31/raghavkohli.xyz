@@ -84,6 +84,16 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 99; display: flex; ju
 .sub-item-count { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; color: var(--dim); }
 .viewer-list-empty { padding: 24px; font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); line-height: 1.8; }
 
+/* Nested sub-children */
+.sub-children { overflow: hidden; max-height: 0; transition: max-height 0.35s ease; }
+.sub-children.open { max-height: 500px; }
+.sub-child { padding: 10px 14px 10px 26px; cursor: pointer; border-left: 2px solid var(--rule); margin-left: 14px; transition: background 0.15s; }
+.sub-child:hover { background: color-mix(in srgb, var(--olive) 6%, transparent); }
+.sub-child.active { background: color-mix(in srgb, var(--olive) 10%, transparent); }
+.sub-child.active .sub-item-title { color: var(--red); }
+.sub-child .sub-item-title { font-size: 12px; }
+.sub-child .sub-item-count { font-family: var(--fm); font-size: 8px; letter-spacing: 1px; color: var(--dim); }
+
 /* Panel 2 — sub-project detail */
 .viewer-detail { border-right: 1px solid var(--rule); padding: 28px 28px; overflow-y: auto; display: flex; flex-direction: column; gap: 20px; }
 .detail-empty { font-family: var(--fm); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--dim); line-height: 1.9; padding-top: 8px; }
@@ -518,18 +528,46 @@ featured.forEach(project => {
 
   const panel1 = document.createElement('div');
   panel1.className = 'viewer-list';
+
+  // Build children map: parentId -> [{sp, index}]
+  const childrenMap = {};
+  if (hasSubprojects) {
+    project.subprojects.forEach((sp, i) => {
+      if (sp.group) {
+        if (!childrenMap[sp.group]) childrenMap[sp.group] = [];
+        childrenMap[sp.group].push({ sp, i });
+      }
+    });
+  }
+  const topLevelCount = hasSubprojects ? project.subprojects.filter(sp => !sp.group).length : 0;
+
   panel1.innerHTML = `
     <div class="viewer-list-header">
       <div class="viewer-list-title">${project.title}</div>
-      <div class="viewer-list-sub">${project.subprojects?.length || 0} sub-projects</div>
+      <div class="viewer-list-sub">${topLevelCount} sub-projects</div>
     </div>
     <div class="viewer-list-items" id="list-${project.id}">
       ${hasSubprojects
-        ? project.subprojects.map((sp, i) => `
-          <div class="sub-item ${i === 0 ? 'active' : ''}" data-project="${project.id}" data-index="${i}">
-            <div class="sub-item-title">${sp.title}</div>
-            <div class="sub-item-count">${sp.images?.filter(Boolean).length || 0} images</div>
-          </div>`).join('')
+        ? project.subprojects.map((sp, i) => {
+            if (sp.group) return ''; // rendered as children
+            const children = childrenMap[sp.id] || [];
+            return `
+              <div class="sub-item ${i === 0 ? 'active' : ''}" data-project="${project.id}" data-index="${i}">
+                <div class="sub-item-title">${sp.title}</div>
+                <div class="sub-item-count">${sp.images?.filter(Boolean).length || 0} images${children.length ? ` · ${children.length} plans` : ''}</div>
+              </div>
+              ${children.length ? `
+                <div class="sub-children ${i === 0 ? 'open' : ''}" id="subch-${project.id}-${i}">
+                  ${children.map(({ sp: child, i: ci }) => `
+                    <div class="sub-child" data-project="${project.id}" data-index="${ci}">
+                      <div class="sub-item-title">${child.title}</div>
+                      <div class="sub-item-count">${child.images?.filter(Boolean).length || 0} images</div>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            `;
+          }).join('')
         : `<div class="viewer-list-empty">Sub-projects<br>coming soon</div>`
       }
     </div>
@@ -712,12 +750,26 @@ featured.forEach(project => {
   viewer.appendChild(panel2);
   viewer.appendChild(panel3);
 
-  // Sub-project click
+  // Sub-project click (top-level)
   panel1.querySelectorAll('.sub-item').forEach(item => {
     item.addEventListener('click', () => {
-      panel1.querySelectorAll('.sub-item').forEach(s => s.classList.remove('active'));
+      panel1.querySelectorAll('.sub-item, .sub-child').forEach(s => s.classList.remove('active'));
       item.classList.add('active');
       const sp = project.subprojects[+item.dataset.index];
+      renderSubproject(sp);
+      // Toggle children panel
+      const childPanel = document.getElementById(`subch-${project.id}-${item.dataset.index}`);
+      if (childPanel) childPanel.classList.toggle('open');
+    });
+  });
+
+  // Sub-child click (nested CRCAP)
+  panel1.querySelectorAll('.sub-child').forEach(child => {
+    child.addEventListener('click', e => {
+      e.stopPropagation();
+      panel1.querySelectorAll('.sub-item, .sub-child').forEach(s => s.classList.remove('active'));
+      child.classList.add('active');
+      const sp = project.subprojects[+child.dataset.index];
       renderSubproject(sp);
     });
   });
