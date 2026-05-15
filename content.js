@@ -35,9 +35,7 @@ const CONTENT = {
           id: "malaysia",
           title: "Malaysia Green City Action Plan",
           description: "City-level climate strategy spanning 5 municipalities, coordinated with national government counterparts.",
-          images: [
-            "images/ICLEI/placeholder.png",
-          ],
+          images: [],
           video: "",
         },
         {
@@ -825,7 +823,7 @@ const CONTENT = {
         },
         {
           id: "compendium",
-          title: "Compendium of Good Climate Practices",
+          title: "Good Practices Compendium",
           description: "Researched and documented climate interventions across 15+ municipalities for national policy adoption.",
           images: [],
           video: "",
@@ -903,8 +901,8 @@ const CONTENT = {
       id: "cept",
       title: "CEPT University",
       subtitle: "Centre for Environmental Planning & Technology",
-      role: "Bachelor of Urban Design",
-      year: "2017 – 2022",
+      role: "Bachelors in Urban Design",
+      year: "2017 – 22",
       category: "design",
       featured: true,
       description: "Five years of urban design education, research, and fieldwork.",
@@ -943,7 +941,7 @@ const CONTENT = {
         },
         {
           id: "eco-machine",
-          title: "Every, Any, All, Some — Eco-machine",
+          title: "Eco-machine",
           description: "A landscape urbanism project proposing an eco-machine on Mumbai's BKC waterfront — a tidal park that treats industrial waste, filters runoff, and creates habitat and livelihood for the fishing communities of Mahim. The design uses modular hexagonal bioremediation units arranged to follow tidal flows, creating a productive edge between the city and the sea. Semester 7, 2021.",
           images: [
             "images/CEPT/Eco-machine/render-01.jpg",
@@ -970,7 +968,7 @@ const CONTENT = {
         },
         {
           id: "generative-techniques",
-          title: "Generative Techniques — Computational Urbanism",
+          title: "Generative Techniques",
           description: "A computational design project using Grasshopper and evolutionary computation to generate and evaluate urban typologies for a mixed-use redevelopment site in Ahmedabad's Wadaj neighbourhood. Eight typologies were tested across eight performance objectives — sunlight, density, green space, connectivity — with Pareto-front optimisation to identify best-fit configurations. Semester 6, 2020.",
           images: [
             "images/CEPT/Generative Techniques/typology diag.jpg",
@@ -988,7 +986,7 @@ const CONTENT = {
         },
         {
           id: "water-urbanism",
-          title: "Water Urbanism — Mithi River",
+          title: "Water Urbanism",
           description: "A landscape urbanism thesis exploring flood resilience and ecological restoration along Mumbai's Mithi River. Five months of fieldwork in fishing villages preceded the design — the project proposes a network of wetlands, eco-trails, urban agriculture zones, and riparian edge treatments to address drainage, ecology, and livelihoods simultaneously. Semester 9, 2021–22.",
           images: [
             "images/CEPT/Water Urbanism/masterplan.jpg",
@@ -1004,24 +1002,4 @@ const CONTENT = {
             "images/CEPT/Water Urbanism/riperian edge and green cover.jpg",
             "images/CEPT/Water Urbanism/phase 02.jpg",
             "images/CEPT/Water Urbanism/phase 03.jpg",
-          ],
-          video: "",
-        },
-        {
-          id: "open-source-urbanism",
-          title: "Open Source Urbanism — DRP",
-          description: "A Design Research Project on the Versova fishing village, Mumbai — mapping the open-source logics already embedded in the settlement: shared jetties, communal fish-drying grounds, bamboo construction, collective waste circuits. The project asks how design can make these systems legible and extensible rather than replace them. Semester 10, 2022.",
-          images: [
-            "images/CEPT/Open Source Urbanism/Artboard 1.jpg",
-            "images/CEPT/Open Source Urbanism/Artboard 1 copy.jpg",
-            "images/CEPT/Open Source Urbanism/Artboard 1 copy 2.jpg",
-            "images/CEPT/Open Source Urbanism/Artboard 1 copy 3.jpg",
-          ],
-          video: "",
-        },
-      ],
-    },
-
-  ],
-
-};
+          ]

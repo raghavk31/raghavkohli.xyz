@@ -202,59 +202,60 @@ body {
 
 /* ── Work Rail ── */
 .work-rail {
-  width: 25vw;
+  width: 200px;
   flex-shrink: 0;
   position: sticky;
   top: 80px;
   height: calc(100vh - 80px);
   overflow-y: auto;
   border-right: 1px solid var(--gb);
-  padding: 32px 0 40px;
+  padding: 24px 0 40px;
   display: flex;
   flex-direction: column;
 }
 .work-rail::-webkit-scrollbar { width: 0; }
 
 .rail-label {
-  font: 700 11px/1 var(--ff);
+  font: 700 10px/1 var(--ff);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--gt);
-  padding: 0 32px 16px;
+  padding: 0 20px 12px;
   border-bottom: 1px solid var(--gb);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .work-entry {
-  padding: 18px 32px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--gb);
   cursor: pointer;
-  border-left: 3px solid transparent;
+  border-left: 2px solid transparent;
   transition: border-left-color var(--tr);
 }
 .work-entry:last-child { border-bottom: none; }
 .work-entry:hover .work-org { color: var(--cyan); }
+.work-entry:hover .work-role { color: var(--cyan); }
 .work-entry.active { border-left-color: var(--magenta); }
 .work-entry.active .work-org { color: var(--magenta); }
 
 .work-org {
-  font: 700 14px/1.2 var(--ffd);
+  font: 600 12px/1.3 var(--ff);
   color: var(--black);
-  margin-bottom: 4px;
+  margin-bottom: 3px;
   transition: color var(--tr);
 }
 .work-role {
-  font: 400 12px/1.4 var(--ff);
+  font: 400 11px/1.4 var(--ff);
   color: var(--gt);
-  margin-bottom: 2px;
+  transition: color var(--tr);
 }
 .work-period {
-  font: 500 11px/1 var(--ff);
-  letter-spacing: 0.03em;
+  font: 400 10px/1 var(--ff);
+  letter-spacing: 0.02em;
   color: var(--gb);
   margin-top: 4px;
 }
-.work-entry.active .work-period { color: rgba(236,0,140,0.4); }
+.work-entry.active .work-period { color: rgba(236,0,140,0.35); }
 
 /* ── Project area ── */
 .project-area { flex: 1; min-width: 0; }
@@ -325,6 +326,22 @@ body {
 }
 .module:hover .module-head::after  { border-top-color: var(--cyan); }
 .module.active .module-head::after { border-top-color: var(--magenta); }
+
+/* Empty head placeholder */
+.module-head-empty .module-head-inner {
+  background: var(--gbg);
+}
+.module-head-empty .module-head-inner::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 18px,
+    rgba(0,0,0,0.03) 18px,
+    rgba(0,0,0,0.03) 19px
+  );
+}
 
 /* Body */
 .module-body { padding: 22px 28px 28px; flex: 1; display: flex; flex-direction: column; }
@@ -554,7 +571,7 @@ footer a:hover { color: var(--cyan); }
    RESPONSIVE
 ═══════════════════════════════════════ */
 @media (max-width: 1080px) {
-  .work-rail { width: 28vw; }
+  .work-rail { width: 180px; }
   .project-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 760px) {
@@ -567,9 +584,9 @@ footer a:hover { color: var(--cyan); }
   }
   .rail-label { display: none; }
   .work-entry {
-    flex-shrink: 0; padding: 14px 20px;
+    flex-shrink: 0; padding: 12px 16px;
     border-bottom: none; border-right: 1px solid var(--gb);
-    border-left: none; border-top: 3px solid transparent;
+    border-left: none; border-top: 2px solid transparent;
   }
   .work-entry.active { border-top-color: var(--magenta); border-left: none; }
   .work-role, .work-period { display: none; }
@@ -737,46 +754,39 @@ const HERO_IMAGES = [
 // ═══════════════════════════════════════
 const WORK = [
   {
-    id: 'iclei',
-    org: 'ICLEI South Asia',
-    role: 'Urban Climate Strategist',
-    period: '2022 – 2024',
-    cards: ['capacities', 'loss-damage'],
-  },
-  {
-    id: 'wri',
-    org: 'WRI India',
-    role: 'Sustainable Cities Consultant',
-    period: '2024',
-    cards: ['malaysia'],
-  },
-  {
-    id: 'bvlf',
-    org: 'Bernard van Leer Foundation',
-    role: 'Urban Design Consultant',
-    period: '2023',
-    cards: ['urban95', 'clean-energy'],
-  },
-  {
     id: 'perspectives',
     org: 'Perspectives',
-    role: 'Founder & Host',
-    period: '2021 –',
+    role: 'Founder',
+    period: '2025',
     cards: ['perspectives'],
   },
   {
+    id: 'iclei',
+    org: 'ICLEI South Asia',
+    role: 'Project Officer · Climate & Energy',
+    period: '2023 – 24',
+    cards: ['capacities', 'malaysia', 'loss-damage', 'urban95', 'clean-energy'],
+  },
+  {
     id: 'niua',
-    org: 'NIUA / C3',
-    role: 'Climate Fellow',
-    period: '2023',
+    org: 'NIUA / MoHUA',
+    role: 'Climate Fellow · C3',
+    period: '2022 – 23',
     cards: ['state-of-cities', 'compendium', 'nbs-toolkit'],
   },
   {
     id: 'cept',
     org: 'CEPT University',
-    role: 'Masters in Urban Design',
-    period: '2015 – 2020',
+    role: 'Bachelors in Urban Design',
+    period: '2017 – 22',
     cards: ['living-heritage', 'utopias-heterotopias', 'eco-machine', 'generative-techniques', 'water-urbanism', 'open-source-urbanism'],
+  },
+  {
+    id: 'ccb',
+    org: "CCB's Office",
+    role: 'Urban Design Intern',
+    period: '2021',
+    cards: [],
   },
 ];
 
@@ -896,19 +906,18 @@ cards.forEach((card, idx) => {
   const thumb  = images[0] || null;
 
   const el = document.createElement('div');
-  el.className = 'module' + (!thumb ? ' module-no-head' : '');
+  el.className = 'module';
   el.dataset.idx      = idx;
   el.dataset.category = categoryOf(card);
   el.dataset.cardid   = card.id;
   el.dataset.search   = [title, desc, ...tags, org, year].join(' ').toLowerCase();
 
   el.innerHTML = `
-    ${thumb ? `
-      <div class="module-head">
-        <div class="module-head-inner">
-          <img src="${thumb}" alt="${title}" loading="lazy" decoding="async">
-        </div>
-      </div>` : ''}
+    <div class="module-head${thumb ? '' : ' module-head-empty'}">
+      <div class="module-head-inner">
+        ${thumb ? `<img src="${thumb}" alt="${title}" loading="lazy" decoding="async">` : ''}
+      </div>
+    </div>
     <div class="module-body">
       <div class="module-eyebrow">${categoryOf(card)}</div>
       <div class="module-title">${title}</div>
