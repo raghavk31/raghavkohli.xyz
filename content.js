@@ -1002,4 +1002,24 @@ const CONTENT = {
             "images/CEPT/Water Urbanism/riperian edge and green cover.jpg",
             "images/CEPT/Water Urbanism/phase 02.jpg",
             "images/CEPT/Water Urbanism/phase 03.jpg",
-          ]
+          ],
+          video: "",
+        },
+        {
+          id: "open-source-urbanism",
+          title: "Open Source Urbanism",
+          description: "A Design Research Project on the Versova fishing village, Mumbai — mapping the open-source logics already embedded in the settlement: shared jetties, communal fish-drying grounds, bamboo construction, collective waste circuits. The project asks how design can make these systems legible and extensible rather than replace them. Semester 10, 2022.",
+          images: [
+            "images/CEPT/Open Source Urbanism/Artboard 1.jpg",
+            "images/CEPT/Open Source Urbanism/Artboard 1 copy.jpg",
+            "images/CEPT/Open Source Urbanism/Artboard 1 copy 2.jpg",
+            "images/CEPT/Open Source Urbanism/Artboard 1 copy 3.jpg",
+          ],
+          video: "",
+        },
+      ],
+    },
+
+  ],
+
+};
