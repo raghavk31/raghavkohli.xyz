@@ -13,18 +13,23 @@ html { scroll-behavior: smooth; overflow-x: hidden; }
 :root {
   --black:   #201f20;
   --white:   #ffffff;
-  --gt:      #a0a0a0;   /* grey text */
-  --gb:      #e6e6e6;   /* grey border */
-  --gbg:     #f0f0f0;   /* grey background */
+  --gt:      #a0a0a0;
+  --gb:      #e0deda;
+  --gbg:     #f0eeec;
   --cyan:    #00aeef;
   --magenta: #ec008c;
   --ff:  Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
   --ffd: 'Space Grotesk', "Helvetica Neue", Helvetica, Arial, sans-serif;
   --tr: 0.3s;
+  --r: 16px;        /* card radius */
+  --glass: rgba(255,255,255,0.72);
+  --glass-border: rgba(255,255,255,0.55);
+  --glass-shadow: 0 2px 20px rgba(32,31,32,0.07);
+  --glass-shadow-hover: 0 10px 40px rgba(32,31,32,0.13);
 }
 
 body {
-  background: var(--white);
+  background: #edecea;
   color: var(--black);
   font-family: var(--ff);
   -webkit-font-smoothing: antialiased;
@@ -98,13 +103,14 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 6.25vw;
-  background: transparent;
-  border-bottom: 1px solid transparent;
-  transition: background var(--tr), border-color var(--tr);
+  background: rgba(255,255,255,0.08);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+  transition: background var(--tr), border-color var(--tr), backdrop-filter var(--tr);
 }
-/* After hero: solid white */
 .site-header.scrolled {
-  background: var(--white);
+  background: rgba(237,236,234,0.88);
   border-bottom-color: var(--gb);
 }
 
@@ -198,6 +204,8 @@ body {
   display: flex;
   align-items: flex-start;
   border-top: 1px solid var(--gb);
+  background: linear-gradient(160deg, #edecea 0%, #e8e9ee 100%);
+  min-height: calc(100vh - 80px);
 }
 
 /* ── Work Rail ── */
@@ -212,6 +220,9 @@ body {
   padding: 24px 0 40px;
   display: flex;
   flex-direction: column;
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .work-rail::-webkit-scrollbar { width: 0; }
 
@@ -266,18 +277,30 @@ body {
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--gb);
+  gap: 16px;
+  background: transparent;
+  padding: 20px;
 }
 
 /* ═══════════════════════════════════════
    MODULE (CARD)
 ═══════════════════════════════════════ */
 .module {
-  background: var(--white);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r);
+  box-shadow: var(--glass-shadow);
   cursor: pointer;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+  transition: box-shadow var(--tr), transform var(--tr);
+}
+.module:hover {
+  box-shadow: var(--glass-shadow-hover);
+  transform: translateY(-3px);
 }
 .module.hidden { display: none; }
 
@@ -292,7 +315,8 @@ body {
   position: absolute;
   inset: 0;
   overflow: hidden;
-  background: #2a2828;
+  background: #d8d6d3;
+  border-radius: var(--r) var(--r) 0 0;
 }
 .module-head-inner img {
   width: 100%; height: 100%;
@@ -301,7 +325,7 @@ body {
 }
 .module:hover .module-head-inner img { transform: scale(1.04); }
 
-/* 3px bar slides up from bottom */
+/* 3px bar slides up from bottom of image */
 .module-head-inner::after {
   content: '';
   position: absolute; bottom: 0; left: 0; right: 0;
@@ -313,23 +337,9 @@ body {
 .module:hover .module-head-inner::after { transform: translateY(0); }
 .module.active .module-head-inner::after { background: var(--magenta); transform: translateY(0); }
 
-/* Triangle notch below image */
-.module-head::after {
-  content: '';
-  position: absolute; bottom: -9px; left: 50%;
-  transform: translateX(-50%);
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
-  border-top: 9px solid var(--gb);
-  transition: border-top-color var(--tr);
-  z-index: 3;
-}
-.module:hover .module-head::after  { border-top-color: var(--cyan); }
-.module.active .module-head::after { border-top-color: var(--magenta); }
-
 /* Empty head placeholder */
 .module-head-empty .module-head-inner {
-  background: var(--gbg);
+  background: linear-gradient(145deg, #dddbd8 0%, #cac8c5 100%);
 }
 .module-head-empty .module-head-inner::before {
   content: '';
@@ -337,9 +347,9 @@ body {
   background: repeating-linear-gradient(
     -45deg,
     transparent,
-    transparent 18px,
-    rgba(0,0,0,0.03) 18px,
-    rgba(0,0,0,0.03) 19px
+    transparent 20px,
+    rgba(255,255,255,0.18) 20px,
+    rgba(255,255,255,0.18) 21px
   );
 }
 
@@ -406,12 +416,16 @@ body {
 
 .detail-panel {
   position: fixed; top: 0; right: 0; bottom: 0;
-  width: min(820px, 90vw); background: var(--white);
+  width: min(820px, 90vw);
+  background: rgba(237,236,234,0.88);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-left: 1px solid var(--glass-border);
   z-index: 201; display: flex; flex-direction: column;
   overflow: hidden;
   transform: translateX(100%);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: -8px 0 48px rgba(32,31,32,0.12);
+  box-shadow: -12px 0 60px rgba(32,31,32,0.14);
 }
 .detail-overlay.open .detail-panel { transform: translateX(0); }
 
@@ -572,7 +586,7 @@ footer a:hover { color: var(--cyan); }
 ═══════════════════════════════════════ */
 @media (max-width: 1080px) {
   .work-rail { width: 26vw; }
-  .project-grid { grid-template-columns: repeat(2, 1fr); }
+  .project-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 14px; }
 }
 @media (max-width: 760px) {
   .page-body { flex-direction: column; }
@@ -591,13 +605,13 @@ footer a:hover { color: var(--cyan); }
   .work-entry.active { border-top-color: var(--magenta); border-left: none; }
   .work-role, .work-period { display: none; }
   .work-org { font-size: 12px; white-space: nowrap; }
-  .project-grid { grid-template-columns: repeat(2, 1fr); }
+  .project-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; padding: 12px; }
   .site-header { padding: 0 20px; gap: 12px; }
   .filter-chips { display: none; }
   .site-hero { height: 55vw; min-height: 320px; }
 }
 @media (max-width: 480px) {
-  .project-grid { grid-template-columns: 1fr; }
+  .project-grid { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
   .detail-panel { width: 100vw; }
   footer { flex-direction: column; gap: 8px; padding: 32px 20px 48px; }
 }
