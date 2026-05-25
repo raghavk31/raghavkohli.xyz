@@ -66,8 +66,8 @@ body {
     180deg,
     rgba(32,31,32,0.55) 0%,
     rgba(32,31,32,0.1)  28%,
-    rgba(32,31,32,0.05) 55%,
-    rgba(32,31,32,0.55) 100%
+    rgba(32,31,32,0.05) 60%,
+    rgba(32,31,32,0.35) 100%
   );
   pointer-events: none;
 }
@@ -90,47 +90,6 @@ body {
   padding: 0;
 }
 .hero-dot.active { background: rgba(255,255,255,0.9); }
-
-/* ═══════════════════════════════════════
-   HERO CONTENT OVERLAY
-═══════════════════════════════════════ */
-.hero-content {
-  position: absolute;
-  bottom: 64px; left: 6.25vw;
-  z-index: 4; max-width: 620px;
-}
-.hero-label {
-  font: 700 11px/1 var(--ff);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
-  margin-bottom: 20px;
-}
-.hero-headline {
-  font: 700 clamp(52px, 7.5vw, 88px)/0.92 var(--ffd);
-  letter-spacing: -0.02em;
-  color: var(--white);
-  margin-bottom: 20px;
-  text-shadow: 0 2px 24px rgba(0,0,0,0.25);
-}
-.hero-sub {
-  font: 400 15px/1.65 var(--ff);
-  color: rgba(255,255,255,0.72);
-  margin-bottom: 28px;
-  max-width: 440px;
-}
-.hero-cta {
-  display: inline-flex; align-items: center;
-  font: 700 12px/1 var(--ff); letter-spacing: 0.05em;
-  color: var(--white); text-decoration: none;
-  border: 1px solid rgba(255,255,255,0.55);
-  padding: 11px 24px; border-radius: 999px;
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: all var(--tr);
-}
-.hero-cta:hover { background: rgba(255,255,255,0.2); border-color: var(--white); }
 
 /* ═══════════════════════════════════════
    HEADER (sticky, transparent over hero)
@@ -261,7 +220,9 @@ body {
   padding: 24px 0 40px;
   display: flex;
   flex-direction: column;
-  background: rgba(255,255,255,0.96);
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 .work-rail::-webkit-scrollbar { width: 0; }
 
@@ -310,47 +271,27 @@ body {
 /* ── Project area ── */
 .project-area { flex: 1; min-width: 0; }
 
-/* Pull quote strip */
-.pull-quote-strip {
-  background: var(--black);
-  padding: 52px 6.25vw;
-}
-.pull-quote {
-  font: 700 clamp(22px, 3vw, 36px)/1.25 var(--ffd);
-  color: var(--white);
-  letter-spacing: -0.02em;
-  max-width: 860px;
-}
-
-/* Section marker */
-.section-marker {
-  font: 700 10px/1 var(--ff);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--gt);
-  padding: 18px 24px;
-  border-bottom: 1px solid var(--gb);
-}
-
 /* ═══════════════════════════════════════
    GRID
 ═══════════════════════════════════════ */
 .project-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 16px;
   background: transparent;
-  padding: 24px;
+  padding: 20px;
 }
 
 /* ═══════════════════════════════════════
    MODULE (CARD)
 ═══════════════════════════════════════ */
 .module {
-  background: #fff;
-  border: 1px solid var(--gb);
+  background: var(--glass);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
   border-radius: var(--r);
-  box-shadow: none;
+  box-shadow: var(--glass-shadow);
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -358,7 +299,7 @@ body {
   transition: box-shadow var(--tr), transform var(--tr);
 }
 .module:hover {
-  box-shadow: 0 6px 28px rgba(32,31,32,0.1);
+  box-shadow: var(--glass-shadow-hover);
   transform: translateY(-3px);
 }
 .module.hidden { display: none; }
@@ -413,7 +354,7 @@ body {
 }
 
 /* Body */
-.module-body { padding: 28px 28px 32px; flex: 1; display: flex; flex-direction: column; }
+.module-body { padding: 22px 28px 28px; flex: 1; display: flex; flex-direction: column; }
 .module-no-head .module-body { padding-top: 28px; }
 
 .module-eyebrow {
@@ -628,35 +569,17 @@ body {
 .lb-thumb.active { opacity: 1; outline: 1px solid rgba(255,255,255,0.5); }
 .lb-thumb:hover { opacity: 0.65; }
 
-/* Launch app button in detail panel */
-.detail-link-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  font: 700 12px/1 var(--ff); letter-spacing: 0.06em;
-  text-transform: uppercase; color: var(--cyan);
-  text-decoration: none; border: 1px solid var(--cyan);
-  padding: 9px 16px; transition: all var(--tr);
-}
-.detail-link-btn:hover { background: var(--cyan); color: #fff; }
-
 /* ═══════════════════════════════════════
    FOOTER
 ═══════════════════════════════════════ */
 footer {
-  background: var(--black);
-  padding: 52px 6.25vw 60px;
-  border-top: none;
-  display: flex; flex-direction: column; gap: 32px;
-}
-.footer-cta {
-  font: 700 clamp(28px, 4vw, 52px)/1.05 var(--ffd);
-  color: var(--white); letter-spacing: -0.02em;
-}
-.footer-links {
+  background: var(--gbg); padding: 40px 6.25vw 60px;
+  border-top: 1px solid var(--gb);
   display: flex; justify-content: space-between;
-  font: 400 12px/1.5 var(--ff); color: rgba(255,255,255,0.35);
+  font: 400 12px/1.5 var(--ff); color: var(--gt);
 }
-.footer-links a { color: rgba(255,255,255,0.35); text-decoration: none; transition: color var(--tr); }
-.footer-links a:hover { color: var(--cyan); }
+footer a { color: var(--gt); text-decoration: none; transition: color var(--tr); }
+footer a:hover { color: var(--cyan); }
 
 /* ═══════════════════════════════════════
    RESPONSIVE
@@ -686,17 +609,11 @@ footer {
   .site-header { padding: 0 20px; gap: 12px; }
   .filter-chips { display: none; }
   .site-hero { height: 55vw; min-height: 320px; }
-  .hero-content { bottom: 50px; }
-  .hero-label { display: none; }
-  .hero-sub { display: none; }
-  .pull-quote-strip { padding: 36px 20px; }
-  .footer-links { flex-direction: column; gap: 6px; }
 }
 @media (max-width: 480px) {
   .project-grid { grid-template-columns: 1fr; gap: 10px; padding: 10px; }
   .detail-panel { width: 100vw; }
-  .hero-content { left: 20px; }
-  footer { padding: 32px 20px 48px; }
+  footer { flex-direction: column; gap: 8px; padding: 32px 20px 48px; }
 }
 </style>
 </head>
@@ -722,18 +639,8 @@ footer {
 <section class="site-hero" id="site-hero">
   <div id="hero-slides"></div>
   <div class="hero-scrim"></div>
-  <div class="hero-content">
-    <p class="hero-label">Urban Designer · Climate Strategist · Bengaluru</p>
-    <h1 class="hero-headline">Cities.<br>Climate.<br>Community.</h1>
-    <p class="hero-sub">I went to the ground first — five months in Mumbai's fishing villages before I drew a single line.</p>
-    <a href="mailto:raghav.kohli.work@gmail.com" class="hero-cta">work with me →</a>
-  </div>
   <div class="hero-dots" id="hero-dots"></div>
 </section>
-
-<div class="pull-quote-strip">
-  <p class="pull-quote">I went to the ground first — five months in Mumbai's fishing villages before I drew a single line.</p>
-</div>
 
 <!-- PAGE BODY -->
 <div class="page-body">
@@ -745,22 +652,18 @@ footer {
 
   <!-- GRID -->
   <main class="project-area">
-    <div class="section-marker">Selected Work</div>
     <div class="project-grid" id="project-grid"></div>
   </main>
 
 </div>
 
 <footer>
-  <p class="footer-cta">let's build something.</p>
-  <div class="footer-links">
-    <span>© Raghav Kohli 2026</span>
-    <span>
-      <a href="mailto:raghav.kohli.work@gmail.com">raghav.kohli.work@gmail.com</a>
-      &nbsp;·&nbsp;
-      <a href="https://linkedin.com/in/raghavkohli31" target="_blank">LinkedIn</a>
-    </span>
-  </div>
+  <span>© Raghav Kohli 2026</span>
+  <span>
+    <a href="mailto:raghav.kohli.work@gmail.com">raghav.kohli.work@gmail.com</a>
+    &nbsp;·&nbsp;
+    <a href="https://linkedin.com/in/raghavkohli31" target="_blank">LinkedIn</a>
+  </span>
 </footer>
 
 <!-- DETAIL OVERLAY -->
@@ -865,13 +768,6 @@ const HERO_IMAGES = [
 // ═══════════════════════════════════════
 const WORK = [
   {
-    id: 'resilience-stack',
-    org: 'Resilience Stack',
-    role: '30 Days of Climate Intelligence',
-    period: '2025',
-    cards: ['day01-grid-stress', 'day02-solar-atlas'],
-  },
-  {
     id: 'perspectives',
     org: 'Perspectives',
     role: 'Founder',
@@ -939,8 +835,6 @@ WORK.forEach(exp => {
 // TAGS
 // ═══════════════════════════════════════
 const TAGS = {
-  'day01-grid-stress':     ['climate', 'energy', 'data viz', 'global'],
-  'day02-solar-atlas':     ['solar', 'renewable energy', 'data viz', 'rooftop'],
   'malaysia':              ['climate', 'green city', 'Southeast Asia', 'policy'],
   'capacities':            ['climate', 'capacity building', 'South Asia', 'cities'],
   'loss-damage':           ['climate', 'policy', 'multilateral', 'COP'],
@@ -1159,19 +1053,15 @@ function openDetail(card, idx) {
   } else if (card.project.id === 'perspectives') {
     buildPerspectivesDetail(card.project, desc, tags);
   } else {
-    buildStandardDetail(title, desc, tags, images, children, card.project, card.subproject?.link || '');
+    buildStandardDetail(title, desc, tags, images, children, card.project);
   }
 
   overlay.classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
-function buildStandardDetail(title, desc, tags, images, children, project, link) {
-  let html = '';
-  if (link) {
-    html += `<div style="padding:22px 32px 0"><a href="${link}" target="_blank" rel="noopener" class="detail-link-btn">Launch App →</a></div>`;
-  }
-  html += `<div class="detail-desc">${desc}</div>`;
+function buildStandardDetail(title, desc, tags, images, children, project) {
+  let html = `<div class="detail-desc">${desc}</div>`;
   if (tags.length)
     html += `<div class="detail-tags">${tags.map(t => `<span class="detail-tag">${t}</span>`).join('')}</div>`;
   if (children.length) {

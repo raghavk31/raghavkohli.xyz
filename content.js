@@ -441,33 +441,6 @@ const CONTENT = {
       ],
     },
 
-    {
-      id: "resilience-stack",
-      title: "Resilience Stack",
-      subtitle: "30 Days of Climate Intelligence",
-      role: "Personal Project",
-      year: "2025",
-      category: "climate",
-      featured: true,
-      description: "30 standalone climate intelligence apps — maps, calculators, and dashboards built in 30 days. Each day layers a new dimension of the global climate crisis.",
-      subprojects: [
-        {
-          id: "day01-grid-stress",
-          title: "Day 01 — Global Grid Stress Map",
-          description: "Country-level grid fragility score combining fossil dependency, energy access gap, and transmission loss. Year slider 2000–2023. Click any country for a deep-dive with projection to 50% clean energy.",
-          link: "",
-          images: [],
-        },
-        {
-          id: "day02-solar-atlas",
-          title: "Day 02 — Solar Potential Atlas",
-          description: "Interactive global map of solar irradiance. Toggle satellite + rooftops mode, click any building to see panel yield, optimal tilt and azimuth from PVGIS, payback period, and CO₂ offset. Powered by NASA POWER.",
-          link: "",
-          images: [],
-        },
-      ],
-    },
-
   ],
 
 };
