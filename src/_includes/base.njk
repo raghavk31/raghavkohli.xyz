@@ -25,65 +25,6 @@
       {{ content | safe }}
     </main>
 
-    <script>
-      (function () {
-        var els = document.querySelectorAll(".reveal");
-        if (!("IntersectionObserver" in window) || !els.length) {
-          els.forEach(function (el) { el.classList.add("in"); });
-          return;
-        }
-        var io = new IntersectionObserver(function (entries) {
-          entries.forEach(function (e) {
-            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
-          });
-        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
-        els.forEach(function (el) { io.observe(el); });
-
-        // Flip the floating metadata panel to whichever side has room
-        document.querySelectorAll(".card__click").forEach(function (card) {
-          card.addEventListener("mouseenter", function () {
-            var meta = card.querySelector(".card__meta");
-            if (!meta) return;
-            var r = card.getBoundingClientRect();
-            var need = 200, vw = window.innerWidth;
-            var rs = vw - r.right, ls = r.left;
-            var side = rs >= need ? "right" : (ls >= need ? "left" : (rs >= ls ? "right" : "left"));
-            meta.classList.remove("left", "right");
-            meta.classList.add(side);
-          });
-        });
-
-        // (index) — hover a row to swap the sticky preview pane
-        var idxList = document.querySelector("[data-idxlist]");
-        if (idxList) {
-          var pvMedia = document.querySelector('[data-pv="media"]');
-          var pvName = document.querySelector('[data-pv="name"]');
-          var pvBlurb = document.querySelector('[data-pv="blurb"]');
-          var rows = idxList.querySelectorAll(".index__row");
-          rows.forEach(function (row) {
-            row.addEventListener("mouseenter", function () {
-              rows.forEach(function (r) { r.classList.remove("on"); });
-              row.classList.add("on");
-              if (pvMedia) pvMedia.textContent = row.getAttribute("data-media");
-              if (pvName) pvName.textContent = row.getAttribute("data-name");
-              if (pvBlurb) pvBlurb.textContent = row.getAttribute("data-blurb");
-            });
-          });
-        }
-
-        // (about) — set the display serif live from the font switcher
-        var fontSwitch = document.querySelector("[data-fontswitch]");
-        if (fontSwitch) {
-          var fontBtns = fontSwitch.querySelectorAll("button[data-font]");
-          fontBtns.forEach(function (btn) {
-            btn.addEventListener("click", function () {
-              document.documentElement.style.setProperty("--serif", btn.getAttribute("data-font"));
-              fontBtns.forEach(function (b) { b.classList.remove("on"); });
-              btn.classList.add("on");
-            });
-          });
-        }
-      })();
-    </script>
+    <script src="/assets/js/main.js" defer></script>
   </body>
 </html>

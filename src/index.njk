@@ -3,21 +3,22 @@ layout: base.njk
 title: Raghav Kohli — invisible systems, made visible
 ---
 
-{% macro card(p, num, size, offset) %}
-<figure class="card card--{{ size }}{% if offset %} {{ offset }}{% endif %}">
-  <a class="card__click" href="{{ p.url }}">
+{#- Faithful port of Portfolio.dc.html: composed grid, hover reveals, zoom-open detail -#}
+{% macro card(p, num, w, mt, aspect, pad, thumbs) %}
+<figure class="card reveal" data-reveal style="--cw:{{ w }}px;--cmt:{{ mt }}px;--car:{{ aspect }};--cpad:{{ pad }}px;--cq:{{ p.data.qsize or '24px' }};">
+  <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}">
     <div class="card__meta right">
-      <div><span class="lbl">(role)</span><br /><span class="val">{{ p.data.role }}</span></div>
-      <div><span class="lbl">(period)</span><br /><span class="val">{{ p.data.period }}</span></div>
-      <div><span class="lbl">(context)</span><br /><span class="val">{{ p.data.context }}</span></div>
-      <div><span class="lbl">(status)</span><br /><span class="val" style="color:{% if p.data.live %}var(--accent){% else %}var(--faint){% endif %}">{{ p.data.status }}</span></div>
+      <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
+      <div><span class="lbl">(period)</span><span class="val">{{ p.data.period }}</span></div>
+      <div><span class="lbl">(context)</span><span class="val">{{ p.data.context }}</span></div>
+      <div><span class="lbl">(status)</span><span class="val{% if p.data.live %} live{% endif %}">{{ p.data.status }}</span></div>
     </div>
     <div class="card__frame">
       {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}" loading="lazy" onerror="this.remove()" />{% endif %}
       <div class="card__fig">{{ p.data.fig }}</div>
       <div class="card__overlay">
         <span class="card__qlabel">(research question)</span>
-        <p class="card__q" style="font-size:{{ p.data.qsize or '24px' }}">{{ p.data.question }}</p>
+        <p class="card__q">{{ p.data.question }}</p>
         <span class="card__view">(view project &rarr;)</span>
       </div>
     </div>
@@ -27,6 +28,9 @@ title: Raghav Kohli — invisible systems, made visible
       <span class="desc">{{ p.data.desc }}</span>
       {% if p.data.live %}<span class="status">({{ p.data.status }})</span>{% endif %}
     </figcaption>
+    <div class="card__thumbs">
+      {% for i in range(0, thumbs) %}<div class="card__thumb"><span>{{ ["a","b","c","d"][i] }}</span></div>{% endfor %}
+    </div>
   </a>
 </figure>
 {% endmacro %}
@@ -41,32 +45,32 @@ title: Raghav Kohli — invisible systems, made visible
 {%- set academic = P | find("title", "selected academic") -%}
 
 <section class="work" id="work">
-  <div class="work__head reveal">
+  <div class="work__head reveal" data-reveal>
     <span class="eyebrow">(selected work)</span>
   </div>
 
   <!-- Row 1: sama large anchored low-left, koliwadas medium high-right -->
-  <div class="row reveal">
-    {{ card(sama, "01", "lg", "off-70") }}
-    {{ card(koliwadas, "02", "md", "") }}
+  <div class="row">
+    {{ card(sama, "01", 560, 70, "4/5", 36, 4) }}
+    {{ card(koliwadas, "02", 340, 0, "3/4", 30, 3) }}
   </div>
 
   <!-- Row 2: perspectives medium left, city-scale large anchored low-right -->
-  <div class="row reveal">
-    {{ card(perspectives, "03", "tall", "off-36") }}
-    {{ card(city, "04", "wide", "off-130") }}
+  <div class="row">
+    {{ card(perspectives, "03", 350, 36, "4/5", 30, 3) }}
+    {{ card(city, "04", 540, 130, "5/4", 36, 4) }}
   </div>
 
   <!-- Row 3: three smalls, scattered -->
-  <div class="row reveal">
-    {{ card(climatecode, "05", "s1", "") }}
-    {{ card(punemetro, "06", "s2", "off-78") }}
-    {{ card(academic, "07", "s2", "off-28") }}
+  <div class="row">
+    {{ card(climatecode, "05", 250, 0, "5/6", 24, 3) }}
+    {{ card(punemetro, "06", 240, 78, "4/5", 24, 3) }}
+    {{ card(academic, "07", 240, 28, "4/5", 24, 3) }}
   </div>
 </section>
 
 <section class="about" id="about">
-  <div class="reveal">
+  <div class="reveal" data-reveal>
     <span class="eyebrow">(about)</span>
     <blockquote class="about__quote">making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</blockquote>
 
@@ -90,11 +94,11 @@ title: Raghav Kohli — invisible systems, made visible
 </section>
 
 <section class="index" id="index">
-  <div class="index__head reveal">
+  <div class="index__head reveal" data-reveal>
     <span class="eyebrow">(index)</span>
-    <span style="font-size:12.5px;color:var(--faint-2)">the fuller archive &mdash; hover a line to preview</span>
+    <span class="index__hint">the fuller archive &mdash; hover a line to preview</span>
   </div>
-  <div class="index__grid reveal">
+  <div class="index__grid reveal" data-reveal>
     <div class="index__list" data-idxlist>
       {% for e in archive %}
       <a class="index__row{% if loop.first %} on{% endif %}" href="{{ e.href or '#index' }}"
@@ -105,7 +109,7 @@ title: Raghav Kohli — invisible systems, made visible
         <span class="yr">{{ e.year }}</span>
       </a>
       {% endfor %}
-      <div style="border-top:1px solid rgba(28,27,24,.09)"></div>
+      <div class="index__end"></div>
     </div>
     <div class="index__preview">
       <div class="index__pv-img"><div class="fig" data-pv="media">{{ archive[0].media }}</div></div>
@@ -116,7 +120,7 @@ title: Raghav Kohli — invisible systems, made visible
 </section>
 
 <section class="contact" id="contact">
-  <div class="reveal">
+  <div class="reveal" data-reveal>
     <span class="eyebrow">(contact)</span>
     <div class="contact__row">
       <a class="contact__email" href="mailto:{{ site.email }}">{{ site.email }}</a>
@@ -129,3 +133,59 @@ title: Raghav Kohli — invisible systems, made visible
     <div class="contact__fine">&copy; {{ '' | year }} &middot; making invisible systems visible, legible, and participatory.</div>
   </div>
 </section>
+
+<!-- Project detail — zooms open from the clicked card (progressive enhancement;
+     the card's href still deep-links to /work/<slug>/ when JS is off) -->
+<div class="pv" id="pv" aria-hidden="true">
+  <div class="pv__backdrop" data-pv-close></div>
+  <div class="pv__panel" role="dialog" aria-modal="true" aria-label="Project detail">
+    <div class="pv__bar">
+      <button type="button" class="pv__nav" data-pv-close>(&larr; selected work)</button>
+      <span class="pv__barname" data-pv="name"></span>
+      <button type="button" class="pv__nav" data-pv-close>(close)</button>
+    </div>
+    <div class="pv__body">
+      <span class="pv__qlabel">(research question)</span>
+      <h2 class="pv__q" data-pv="question"></h2>
+      <div class="pv__meta">
+        <div><div class="lbl">(role)</div><div class="val" data-pv="role"></div></div>
+        <div><div class="lbl">(period)</div><div class="val" data-pv="period"></div></div>
+        <div><div class="lbl">(context)</div><div class="val" data-pv="context"></div></div>
+        <div><div class="lbl">(status)</div><div class="val" data-pv="status"></div></div>
+      </div>
+      <p class="pv__lead" data-pv="lead"></p>
+      <div class="pv__hero"><div class="fig" data-pv="mediaHero"></div></div>
+      <div class="pv__pair" data-pv-pair></div>
+      <div class="pv__methodwrap" data-pv-methodwrap>
+        <span class="eyebrow">(method)</span>
+        <div class="pv__method" data-pv-method></div>
+      </div>
+      <a class="pv__next" href="#work" data-pv-close>
+        <span class="eyebrow">(next)</span>
+        <span class="pv__nextname" data-pv="next"></span>
+        <span class="pv__arrow">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<script id="pvdata" type="application/json">
+{
+{%- for p in collections.projects %}
+  {{ p.url | dump | safe }}: {
+    "name": {{ p.data.title | dump | safe }},
+    "question": {{ p.data.question | dump | safe }},
+    "role": {{ p.data.role | dump | safe }},
+    "period": {{ p.data.period | dump | safe }},
+    "context": {{ p.data.context | dump | safe }},
+    "status": {{ p.data.status | dump | safe }},
+    "live": {{ (p.data.live or false) | dump | safe }},
+    "lead": {{ (p.data.lead or "") | dump | safe }},
+    "mediaHero": {{ (p.data.mediaHero or "") | dump | safe }},
+    "mediaPair": {{ (p.data.mediaPair or []) | dump | safe }},
+    "method": {{ (p.data.method or []) | dump | safe }},
+    "next": {{ (p.data.next or "") | dump | safe }}
+  }{% if not loop.last %},{% endif %}
+{%- endfor %}
+}
+</script>
