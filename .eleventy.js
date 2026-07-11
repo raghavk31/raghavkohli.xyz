@@ -16,6 +16,12 @@ module.exports = function (eleventyConfig) {
     new Date(dateObj).getFullYear()
   );
 
+  // Find one item in a list by a data key — used to compose the homepage grid
+  // by project title, independent of file order.
+  eleventyConfig.addFilter("find", (arr, key, val) =>
+    (arr || []).find((i) => i && i.data && i.data[key] === val)
+  );
+
   return {
     dir: {
       input: "src",

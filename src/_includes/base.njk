@@ -14,10 +14,10 @@
     <header class="head">
       <a class="mark" href="/">र.</a>
       <nav>
-        <a href="/#work">(selected work)</a>
-        <a href="/#about">(about)</a>
-        <a href="/#index">(index)</a>
-        <a href="/#contact">(contact)</a>
+        <a href="/#work">(selected work)<span class="navsub"><span>07 projects · 2018—now</span><span>energy · carbon · transit</span><span>research + systems design</span></span></a>
+        <a href="/#about">(about)<span class="navsub"><span>the practice, in one line</span><span>from inside the system</span><span>instrumentation + participation</span></span></a>
+        <a href="/#index">(index)<span class="navsub"><span>teaching · writing · talks</span><span>open data · earlier work</span><span>full cv (pdf)</span></span></a>
+        <a href="/#contact">(contact)<span class="navsub"><span>email</span><span>google scholar</span><span>github · linkedin</span></span></a>
       </nav>
     </header>
 
@@ -52,6 +52,37 @@
             meta.classList.add(side);
           });
         });
+
+        // (index) — hover a row to swap the sticky preview pane
+        var idxList = document.querySelector("[data-idxlist]");
+        if (idxList) {
+          var pvMedia = document.querySelector('[data-pv="media"]');
+          var pvName = document.querySelector('[data-pv="name"]');
+          var pvBlurb = document.querySelector('[data-pv="blurb"]');
+          var rows = idxList.querySelectorAll(".index__row");
+          rows.forEach(function (row) {
+            row.addEventListener("mouseenter", function () {
+              rows.forEach(function (r) { r.classList.remove("on"); });
+              row.classList.add("on");
+              if (pvMedia) pvMedia.textContent = row.getAttribute("data-media");
+              if (pvName) pvName.textContent = row.getAttribute("data-name");
+              if (pvBlurb) pvBlurb.textContent = row.getAttribute("data-blurb");
+            });
+          });
+        }
+
+        // (about) — set the display serif live from the font switcher
+        var fontSwitch = document.querySelector("[data-fontswitch]");
+        if (fontSwitch) {
+          var fontBtns = fontSwitch.querySelectorAll("button[data-font]");
+          fontBtns.forEach(function (btn) {
+            btn.addEventListener("click", function () {
+              document.documentElement.style.setProperty("--serif", btn.getAttribute("data-font"));
+              fontBtns.forEach(function (b) { b.classList.remove("on"); });
+              btn.classList.add("on");
+            });
+          });
+        }
       })();
     </script>
   </body>

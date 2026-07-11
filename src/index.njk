@@ -3,8 +3,8 @@ layout: base.njk
 title: Raghav Kohli — invisible systems, made visible
 ---
 
-{% macro card(p, i) %}
-<figure class="card card--{{ p.data.size }} {{ p.data.offset }}">
+{% macro card(p, num, size, offset) %}
+<figure class="card card--{{ size }}{% if offset %} {{ offset }}{% endif %}">
   <a class="card__click" href="{{ p.url }}">
     <div class="card__meta right">
       <div><span class="lbl">(role)</span><br /><span class="val">{{ p.data.role }}</span></div>
@@ -13,7 +13,7 @@ title: Raghav Kohli — invisible systems, made visible
       <div><span class="lbl">(status)</span><br /><span class="val" style="color:{% if p.data.live %}var(--accent){% else %}var(--faint){% endif %}">{{ p.data.status }}</span></div>
     </div>
     <div class="card__frame">
-      {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}" loading="lazy" />{% endif %}
+      {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}" loading="lazy" onerror="this.remove()" />{% endif %}
       <div class="card__fig">{{ p.data.fig }}</div>
       <div class="card__overlay">
         <span class="card__qlabel">(research question)</span>
@@ -22,7 +22,7 @@ title: Raghav Kohli — invisible systems, made visible
       </div>
     </div>
     <figcaption>
-      <span class="n">{% if i < 10 %}0{% endif %}{{ i }}</span>
+      <span class="n">{{ num }}</span>
       <span class="name">{{ p.data.title }}</span>
       <span class="desc">{{ p.data.desc }}</span>
       {% if p.data.live %}<span class="status">({{ p.data.status }})</span>{% endif %}
@@ -31,45 +31,60 @@ title: Raghav Kohli — invisible systems, made visible
 </figure>
 {% endmacro %}
 
-<section class="hero">
-  <h1 class="hero__lead reveal">
-    Making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.
-  </h1>
-  <p class="hero__sub reveal">
-    I work from inside the systems I study &mdash; energy, carbon, the street &mdash;
-    building tools that let the people already living there read and reshape their
-    own flows.
-  </p>
-  <p class="hero__scroll eyebrow reveal">(scroll to explore)</p>
-</section>
+{%- set P = collections.projects -%}
+{%- set sama = P | find("title", "sama") -%}
+{%- set koliwadas = P | find("title", "koliwadas") -%}
+{%- set perspectives = P | find("title", "perspectives") -%}
+{%- set city = P | find("title", "city-scale climate") -%}
+{%- set climatecode = P | find("title", "climate code india") -%}
+{%- set punemetro = P | find("title", "pune metro") -%}
+{%- set academic = P | find("title", "selected academic") -%}
 
 <section class="work" id="work">
   <div class="work__head reveal">
     <span class="eyebrow">(selected work)</span>
-    <span class="eyebrow">(2018&mdash;now)</span>
   </div>
 
-  {%- set ordered = collections.projects -%}
-  {%- for p in ordered -%}
-    {%- if loop.index0 % 2 == 0 -%}
+  <!-- Row 1: sama large anchored low-left, koliwadas medium high-right -->
   <div class="row reveal">
-    {{ card(p, loop.index) }}
-    {%- if ordered[loop.index0 + 1] -%}{{ card(ordered[loop.index0 + 1], loop.index + 1) }}{%- endif -%}
+    {{ card(sama, "01", "lg", "off-70") }}
+    {{ card(koliwadas, "02", "md", "") }}
   </div>
-    {%- endif -%}
-  {%- endfor -%}
+
+  <!-- Row 2: perspectives medium left, city-scale large anchored low-right -->
+  <div class="row reveal">
+    {{ card(perspectives, "03", "tall", "off-36") }}
+    {{ card(city, "04", "wide", "off-130") }}
+  </div>
+
+  <!-- Row 3: three smalls, scattered -->
+  <div class="row reveal">
+    {{ card(climatecode, "05", "s1", "") }}
+    {{ card(punemetro, "06", "s2", "off-78") }}
+    {{ card(academic, "07", "s2", "off-28") }}
+  </div>
 </section>
 
 <section class="about" id="about">
   <div class="reveal">
     <span class="eyebrow">(about)</span>
     <blockquote class="about__quote">making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</blockquote>
+
+    <div class="about__set" data-fontswitch>
+      <span>(set in)</span>
+      <button type="button" data-font="'Cormorant',Georgia,serif">cormorant</button>
+      <span class="sep">/</span>
+      <button type="button" data-font="'Fraunces',Georgia,serif" class="on">fraunces</button>
+      <span class="sep">/</span>
+      <button type="button" data-font="'Newsreader',Georgia,serif">newsreader</button>
+    </div>
+
     <p class="about__body">
-      The practice is single-minded rather than broad: one obsession, pursued
-      through instrumentation, participatory method, and design that stays close
-      to the ground. Five years across ICLEI South Asia and NIUA/MoHUA &mdash;
-      carbon accounting, climate risk, and action plans for 15+ cities &mdash;
-      and a thesis embedded in the Koliwadas of Mumbai. Now building Sama.
+      I work from inside the systems I study &mdash; energy, carbon, the street &mdash;
+      building tools that let the people already living there read and reshape their
+      own flows. The practice is single-minded rather than broad: one obsession,
+      pursued through instrumentation, participatory method, and design that stays
+      close to the ground.
     </p>
   </div>
 </section>
@@ -77,12 +92,13 @@ title: Raghav Kohli — invisible systems, made visible
 <section class="index" id="index">
   <div class="index__head reveal">
     <span class="eyebrow">(index)</span>
-    <span style="font-size:12.5px;color:#B7B5AC">the fuller archive</span>
+    <span style="font-size:12.5px;color:var(--faint-2)">the fuller archive &mdash; hover a line to preview</span>
   </div>
   <div class="index__grid reveal">
-    <div>
+    <div class="index__list" data-idxlist>
       {% for e in archive %}
-      <a class="index__row" href="{{ e.href or '#index' }}">
+      <a class="index__row{% if loop.first %} on{% endif %}" href="{{ e.href or '#index' }}"
+         data-media="{{ e.media }}" data-name="{{ e.name }}" data-blurb="{{ e.blurb }}">
         <span class="n">{{ e.n }}</span>
         <span class="nm">{{ e.name }}</span>
         <span class="cat">{{ e.cat }}</span>
@@ -92,9 +108,9 @@ title: Raghav Kohli — invisible systems, made visible
       <div style="border-top:1px solid rgba(28,27,24,.09)"></div>
     </div>
     <div class="index__preview">
-      <div class="index__pv-img"><div class="fig">fig — selected archive</div></div>
-      <div class="index__pv-name">the fuller record</div>
-      <p class="index__pv-blurb">Teaching, writing, talks, open data, and earlier work &mdash; kept one layer down for the reader who wants everything in order rather than the image.</p>
+      <div class="index__pv-img"><div class="fig" data-pv="media">{{ archive[0].media }}</div></div>
+      <div class="index__pv-name" data-pv="name">{{ archive[0].name }}</div>
+      <p class="index__pv-blurb" data-pv="blurb">{{ archive[0].blurb }}</p>
     </div>
   </div>
 </section>
@@ -107,7 +123,7 @@ title: Raghav Kohli — invisible systems, made visible
       <nav class="contact__links">
         {% if site.scholar %}<a href="{{ site.scholar }}">(scholar)</a>{% endif %}
         {% if site.github %}<a href="{{ site.github }}">(github)</a>{% endif %}
-        <a href="{{ site.linkedin }}">(linkedin)</a>
+        {% if site.linkedin %}<a href="{{ site.linkedin }}">(linkedin)</a>{% endif %}
       </nav>
     </div>
     <div class="contact__fine">&copy; {{ '' | year }} &middot; making invisible systems visible, legible, and participatory.</div>
