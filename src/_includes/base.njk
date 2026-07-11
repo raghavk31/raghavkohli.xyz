@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ title or "Raghav Kohli" }}</title>
+    <meta name="description" content="{{ description or 'Raghav Kohli — making invisible urban systems visible, legible, and participatory.' }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Newsreader:opsz,wght@6..72,300;6..72,400&family=Geist:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/assets/css/main.css" />
+  </head>
+  <body>
+    <header class="head">
+      <a class="mark" href="/">र.</a>
+      <nav>
+        <a href="/#work">(selected work)</a>
+        <a href="/#about">(about)</a>
+        <a href="/#index">(index)</a>
+        <a href="/#contact">(contact)</a>
+      </nav>
+    </header>
+
+    <main>
+      {{ content | safe }}
+    </main>
+
+    <script>
+      (function () {
+        var els = document.querySelectorAll(".reveal");
+        if (!("IntersectionObserver" in window) || !els.length) {
+          els.forEach(function (el) { el.classList.add("in"); });
+          return;
+        }
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        els.forEach(function (el) { io.observe(el); });
+
+        // Flip the floating metadata panel to whichever side has room
+        document.querySelectorAll(".card__click").forEach(function (card) {
+          card.addEventListener("mouseenter", function () {
+            var meta = card.querySelector(".card__meta");
+            if (!meta) return;
+            var r = card.getBoundingClientRect();
+            var need = 200, vw = window.innerWidth;
+            var rs = vw - r.right, ls = r.left;
+            var side = rs >= need ? "right" : (ls >= need ? "left" : (rs >= ls ? "right" : "left"));
+            meta.classList.remove("left", "right");
+            meta.classList.add(side);
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

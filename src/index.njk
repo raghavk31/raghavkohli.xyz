@@ -1,0 +1,115 @@
+---
+layout: base.njk
+title: Raghav Kohli — invisible systems, made visible
+---
+
+{% macro card(p, i) %}
+<figure class="card card--{{ p.data.size }} {{ p.data.offset }}">
+  <a class="card__click" href="{{ p.url }}">
+    <div class="card__meta right">
+      <div><span class="lbl">(role)</span><br /><span class="val">{{ p.data.role }}</span></div>
+      <div><span class="lbl">(period)</span><br /><span class="val">{{ p.data.period }}</span></div>
+      <div><span class="lbl">(context)</span><br /><span class="val">{{ p.data.context }}</span></div>
+      <div><span class="lbl">(status)</span><br /><span class="val" style="color:{% if p.data.live %}var(--accent){% else %}var(--faint){% endif %}">{{ p.data.status }}</span></div>
+    </div>
+    <div class="card__frame">
+      {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}" loading="lazy" />{% endif %}
+      <div class="card__fig">{{ p.data.fig }}</div>
+      <div class="card__overlay">
+        <span class="card__qlabel">(research question)</span>
+        <p class="card__q" style="font-size:{{ p.data.qsize or '24px' }}">{{ p.data.question }}</p>
+        <span class="card__view">(view project &rarr;)</span>
+      </div>
+    </div>
+    <figcaption>
+      <span class="n">{% if i < 10 %}0{% endif %}{{ i }}</span>
+      <span class="name">{{ p.data.title }}</span>
+      <span class="desc">{{ p.data.desc }}</span>
+      {% if p.data.live %}<span class="status">({{ p.data.status }})</span>{% endif %}
+    </figcaption>
+  </a>
+</figure>
+{% endmacro %}
+
+<section class="hero">
+  <h1 class="hero__lead reveal">
+    Making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.
+  </h1>
+  <p class="hero__sub reveal">
+    I work from inside the systems I study &mdash; energy, carbon, the street &mdash;
+    building tools that let the people already living there read and reshape their
+    own flows.
+  </p>
+  <p class="hero__scroll eyebrow reveal">(scroll to explore)</p>
+</section>
+
+<section class="work" id="work">
+  <div class="work__head reveal">
+    <span class="eyebrow">(selected work)</span>
+    <span class="eyebrow">(2018&mdash;now)</span>
+  </div>
+
+  {%- set ordered = collections.projects -%}
+  {%- for p in ordered -%}
+    {%- if loop.index0 % 2 == 0 -%}
+  <div class="row reveal">
+    {{ card(p, loop.index) }}
+    {%- if ordered[loop.index0 + 1] -%}{{ card(ordered[loop.index0 + 1], loop.index + 1) }}{%- endif -%}
+  </div>
+    {%- endif -%}
+  {%- endfor -%}
+</section>
+
+<section class="about" id="about">
+  <div class="reveal">
+    <span class="eyebrow">(about)</span>
+    <blockquote class="about__quote">making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</blockquote>
+    <p class="about__body">
+      The practice is single-minded rather than broad: one obsession, pursued
+      through instrumentation, participatory method, and design that stays close
+      to the ground. Five years across ICLEI South Asia and NIUA/MoHUA &mdash;
+      carbon accounting, climate risk, and action plans for 15+ cities &mdash;
+      and a thesis embedded in the Koliwadas of Mumbai. Now building Sama.
+    </p>
+  </div>
+</section>
+
+<section class="index" id="index">
+  <div class="index__head reveal">
+    <span class="eyebrow">(index)</span>
+    <span style="font-size:12.5px;color:#B7B5AC">the fuller archive</span>
+  </div>
+  <div class="index__grid reveal">
+    <div>
+      {% for e in archive %}
+      <a class="index__row" href="{{ e.href or '#index' }}">
+        <span class="n">{{ e.n }}</span>
+        <span class="nm">{{ e.name }}</span>
+        <span class="cat">{{ e.cat }}</span>
+        <span class="yr">{{ e.year }}</span>
+      </a>
+      {% endfor %}
+      <div style="border-top:1px solid rgba(28,27,24,.09)"></div>
+    </div>
+    <div class="index__preview">
+      <div class="index__pv-img"><div class="fig">fig — selected archive</div></div>
+      <div class="index__pv-name">the fuller record</div>
+      <p class="index__pv-blurb">Teaching, writing, talks, open data, and earlier work &mdash; kept one layer down for the reader who wants everything in order rather than the image.</p>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="reveal">
+    <span class="eyebrow">(contact)</span>
+    <div class="contact__row">
+      <a class="contact__email" href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <nav class="contact__links">
+        {% if site.scholar %}<a href="{{ site.scholar }}">(scholar)</a>{% endif %}
+        {% if site.github %}<a href="{{ site.github }}">(github)</a>{% endif %}
+        <a href="{{ site.linkedin }}">(linkedin)</a>
+      </nav>
+    </div>
+    <div class="contact__fine">&copy; {{ '' | year }} &middot; making invisible systems visible, legible, and participatory.</div>
+  </div>
+</section>

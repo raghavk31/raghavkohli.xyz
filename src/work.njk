@@ -1,0 +1,17 @@
+---
+layout: base.njk
+title: Index — Raghav Kohli
+permalink: /work/
+---
+<section class="detail">
+  <a class="detail__back" href="/">(&larr; home)</a>
+  <span class="detail__qlabel">(index)</span>
+  <h1 class="detail__q reveal">the full index.</h1>
+  <div class="detail__body reveal" style="margin-top:clamp(40px,6vw,64px)">
+    <p>Everything, in order. Research questions first; the work sits beneath each.</p>
+    {% for p in collections.projects %}
+    <h2><a href="{{ p.url }}">{{ p.data.title }}</a></h2>
+    <p><em>{{ p.data.question }}</em><br /><span class="eyebrow">{{ p.data.role }} &middot; {{ p.data.context }} &middot; {{ p.data.period }}</span></p>
+    {% endfor %}
+  </div>
+</section>

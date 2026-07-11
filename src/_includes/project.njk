@@ -1,0 +1,52 @@
+---
+layout: base.njk
+---
+<article class="detail">
+  <a class="detail__back" href="/#work">(&larr; selected work)</a>
+
+  <span class="detail__qlabel">(research question)</span>
+  <h1 class="detail__q reveal">{{ question }}</h1>
+
+  <div class="detail__meta reveal">
+    <div><div class="lbl">(role)</div><div class="val">{{ role }}</div></div>
+    <div><div class="lbl">(period)</div><div class="val">{{ period }}</div></div>
+    <div><div class="lbl">(context)</div><div class="val">{{ context }}</div></div>
+    <div><div class="lbl">(status)</div><div class="val" style="color:{% if live %}var(--accent){% else %}var(--faint){% endif %}">{{ status }}</div></div>
+  </div>
+
+  {% if lead %}<p class="detail__lead reveal">{{ lead }}</p>{% endif %}
+
+  <div class="detail__hero-media reveal"><div class="fig">({{ mediaHero or 'project media' }})</div></div>
+
+  {% if mediaPair %}
+  <div class="detail__pair reveal">
+    {% for m in mediaPair %}<div><div class="fig">({{ m }})</div></div>{% endfor %}
+  </div>
+  {% endif %}
+
+  <div class="detail__body reveal">
+    {{ content | safe }}
+  </div>
+
+  {% if method %}
+  <div class="reveal" style="margin-top:clamp(56px,8vw,96px)">
+    <span class="eyebrow">(method)</span>
+    <div style="display:flex;flex-direction:column;margin-top:36px">
+      {% for m in method %}
+      <div style="display:flex;gap:24px;padding:24px 0;border-top:1px solid rgba(28,27,24,.09)">
+        <span class="mono" style="font-size:12px;color:var(--line);min-width:28px">{{ m.n }}</span>
+        <div><div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:6px">{{ m.title }}</div><div style="font-size:14px;color:var(--faint);max-width:34em">{{ m.body }}</div></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if next %}
+  <a class="detail__next reveal" href="/#work">
+    <span class="lbl">(next)</span>
+    <span class="nm">{{ next }}</span>
+    <span style="color:var(--accent)">&rarr;</span>
+  </a>
+  {% endif %}
+</article>

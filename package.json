@@ -1,0 +1,13 @@
+{
+  "name": "raghavkohli-xyz",
+  "version": "1.0.0",
+  "description": "Personal site for Raghav Kohli — built on Eleventy",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "eleventy"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}
