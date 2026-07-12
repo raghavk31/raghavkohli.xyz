@@ -2,3 +2,5 @@ node_modules/
 _site/
 .DS_Store
 .gstack/
+# source CV lives at root; the served copy is src/assets/Raghav_Kohli_CV.pdf
+/Raghav_Kohli_CV.pdf

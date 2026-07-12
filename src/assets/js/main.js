@@ -142,6 +142,18 @@
     });
   }
 
+  /* ---------- (about) full-cv disclosure ---------- */
+  var cvBtn = document.querySelector(".about__expand");
+  var cvPanel = document.getElementById("about-cv");
+  if (cvBtn && cvPanel) {
+    cvPanel.inert = true; // collapsed content shouldn't be tabbable
+    cvBtn.addEventListener("click", function () {
+      var open = cvPanel.classList.toggle("open");
+      cvBtn.setAttribute("aria-expanded", open ? "true" : "false");
+      cvPanel.inert = !open;
+    });
+  }
+
   /* ---------- project overlay — zooms open from the clicked card ---------- */
   var pv = document.getElementById("pv");
   var dataEl = document.getElementById("pvdata");
