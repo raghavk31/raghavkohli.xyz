@@ -32,6 +32,7 @@
   document.querySelectorAll("main *").forEach(function (el) {
     var cs = getComputedStyle(el);
     if (cs.display === "none" || cs.visibility === "hidden") return;
+    if (el.closest(".vh")) return; // sr-only text is deliberately clipped
     var r = el.getBoundingClientRect();
     if (r.width < 1 || r.height < 1) return;
     var tag = (typeof el.className === "string" && el.className) ? "." + el.className.split(" ")[0] : el.tagName;
