@@ -47,7 +47,10 @@
       out.push("VCLIP card#" + i + " sh" + o.scrollHeight + "/ch" + o.clientHeight);
   });
 
-  var cards = [].slice.call(document.querySelectorAll(".work__grid .card"));
+  // skip cards mid-FLIP (an inline transform is set only during the filter
+  // animation) so a settling card isn't mistaken for a real overlap
+  var cards = [].slice.call(document.querySelectorAll(".work__grid .card"))
+    .filter(function (c) { return getComputedStyle(c).transform === "none"; });
   for (var i = 0; i < cards.length; i++) for (var j = i + 1; j < cards.length; j++) {
     var a = cards[i].getBoundingClientRect(), b = cards[j].getBoundingClientRect();
     var ox = Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left));

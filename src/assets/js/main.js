@@ -101,22 +101,44 @@
       });
     }
 
+    // "× reset" control — only visible while a filter is active
+    var resetBtn = document.createElement("button");
+    resetBtn.type = "button";
+    resetBtn.className = "work__reset";
+    resetBtn.textContent = "× reset";
+    resetBtn.setAttribute("aria-label", "reset arrangement");
+    resetBtn.hidden = true;
+
+    function setActive(topic) {
+      active = topic || null;
+      filterBar.querySelectorAll(".work__chip").forEach(function (b) {
+        var on = !!active && b.getAttribute("data-topic") === active;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      resetBtn.hidden = !active;
+      applyFilter(active);
+    }
+
     topics.forEach(function (t) {
       var chip = document.createElement("button");
       chip.type = "button";
       chip.className = "work__chip";
       chip.textContent = "#" + t;
+      chip.setAttribute("data-topic", t);
       chip.setAttribute("aria-pressed", "false");
       chip.addEventListener("click", function () {
-        active = active === t ? null : t;
-        filterBar.querySelectorAll(".work__chip").forEach(function (b) {
-          var on = b === chip && active === t;
-          b.classList.toggle("on", on);
-          b.setAttribute("aria-pressed", on ? "true" : "false");
-        });
-        applyFilter(active);
+        setActive(active === t ? null : t);
       });
       filterBar.appendChild(chip);
+    });
+
+    resetBtn.addEventListener("click", function () { setActive(null); });
+    filterBar.appendChild(resetBtn);
+
+    // Escape also resets, unless the project overlay is open (it owns Escape then)
+    window.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && active && !document.body.classList.contains("pv-open")) setActive(null);
     });
   }
 
