@@ -49,16 +49,74 @@
     });
   }
 
-  /* ---------- (about) live serif switcher ---------- */
-  var fontSwitch = document.querySelector("[data-fontswitch]");
-  if (fontSwitch) {
-    var fontBtns = fontSwitch.querySelectorAll("button[data-font]");
-    fontBtns.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        document.documentElement.style.setProperty("--serif", btn.getAttribute("data-font"));
-        fontBtns.forEach(function (b) { b.classList.remove("on"); });
-        btn.classList.add("on");
+  /* ---------- (work) keyword filter — reorders + resizes the grid, FLIP-animated ---------- */
+  var grid = document.querySelector("[data-grid]");
+  var filterBar = document.querySelector("[data-filters]");
+  if (grid && filterBar) {
+    var cards = Array.prototype.slice.call(grid.querySelectorAll(".card"));
+
+    // union of every card's topics, in first-seen order
+    var topics = [];
+    cards.forEach(function (c) {
+      (c.getAttribute("data-topics") || "").split(/\s+/).forEach(function (t) {
+        if (t && topics.indexOf(t) === -1) topics.push(t);
       });
+    });
+
+    var active = null;
+
+    function topicsOf(card) {
+      return (card.getAttribute("data-topics") || "").split(/\s+/);
+    }
+
+    function applyFilter(topic) {
+      // FLIP: measure, mutate, invert, play — so the reflow animates smoothly
+      var first = cards.map(function (c) { return c.getBoundingClientRect(); });
+
+      if (topic) {
+        grid.classList.add("filtering");
+        cards.forEach(function (c) {
+          c.classList.toggle("match", topicsOf(c).indexOf(topic) !== -1);
+        });
+      } else {
+        grid.classList.remove("filtering");
+        cards.forEach(function (c) { c.classList.remove("match"); });
+      }
+
+      cards.forEach(function (c, i) {
+        var last = c.getBoundingClientRect();
+        var dx = first[i].left - last.left;
+        var dy = first[i].top - last.top;
+        if (!dx && !dy) return;
+        c.classList.remove("flip");
+        c.style.transform = "translate(" + dx + "px," + dy + "px)";
+      });
+      // force reflow so the inverted start position is committed
+      void grid.offsetWidth;
+      requestAnimationFrame(function () {
+        cards.forEach(function (c) {
+          c.classList.add("flip");
+          c.style.transform = "";
+        });
+      });
+    }
+
+    topics.forEach(function (t) {
+      var chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "work__chip";
+      chip.textContent = "#" + t;
+      chip.setAttribute("aria-pressed", "false");
+      chip.addEventListener("click", function () {
+        active = active === t ? null : t;
+        filterBar.querySelectorAll(".work__chip").forEach(function (b) {
+          var on = b === chip && active === t;
+          b.classList.toggle("on", on);
+          b.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+        applyFilter(active);
+      });
+      filterBar.appendChild(chip);
     });
   }
 

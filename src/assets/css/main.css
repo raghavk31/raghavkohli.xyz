@@ -49,22 +49,55 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 
 /* ---------- work section ---------- */
 .work{padding:clamp(36px,5vw,72px) var(--gutter) 0;max-width:var(--maxw);margin:0 auto;}
-.work__head{display:flex;align-items:baseline;justify-content:space-between;gap:24px;flex-wrap:wrap;
+.work__head{display:flex;align-items:baseline;justify-content:space-between;gap:20px 40px;flex-wrap:wrap;
   margin-bottom:clamp(40px,6vw,72px);}
-.row{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;flex-wrap:wrap;}
-.row + .row{margin-top:clamp(60px,9vw,140px);}
+
+/* keyword filter chips */
+.work__filters{display:flex;flex-wrap:wrap;gap:7px 8px;align-items:center;}
+.work__chip{font-family:var(--mono);font-size:11.5px;letter-spacing:.02em;color:var(--faint);
+  background:none;border:1px solid transparent;padding:5px 11px;border-radius:999px;cursor:pointer;line-height:1;
+  transition:color .3s ease,border-color .3s ease,background .3s ease;}
+.work__chip:hover{color:var(--ink);}
+.work__chip.on{color:var(--accent);border-color:var(--line);background:rgba(46,58,87,.05);}
+
+/* one reflowing container; per-card --cw/--cmt build the composed landing look.
+   justify-content:space-between + wrap reproduces the asymmetric rows. */
+.work__grid{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;
+  gap:clamp(60px,9vw,140px) 40px;}
+
+/* filtered state: matches float to the top and grow, the rest shrink + recede.
+   width/margin-top are set directly (not via --cw/--cmt) because those custom
+   props are inline on each card and inline declarations can't be overridden.
+   FLIP transforms (set inline by main.js) animate the reflow. */
+.work__grid.filtering .card{margin-top:0;}
+.work__grid.filtering .card.match{width:480px;order:0;}
+.work__grid.filtering .card:not(.match){width:236px;order:1;opacity:.38;}
+.work__grid.filtering .card:not(.match):hover{opacity:.85;}
+.card.flip{transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .5s ease;will-change:transform;}
 
 /* card layout is driven by per-card custom props (--cw width, --cmt offset,
    --car aspect, --cpad overlay padding, --cq question size) so the mobile
    media query can override cleanly without !important */
-figure.card{width:var(--cw);margin-top:var(--cmt,0);max-width:100%;}
+figure.card{width:var(--cw);margin-top:var(--cmt,0);max-width:100%;
+  transition:opacity .5s ease;}
 .card__click{cursor:pointer;position:relative;display:block;color:inherit;}
 .card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--stripe);
   transition:transform .6s cubic-bezier(.16,1,.3,1);}
 .card__frame > img{position:absolute;inset:0;transition:transform .9s cubic-bezier(.16,1,.3,1);}
 .card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);}
-.card__overlay{position:absolute;inset:0;background:rgba(250,250,248,.9);display:flex;flex-direction:column;
-  justify-content:flex-end;padding:var(--cpad,30px);opacity:0;transition:opacity .55s cubic-bezier(.16,1,.3,1);pointer-events:none;}
+/* frosted-glass + halftone screen over the image, question text on top */
+.card__overlay{position:absolute;inset:0;background:rgba(250,250,248,.5);
+  backdrop-filter:blur(9px) saturate(1.15);-webkit-backdrop-filter:blur(9px) saturate(1.15);
+  display:flex;flex-direction:column;justify-content:flex-end;padding:var(--cpad,30px);
+  opacity:0;transition:opacity .55s cubic-bezier(.16,1,.3,1);pointer-events:none;overflow:hidden;}
+.card__overlay::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(circle at center,rgba(28,27,24,.2) 1px,transparent 1.5px);
+  background-size:6px 6px;mix-blend-mode:multiply;opacity:.7;}
+.card__overlay > *{position:relative;z-index:1;}
+/* if the browser can't frost the glass, fall back to a near-opaque tint so text stays legible */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .card__overlay{background:rgba(250,250,248,.92);}
+}
 .card__qlabel{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--faint-2);margin-bottom:14px;}
 .card__q{font-family:var(--serif);font-weight:400;font-size:var(--cq,24px);line-height:1.32;color:#23221E;margin:0;}
 .card__view{margin-top:20px;font-size:12.5px;color:var(--accent);}
@@ -78,9 +111,10 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 /* floating metadata panel (desktop hover) */
 .card__meta{position:absolute;top:6px;width:172px;opacity:0;pointer-events:none;z-index:3;
   display:flex;flex-direction:column;gap:9px;transition:opacity .45s ease, transform .55s cubic-bezier(.16,1,.3,1);}
-.card__meta.right{left:100%;margin-left:22px;transform:translateX(-10px);}
-.card__meta.left{right:100%;margin-right:22px;transform:translateX(10px);}
-.card__meta > div{display:flex;flex-direction:column;gap:3px;}
+/* details hug the card edge: panel on the right reads left-aligned, panel on the left reads right-aligned */
+.card__meta.right{left:100%;margin-left:22px;transform:translateX(-10px);text-align:left;align-items:flex-start;}
+.card__meta.left{right:100%;margin-right:22px;transform:translateX(10px);text-align:right;align-items:flex-end;}
+.card__meta > div{display:flex;flex-direction:column;gap:3px;align-items:inherit;}
 .card__meta .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:#B7B5AC;}
 .card__meta .val{font-size:12px;color:var(--ink-2);}
 .card__meta > div:nth-child(4) .val{color:var(--faint);}
@@ -107,12 +141,6 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .about__quote{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5.2vw,80px);line-height:1.08;
   letter-spacing:-0.01em;color:var(--ink);max-width:14em;margin:30px 0 0;}
 .about__quote em{font-style:normal;color:var(--accent);}
-.about__set{display:flex;align-items:center;gap:16px;font-size:12.5px;color:var(--faint-2);margin-top:30px;}
-.about__set button{background:none;border:none;padding:0;cursor:pointer;font-size:12.5px;color:var(--faint-2);
-  transition:color .3s ease;}
-.about__set button:hover{color:var(--ink);}
-.about__set button.on{color:var(--accent);}
-.about__set .sep{color:#D6D4CB;}
 .about__body{font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.65;color:var(--ink-soft);
   max-width:32em;margin:48px 0 0;}
 
@@ -224,10 +252,12 @@ body.pv-open{overflow:hidden;}
 @media(max-width:900px){
   figure.card{width:100%;margin-top:0;}
   .card__frame{aspect-ratio:4/3;}
-  .row + .row{margin-top:clamp(48px,10vw,80px);}
-  .row{gap:clamp(40px,10vw,80px);}
+  .work__grid{gap:clamp(48px,10vw,80px);}
+  .work__grid.filtering .card.match,.work__grid.filtering .card:not(.match){width:100%;margin-top:0;opacity:1;}
   .card__meta,.card__thumbs{display:none;}
-  .card__overlay{opacity:1;position:static;background:none;padding:16px 0 0;pointer-events:auto;}
+  .card__overlay{opacity:1;position:static;background:none;padding:16px 0 0;pointer-events:auto;
+    backdrop-filter:none;-webkit-backdrop-filter:none;}
+  .card__overlay::before{display:none;}
   .card__q{font-size:1.15rem;}
   .card__qlabel{color:var(--faint);}
   .head nav .navsub{display:none;}

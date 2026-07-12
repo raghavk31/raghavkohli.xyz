@@ -2,6 +2,7 @@
 title: city-scale climate
 question: what does carbon accountability actually require at the data layer — and why do existing frameworks fail?
 desc: iclei–niua · carbon accounting
+topics: [carbon, data]
 size: wide
 offset: off-130
 qsize: 25px

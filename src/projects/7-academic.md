@@ -2,6 +2,7 @@
 title: selected academic
 question: what belongs in the archive, and what in the thesis?
 desc: cept · selected studio work
+topics: [research]
 size: sm
 offset: off-36
 qsize: 19px

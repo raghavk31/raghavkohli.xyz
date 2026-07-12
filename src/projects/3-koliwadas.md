@@ -2,6 +2,7 @@
 title: koliwadas
 question: how do you design with a community from inside it?
 desc: embedded participatory method
+topics: [community]
 size: md
 offset: ""
 qsize: 22px

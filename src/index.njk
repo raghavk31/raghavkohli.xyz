@@ -5,7 +5,9 @@ title: Raghav Kohli — invisible systems, made visible
 
 {#- Faithful port of Portfolio.dc.html: composed grid, hover reveals, zoom-open detail -#}
 {% macro card(p, num, w, mt, aspect, pad, thumbs) %}
-<figure class="card reveal" data-reveal style="--cw:{{ w }}px;--cmt:{{ mt }}px;--car:{{ aspect }};--cpad:{{ pad }}px;--cq:{{ p.data.qsize or '24px' }};">
+<figure class="card reveal" data-reveal
+        data-topics="{{ (p.data.topics or []) | join(' ') }}"
+        style="--cw:{{ w }}px;--cmt:{{ mt }}px;--car:{{ aspect }};--cpad:{{ pad }}px;--cq:{{ p.data.qsize or '24px' }};">
   <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}">
     <div class="card__meta right">
       <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
@@ -47,22 +49,17 @@ title: Raghav Kohli — invisible systems, made visible
 <section class="work" id="work">
   <div class="work__head reveal" data-reveal>
     <span class="eyebrow">(selected work)</span>
+    <!-- keyword chips injected by main.js from each card's data-topics -->
+    <div class="work__filters" data-filters aria-label="filter by keyword"></div>
   </div>
 
-  <!-- Row 1: sama large anchored low-left, koliwadas medium high-right -->
-  <div class="row">
+  <!-- Single reflowing grid. Per-card --cw/--cmt reproduce the composed
+       landing layout; the filter reorders + resizes within this one container. -->
+  <div class="work__grid" data-grid>
     {{ card(sama, "01", 560, 70, "4/5", 36, 4) }}
     {{ card(koliwadas, "02", 340, 0, "3/4", 30, 3) }}
-  </div>
-
-  <!-- Row 2: perspectives medium left, city-scale large anchored low-right -->
-  <div class="row">
     {{ card(perspectives, "03", 350, 36, "4/5", 30, 3) }}
     {{ card(city, "04", 540, 130, "5/4", 36, 4) }}
-  </div>
-
-  <!-- Row 3: three smalls, scattered -->
-  <div class="row">
     {{ card(climatecode, "05", 250, 0, "5/6", 24, 3) }}
     {{ card(punemetro, "06", 240, 78, "4/5", 24, 3) }}
     {{ card(academic, "07", 240, 28, "4/5", 24, 3) }}
@@ -73,15 +70,6 @@ title: Raghav Kohli — invisible systems, made visible
   <div class="reveal" data-reveal>
     <span class="eyebrow">(about)</span>
     <blockquote class="about__quote">making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</blockquote>
-
-    <div class="about__set" data-fontswitch>
-      <span>(set in)</span>
-      <button type="button" data-font="'Cormorant',Georgia,serif">cormorant</button>
-      <span class="sep">/</span>
-      <button type="button" data-font="'Fraunces',Georgia,serif" class="on">fraunces</button>
-      <span class="sep">/</span>
-      <button type="button" data-font="'Newsreader',Georgia,serif">newsreader</button>
-    </div>
 
     <p class="about__body">
       I work from inside the systems I study &mdash; energy, carbon, the street &mdash;

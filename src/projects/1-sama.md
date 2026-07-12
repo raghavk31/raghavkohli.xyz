@@ -2,6 +2,7 @@
 title: sama
 question: what would it take for a household to see, price, and trade the energy it makes?
 desc: peer-to-peer rooftop-solar trading
+topics: [energy]
 size: lg
 offset: off-70
 qsize: 26px

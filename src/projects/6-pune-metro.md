@@ -2,6 +2,7 @@
 title: pune metro
 question: who is a metro map actually for?
 desc: transit legibility research
+topics: [transit]
 size: md
 offset: ""
 qsize: 20px

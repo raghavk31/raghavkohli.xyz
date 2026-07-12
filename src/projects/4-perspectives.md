@@ -2,6 +2,7 @@
 title: perspectives
 question: can you engineer serendipity — infrastructure for participation across 250+ gatherings?
 desc: participatory systems design
+topics: [community]
 size: tall
 offset: off-36
 qsize: 22px
