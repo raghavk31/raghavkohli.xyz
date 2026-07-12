@@ -4,10 +4,10 @@ title: Raghav Kohli — invisible systems, made visible
 ---
 
 {#- Faithful port of Portfolio.dc.html: composed grid, hover reveals, zoom-open detail -#}
-{% macro card(p, num, w, mt, aspect, pad, thumbs) %}
+{% macro card(p, num, col, mt, aspect, pad, thumbs) %}
 <figure class="card reveal" data-reveal
         data-topics="{{ (p.data.topics or []) | join(' ') }}"
-        style="--cw:{{ w }}px;--cmt:{{ mt }}px;--car:{{ aspect }};--cpad:{{ pad }}px;--cq:{{ p.data.qsize or '24px' }};">
+        style="grid-column:{{ col }};--cmt:{{ mt }}px;--car:{{ aspect }};--cpad:{{ pad }}px;--cq:{{ p.data.qsize or '24px' }};">
   <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}">
     <div class="card__meta right">
       <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
@@ -53,16 +53,17 @@ title: Raghav Kohli — invisible systems, made visible
     <div class="work__filters" data-filters aria-label="filter by keyword"></div>
   </div>
 
-  <!-- Single reflowing grid. Per-card --cw/--cmt reproduce the composed
-       landing layout; the filter reorders + resizes within this one container. -->
+  <!-- 12-column grid. Per-card grid-column span + --cmt offset reproduce the
+       composed, floating landing layout; the filter reorders + resizes within
+       this one container (it flips to flex while a chip is active). -->
   <div class="work__grid" data-grid>
-    {{ card(sama, "01", 560, 70, "4/5", 36, 4) }}
-    {{ card(koliwadas, "02", 340, 0, "3/4", 30, 3) }}
-    {{ card(perspectives, "03", 350, 36, "4/5", 30, 3) }}
-    {{ card(city, "04", 540, 130, "5/4", 36, 4) }}
-    {{ card(climatecode, "05", 250, 0, "5/6", 24, 3) }}
-    {{ card(punemetro, "06", 240, 78, "4/5", 24, 3) }}
-    {{ card(academic, "07", 240, 28, "4/5", 24, 3) }}
+    {{ card(sama, "01", "1 / 7", 70, "4/5", 36, 4) }}
+    {{ card(koliwadas, "02", "9 / 13", 0, "3/4", 30, 3) }}
+    {{ card(perspectives, "03", "1 / 5", 36, "4/5", 30, 3) }}
+    {{ card(city, "04", "7 / 13", 130, "5/4", 36, 4) }}
+    {{ card(climatecode, "05", "1 / 4", 0, "5/6", 24, 3) }}
+    {{ card(punemetro, "06", "5 / 8", 78, "4/5", 24, 3) }}
+    {{ card(academic, "07", "9 / 12", 28, "4/5", 24, 3) }}
   </div>
 </section>
 

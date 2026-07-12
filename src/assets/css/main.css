@@ -60,25 +60,29 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 .work__chip:hover{color:var(--ink);}
 .work__chip.on{color:var(--accent);border-color:var(--line);background:rgba(46,58,87,.05);}
 
-/* one reflowing container; per-card --cw/--cmt build the composed landing look.
-   justify-content:space-between + wrap reproduces the asymmetric rows. */
-.work__grid{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;
-  gap:clamp(60px,9vw,140px) 40px;}
+/* Default landing: a 12-column grid. Each card is placed with an inline
+   grid-column span (see index.njk) + a --cmt vertical offset, which recreates
+   the floating, asymmetric composition and holds it across widths (proportional
+   columns, not fixed px) down to the mobile breakpoint. */
+.work__grid{display:grid;grid-template-columns:repeat(12,1fr);align-items:start;
+  column-gap:40px;row-gap:clamp(60px,9vw,140px);}
 
-/* filtered state: matches float to the top and grow, the rest shrink + recede.
-   width/margin-top are set directly (not via --cw/--cmt) because those custom
-   props are inline on each card and inline declarations can't be overridden.
-   FLIP transforms (set inline by main.js) animate the reflow. */
+/* filtered state: the container flips to flex so matches can float to the top
+   and grow while the rest shrink + recede. In flex mode each card's inline
+   grid-column is inert, so widths here take over cleanly. FLIP transforms
+   (set inline by main.js) animate the reflow. */
+.work__grid.filtering{display:flex;flex-wrap:wrap;justify-content:space-between;
+  align-items:flex-start;gap:56px 40px;}
 .work__grid.filtering .card{margin-top:0;}
 .work__grid.filtering .card.match{width:480px;order:0;}
 .work__grid.filtering .card:not(.match){width:236px;order:1;opacity:.38;}
 .work__grid.filtering .card:not(.match):hover{opacity:.85;}
 .card.flip{transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .5s ease;will-change:transform;}
 
-/* card layout is driven by per-card custom props (--cw width, --cmt offset,
-   --car aspect, --cpad overlay padding, --cq question size) so the mobile
-   media query can override cleanly without !important */
-figure.card{width:var(--cw);margin-top:var(--cmt,0);max-width:100%;
+/* --cmt offset, --car aspect, --cpad overlay padding, --cq question size are
+   per-card inline custom props; grid-column is inline too. min-width:0 keeps
+   grid items from overflowing their track. */
+figure.card{margin-top:var(--cmt,0);max-width:100%;min-width:0;
   transition:opacity .5s ease;}
 .card__click{cursor:pointer;position:relative;display:block;color:inherit;}
 .card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--stripe);
@@ -250,10 +254,13 @@ body.pv-open{overflow:hidden;}
 
 /* ---------- responsive ---------- */
 @media(max-width:900px){
-  figure.card{width:100%;margin-top:0;}
+  figure.card{margin-top:0;}
   .card__frame{aspect-ratio:4/3;}
-  .work__grid{gap:clamp(48px,10vw,80px);}
-  .work__grid.filtering .card.match,.work__grid.filtering .card:not(.match){width:100%;margin-top:0;opacity:1;}
+  /* one column on mobile — for both the default grid and the filtered view */
+  .work__grid,.work__grid.filtering{display:grid;grid-template-columns:1fr;
+    row-gap:clamp(48px,10vw,80px);column-gap:0;}
+  .work__grid > .card{grid-column:1 / -1 !important;margin-top:0;}
+  .work__grid.filtering .card.match,.work__grid.filtering .card:not(.match){width:auto;margin-top:0;opacity:1;}
   .card__meta,.card__thumbs{display:none;}
   .card__overlay{opacity:1;position:static;background:none;padding:16px 0 0;pointer-events:auto;
     backdrop-filter:none;-webkit-backdrop-filter:none;}
