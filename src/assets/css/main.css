@@ -24,7 +24,8 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;line-height:1.6;}
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;line-height:1.6;
+  overflow-wrap:break-word;}
 a{color:var(--accent);text-decoration:none;transition:color .3s ease;}
 a:hover{color:var(--ink);}
 ::selection{background:var(--accent);color:var(--paper);}
@@ -85,8 +86,9 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 figure.card{margin-top:var(--cmt,0);max-width:100%;min-width:0;
   transition:opacity .5s ease;}
 .card__click{cursor:pointer;position:relative;display:block;color:inherit;}
+/* container-type lets the question below size to the card's own width */
 .card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--stripe);
-  transition:transform .6s cubic-bezier(.16,1,.3,1);}
+  container-type:inline-size;transition:transform .6s cubic-bezier(.16,1,.3,1);}
 .card__frame > img{position:absolute;inset:0;transition:transform .9s cubic-bezier(.16,1,.3,1);}
 .card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);}
 /* frosted-glass + halftone screen over the image, question text on top */
@@ -103,7 +105,10 @@ figure.card{margin-top:var(--cmt,0);max-width:100%;min-width:0;
   .card__overlay{background:rgba(250,250,248,.92);}
 }
 .card__qlabel{font-family:var(--mono);font-size:11px;letter-spacing:.05em;color:var(--faint-2);margin-bottom:14px;}
-.card__q{font-family:var(--serif);font-weight:400;font-size:var(--cq,24px);line-height:1.32;color:#23221E;margin:0;}
+/* scale to the card width (cqi), capped at the designed --cq, floored at 14px,
+   so a long question in a narrow card shrinks instead of clipping */
+.card__q{font-family:var(--serif);font-weight:400;font-size:clamp(14px,8.5cqi,var(--cq,24px));
+  line-height:1.32;color:#23221E;margin:0;}
 .card__view{margin-top:20px;font-size:12.5px;color:var(--accent);}
 
 figcaption{display:flex;align-items:baseline;gap:12px;margin-top:18px;font-size:13.5px;flex-wrap:wrap;}
