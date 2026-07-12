@@ -6,7 +6,7 @@ desc: ambli · participatory systems mapping
 topics: [community]
 size: md
 offset: ""
-qsize: 22px
+qsize: 25px
 fig: fig.03 — boundary mesh · ambli village
 role: embedded fieldwork · participatory systems mapping
 period: 2019 — 2020
