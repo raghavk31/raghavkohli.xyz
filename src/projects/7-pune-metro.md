@@ -19,7 +19,7 @@ mediaHero: map redesign
 mediaPair:
   - legibility test
   - rider study
-next: selected academic work
+next: sama — peer-to-peer rooftop-solar trading
 ---
 
 A study of transit legibility for the Pune Metro — redrawing the map around the

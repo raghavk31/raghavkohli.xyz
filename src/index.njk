@@ -39,12 +39,12 @@ title: Raghav Kohli — invisible systems, made visible
 
 {%- set P = collections.projects -%}
 {%- set sama = P | find("title", "sama") -%}
+{%- set livingheritage = P | find("title", "living heritage") -%}
 {%- set koliwadas = P | find("title", "koliwadas") -%}
 {%- set perspectives = P | find("title", "perspectives") -%}
 {%- set city = P | find("title", "city-scale climate") -%}
 {%- set climatecode = P | find("title", "climate code india") -%}
 {%- set punemetro = P | find("title", "pune metro") -%}
-{%- set academic = P | find("title", "selected academic") -%}
 
 <h1 class="vh">Raghav Kohli — making invisible urban systems visible, legible, and participatory</h1>
 
@@ -63,9 +63,9 @@ title: Raghav Kohli — invisible systems, made visible
     {{ card(koliwadas, "02", "9 / 13", 0, "3/4", 30, 3) }}
     {{ card(perspectives, "03", "1 / 5", 36, "4/5", 30, 3) }}
     {{ card(city, "04", "7 / 13", 130, "5/4", 36, 4) }}
-    {{ card(climatecode, "05", "1 / 4", 0, "5/6", 24, 3) }}
-    {{ card(punemetro, "06", "5 / 8", 78, "4/5", 24, 3) }}
-    {{ card(academic, "07", "9 / 12", 28, "4/5", 24, 3) }}
+    {{ card(livingheritage, "05", "1 / 13", 46, "21/9", 40, 4) }}
+    {{ card(climatecode, "06", "1 / 6", 0, "5/6", 30, 3) }}
+    {{ card(punemetro, "07", "8 / 13", 48, "4/5", 30, 3) }}
   </div>
 </section>
 
@@ -210,6 +210,7 @@ title: Raghav Kohli — invisible systems, made visible
     <div class="pv__body">
       <span class="pv__qlabel">(research question)</span>
       <h2 class="pv__q" data-pv="question"></h2>
+      <p class="pv__sub" data-pv="subtitle" hidden></p>
       <div class="pv__meta">
         <div><div class="lbl">(role)</div><div class="val" data-pv="role"></div></div>
         <div><div class="lbl">(period)</div><div class="val" data-pv="period"></div></div>
@@ -219,6 +220,7 @@ title: Raghav Kohli — invisible systems, made visible
       <p class="pv__lead" data-pv="lead"></p>
       <div class="pv__hero"><div class="fig" data-pv="mediaHero"></div></div>
       <div class="pv__pair" data-pv-pair></div>
+      <div class="gallery pv__gallery" data-pv-gallery hidden></div>
       <div class="pv__methodwrap" data-pv-methodwrap>
         <span class="eyebrow">(method)</span>
         <div class="pv__method" data-pv-method></div>
@@ -238,6 +240,8 @@ title: Raghav Kohli — invisible systems, made visible
   {{ p.url | dump | safe }}: {
     "name": {{ p.data.title | dump | safe }},
     "question": {{ p.data.question | dump | safe }},
+    "subtitle": {{ (p.data.subtitle or "") | dump | safe }},
+    "gallery": {{ (p.data.gallery or []) | dump | safe }},
     "role": {{ p.data.role | dump | safe }},
     "period": {{ p.data.period | dump | safe }},
     "context": {{ p.data.context | dump | safe }},

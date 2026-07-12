@@ -6,6 +6,7 @@ layout: base.njk
 
   <span class="detail__qlabel">(research question)</span>
   <h1 class="detail__q reveal">{{ question }}</h1>
+  {% if subtitle %}<p class="detail__sub reveal">{{ subtitle }}</p>{% endif %}
 
   <div class="detail__meta reveal">
     <div><div class="lbl">(role)</div><div class="val">{{ role }}</div></div>
@@ -16,7 +17,7 @@ layout: base.njk
 
   {% if lead %}<p class="detail__lead reveal">{{ lead }}</p>{% endif %}
 
-  <div class="detail__hero-media reveal"><div class="fig">({{ mediaHero or 'project media' }})</div></div>
+  {% if mediaHero %}<div class="detail__hero-media reveal"><div class="fig">({{ mediaHero }})</div></div>{% endif %}
 
   {% if mediaPair %}
   <div class="detail__pair reveal">
@@ -27,6 +28,20 @@ layout: base.njk
   <div class="detail__body reveal">
     {{ content | safe }}
   </div>
+
+  {% if gallery %}
+  <div class="gallery">
+    {% for g in gallery %}
+    <figure class="g g--{{ g.size or 'md' }} reveal">
+      <div class="g__frame">
+        {% if g.src %}<img src="{{ g.src }}" alt="{{ g.cap }}" loading="lazy" />{% endif %}
+        <div class="g__fig">{{ g.fig }}</div>
+      </div>
+      {% if g.cap %}<figcaption class="g__cap">{{ g.cap }}</figcaption>{% endif %}
+    </figure>
+    {% endfor %}
+  </div>
+  {% endif %}
 
   {% if method %}
   <div class="reveal" style="margin-top:clamp(56px,8vw,96px)">

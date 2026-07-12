@@ -163,6 +163,9 @@
     var accent = "#2E3A57", faint = "#8A887F";
     var panel = pv.querySelector(".pv__panel");
     var pairWrap = pv.querySelector("[data-pv-pair]");
+    var heroWrap = pv.querySelector(".pv__hero");
+    var galleryWrap = pv.querySelector("[data-pv-gallery]");
+    var subEl = pv.querySelector('[data-pv="subtitle"]');
     var methodWrap = pv.querySelector("[data-pv-methodwrap]");
     var methodList = pv.querySelector("[data-pv-method]");
     var lastFocus = null;
@@ -184,10 +187,54 @@
       setField("mediaHero", "(" + (d.mediaHero || "project media") + ")");
       setField("next", d.next);
 
+      if (subEl) {
+        subEl.textContent = d.subtitle || "";
+        subEl.hidden = !d.subtitle;
+      }
+
       pv.querySelectorAll('[data-pv="status"]').forEach(function (el) {
         el.textContent = d.status || "";
         el.style.color = d.live ? accent : faint;
       });
+
+      // media: a real gallery replaces the placeholder hero + pair when present
+      var gallery = d.gallery || [];
+      galleryWrap.innerHTML = "";
+      if (gallery.length) {
+        if (heroWrap) heroWrap.hidden = true;
+        pairWrap.hidden = true;
+        galleryWrap.hidden = false;
+        gallery.forEach(function (g) {
+          var fig = document.createElement("figure");
+          fig.className = "g g--" + (g.size || "md");
+          var frame = document.createElement("div");
+          frame.className = "g__frame";
+          if (g.src) {
+            var img = document.createElement("img");
+            img.src = g.src;
+            img.alt = g.cap || "";
+            img.loading = "lazy";
+            img.addEventListener("error", function () { img.remove(); });
+            frame.appendChild(img);
+          }
+          var fg = document.createElement("div");
+          fg.className = "g__fig";
+          fg.textContent = g.fig || "";
+          frame.appendChild(fg);
+          fig.appendChild(frame);
+          if (g.cap) {
+            var cap = document.createElement("figcaption");
+            cap.className = "g__cap";
+            cap.textContent = g.cap;
+            fig.appendChild(cap);
+          }
+          galleryWrap.appendChild(fig);
+        });
+      } else {
+        if (heroWrap) heroWrap.hidden = false;
+        pairWrap.hidden = false;
+        galleryWrap.hidden = true;
+      }
 
       // paired media placeholders
       pairWrap.innerHTML = "";
