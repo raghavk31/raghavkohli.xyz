@@ -317,6 +317,12 @@ body.pv-open{overflow:hidden;}
   .index__grid{grid-template-columns:1fr;}
   .index__preview{display:none;}
   .cv-line{grid-template-columns:1fr;gap:4px;}
+  /* larger touch targets on mobile (>=~44px hit area) */
+  .head{padding-block:8px;}
+  .head nav a{padding-block:12px;}
+  .work__chip,.work__reset{padding-block:11px;}
+  .about__expand{padding-block:14px;margin-top:22px;}
+  .contact__links a{padding-block:11px;}
 }
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 @media(prefers-reduced-motion:reduce){
