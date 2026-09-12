@@ -32,7 +32,7 @@ layout: base.njk
   {% if gallery %}
   <div class="gallery">
     {% for g in gallery %}
-    <figure class="g g--{{ g.size or 'md' }} reveal">
+    <figure class="g g--{{ g.size or 'md' }}{% if g.fit == 'natural' %} g--natural{% endif %} reveal">
       <div class="g__frame">
         {% if g.src %}<img src="{{ g.src }}" alt="{{ g.cap }}" loading="lazy" />{% endif %}
         <div class="g__fig">{{ g.fig }}</div>

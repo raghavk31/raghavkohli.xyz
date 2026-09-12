@@ -357,9 +357,13 @@ body.pv-open{overflow:hidden;}
 .g--sm .g__frame{aspect-ratio:1/1;}
 .g--tall{grid-column:span 5;}
 .g--tall .g__frame{aspect-ratio:3/4;}
+/* fit: natural — drawings and book spreads must not be cropped: the frame takes the image's own ratio */
+.g--natural .g__frame{aspect-ratio:auto;}
+.g--natural .g__frame > img{position:static;height:auto;object-fit:unset;}
 
 @media(max-width:820px){
   .g--lg,.g--md,.g--sm,.g--tall{grid-column:1 / -1;}
   .g--lg .g__frame,.g--md .g__frame,.g--sm .g__frame,.g--tall .g__frame{aspect-ratio:4/3;}
+  .g--natural .g__frame{aspect-ratio:auto;}
   .gallery{row-gap:clamp(36px,8vw,56px);}
 }

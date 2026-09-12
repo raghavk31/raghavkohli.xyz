@@ -4,3 +4,7 @@ _site/
 .gstack/
 # source CV lives at root; the served copy is src/assets/Raghav_Kohli_CV.pdf
 /Raghav_Kohli_CV.pdf
+# private application material — never publish
+/applications/
+# per-project image picks (working area for scripts/prep-images.py); served copies live in src/assets/projects/
+/images/_picks/

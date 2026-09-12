@@ -7,25 +7,22 @@ topics: [community]
 size: md
 offset: ""
 qsize: 25px
-fig: fig.03 — boundary mesh · ambli village
+fig: fig.04 — boundary mesh · ambli village
 role: embedded fieldwork · participatory systems mapping
 period: 2019 — 2020
 context: ambli · ahmedabad · 14 communities
 status: excellence award
 live: false
 date: 2020-05-01
-thumb: /assets/projects/LH_00.jpg
+thumb: /assets/projects/living-heritage/00.jpg
 gallery:
-  - { src: /assets/projects/LH_01.jpg, size: sm, fig: fig.01, cap: "Ambli's evolution — the city arriving at the village edge." }
-  - { src: /assets/projects/LH_02.jpg, size: sm, fig: fig.02, cap: "Settlement growth and the fourteen community territories." }
-  - { src: /assets/projects/LH_03.jpg, size: sm, fig: fig.03, cap: "Months in the village — access before research." }
-  - { src: /assets/projects/LH_04.jpg, size: lg, fig: fig.04, cap: "The instrument — roughly two hundred drawings from a transect walk, assembled and categorised. A map of attachment the village had never seen of itself." }
-  - { src: /assets/projects/LH_05.jpg, size: md, fig: fig.05, cap: "Strategy — attachments overlaid against community boundaries to locate the pockets of overlap." }
-  - { src: /assets/projects/LH_06.jpg, size: md, fig: fig.06, cap: "Perception map — the boundary mesh, and its varying degrees of discernability." }
-  - { src: /assets/projects/LH_07.jpg, size: lg, fig: fig.07, cap: "The village, whole — interventions sited only where the boundaries overlapped." }
-  - { src: /assets/projects/LH_08.jpg, size: sm, fig: fig.08, cap: "Intervention — non-programmatic play structure." }
-  - { src: /assets/projects/LH_09.jpg, size: sm, fig: fig.09, cap: "Intervention — micro-climate programme." }
-  - { src: /assets/projects/LH_10.jpg, size: sm, fig: fig.10, cap: "Intervention — shared ground." }
+  - { src: /assets/projects/living-heritage/01.jpg, size: lg, fit: natural, fig: fig.01, cap: "Ambli's evolution, 1800 to 2019 — the city arriving at the village edge, mapped from residents' accounts." }
+  - { src: /assets/projects/living-heritage/02.jpg, size: tall, fig: fig.02, cap: "Months in the village — access before research." }
+  - { src: /assets/projects/living-heritage/03.jpg, size: lg, fit: natural, fig: fig.03, cap: "The instrument — roughly two hundred drawings from a transect walk, assembled and categorised. A map of attachment the village had never seen of itself." }
+  - { src: /assets/projects/living-heritage/04.jpg, size: lg, fit: natural, fig: fig.04, cap: "Perception map — the boundary mesh, and its varying degrees of discernability. Blue: spaces generally liked; red: collectively not." }
+  - { src: /assets/projects/living-heritage/05.jpg, size: md, fig: fig.05, cap: "Strategy — attachments overlaid against community boundaries to locate the pockets of overlap." }
+  - { src: /assets/projects/living-heritage/06.jpg, size: md, fig: fig.06, cap: "Co-design — the workshop call, and what the children built in the sites their own drawings had identified." }
+  - { src: /assets/projects/living-heritage/07.jpg, size: lg, fit: natural, fig: fig.07, cap: "The village, whole — interventions sited only where the boundaries overlapped." }
 method:
   - { n: "01", title: embed, body: "months inside the settlement before proposing anything about it — mostly with children: playing, listening, helping with homework. access came before research." }
   - { n: "02", title: instrument, body: "a transect walk where children drew the places they were attached to. ~200 drawings, categorised and assembled into a map of association the village had never seen of itself." }
