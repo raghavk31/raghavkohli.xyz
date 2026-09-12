@@ -8,6 +8,7 @@ Writes  src/assets/projects/<slug>/NN.jpg                    (long edge <= 1800p
 Prints  a ready-to-paste YAML block for the page's frontmatter.
 
 Optional size hint in the filename: 03-lg-name.jpg -> size: lg (lg | md | sm | tall).
+Add "natural" after the size (03-lg-natural-name.jpg) -> fit: natural (never cropped).
 Without a hint, size is suggested from the aspect ratio.
 
 --grid  composites every non-thumb pick into one contact-grid image (for tile sets like
@@ -35,7 +36,7 @@ THUMB_EDGE = 1200
 QUALITY = 82
 SIZES = ("lg", "md", "sm", "tall")
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|tall))?(?:-.*)?$", re.I)
+NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|tall))?(?:-(natural))?(?:-.*)?$", re.I)
 
 
 def suggest_size(w, h):
@@ -104,7 +105,7 @@ def main():
         if not m:
             print(f"  skip (no NN- prefix): {p.name}")
             continue
-        picks.append((m.group(1), (m.group(2) or "").lower(), p))
+        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), p))
     if not picks:
         sys.exit("nothing to do — files need a two-digit prefix, e.g. 01-map.jpg")
 
@@ -116,7 +117,7 @@ def main():
     thumb = None
     items = []
     grid_src = []
-    for n, hint, p in picks:
+    for n, hint, natural, p in picks:
         im = load(p)
         if n == "00":
             im = shrink(im, THUMB_EDGE)
@@ -130,21 +131,22 @@ def main():
         im = shrink(im, MAX_EDGE)
         kb = save(im, dest / f"{n}.jpg") // 1024
         size = hint or suggest_size(*im.size)
-        items.append((n, size))
-        print(f"  {n}.jpg  {im.size[0]}x{im.size[1]}  {kb}K  {size:4}  <- {p.name}")
+        items.append((n, size, natural))
+        print(f"  {n}.jpg  {im.size[0]}x{im.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
 
     if args.grid and grid_src:
         im = shrink(make_grid(grid_src, args.cols), MAX_EDGE)
         kb = save(im, dest / "01.jpg") // 1024
-        items.append(("01", "lg"))
+        items.append(("01", "lg", True))
         print(f"  01.jpg  {im.size[0]}x{im.size[1]}  {kb}K  lg    <- grid of {len(grid_src)}")
 
     print("\n# --- paste into frontmatter ---")
     if thumb:
         print(f"thumb: {thumb}")
     print("gallery:")
-    for n, size in items:
-        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, size: {size}, fig: fig.{n}, cap: "" }}')
+    for n, size, natural in items:
+        fit = ", fit: natural" if natural else ""
+        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, size: {size}{fit}, fig: fig.{n}, cap: "" }}')
 
 
 if __name__ == "__main__":
