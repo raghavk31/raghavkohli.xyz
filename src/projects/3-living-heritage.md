@@ -17,10 +17,10 @@ date: 2020-05-01
 thumb: /assets/projects/living-heritage/00.jpg
 gallery:
   - { src: /assets/projects/living-heritage/01.jpg, size: lg, fit: natural, fig: fig.01, cap: "Ambli's evolution, 1800 to 2019 — the city arriving at the village edge, mapped from residents' accounts." }
-  - { src: /assets/projects/living-heritage/02.jpg, size: xs, fit: natural, fig: fig.02, cap: "Months in the village — access before research." }
-  - { src: /assets/projects/living-heritage/03.jpg, size: xs, fit: natural, fig: fig.03, cap: "" }
-  - { src: /assets/projects/living-heritage/04.jpg, size: xs, fit: natural, fig: fig.04, cap: "" }
-  - { src: /assets/projects/living-heritage/05.jpg, size: xs, fit: natural, fig: fig.05, cap: "" }
+  - { src: /assets/projects/living-heritage/02.jpg, row: fieldwork, ar: 1.178, fig: fig.02, cap: "", rowcap: "Months in the village — access before research." }
+  - { src: /assets/projects/living-heritage/03.jpg, row: fieldwork, ar: 1.687, fig: fig.03, cap: "" }
+  - { src: /assets/projects/living-heritage/04.jpg, row: fieldwork, ar: 1.355, fig: fig.04, cap: "" }
+  - { src: /assets/projects/living-heritage/05.jpg, row: fieldwork, ar: 1.849, fig: fig.05, cap: "" }
   - { src: /assets/projects/living-heritage/06.jpg, size: md, fit: natural, fig: fig.06, cap: "The instrument — roughly two hundred drawings from a transect walk, assembled and categorised. A map of attachment the village had never seen of itself." }
   - { src: /assets/projects/living-heritage/07.jpg, size: md, fit: natural, fig: fig.07, cap: "Co-design — what the children built in the sites their own drawings had identified." }
   - { src: /assets/projects/living-heritage/08.jpg, size: sm, fit: natural, fig: fig.08, cap: "The workshop call — re-imagining Ambli, 22.09.19. For kids, aged 5 and above." }

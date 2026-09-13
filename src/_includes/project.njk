@@ -32,6 +32,19 @@ layout: base.njk
   {% if gallery %}
   <div class="gallery">
     {% for g in gallery %}
+    {# row: <name> on consecutive items -> one justified row, equal heights, no cropping #}
+    {% set prevRow = gallery[loop.index0 - 1].row if loop.index0 > 0 else '' %}
+    {% set nextRow = gallery[loop.index0 + 1].row if not loop.last else '' %}
+    {% if g.row and g.row != prevRow %}
+    <figure class="g-row reveal">
+      <div class="g-row__imgs">
+    {% endif %}
+    {% if g.row %}
+        <div class="g-row__item" style="--ar:{{ g.ar or 1.5 }}">
+          <img src="{{ g.src }}" alt="{{ g.cap }}" loading="lazy" />
+          <div class="g__fig">{{ g.fig }}</div>
+        </div>
+    {% else %}
     <figure class="g g--{{ g.size or 'md' }}{% if g.fit == 'natural' %} g--natural{% endif %}{% if g.break %} g--break{% endif %} reveal">
       <div class="g__frame">
         {% if g.src %}<img src="{{ g.src }}" alt="{{ g.cap }}" loading="lazy" />{% endif %}
@@ -39,6 +52,12 @@ layout: base.njk
       </div>
       {% if g.cap %}<figcaption class="g__cap">{{ g.cap }}</figcaption>{% endif %}
     </figure>
+    {% endif %}
+    {% if g.row and g.row != nextRow %}
+      </div>
+      {% if g.rowcap %}<figcaption class="g__cap">{{ g.rowcap }}</figcaption>{% endif %}
+    </figure>
+    {% endif %}
     {% endfor %}
   </div>
   {% endif %}

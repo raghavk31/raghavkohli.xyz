@@ -359,6 +359,12 @@ body.pv-open{overflow:hidden;}
 .g--tall .g__frame{aspect-ratio:3/4;}
 .g--xs{grid-column:span 3;}
 .g--xs .g__frame{aspect-ratio:4/3;}
+/* row: <name> — justified strip: each image's width is proportional to its aspect ratio
+   (--ar), so every image in the row shares one height and none is cropped */
+.g-row{grid-column:1 / -1;margin:0;}
+.g-row__imgs{display:flex;gap:clamp(12px,1.5vw,20px);align-items:stretch;}
+.g-row__item{position:relative;flex:var(--ar) 1 0%;min-width:0;background:var(--stripe);}
+.g-row__item > img{display:block;width:100%;height:auto;}
 /* break: true — start a new grid row (keeps pairs together when a smaller item precedes them) */
 .g--break.g--md{grid-column:1 / span 6;}
 .g--break.g--sm{grid-column:1 / span 4;}
@@ -373,6 +379,8 @@ body.pv-open{overflow:hidden;}
   .g--xs{grid-column:span 6;}
   .g--break.g--md,.g--break.g--sm,.g--break.g--tall{grid-column:1 / -1;}
   .g--break.g--xs{grid-column:1 / span 6;}
+  .g-row__imgs{flex-wrap:wrap;align-items:flex-start;}
+  .g-row__item{flex-basis:calc(50% - 8px);}
   .g--lg .g__frame,.g--md .g__frame,.g--sm .g__frame,.g--tall .g__frame,.g--xs .g__frame{aspect-ratio:4/3;}
   .g--natural .g__frame{aspect-ratio:auto;}
   .gallery{row-gap:clamp(36px,8vw,56px);}

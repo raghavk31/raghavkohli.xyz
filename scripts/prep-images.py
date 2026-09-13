@@ -131,22 +131,23 @@ def main():
         im = shrink(im, MAX_EDGE)
         kb = save(im, dest / f"{n}.jpg") // 1024
         size = hint or suggest_size(*im.size)
-        items.append((n, size, natural))
+        items.append((n, size, natural, round(im.size[0] / im.size[1], 3)))
         print(f"  {n}.jpg  {im.size[0]}x{im.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
 
     if args.grid and grid_src:
         im = shrink(make_grid(grid_src, args.cols), MAX_EDGE)
         kb = save(im, dest / "01.jpg") // 1024
-        items.append(("01", "lg", True))
+        items.append(("01", "lg", True, round(im.size[0] / im.size[1], 3)))
         print(f"  01.jpg  {im.size[0]}x{im.size[1]}  {kb}K  lg    <- grid of {len(grid_src)}")
 
     print("\n# --- paste into frontmatter ---")
     if thumb:
         print(f"thumb: {thumb}")
     print("gallery:")
-    for n, size, natural in items:
+    for n, size, natural, ar in items:
         fit = ", fit: natural" if natural else ""
-        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, size: {size}{fit}, fig: fig.{n}, cap: "" }}')
+        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, size: {size}{fit}, ar: {ar}, fig: fig.{n}, cap: "" }}')
+    print("# row: <name> + rowcap on consecutive items -> one justified strip (equal heights, no crop); size is ignored there")
 
 
 if __name__ == "__main__":
