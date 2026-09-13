@@ -7,7 +7,7 @@ Reads   images/_picks/<slug>/NN-*.{jpg,jpeg,png,tif,tiff}   (NN = two-digit orde
 Writes  src/assets/projects/<slug>/NN.jpg                    (long edge <= 1800px, thumb <= 1200px)
 Prints  a ready-to-paste YAML block for the page's frontmatter.
 
-Optional size hint in the filename: 03-lg-name.jpg -> size: lg (lg | md | sm | tall).
+Optional size hint in the filename: 03-lg-name.jpg -> size: lg (lg | md | sm | xs | tall).
 Add "natural" after the size (03-lg-natural-name.jpg) -> fit: natural (never cropped).
 Without a hint, size is suggested from the aspect ratio.
 
@@ -34,9 +34,9 @@ OUT = ROOT / "src" / "assets" / "projects"
 MAX_EDGE = 1800
 THUMB_EDGE = 1200
 QUALITY = 82
-SIZES = ("lg", "md", "sm", "tall")
+SIZES = ("lg", "md", "sm", "xs", "tall")
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|tall))?(?:-(natural))?(?:-.*)?$", re.I)
+NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-.*)?$", re.I)
 
 
 def suggest_size(w, h):

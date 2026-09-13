@@ -357,13 +357,23 @@ body.pv-open{overflow:hidden;}
 .g--sm .g__frame{aspect-ratio:1/1;}
 .g--tall{grid-column:span 5;}
 .g--tall .g__frame{aspect-ratio:3/4;}
+.g--xs{grid-column:span 3;}
+.g--xs .g__frame{aspect-ratio:4/3;}
+/* break: true — start a new grid row (keeps pairs together when a smaller item precedes them) */
+.g--break.g--md{grid-column:1 / span 6;}
+.g--break.g--sm{grid-column:1 / span 4;}
+.g--break.g--xs{grid-column:1 / span 3;}
+.g--break.g--tall{grid-column:1 / span 5;}
 /* fit: natural — drawings and book spreads must not be cropped: the frame takes the image's own ratio */
 .g--natural .g__frame{aspect-ratio:auto;}
 .g--natural .g__frame > img{position:static;height:auto;object-fit:unset;}
 
 @media(max-width:820px){
   .g--lg,.g--md,.g--sm,.g--tall{grid-column:1 / -1;}
-  .g--lg .g__frame,.g--md .g__frame,.g--sm .g__frame,.g--tall .g__frame{aspect-ratio:4/3;}
+  .g--xs{grid-column:span 6;}
+  .g--break.g--md,.g--break.g--sm,.g--break.g--tall{grid-column:1 / -1;}
+  .g--break.g--xs{grid-column:1 / span 6;}
+  .g--lg .g__frame,.g--md .g__frame,.g--sm .g__frame,.g--tall .g__frame,.g--xs .g__frame{aspect-ratio:4/3;}
   .g--natural .g__frame{aspect-ratio:auto;}
   .gallery{row-gap:clamp(36px,8vw,56px);}
 }
