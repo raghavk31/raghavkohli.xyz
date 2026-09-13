@@ -296,13 +296,83 @@
       if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
     }
 
+    // The overlay shows the REAL project page: fetch /work/<slug>/, lift its <article class="detail">
+    // into the panel, and reveal it with the same zoom. One template, one source of truth — chapter
+    // pages and legacy pages both render exactly as they do standalone. The JSON path above is
+    // only the fallback for when the fetch fails (offline, file://).
+    var pageCache = {};
+    var jsonBody = pv.querySelector(".pv__body");
+    var pageBody = document.createElement("div");
+    pageBody.className = "pv__page";
+    pageBody.hidden = true;
+    if (jsonBody) jsonBody.parentNode.insertBefore(pageBody, jsonBody.nextSibling);
+
+    function fetchPage(url) {
+      if (!pageCache[url]) {
+        pageCache[url] = fetch(url, { credentials: "same-origin" }).then(function (r) {
+          if (!r.ok) throw new Error(r.status);
+          return r.text();
+        }).then(function (html) {
+          var doc = new DOMParser().parseFromString(html, "text/html");
+          var art = doc.querySelector("article.detail");
+          if (!art) throw new Error("no article");
+          return art;
+        });
+        pageCache[url].catch(function () { delete pageCache[url]; });
+      }
+      return pageCache[url];
+    }
+
+    function showPage(art, name, originEl) {
+      pageBody.innerHTML = "";
+      var clone = art.cloneNode(true);
+      // in-page links back to the grid close the overlay instead of navigating
+      clone.querySelectorAll('a[href^="/#"], a[href^="#"]').forEach(function (a) {
+        a.addEventListener("click", function (ev) { ev.preventDefault(); closeProject(); });
+      });
+      pageBody.appendChild(clone);
+      pageBody.hidden = false;
+      if (jsonBody) jsonBody.hidden = true;
+      setField("name", name);
+      // reveal-on-scroll inside the panel (the panel is the scroll container, not the window)
+      var items = clone.querySelectorAll(".reveal, [data-reveal]");
+      if ("IntersectionObserver" in window) {
+        var pio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add("in"); pio.unobserve(e.target); } });
+        }, { root: panel, rootMargin: "0px 0px -8% 0px" });
+        items.forEach(function (el) { pio.observe(el); });
+      } else {
+        items.forEach(function (el) { el.classList.add("in"); });
+      }
+      if (originEl) {
+        var r = originEl.getBoundingClientRect();
+        panel.style.setProperty("--pv-origin", (r.left + r.width / 2) + "px " + (r.top + r.height / 2) + "px");
+      }
+      if (panel) panel.scrollTop = 0;
+      document.body.classList.add("pv-open");
+      pv.setAttribute("aria-hidden", "false");
+      requestAnimationFrame(function () { requestAnimationFrame(function () { pv.classList.add("open"); }); });
+    }
+
     document.querySelectorAll(".card__click[data-project]").forEach(function (card) {
+      var url = card.getAttribute("data-project");
+      // warm the cache on intent so the open feels instant
+      card.addEventListener("mouseenter", function () { fetchPage(url).catch(function () {}); }, { passive: true });
+      card.addEventListener("focus", function () { fetchPage(url).catch(function () {}); }, { passive: true });
       card.addEventListener("click", function (ev) {
         // let modifier / middle clicks open the real page in a new tab
         if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;
-        var key = card.getAttribute("data-project");
+        ev.preventDefault();
         lastFocus = card;
-        if (openProject(key, card)) ev.preventDefault();
+        var d = DATA[url] || {};
+        fetchPage(url).then(function (art) {
+          showPage(art, d.name, card);
+        }).catch(function () {
+          // fallback: JSON reconstruction, or plain navigation if even that is missing
+          pageBody.hidden = true;
+          if (jsonBody) jsonBody.hidden = false;
+          if (!openProject(url, card)) window.location.href = url;
+        });
       });
     });
 
