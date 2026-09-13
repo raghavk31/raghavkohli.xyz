@@ -1,6 +1,21 @@
 ---
 layout: base.njk
 ---
+{#- One figure system for every project image: natural ratio, width/height reserved,
+    mono fig label + caption BELOW the image (never overlaid). -#}
+{% macro plate(p) %}
+<figure class="plate">
+  <div class="plate__img"><img src="{{ p.src }}" alt="{{ p.alt or p.cap }}"{% if p.w and p.h %} width="{{ p.w }}" height="{{ p.h }}"{% endif %} loading="lazy" /></div>
+  {% if p.fig or p.cap %}<figcaption class="plate__cap">{% if p.fig %}<span class="n">{{ p.fig }}</span>{% endif %}{% if p.cap %}<span>{{ p.cap }}</span>{% endif %}</figcaption>{% endif %}
+</figure>
+{% endmacro %}
+{#- Justified strip: widths proportional to w/h so every photo shares one height. -#}
+{% macro strip(s) %}
+<figure class="plate">
+  <div class="strip">{% for it in s.items %}<div style="--ar:{{ (it.ar or (it.w / it.h)) | round(3) }}"><img src="{{ it.src }}" alt="{{ it.alt or '' }}"{% if it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
+  {% if s.fig or s.cap %}<figcaption class="plate__cap">{% if s.fig %}<span class="n">{{ s.fig }}</span>{% endif %}{% if s.cap %}<span>{{ s.cap }}</span>{% endif %}</figcaption>{% endif %}
+</figure>
+{% endmacro %}
 <article class="detail">
   <a class="detail__back" href="/#work">(&larr; selected work)</a>
 
@@ -17,6 +32,45 @@ layout: base.njk
 
   {% if lead %}<p class="detail__lead reveal">{{ lead }}</p>{% endif %}
 
+  {% if chapters %}
+  {#- ===== chapter layout: the argument beside its evidence =====
+      Body markdown is split at `## NN name` headings; each piece joins the chapter with that
+      number. Text before the first numbered heading opens the first chapter. -#}
+  {% set ch = content | chapters %}
+  {% if open %}<div class="detail__open reveal">{{ plate(open) }}</div>{% endif %}
+
+  {% for c in chapters %}
+  {% set body = ch.byNum[c.n] or '' %}
+  {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
+  {% set hasPlates = c.plates or c.pair or c.strip %}
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if not body and not c.title %} chap--notext{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+    {% if body or c.title %}
+    <div class="chap__txt">
+      <span class="chap__eyebrow"><b>({{ c.n }})</b> {{ c.name }}</span>
+      {% if c.title %}<h2 class="chap__title">{{ c.title }}</h2>{% endif %}
+      {% if body %}<div class="chap__body">{{ body | safe }}</div>{% endif %}
+    </div>
+    {% endif %}
+    {% if c.plates or c.pair %}
+    <div class="chap__pl">
+      {% for p in c.plates %}{{ plate(p) }}{% endfor %}
+      {% if c.pair %}<div class="pair">{% for p in c.pair %}{{ plate(p) }}{% endfor %}</div>{% endif %}
+    </div>
+    {% endif %}
+    {% if c.strip %}<div class="chap__full">{{ strip(c.strip) }}</div>{% endif %}
+  </section>
+  {% endfor %}
+
+  {% if outcome %}
+  <section class="detail__outcome reveal" aria-label="outcome">
+    {% if outcome.built %}<div><div class="lbl">(outcome)</div><div class="val">{{ outcome.built }}</div></div>{% endif %}
+    {% if outcome.recognised %}<div><div class="lbl">(recognition)</div><div class="val">{{ outcome.recognised }}</div></div>{% endif %}
+    {% if outcome.next %}<div><div class="lbl">(what I'd do next)</div><div class="val">{{ outcome.next }}</div></div>{% endif %}
+  </section>
+  {% endif %}
+
+  {% else %}
+  {#- ===== legacy layout (pages not yet curated into chapters) ===== -#}
   {% if mediaHero %}<div class="detail__hero-media reveal"><div class="fig">({{ mediaHero }})</div></div>{% endif %}
 
   {% if mediaPair %}
@@ -32,30 +86,26 @@ layout: base.njk
   {% if gallery %}
   <div class="gallery">
     {% for g in gallery %}
-    {# row: <name> on consecutive items -> one justified row, equal heights, no cropping #}
+    {# row: <name> on consecutive items -> one justified strip #}
     {% set prevRow = gallery[loop.index0 - 1].row if loop.index0 > 0 else '' %}
     {% set nextRow = gallery[loop.index0 + 1].row if not loop.last else '' %}
     {% if g.row and g.row != prevRow %}
-    <figure class="g-row reveal">
-      <div class="g-row__imgs">
+    <figure class="g-row plate reveal">
+      <div class="strip">
     {% endif %}
     {% if g.row %}
-        <div class="g-row__item" style="--ar:{{ g.ar or 1.5 }}">
-          <img src="{{ g.src }}" alt="{{ g.cap }}" loading="lazy" />
-          <div class="g__fig">{{ g.fig }}</div>
-        </div>
+        <div style="--ar:{{ (g.ar or (g.w / g.h)) | round(3) }}"><img src="{{ g.src }}" alt="{{ g.cap }}"{% if g.w and g.h %} width="{{ g.w }}" height="{{ g.h }}"{% endif %} loading="lazy" /></div>
     {% else %}
     <figure class="g g--{{ g.size or 'md' }}{% if g.fit == 'natural' %} g--natural{% endif %}{% if g.break %} g--break{% endif %} reveal">
       <div class="g__frame">
-        {% if g.src %}<img src="{{ g.src }}" alt="{{ g.cap }}" loading="lazy" />{% endif %}
-        <div class="g__fig">{{ g.fig }}</div>
+        {% if g.src %}<img src="{{ g.src }}" alt="{{ g.cap }}"{% if g.w and g.h %} width="{{ g.w }}" height="{{ g.h }}"{% endif %} loading="lazy" />{% endif %}
       </div>
-      {% if g.cap %}<figcaption class="g__cap">{{ g.cap }}</figcaption>{% endif %}
+      {% if g.fig or g.cap %}<figcaption class="g__cap">{% if g.fig %}<span class="g__fig">{{ g.fig }}</span>{% endif %}{% if g.cap %}<span>{{ g.cap }}</span>{% endif %}</figcaption>{% endif %}
     </figure>
     {% endif %}
     {% if g.row and g.row != nextRow %}
       </div>
-      {% if g.rowcap %}<figcaption class="g__cap">{{ g.rowcap }}</figcaption>{% endif %}
+      {% if g.rowcap %}<figcaption class="plate__cap"><span>{{ g.rowcap }}</span></figcaption>{% endif %}
     </figure>
     {% endif %}
     {% endfor %}
@@ -74,6 +124,7 @@ layout: base.njk
       {% endfor %}
     </div>
   </div>
+  {% endif %}
   {% endif %}
 
   {% if next %}

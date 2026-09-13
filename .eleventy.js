@@ -22,6 +22,21 @@ module.exports = function (eleventyConfig) {
     (arr || []).find((i) => i && i.data && i.data[key] === val)
   );
 
+  // Split a project's rendered body at `## NN name` headings so the chapter template can
+  // place each piece beside its plates. Returns { intro, byNum: { "00": html, ... } };
+  // text before the first numbered heading lands in `intro`. Headings without a leading
+  // two-digit number stay inside the preceding chunk untouched.
+  eleventyConfig.addFilter("chapters", (html) => {
+    const out = { intro: "", byNum: {} };
+    const parts = String(html || "").split(/(?=<h2[^>]*>\s*\d{2}\b)/);
+    for (const part of parts) {
+      const m = part.match(/^<h2[^>]*>\s*(\d{2})\b[^<]*<\/h2>\s*/);
+      if (!m) { out.intro += part; continue; }
+      out.byNum[m[1]] = (out.byNum[m[1]] || "") + part.slice(m[0].length);
+    }
+    return out;
+  });
+
   return {
     dir: {
       input: "src",

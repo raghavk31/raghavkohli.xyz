@@ -122,7 +122,7 @@ def main():
         if n == "00":
             im = shrink(im, THUMB_EDGE)
             kb = save(im, dest / "00.jpg") // 1024
-            thumb = f"/assets/projects/{args.slug}/00.jpg"
+            thumb = (f"/assets/projects/{args.slug}/00.jpg", im.size[0], im.size[1])
             print(f"  00.jpg  {im.size[0]}x{im.size[1]}  {kb}K  thumb  <- {p.name}")
             continue
         if args.grid:
@@ -131,23 +131,26 @@ def main():
         im = shrink(im, MAX_EDGE)
         kb = save(im, dest / f"{n}.jpg") // 1024
         size = hint or suggest_size(*im.size)
-        items.append((n, size, natural, round(im.size[0] / im.size[1], 3)))
+        items.append((n, size, natural, im.size[0], im.size[1]))
         print(f"  {n}.jpg  {im.size[0]}x{im.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
 
     if args.grid and grid_src:
         im = shrink(make_grid(grid_src, args.cols), MAX_EDGE)
         kb = save(im, dest / "01.jpg") // 1024
-        items.append(("01", "lg", True, round(im.size[0] / im.size[1], 3)))
+        items.append(("01", "lg", True, im.size[0], im.size[1]))
         print(f"  01.jpg  {im.size[0]}x{im.size[1]}  {kb}K  lg    <- grid of {len(grid_src)}")
 
     print("\n# --- paste into frontmatter ---")
     if thumb:
-        print(f"thumb: {thumb}")
+        print(f"thumb: {thumb[0]}")
+        print(f"thumbw: {thumb[1]}")
+        print(f"thumbh: {thumb[2]}")
     print("gallery:")
-    for n, size, natural, ar in items:
+    for n, size, natural, w, h in items:
         fit = ", fit: natural" if natural else ""
-        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, size: {size}{fit}, ar: {ar}, fig: fig.{n}, cap: "" }}')
-    print("# row: <name> + rowcap on consecutive items -> one justified strip (equal heights, no crop); size is ignored there")
+        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}, fig: fig.{n}, cap: "" }}')
+    print("# w/h let the browser reserve space before the image loads (no layout jump) and size strips.")
+    print("# Chapter pages: move items into `open:` / `chapters[].plates` / `chapters[].strip.items` — see docs/plans/2026-09-13-project-page.md")
 
 
 if __name__ == "__main__":

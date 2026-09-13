@@ -99,6 +99,8 @@ figure.card{margin-top:var(--cmt,0);max-width:100%;min-width:0;
 .card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--stripe);
   container-type:inline-size;transition:transform .6s cubic-bezier(.16,1,.3,1);}
 .card__frame > img{position:absolute;inset:0;transition:transform .9s cubic-bezier(.16,1,.3,1);}
+/* thumbfit: contain — show the whole drawing on the --stripe ground instead of cover-cropping */
+.card__frame > img.contain{object-fit:contain;}
 .card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);}
 /* frosted-glass + halftone screen over the image, question text on top */
 .card__overlay{position:absolute;inset:0;background:rgba(250,250,248,.5);
@@ -339,16 +341,62 @@ body.pv-open{overflow:hidden;}
 .detail__sub{font-family:var(--sans);font-weight:300;font-size:clamp(15px,1.5vw,18px);line-height:1.5;
   color:var(--faint);margin-top:20px;max-width:34em;}
 
-/* ---------- detail gallery: variable sizes, invisible grid ---------- */
+/* ---------- plates: one figure system for every project image ----------
+   Images always render at their own ratio (never cover-cropped). width/height attributes
+   from the frontmatter let the browser reserve the box before the bytes arrive, so the
+   page does not jump while lazy images load. Label + caption sit BELOW the image. */
+.plate{margin:0;}
+.plate__img{position:relative;background:var(--paper-2);}
+.plate__img > img{display:block;width:100%;height:auto;object-fit:unset;}
+.plate__cap{display:flex;gap:14px;margin-top:12px;font-size:12.5px;line-height:1.5;color:var(--faint);max-width:38em;}
+.plate__cap .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--faint-2);white-space:nowrap;padding-top:2px;}
+/* two plates side by side */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,2.5vw,32px);align-items:start;}
+/* justified strip: each item's width is proportional to its ratio (--ar = w/h), so every
+   photo in the row shares one height and none is cropped */
+.strip{display:flex;gap:clamp(10px,1.2vw,16px);align-items:stretch;}
+.strip > div{flex:var(--ar) 1 0%;min-width:0;background:var(--paper-2);}
+.strip img{display:block;width:100%;height:auto;object-fit:unset;}
+
+/* ---------- chapters: argument beside its evidence ----------
+   .chap is one 12-col row: text in 5 cols, plates in 6, one col of air between. `side: left`
+   flips it. The text column is sticky so the words stay in view while a tall plate scrolls;
+   .chap--long (set by the template for long bodies) turns that off so the end is reachable. */
+.detail__open{margin-top:clamp(56px,8vw,96px);}
+.chap{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(20px,3vw,40px);row-gap:32px;
+  align-items:start;margin-top:clamp(72px,10vw,128px);}
+.chap__txt{grid-column:1 / span 5;position:sticky;top:96px;}
+.chap__pl{grid-column:7 / -1;display:flex;flex-direction:column;gap:28px;}
+.chap--left .chap__txt{grid-column:8 / -1;grid-row:1;}
+.chap--left .chap__pl{grid-column:1 / span 6;grid-row:1;}
+.chap--long .chap__txt,.chap--noplates .chap__txt{position:static;}
+.chap--noplates .chap__txt{grid-column:1 / span 8;}
+.chap--notext .chap__pl{grid-column:1 / -1;}
+.chap__full{grid-column:1 / -1;}
+.chap__eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--faint-2);}
+.chap__eyebrow b{font-weight:400;color:var(--accent);}
+.chap__title{font-family:var(--serif);font-weight:500;font-size:clamp(1.4rem,2.4vw,2rem);line-height:1.15;color:var(--ink);margin:14px 0 18px;}
+.chap__body{font-size:1.0625rem;line-height:1.7;color:var(--ink-soft);font-weight:300;}
+.chap__body p{margin-bottom:1.1em;}
+.chap__body strong{color:var(--ink);font-weight:500;}
+.chap__body a{border-bottom:1px solid var(--faint-2);}
+.chap__body blockquote{margin:1.2em 0;padding-left:18px;border-left:1px solid var(--line);font-style:italic;color:var(--faint);}
+/* (outcome): the landing before (next) — same (label)/value vocabulary as the meta row */
+.detail__outcome{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(20px,3vw,40px);row-gap:28px;
+  margin-top:clamp(72px,10vw,128px);padding-top:28px;border-top:1px solid rgba(28,27,24,.09);}
+.detail__outcome > div{grid-column:span 4;}
+.detail__outcome .lbl{font-family:var(--mono);font-size:11px;color:var(--faint-2);margin-bottom:10px;}
+.detail__outcome .val{font-size:15px;line-height:1.55;color:var(--ink-2);max-width:26em;}
+
+/* ---------- legacy detail gallery (pages not yet curated into chapters) ----------
+   Same plate captions as above; frames keep a fixed ratio only where fit is not natural. */
 .gallery{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(20px,3vw,36px);
   row-gap:clamp(48px,7vw,96px);align-items:start;margin-top:clamp(64px,9vw,110px);}
 .g{margin:0;}
 .g__frame{position:relative;overflow:hidden;background:var(--stripe);}
 .g__frame > img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
-.g__fig{position:absolute;left:14px;bottom:12px;font-family:var(--mono);font-size:10.5px;
-  letter-spacing:.03em;color:var(--faint);}
-.g__cap{margin-top:14px;font-size:12.5px;color:var(--faint);line-height:1.5;max-width:34em;}
-
+.g__cap{display:flex;gap:14px;margin-top:12px;font-size:12.5px;color:var(--faint);line-height:1.5;max-width:38em;}
+.g__fig{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--faint-2);white-space:nowrap;padding-top:2px;}
 .g--lg{grid-column:1 / -1;}
 .g--lg .g__frame{aspect-ratio:16/10;}
 .g--md{grid-column:span 6;}
@@ -359,29 +407,31 @@ body.pv-open{overflow:hidden;}
 .g--tall .g__frame{aspect-ratio:3/4;}
 .g--xs{grid-column:span 3;}
 .g--xs .g__frame{aspect-ratio:4/3;}
-/* row: <name> — justified strip: each image's width is proportional to its aspect ratio
-   (--ar), so every image in the row shares one height and none is cropped */
 .g-row{grid-column:1 / -1;margin:0;}
-.g-row__imgs{display:flex;gap:clamp(12px,1.5vw,20px);align-items:stretch;}
-.g-row__item{position:relative;flex:var(--ar) 1 0%;min-width:0;background:var(--stripe);}
-.g-row__item > img{display:block;width:100%;height:auto;}
-/* break: true — start a new grid row (keeps pairs together when a smaller item precedes them) */
 .g--break.g--md{grid-column:1 / span 6;}
 .g--break.g--sm{grid-column:1 / span 4;}
 .g--break.g--xs{grid-column:1 / span 3;}
 .g--break.g--tall{grid-column:1 / span 5;}
-/* fit: natural — drawings and book spreads must not be cropped: the frame takes the image's own ratio */
-.g--natural .g__frame{aspect-ratio:auto;}
+.g--natural .g__frame{aspect-ratio:auto;background:var(--paper-2);}
 .g--natural .g__frame > img{position:static;height:auto;object-fit:unset;}
 
 @media(max-width:820px){
+  .chap__txt,.chap__pl,.chap--left .chap__txt,.chap--left .chap__pl,.chap--noplates .chap__txt{grid-column:1 / -1;grid-row:auto;position:static;}
+  .chap{row-gap:28px;margin-top:clamp(56px,12vw,80px);}
+  .pair{grid-template-columns:1fr;}
+  /* strip stays one row at one height and scrolls sideways, bleeding to the screen edge */
+  .strip{overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;
+    margin-inline:calc(-1 * var(--gutter));padding-inline:var(--gutter);scrollbar-width:none;}
+  .strip::-webkit-scrollbar{display:none;}
+  .strip > div{flex:0 0 auto;height:150px;scroll-snap-align:start;}
+  .strip img{width:auto;height:100%;}
+  .detail__outcome > div{grid-column:1 / -1;}
   .g--lg,.g--md,.g--sm,.g--tall{grid-column:1 / -1;}
   .g--xs{grid-column:span 6;}
   .g--break.g--md,.g--break.g--sm,.g--break.g--tall{grid-column:1 / -1;}
   .g--break.g--xs{grid-column:1 / span 6;}
-  .g-row__imgs{flex-wrap:wrap;align-items:flex-start;}
-  .g-row__item{flex-basis:calc(50% - 8px);}
   .g--lg .g__frame,.g--md .g__frame,.g--sm .g__frame,.g--tall .g__frame,.g--xs .g__frame{aspect-ratio:4/3;}
   .g--natural .g__frame{aspect-ratio:auto;}
   .gallery{row-gap:clamp(36px,8vw,56px);}
+}
 }
