@@ -1,13 +1,13 @@
 ---
 title: state of cities
-subtitle: Fifteen Indian cities on one climate instrument — and the seams in the instrument.
+subtitle: Fifteen Indian cities, read side by side on one climate instrument for the first time.
 question: can fifteen cities be read on one instrument — and what does the instrument miss?
 desc: niua · fifteen cities · one template
 topics: [carbon, data]
 size: wide
 offset: ""
 qsize: 25px
-fig: fig.05 — where cities stand · niua
+fig: fig.01 — cities at crossroads · niua
 role: research · data · design [confirm]
 period: 2023 [confirm]
 context: niua · c-cube · fifteen indian cities
@@ -17,7 +17,7 @@ date: 2023-07-01
 thumb: /assets/projects/state-of-cities/00.jpg
 thumbw: 1200
 thumbh: 600
-lead: A 72-page report that puts fifteen Indian cities on the same page — literally. The same template, fifteen times, over inventories from 2012 to 2021. This is what a city's climate looks like once someone insists it be read in one format, and where that format starts to show its seams.
+lead: A 72-page report that puts fifteen Indian cities on the same page — literally. One template, fifteen times, so that a city's energy, emissions, risks and plans can be read against its neighbours' for the first time. This is what a country's cities look like once someone insists they be read in one format.
 next: koliwadas — embedded participatory method
 open: { src: /assets/projects/state-of-cities/01.jpg, w: 1800, h: 900, fig: fig.01, cap: "Cities at crossroads — the argument, drawn: what climate change costs a city that cannot read itself." }
 chapters:
@@ -90,14 +90,16 @@ all. Ten of them were already acting on it.
 
 ## 03 fifteen cities
 
-Every city got the same spread: a profile, a star rating, two donuts, a column of
-measures. The template is the point. It is the first time fifteen Indian cities
-could be read side by side on one instrument.
+Every city got the same spread: a profile, a star rating, two donuts — energy and
+emissions, city-wide and municipal — and a column of measures in the pipeline.
+The template is the point. It is the first time fifteen Indian cities could be
+read side by side on one instrument, and the reading is the finding.
 
-Read across them and the instrument shows its seams. The inventories span
-**2012 to 2021**; a person in Panaji is charged 3.5 tonnes, in Thane one. And one
-city's total and its per-capita figure cannot both be true — the book's own sum
-only works if you pick the wrong one.
+A person in Panaji is charged three and a half tonnes a year, a person in Thane
+one. Transport leads energy use almost everywhere; water supply is most of what a
+municipality itself burns. And the inventories run from 2012 to 2021 — the page
+shows how unevenly the country measures its cities, and how much a common format
+still makes legible.
 
 ## 04 the path
 
