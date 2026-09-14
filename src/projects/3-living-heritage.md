@@ -57,8 +57,10 @@ chapters:
       - { src: /assets/projects/living-heritage/07.jpg, w: 1392, h: 1800, fig: fig.11, wide: true, cap: "Co-design — what the children built, in lego, on the sites their own drawings had identified." }
   - n: "05"
     name: model
+    narrow: true
     plates:
       - { src: /assets/projects/living-heritage/12.jpg, w: 1591, h: 1060, fig: fig.12, cap: "The model — the village whole, with the interventions built into the pockets where the boundaries overlap." }
+      - { src: /assets/projects/living-heritage/13.jpg, w: 1748, h: 1100, fig: fig.13, cap: "The interventions — play, grow, celebrate together. Shade, water and community; food, learning and sustainability; culture, expression and belonging." }
 outcome:
   built: "Non-programmatic play structures carrying micro-climate functions — greenhouses, water harvesting, study areas, small farms — sited only in the pockets where more than one community's attachments overlapped."
   recognised: "CEPT University Student Excellence Award. The jury: “identified and mapped the invisible and virtual boundaries and thresholds that exist in our communities … through the resultant mesh, he identified pockets of potentiality and greater commonality.”"

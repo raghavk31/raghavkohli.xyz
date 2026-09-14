@@ -43,7 +43,7 @@ layout: base.njk
   {% set body = ch.byNum[c.n] or '' %}
   {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
   {% set hasPlates = c.plates or c.pair or c.strip %}
-  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if not body and not c.title %} chap--notext{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if not body and not c.title %} chap--notext{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
     {% if body or c.title %}
     <div class="chap__txt">
       <span class="chap__eyebrow"><b>({{ c.n }})</b> {{ c.name }}</span>
