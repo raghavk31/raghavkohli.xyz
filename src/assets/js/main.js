@@ -331,7 +331,7 @@
         a.addEventListener("click", function (ev) { ev.preventDefault(); closeProject(); });
       });
       pageBody.appendChild(clone);
-      initViewer(clone);
+      initCarousel(clone);
       initLightbox(clone);
       pageBody.hidden = false;
       if (jsonBody) jsonBody.hidden = true;
@@ -492,93 +492,85 @@
     if (lbLastFocus && lbLastFocus.focus) { try { lbLastFocus.focus({ preventScroll: true }); } catch (e) {} }
   }
 
-  /* ---------- ghost viewer — one averaged plate that resolves into a city from its ledger ----------
-     Hover (mouse only) or focus a ledger row: the city image is shown once it has decoded, so the
-     crossfade never pops; leave and it returns to the ghost (or to the held city). Click / Enter
-     holds; click again or Esc releases. Touch has no hover, so tap = hold. Clicking the image
-     opens the lightbox on the fifteen cities, at the held one. The fifteen resolve renditions are
-     prefetched once the viewer scrolls into view. Without JS the rows are plain links. */
-  function initViewer(root) {
+  /* ---------- city carousel — one spread at full width; the ledger beside the text is its index ----------
+     Prev / next links, the fifteen-segment rule and the ledger rows all turn to a city; arrow keys
+     work while focus is inside the chapter; swipe on touch. The image is swapped only after it has
+     decoded (a short fade out / in, never a pop). Clicking the image opens the lightbox on the full
+     set at the current city. The 1024px renditions are prefetched once the carousel is near view. */
+  function initCarousel(root) {
     if (!root) return;
-    root.querySelectorAll(".chap--viewer").forEach(function (chap) {
-      var v = chap.querySelector(".viewer"), city = v && v.querySelector(".viewer__city");
-      var capN = v && v.querySelector(".plate__cap .n"), capT = v && v.querySelector(".plate__cap .t");
+    root.querySelectorAll(".chap--carousel").forEach(function (chap) {
+      var car = chap.querySelector("[data-carousel]");
       var rows = Array.prototype.slice.call(chap.querySelectorAll(".ledger a[data-src]"));
-      if (!v || !city || !rows.length) return;
-      var ghostN = capN.textContent, ghostT = capT.innerHTML;
-      var canHover = window.matchMedia("(hover:hover)").matches;
-      var held = null, timer = null, token = 0;
+      if (!car || !rows.length) return;
+      var img = car.querySelector(".carousel__img"), capN = car.querySelector(".plate__cap .n"), capT = car.querySelector(".plate__cap .t");
+      var prev = car.querySelector("[data-step='-1']"), next = car.querySelector("[data-step='1']"), pos = car.querySelector(".carousel__pos");
+      var segs = Array.prototype.slice.call(car.querySelectorAll(".carousel__rule a"));
+      var n = rows.length, idx = 0, token = 0;
+      var two = function (k) { return (k < 10 ? "0" : "") + k; };
 
-      function show(row) {
-        var my = ++token;
-        capN.textContent = row.dataset.fig;
-        capT.textContent = row.dataset.cap;
-        var im = new Image();
-        im.src = row.dataset.src;
-        var ready = im.decode ? im.decode() : Promise.resolve();
-        ready.then(function () {
+      function show(i, scroll) {
+        idx = (i + n) % n;
+        var row = rows[idx], my = ++token;
+        rows.forEach(function (r, k) { r.classList.toggle("on", k === idx); });
+        segs.forEach(function (a, k) { a.classList.toggle("on", k === idx); });
+        var p = rows[(idx - 1 + n) % n], q = rows[(idx + 1) % n];
+        prev.innerHTML = "(&larr;<span class=\"long\"> " + p.dataset.city.toLowerCase() + "</span>)"; prev.href = p.href;
+        next.innerHTML = "(<span class=\"long\">" + q.dataset.city.toLowerCase() + " </span>&rarr;)"; next.href = q.href;
+        pos.innerHTML = two(idx + 1) + " / " + two(n) + " · " + row.dataset.city.toLowerCase() + "<span class=\"long\"> · " + (row.dataset.cap.split(" · ")[1] || "").replace(" inventory", "") + "</span>";
+        var im = new Image(); im.src = row.dataset.src;
+        car.classList.add("is-swapping");
+        (im.decode ? im.decode() : Promise.resolve()).then(function () {
           if (my !== token) return;
-          city.src = row.dataset.src; city.alt = row.dataset.city;
-          v.classList.add("on"); row.classList.remove("err");
-        }, function () {
-          if (my !== token) return;
-          row.classList.add("err"); reset(true);
-        });
+          img.src = row.dataset.src; img.alt = row.dataset.city;
+          capN.textContent = row.dataset.fig; capT.textContent = row.dataset.cap;
+          car.classList.remove("is-swapping"); row.classList.remove("err");
+        }, function () { if (my === token) { car.classList.remove("is-swapping"); row.classList.add("err"); } });
+        if (scroll) car.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
-      function reset(force) {
-        if (held && !force) { show(held); return; }
-        token++;
-        v.classList.remove("on");
-        city.removeAttribute("src"); city.alt = "";
-        capN.textContent = ghostN; capT.innerHTML = ghostT;
-      }
-      function hold(row) {
-        rows.forEach(function (r) { r.classList.remove("on"); });
-        if (held === row) { held = null; reset(); }
-        else { held = row; row.classList.add("on"); show(row); }
-      }
-      rows.forEach(function (row) {
-        if (canHover) {
-          row.addEventListener("pointerenter", function () { clearTimeout(timer); show(row); });
-          row.addEventListener("pointerleave", function () { timer = setTimeout(function () { reset(); }, 120); });
-        }
-        row.addEventListener("focus", function () { show(row); });
-        row.addEventListener("blur", function () { reset(); });
-        row.addEventListener("click", function (e) { e.preventDefault(); hold(row); });
-      });
-      v.addEventListener("pointerenter", function () { clearTimeout(timer); });
+      prev.addEventListener("click", function (e) { e.preventDefault(); show(idx - 1); });
+      next.addEventListener("click", function (e) { e.preventDefault(); show(idx + 1); });
+      segs.forEach(function (a, k) { a.addEventListener("click", function (e) { e.preventDefault(); show(k); }); });
+      rows.forEach(function (r, k) { r.addEventListener("click", function (e) { e.preventDefault(); show(k, true); }); });
       chap.addEventListener("keydown", function (e) {
-        if (e.key === "Escape" && held) { held = null; rows.forEach(function (r) { r.classList.remove("on"); }); reset(); }
+        if (e.key === "ArrowRight") { e.preventDefault(); show(idx + 1); }
+        else if (e.key === "ArrowLeft") { e.preventDefault(); show(idx - 1); }
       });
-
-      // the image opens the lightbox on the fifteen, in ledger order, at the held city
+      // swipe on touch
+      var px = null, box = car.querySelector(".plate__img");
+      box.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") px = e.clientX; }, { passive: true });
+      box.addEventListener("pointerup", function (e) {
+        if (px === null) return;
+        var dx = e.clientX - px; px = null;
+        if (Math.abs(dx) > 40) { e.preventDefault(); show(dx < 0 ? idx + 1 : idx - 1); box.dataset.swiped = "1"; }
+      });
+      // the image opens the lightbox on the full set, at the current city
       var items = rows.map(function (row) {
         return { src: row.dataset.full || row.dataset.src, alt: row.dataset.city, w: row.dataset.w, h: row.dataset.h, n: row.dataset.fig, t: row.dataset.cap };
       });
-      var box = v.querySelector(".plate__img");
       box.classList.add("lb-src");
       box.setAttribute("tabindex", "0");
       box.setAttribute("role", "button");
       box.setAttribute("aria-label", "open the city spreads");
-      function openSet() { openLightbox(items, held ? rows.indexOf(held) : 0, box); }
+      function openSet() { if (box.dataset.swiped) { delete box.dataset.swiped; return; } openLightbox(items, idx, box); }
       box.addEventListener("click", openSet);
       box.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSet(); } });
-
-      // prefetch the resolve renditions once the viewer is near the viewport
+      // prefetch the renditions once the carousel is near the viewport
       function prefetch() { rows.forEach(function (row) { var im = new Image(); im.src = row.dataset.src; }); }
       if ("IntersectionObserver" in window) {
         var io = new IntersectionObserver(function (en) {
           if (en.some(function (e) { return e.isIntersecting; })) { prefetch(); io.disconnect(); }
-        }, { rootMargin: "200px" });
-        io.observe(v);
+        }, { rootMargin: "300px" });
+        io.observe(car);
       } else { prefetch(); }
+      show(0);
     });
   }
 
   function initLightbox(root) {
     if (!root) return;
     var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .g__frame img"))
-      .filter(function (img) { return !img.closest(".viewer"); }); // the ghost viewer registers its own set
+      .filter(function (img) { return !img.closest("[data-carousel]"); }); // the city carousel registers its own set
     if (!imgs.length) return;
     var items = imgs.map(function (img) {
       var c = captionFor(img);
@@ -596,6 +588,6 @@
       });
     });
   }
-  initViewer(document.querySelector("article.detail"));
+  initCarousel(document.querySelector("article.detail"));
   initLightbox(document.querySelector("article.detail"));
 })();

@@ -7,7 +7,7 @@ topics: [carbon, data]
 size: wide
 offset: ""
 qsize: 25px
-fig: fig.05–19 — fifteen cities, one instrument · niua
+fig: fig.05 — where cities stand · niua
 role: research · data · design [confirm]
 period: 2023 [confirm]
 context: niua · c-cube · fifteen indian cities
@@ -47,8 +47,9 @@ chapters:
         - { n: "24 M", l: "people" }
         - { n: "38 Mt", l: "CO₂e · one year" }
         - { n: "319", l: "actions · 147 adaptation + 172 mitigation" }
-    viewer:
-      ghost: { src: /assets/projects/state-of-cities/05.jpg, w: 1800, h: 900, fig: "fig.05–19", cap: "The fifteen city spreads, averaged into one image. What stays sharp is the template; what blurs is the city.", cap_short: "Fifteen spreads, averaged." }
+    plates:
+      - { src: /assets/projects/state-of-cities/22.jpg, w: 1800, h: 900, fig: fig.05, cap: "Where cities stand — the climate profile of fifteen cities on one page: per-capita energy, electricity and emissions, and the range of each sector's share." }
+    carousel:
       data: socCities
       max: 4
       unit: "tCO₂e per person, most to least · stars = CSCAF 2.0"
@@ -58,7 +59,7 @@ chapters:
     title: What the loop needs
     narrow: true
     plates:
-      - { src: /assets/projects/state-of-cities/21.jpg, w: 1800, h: 900, fig: fig.20, cap: "Planning climate action — the book's closing loop: assess, commit, plan, implement, monitor, revise." }
+      - { src: /assets/projects/state-of-cities/21.jpg, w: 1800, h: 900, fig: fig.21, cap: "Planning climate action — the book's closing loop: assess, commit, plan, implement, monitor, revise." }
 outcome:
   built: "A 72-page public report — four sections, fifteen city profiles on one template, and the first side-by-side reading of Indian city inventories."
   recognised: "Published by NIUA's Climate Centre for Cities (C-Cube) under the Ministry of Housing and Urban Affairs. [confirm]"

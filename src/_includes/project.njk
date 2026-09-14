@@ -16,25 +16,32 @@ layout: base.njk
   {% if s.fig or s.cap %}<figcaption class="plate__cap">{% if s.fig %}<span class="n">{{ s.fig }}</span>{% endif %}{% if s.cap %}<span>{{ s.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
 {% endmacro %}
-{#- Ghost viewer: one averaged "ghost" plate that resolves into a city when its ledger row is
-    hovered / held (main.js initViewer). The ledger IS the chart: city · bar · per-capita · stars.
-    Rows are real links to the full-size spread, so without JS every city is still reachable. -#}
-{% macro viewer(v, rows) %}
-<div class="chap__pin">
-  <figure class="plate viewer">
-    <div class="plate__img"><img src="{{ v.ghost.src }}" alt="{{ v.ghost.alt or 'fifteen spreads averaged' }}"{% if v.ghost.w and v.ghost.h %} width="{{ v.ghost.w }}" height="{{ v.ghost.h }}"{% endif %} loading="eager" /><img class="viewer__city" alt="" decoding="async"{% if v.ghost.w and v.ghost.h %} width="{{ v.ghost.w }}" height="{{ v.ghost.h }}"{% endif %} /></div>
-    <figcaption class="plate__cap" aria-live="polite"><span class="n">{{ v.ghost.fig }}</span><span class="t"><span class="viewer__long">{{ v.ghost.cap }}</span><span class="viewer__short">{{ v.ghost.cap_short or v.ghost.cap }}</span> <span class="js-only"><span class="hover-only">Hover a city to resolve it; click to hold it.</span><span class="touch-only">Tap a city to resolve it; tap again to release.</span></span></span></figcaption>
+{#- City carousel: one spread at full width, a mono pager and a fifteen-segment rule; the ledger
+    beside the text is its index (main.js initCarousel). Without JS: the first city, and every rule
+    segment / ledger row is a real link to that spread. -#}
+{% macro carousel(v, rows) %}
+{% set first = rows[0] %}
+<div class="chap__full carousel" data-carousel>
+  <figure class="plate">
+    <div class="plate__img"><img class="carousel__img" src="{{ first.resolve or first.src }}" alt="{{ first.city }}"{% if first.w and first.h %} width="{{ first.w }}" height="{{ first.h }}"{% endif %} loading="lazy" decoding="async" /></div>
+    <figcaption class="plate__cap" aria-live="polite"><span class="n">{{ first.fig }}</span><span class="t">{{ first.city }} · {{ first.year }} inventory · {{ first.tco2e_pc | fixed(2) }} tCO₂e per person · {{ first.pop_m }} M people · CSCAF {{ first.cscaf }}/5</span></figcaption>
   </figure>
+  <div class="carousel__nav">
+    <a class="carousel__prev" href="{{ rows[rows.length - 1].src }}" data-step="-1">(&larr;<span class="long"> {{ rows[rows.length - 1].city | lower }}</span>)</a>
+    <span class="carousel__pos">01 / {{ rows.length }} · {{ first.city | lower }}<span class="long"> · {{ first.year }}</span></span>
+    <a class="carousel__next" href="{{ rows[1].src }}" data-step="1">(<span class="long">{{ rows[1].city | lower }} </span>&rarr;)</a>
+  </div>
+  <div class="carousel__rule" role="list">{% for r in rows %}<a role="listitem" href="{{ r.src }}" data-i="{{ loop.index0 }}"{% if loop.first %} class="on"{% endif %} title="{{ r.city }}" aria-label="{{ r.city }}"></a>{% endfor %}</div>
 </div>
 {% endmacro %}
 {% macro ledger(v, rows) %}
 {% set mx = v.max or 4 %}
 <ol class="ledger">
   {% for r in rows %}
-  <li><a href="{{ r.src }}" data-src="{{ r.resolve or r.src }}" data-full="{{ r.src }}" data-w="{{ r.w }}" data-h="{{ r.h }}" data-city="{{ r.city }}" data-fig="{{ r.fig }}" data-cap="{{ r.city }} · {{ r.year }} inventory · {{ r.tco2e_pc | fixed(2) }} tCO₂e per person · {{ r.pop_m }} M people · CSCAF {{ r.cscaf }}/5" aria-label="{{ r.city }} — {{ r.tco2e_pc | fixed(2) }} tonnes CO₂e per person, {{ r.pop_m }} million people, CSCAF {{ r.cscaf }} of 5, {{ r.year }} inventory"><span class="ledger__c">{{ r.city }}</span><span class="ledger__t" aria-hidden="true"><span class="ledger__b" style="width:{{ (100 * r.tco2e_pc / mx) | round(1) }}%"></span></span><span class="ledger__v" aria-hidden="true">{{ r.tco2e_pc | fixed(2) }}</span><span class="ledger__s" aria-hidden="true">{{ r.cscaf | stars }}</span><span class="ledger__h" aria-hidden="true">(held)</span></a></li>
+  <li><a href="{{ r.src }}" data-i="{{ loop.index0 }}" data-src="{{ r.resolve or r.src }}" data-full="{{ r.src }}" data-w="{{ r.w }}" data-h="{{ r.h }}" data-city="{{ r.city }}" data-fig="{{ r.fig }}" data-cap="{{ r.city }} · {{ r.year }} inventory · {{ r.tco2e_pc | fixed(2) }} tCO₂e per person · {{ r.pop_m }} M people · CSCAF {{ r.cscaf }}/5" aria-label="{{ r.city }} — {{ r.tco2e_pc | fixed(2) }} tonnes CO₂e per person, {{ r.pop_m }} million people, CSCAF {{ r.cscaf }} of 5, {{ r.year }} inventory"><span class="ledger__c">{{ r.city }}</span><span class="ledger__t" aria-hidden="true"><span class="ledger__b" style="width:{{ (100 * r.tco2e_pc / mx) | round(1) }}%"></span></span><span class="ledger__v" aria-hidden="true">{{ r.tco2e_pc | fixed(2) }}</span><span class="ledger__s" aria-hidden="true">{{ r.cscaf | stars }}</span></a></li>
   {% endfor %}
 </ol>
-{% if v.unit %}<div class="ledger__u"><span class="viewer__long">{{ v.unit }}</span><span class="viewer__short">{{ v.unit_short or v.unit }}</span></div>{% endif %}
+{% if v.unit %}<div class="ledger__u"><span class="long">{{ v.unit }}</span><span class="short">{{ v.unit_short or v.unit }}</span></div>{% endif %}
 {% endmacro %}
 <article class="detail">
   <a class="detail__back" href="/#work">(&larr; selected work)</a>
@@ -62,11 +69,11 @@ layout: base.njk
   {% for c in chapters %}
   {% set body = ch.byNum[c.n] or '' %}
   {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
-  {% set hasPlates = c.plates or c.pair or c.strip or c.viewer %}
+  {% set hasPlates = c.plates or c.pair or c.strip or c.carousel %}
   {% set hasText = body or c.title %}
-  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.viewer %} chap--viewer{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
-    {% if c.viewer %}
-    {#- viewer chapters: eyebrow, then the stat row, then the pinned ghost, then text | ledger -#}
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+    {% if c.carousel %}
+    {#- carousel chapters: eyebrow, stat row, any full-width plates, the carousel, then text | ledger -#}
     <span class="chap__eyebrow chap__eyebrow--row"><b>({{ c.n }})</b> {{ c.name }}</span>
     {% if c.stats %}
     <div class="stats">
@@ -74,18 +81,19 @@ layout: base.njk
       {% if c.stats.src %}<div class="src">{{ c.stats.src }}</div>{% endif %}
     </div>
     {% endif %}
-    {% set rows = c.viewer.rows or (c.viewer.data | dataset) %}
-    {{ viewer(c.viewer, rows) }}
+    {% for p in c.plates %}<div class="chap__full">{{ plate(p) }}</div>{% endfor %}
+    {% set rows = c.carousel.rows or (c.carousel.data | dataset) %}
+    {{ carousel(c.carousel, rows) }}
     {% endif %}
     {% if hasText %}
     <div class="chap__txt">
-      {% if not c.viewer %}<span class="chap__eyebrow"><b>({{ c.n }})</b> {{ c.name }}</span>{% endif %}
+      {% if not c.carousel %}<span class="chap__eyebrow"><b>({{ c.n }})</b> {{ c.name }}</span>{% endif %}
       {% if c.title %}<h2 class="chap__title">{{ c.title }}</h2>{% endif %}
       {% if body %}<div class="chap__body">{{ body | safe }}</div>{% endif %}
     </div>
     {% endif %}
-    {% if c.viewer %}<div class="chap__pl">{{ ledger(c.viewer, rows) }}</div>{% endif %}
-    {% if c.plates or c.pair %}
+    {% if c.carousel %}<div class="chap__pl">{{ ledger(c.carousel, rows) }}</div>{% endif %}
+    {% if (c.plates or c.pair) and not c.carousel %}
     <div class="chap__pl">
       {% for p in c.plates %}{{ plate(p) }}{% endfor %}
       {% if c.pair %}<div class="pair">{% for p in c.pair %}{{ plate(p) }}{% endfor %}</div>{% endif %}

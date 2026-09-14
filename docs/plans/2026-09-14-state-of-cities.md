@@ -15,6 +15,14 @@ first person and terse.
 
 ## Approved direction
 
+> **Revised after first deploy (2026-09-14):** the ghost viewer did not read well live and the
+> city spreads were too small. Chapter 03 is now: stat row → `SOC_06` *Where Cities Stand* as a
+> full-width plate (fig.05) → a **full-width city carousel** (fig.06–20; prev/next, a fifteen-
+> segment rule, arrow keys, swipe, lightbox on click) → text | ledger, where clicking a row turns
+> the carousel to that city. The ghost survives only as `scripts/ghost.py`. The homepage thumb is
+> `SOC_06`. The sections below describe the ghost design as reviewed; the state table's hover /
+> held / prefetch / decode-gating / a11y rules carry over to the carousel unchanged.
+
 `~/.gstack/projects/raghavk31-raghavkohli.xyz/designs/state-of-cities-20260914/D-final.html`
 (render: `variant-D-final.png`; `approved.json`). Real site CSS, real spreads, working JS —
 hover, hold, Esc, touch and prefetch all behave as specified below. Round one (A grid /

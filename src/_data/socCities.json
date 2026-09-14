@@ -14,7 +14,7 @@
     "resolve": "/assets/projects/state-of-cities/06-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.05"
+    "fig": "fig.06"
   },
   {
     "city": "Kochi",
@@ -31,7 +31,7 @@
     "resolve": "/assets/projects/state-of-cities/07-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.06"
+    "fig": "fig.07"
   },
   {
     "city": "Siliguri",
@@ -48,7 +48,7 @@
     "resolve": "/assets/projects/state-of-cities/08-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.07"
+    "fig": "fig.08"
   },
   {
     "city": "Udaipur",
@@ -65,7 +65,7 @@
     "resolve": "/assets/projects/state-of-cities/09-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.08"
+    "fig": "fig.09"
   },
   {
     "city": "Tiruchirappalli",
@@ -82,7 +82,7 @@
     "resolve": "/assets/projects/state-of-cities/10-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.09"
+    "fig": "fig.10"
   },
   {
     "city": "Ahmedabad",
@@ -99,7 +99,7 @@
     "resolve": "/assets/projects/state-of-cities/11-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.10"
+    "fig": "fig.11"
   },
   {
     "city": "Pimpri-Chinchwad",
@@ -116,7 +116,7 @@
     "resolve": "/assets/projects/state-of-cities/12-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.11"
+    "fig": "fig.12"
   },
   {
     "city": "Coimbatore",
@@ -133,7 +133,7 @@
     "resolve": "/assets/projects/state-of-cities/13-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.12"
+    "fig": "fig.13"
   },
   {
     "city": "Rajkot",
@@ -150,7 +150,7 @@
     "resolve": "/assets/projects/state-of-cities/14-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.13"
+    "fig": "fig.14"
   },
   {
     "city": "Shimla",
@@ -167,7 +167,7 @@
     "resolve": "/assets/projects/state-of-cities/15-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.14"
+    "fig": "fig.15"
   },
   {
     "city": "Tirunelveli",
@@ -184,7 +184,7 @@
     "resolve": "/assets/projects/state-of-cities/16-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.15"
+    "fig": "fig.16"
   },
   {
     "city": "Vadodara",
@@ -201,7 +201,7 @@
     "resolve": "/assets/projects/state-of-cities/17-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.16"
+    "fig": "fig.17"
   },
   {
     "city": "Nagpur",
@@ -218,7 +218,7 @@
     "resolve": "/assets/projects/state-of-cities/18-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.17"
+    "fig": "fig.18"
   },
   {
     "city": "Gwalior",
@@ -235,7 +235,7 @@
     "resolve": "/assets/projects/state-of-cities/19-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.18"
+    "fig": "fig.19"
   },
   {
     "city": "Thane",
@@ -252,6 +252,6 @@
     "resolve": "/assets/projects/state-of-cities/20-r.jpg",
     "w": 1800,
     "h": 900,
-    "fig": "fig.19"
+    "fig": "fig.20"
   }
 ]
