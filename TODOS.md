@@ -32,3 +32,21 @@
 - **Pros:** the one interactive component on the site is checked where most readers use it.
   **Cons:** 15 min with two phones; a fix cycle if something fails.
 - **Depends on:** the page deployed (`docs/plans/2026-09-14-state-of-cities.md`, T1–T8).
+
+## State of cities — final touch (parked 2026-09-15, do when all book pages are in)
+
+### 1 · Tell the making, not the book
+- **What:** one paragraph at the top of chapter 03 on what Raghav did — fifteen inventories from
+  different years and boundaries, the decision to force them into one template, what it took.
+  Fill the meta row: `role`, `period`, the C-Cube recognition line, the real PDF `href`
+  (all still `[confirm]` on prod in `src/projects/2-state-of-cities.md`).
+- **Why:** the page currently narrates NIUA's four sections; the Media Lab / hiring reader needs
+  the author's method and contribution. Single biggest improvement available.
+- **Depends on:** Raghav's account of the role.
+
+### 2–5 · Same session, once the facts are in
+- Opening plate → `SOC_9` (clean drawing, 7200px); `SOC_01` (with text) into the lightbox.
+- Carousel shows one page at a time (the data page, 1:1) so the numbers read on the page;
+  and/or 2× export of the spreads from the PDF (needs the PDF).
+- Chapter 03 duplicates: keep the ledger, move `SOC_06` to the lightbox set.
+- Detail crops 00–02 recut from the 2× files.
