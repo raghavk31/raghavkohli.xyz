@@ -39,7 +39,7 @@ chapters:
       - { src: /assets/projects/state-of-cities/04.jpg, w: 840, h: 780, fig: "fig.04 (detail)", cap: "CSCAF 2.0 — five sectors, five stars; the framework that turns a municipality into a rating." }
   - n: "03"
     name: fifteen cities
-    title: The same page, fifteen times
+    title: City view
     stats:
       src: "State of Cities, NIUA 2023 · inventories by ICLEI South Asia, 2012–21"
       items:
@@ -90,10 +90,14 @@ all. Ten of them were already acting on it.
 
 ## 03 fifteen cities
 
-Every city got the same spread: a profile, a star rating, two donuts — energy and
-emissions, city-wide and municipal — and a column of measures in the pipeline.
-The template is the point. It is the first time fifteen Indian cities could be
-read side by side on one instrument, and the reading is the finding.
+The climate challenge in India's cities is its own kind. Growing emissions land on
+top of what the cities already carry — rising temperatures, air pollution, water
+scarcity, extreme weather. Some have moved: renewable energy, waste systems, a
+first inventory. But none of it becomes a country's plan until the cities can be
+read together. So the report reads fifteen of them the same way — twenty-four
+million people, 246 million GJ of energy, 38 million tonnes of CO₂e in a year, and
+319 actions, 147 for adaptation and 172 for mitigation — one profile, one rating,
+one set of measures, on the same page.
 
 A person in Panaji is charged three and a half tonnes a year, a person in Thane
 one. Transport leads energy use almost everywhere; water supply is most of what a
