@@ -37,6 +37,16 @@ module.exports = function (eleventyConfig) {
     return out;
   });
 
+  // A named JSON file from src/_data, for frontmatter that points at a dataset by name
+  // (`viewer: { data: socCities }`) instead of inlining fifteen rows.
+  eleventyConfig.addFilter("dataset", (name) => require(`./src/_data/${name}.json`));
+
+  // Fixed decimals that keep their trailing zero ("1.60"), unlike `round`
+  eleventyConfig.addFilter("fixed", (n, d) => Number(n).toFixed(d));
+
+  // "★★★☆☆" for a 0–5 rating (CSCAF stars in the state-of-cities ledger)
+  eleventyConfig.addFilter("stars", (n) => "★".repeat(n) + "☆".repeat(5 - n));
+
   return {
     dir: {
       input: "src",

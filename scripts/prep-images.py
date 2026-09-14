@@ -9,6 +9,8 @@ Prints  a ready-to-paste YAML block for the page's frontmatter.
 
 Optional size hint in the filename: 03-lg-name.jpg -> size: lg (lg | md | sm | xs | tall).
 Add "natural" after the size (03-lg-natural-name.jpg) -> fit: natural (never cropped).
+Add "resolve" after that (06-lg-natural-resolve-name.jpg) -> also writes NN-r.jpg, long edge
+<= 1280px, for a viewer that prefetches many images (state of cities) — emitted as resolve:.
 Without a hint, size is suggested from the aspect ratio.
 
 --grid  composites every non-thumb pick into one contact-grid image (for tile sets like
@@ -33,10 +35,12 @@ OUT = ROOT / "src" / "assets" / "projects"
 
 MAX_EDGE = 1800
 THUMB_EDGE = 1200
+RESOLVE_EDGE = 1024  # the viewer is never wider than 966px
+RESOLVE_QUALITY = 72  # fifteen of these are prefetched at once; keep the set near 1.5 MB
 QUALITY = 82
 SIZES = ("lg", "md", "sm", "xs", "tall")
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-.*)?$", re.I)
+NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-.*)?$", re.I)
 
 
 def suggest_size(w, h):
@@ -68,8 +72,8 @@ def shrink(im, max_edge):
     return im
 
 
-def save(im, dest):
-    im.save(dest, "JPEG", quality=QUALITY, optimize=True, progressive=True)
+def save(im, dest, quality=QUALITY):
+    im.save(dest, "JPEG", quality=quality, optimize=True, progressive=True)
     return dest.stat().st_size
 
 
@@ -105,7 +109,7 @@ def main():
         if not m:
             print(f"  skip (no NN- prefix): {p.name}")
             continue
-        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), p))
+        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), p))
     if not picks:
         sys.exit("nothing to do — files need a two-digit prefix, e.g. 01-map.jpg")
 
@@ -117,7 +121,7 @@ def main():
     thumb = None
     items = []
     grid_src = []
-    for n, hint, natural, p in picks:
+    for n, hint, natural, resolve, p in picks:
         im = load(p)
         if n == "00":
             im = shrink(im, THUMB_EDGE)
@@ -128,16 +132,20 @@ def main():
         if args.grid:
             grid_src.append(shrink(im, 900))
             continue
-        im = shrink(im, MAX_EDGE)
-        kb = save(im, dest / f"{n}.jpg") // 1024
-        size = hint or suggest_size(*im.size)
-        items.append((n, size, natural, im.size[0], im.size[1]))
-        print(f"  {n}.jpg  {im.size[0]}x{im.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
+        full = shrink(im, MAX_EDGE)
+        kb = save(full, dest / f"{n}.jpg") // 1024
+        size = hint or suggest_size(*full.size)
+        items.append((n, size, natural, resolve, full.size[0], full.size[1]))
+        print(f"  {n}.jpg  {full.size[0]}x{full.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
+        if resolve:
+            r = shrink(im, RESOLVE_EDGE)
+            rkb = save(r, dest / f"{n}-r.jpg", RESOLVE_QUALITY) // 1024
+            print(f"  {n}-r.jpg  {r.size[0]}x{r.size[1]}  {rkb}K  resolve")
 
     if args.grid and grid_src:
         im = shrink(make_grid(grid_src, args.cols), MAX_EDGE)
         kb = save(im, dest / "01.jpg") // 1024
-        items.append(("01", "lg", True, im.size[0], im.size[1]))
+        items.append(("01", "lg", True, False, im.size[0], im.size[1]))
         print(f"  01.jpg  {im.size[0]}x{im.size[1]}  {kb}K  lg    <- grid of {len(grid_src)}")
 
     print("\n# --- paste into frontmatter ---")
@@ -146,9 +154,10 @@ def main():
         print(f"thumbw: {thumb[1]}")
         print(f"thumbh: {thumb[2]}")
     print("gallery:")
-    for n, size, natural, w, h in items:
+    for n, size, natural, resolve, w, h in items:
         fit = ", fit: natural" if natural else ""
-        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}, fig: fig.{n}, cap: "" }}')
+        res = f", resolve: /assets/projects/{args.slug}/{n}-r.jpg" if resolve else ""
+        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}{res}, fig: fig.{n}, cap: "" }}')
     print("# w/h let the browser reserve space before the image loads (no layout jump) and size strips.")
     print("# Chapter pages: move items into `open:` / `chapters[].plates` / `chapters[].strip.items` — see docs/plans/2026-09-13-project-page.md")
 
