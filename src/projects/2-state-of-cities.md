@@ -7,7 +7,7 @@ topics: [carbon, data]
 size: wide
 offset: ""
 qsize: 25px
-fig: fig.01 — cities at crossroads · niua
+fig: fig.01 — cities at crossroads, drawn · niua
 role: research · data · design [confirm]
 period: 2023 [confirm]
 context: niua · c-cube · fifteen indian cities
@@ -16,7 +16,7 @@ live: false
 date: 2023-07-01
 thumb: /assets/projects/state-of-cities/00.jpg
 thumbw: 1200
-thumbh: 600
+thumbh: 953
 lead: A 72-page report that puts fifteen Indian cities on the same page — literally. One template, fifteen times, so that a city's energy, emissions, risks and plans can be read against its neighbours' for the first time. This is what a country's cities look like once someone insists they be read in one format.
 next: koliwadas — embedded participatory method
 open: { src: /assets/projects/state-of-cities/01.jpg, w: 1800, h: 900, fig: fig.01, cap: "Cities at crossroads — the argument, drawn: what climate change costs a city that cannot read itself." }
