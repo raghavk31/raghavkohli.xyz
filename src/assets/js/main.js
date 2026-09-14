@@ -331,6 +331,7 @@
         a.addEventListener("click", function (ev) { ev.preventDefault(); closeProject(); });
       });
       pageBody.appendChild(clone);
+      initLightbox(clone);
       pageBody.hidden = false;
       if (jsonBody) jsonBody.hidden = true;
       setField("name", name);
@@ -379,6 +380,136 @@
     pv.querySelectorAll("[data-pv-close]").forEach(function (el) {
       el.addEventListener("click", function (ev) { ev.preventDefault(); closeProject(); });
     });
-    window.addEventListener("keydown", function (e) { if (e.key === "Escape") closeProject(); });
+    window.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !document.body.classList.contains("lb-open")) closeProject();
+    });
   }
+
+  /* ---------- lightbox — any project image opens the page's images as a carousel ----------
+     Collects every plate / strip / gallery image inside an <article class="detail"> in page order.
+     Runs on the standalone project page at load, and on the fetched article when the overlay
+     shows it (see showPage). The markup is built once, on first open. */
+  var lb = null, lbImg, lbN, lbT, lbCount, lbItems = [], lbIdx = 0, lbLastFocus = null;
+
+  function buildLightbox() {
+    lb = document.createElement("div");
+    lb.className = "lb";
+    lb.setAttribute("aria-hidden", "true");
+    lb.innerHTML =
+      '<div class="lb__backdrop" data-lb-close></div>' +
+      '<div class="lb__panel" role="dialog" aria-modal="true" aria-label="Image">' +
+        '<div class="lb__bar"><span class="lb__count"></span><button type="button" class="lb__nav" data-lb-close>(close)</button></div>' +
+        '<div class="lb__stage">' +
+          '<button type="button" class="lb__arrow lb__arrow--prev" data-lb-prev aria-label="previous image">(&larr; prev)</button>' +
+          '<img class="lb__img" alt="" />' +
+          '<button type="button" class="lb__arrow lb__arrow--next" data-lb-next aria-label="next image">(next &rarr;)</button>' +
+        '</div>' +
+        '<div class="lb__cap"><span class="n"></span><span class="t"></span></div>' +
+      '</div>';
+    document.body.appendChild(lb);
+    lbImg = lb.querySelector(".lb__img");
+    lbN = lb.querySelector(".lb__cap .n");
+    lbT = lb.querySelector(".lb__cap .t");
+    lbCount = lb.querySelector(".lb__count");
+    lb.querySelectorAll("[data-lb-close]").forEach(function (el) { el.addEventListener("click", closeLightbox); });
+    lb.querySelector("[data-lb-prev]").addEventListener("click", function () { stepLightbox(-1); });
+    lb.querySelector("[data-lb-next]").addEventListener("click", function () { stepLightbox(1); });
+    // swipe on touch
+    var px = null;
+    var stage = lb.querySelector(".lb__stage");
+    stage.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") px = e.clientX; }, { passive: true });
+    stage.addEventListener("pointerup", function (e) {
+      if (px === null) return;
+      var dx = e.clientX - px; px = null;
+      if (Math.abs(dx) > 40) stepLightbox(dx < 0 ? 1 : -1);
+    }, { passive: true });
+    // capture phase so an open lightbox owns the keys before the overlay / filter handlers see them
+    window.addEventListener("keydown", function (e) {
+      if (!lb.classList.contains("open")) return;
+      if (e.key === "Escape") { e.stopPropagation(); closeLightbox(); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); stepLightbox(1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); stepLightbox(-1); }
+    }, true);
+  }
+
+  // caption for one image: its figure's label + text. A strip shares one "fig.03–06" label, so
+  // each photo in it gets its own number from that range.
+  function captionFor(img) {
+    var fig = img.closest("figure");
+    var cap = fig && fig.querySelector("figcaption");
+    var n = "", t = "";
+    if (cap) {
+      var nEl = cap.querySelector(".n, .g__fig");
+      n = nEl ? nEl.textContent.trim() : "";
+      var tEl = Array.prototype.filter.call(cap.children, function (c) { return c !== nEl; })[0];
+      t = tEl ? tEl.textContent.trim() : "";
+    }
+    var strip = img.closest(".strip");
+    var m = /^(fig\.)(\d+)[–-](\d+)$/.exec(n);
+    if (strip && m) {
+      var i = Array.prototype.indexOf.call(strip.querySelectorAll("img"), img);
+      var k = parseInt(m[2], 10) + i;
+      if (k <= parseInt(m[3], 10)) n = m[1] + (k < 10 ? "0" + k : "" + k);
+    }
+    return { n: n, t: t };
+  }
+
+  function showLightbox(i) {
+    lbIdx = (i + lbItems.length) % lbItems.length;
+    var it = lbItems[lbIdx];
+    lbImg.src = it.src;
+    lbImg.alt = it.alt;
+    if (it.w && it.h) { lbImg.width = it.w; lbImg.height = it.h; }
+    lbN.textContent = it.n;
+    lbT.textContent = it.t;
+    lbCount.textContent = (lbIdx + 1 < 10 ? "0" : "") + (lbIdx + 1) + " / " + (lbItems.length < 10 ? "0" : "") + lbItems.length;
+    lb.classList.toggle("lb--single", lbItems.length < 2);
+    // warm the neighbours so the step feels instant
+    [1, -1].forEach(function (d) {
+      var nx = lbItems[(lbIdx + d + lbItems.length) % lbItems.length];
+      if (nx && nx.src !== it.src) { var im = new Image(); im.src = nx.src; }
+    });
+  }
+  function stepLightbox(d) { if (lbItems.length > 1) showLightbox(lbIdx + d); }
+
+  function openLightbox(items, i, originEl) {
+    if (!lb) buildLightbox();
+    lbItems = items;
+    lbLastFocus = originEl;
+    showLightbox(i);
+    document.body.classList.add("lb-open");
+    lb.setAttribute("aria-hidden", "false");
+    requestAnimationFrame(function () { requestAnimationFrame(function () { lb.classList.add("open"); }); });
+    var closeBtn = lb.querySelector(".lb__nav");
+    if (closeBtn) closeBtn.focus({ preventScroll: true });
+  }
+  function closeLightbox() {
+    if (!lb || !lb.classList.contains("open")) return;
+    lb.classList.remove("open");
+    document.body.classList.remove("lb-open");
+    lb.setAttribute("aria-hidden", "true");
+    if (lbLastFocus && lbLastFocus.focus) { try { lbLastFocus.focus({ preventScroll: true }); } catch (e) {} }
+  }
+
+  function initLightbox(root) {
+    if (!root) return;
+    var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .g__frame img"));
+    if (!imgs.length) return;
+    var items = imgs.map(function (img) {
+      var c = captionFor(img);
+      return { src: img.currentSrc || img.src, alt: img.alt || c.t, w: img.getAttribute("width"), h: img.getAttribute("height"), n: c.n, t: c.t };
+    });
+    imgs.forEach(function (img, i) {
+      var box = img.closest(".plate__img, .strip > div, .g__frame") || img;
+      box.classList.add("lb-src");
+      box.setAttribute("tabindex", "0");
+      box.setAttribute("role", "button");
+      box.setAttribute("aria-label", "open image " + (i + 1) + " of " + imgs.length);
+      box.addEventListener("click", function () { openLightbox(items, i, box); });
+      box.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLightbox(items, i, box); }
+      });
+    });
+  }
+  initLightbox(document.querySelector("article.detail"));
 })();

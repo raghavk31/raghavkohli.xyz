@@ -7,7 +7,7 @@ topics: [community]
 size: md
 offset: ""
 qsize: 25px
-fig: fig.11 — the village, whole · ambli
+fig: fig.01 — the village, whole · ambli
 role: embedded fieldwork · participatory systems mapping
 period: 2019 — 2020
 context: ambli · ahmedabad · 14 communities
@@ -18,18 +18,18 @@ thumb: /assets/projects/living-heritage/00.jpg
 thumbfit: contain
 lead: A village of 40,000 square metres and fourteen communities, running on a boundary system no map recorded — caste, religion, age, mobility, wealth. This work instrumented that system by asking the residents least able to conceal it, and designed into the pockets where the boundaries overlapped.
 next: koliwadas — embedded participatory method
-open: { src: /assets/projects/living-heritage/11.jpg, w: 1212, h: 1240, fig: fig.11, cap: "The village, whole — interventions sited only where the boundaries overlapped." }
+open: { src: /assets/projects/living-heritage/11.jpg, w: 1212, h: 1240, fig: fig.01, cap: "The village, whole — interventions sited only where the boundaries overlapped." }
 chapters:
   - n: "00"
     name: context
     title: The system nobody had mapped
     plates:
-      - { src: /assets/projects/living-heritage/01.jpg, w: 1800, h: 1356, fig: fig.01, cap: "Ambli's evolution, 1800 to 2019 — the city arriving at the village edge, mapped from residents' accounts." }
+      - { src: /assets/projects/living-heritage/01.jpg, w: 1800, h: 1356, fig: fig.02, cap: "Ambli's evolution, 1800 to 2019 — the city arriving at the village edge, mapped from residents' accounts." }
   - n: "01"
     name: embed
     title: Access before research
     strip:
-      fig: fig.02–05
+      fig: fig.03–06
       cap: "Months in the village before proposing anything about it — mostly with children: playing, listening, helping with homework."
       items:
         - { src: /assets/projects/living-heritage/02.jpg, w: 867, h: 736 }
@@ -41,20 +41,20 @@ chapters:
     title: Children as instrument
     side: left
     plates:
-      - { src: /assets/projects/living-heritage/06.jpg, w: 906, h: 1280, fig: fig.06, cap: "The instrument — roughly two hundred drawings from a transect walk, assembled and categorised. A map of attachment the village had never seen of itself." }
+      - { src: /assets/projects/living-heritage/06.jpg, w: 906, h: 1280, fig: fig.07, cap: "The instrument — roughly two hundred drawings from a transect walk, assembled and categorised. A map of attachment the village had never seen of itself." }
   - n: "03"
     name: locate
     title: The mesh, and where it overlaps
     plates:
-      - { src: /assets/projects/living-heritage/09.jpg, w: 1800, h: 1356, fig: fig.09, cap: "Perception map — the boundary mesh and its varying degrees of discernability. Blue: spaces generally liked; red: collectively not." }
-      - { src: /assets/projects/living-heritage/10.jpg, w: 1693, h: 1242, fig: fig.10, cap: "Strategy — attachments overlaid against community boundaries to locate the pockets of overlap." }
+      - { src: /assets/projects/living-heritage/09.jpg, w: 1800, h: 1356, fig: fig.08, cap: "Perception map — the boundary mesh and its varying degrees of discernability. Blue: spaces generally liked; red: collectively not." }
+      - { src: /assets/projects/living-heritage/10.jpg, w: 1693, h: 1242, fig: fig.09, cap: "Strategy — attachments overlaid against community boundaries to locate the pockets of overlap." }
   - n: "04"
     name: co-design
     title: Designing into the overlap
     side: left
     pair:
-      - { src: /assets/projects/living-heritage/08.jpg, w: 1288, h: 1800, fig: fig.08, cap: "The workshop call — re-imagining Ambli, 22.09.19. For kids, aged 5 and above." }
-      - { src: /assets/projects/living-heritage/07.jpg, w: 1401, h: 1800, fig: fig.07, cap: "Co-design — what the children built, in lego, on the sites their own drawings had identified." }
+      - { src: /assets/projects/living-heritage/08.jpg, w: 1288, h: 1800, fig: fig.10, cap: "The workshop call — re-imagining Ambli, 22.09.19. For kids, aged 5 and above." }
+      - { src: /assets/projects/living-heritage/07.jpg, w: 1401, h: 1800, fig: fig.11, wide: true, cap: "Co-design — what the children built, in lego, on the sites their own drawings had identified." }
 outcome:
   built: "Non-programmatic play structures carrying micro-climate functions — greenhouses, water harvesting, study areas, small farms — sited only in the pockets where more than one community's attachments overlapped."
   recognised: "CEPT University Student Excellence Award. The jury: “identified and mapped the invisible and virtual boundaries and thresholds that exist in our communities … through the resultant mesh, he identified pockets of potentiality and greater commonality.”"

@@ -4,7 +4,7 @@ layout: base.njk
 {#- One figure system for every project image: natural ratio, width/height reserved,
     mono fig label + caption BELOW the image (never overlaid). -#}
 {% macro plate(p) %}
-<figure class="plate">
+<figure class="plate{% if p.wide %} plate--wide{% endif %}">
   <div class="plate__img"><img src="{{ p.src }}" alt="{{ p.alt or p.cap }}"{% if p.w and p.h %} width="{{ p.w }}" height="{{ p.h }}"{% endif %} loading="lazy" /></div>
   {% if p.fig or p.cap %}<figcaption class="plate__cap">{% if p.fig %}<span class="n">{{ p.fig }}</span>{% endif %}{% if p.cap %}<span>{{ p.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
