@@ -61,3 +61,6 @@
   from the grid. Raghav: "we'll figure out routing at the end" — decide before the push, or when
   the remaining project pages are in and the whole chain can be set once.
 - **Depends on:** `docs/plans/2026-09-15-one-is-to-one.md` T6/T9; the 2026-09-16 batch.
+- **Update 2026-09-16:** `/work/rebel-bodies/` (card 10) also points at living heritage as a
+  placeholder. Natural chain once decided: rebel bodies → living heritage → koliwadas (three
+  Ahmedabad/Mumbai community pages, cartography → participatory method).
