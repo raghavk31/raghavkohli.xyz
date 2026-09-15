@@ -322,6 +322,9 @@ body.lb-open{overflow:hidden;}
 .lb__nav:hover{color:var(--ink);}
 .lb__stage{position:relative;flex:1 1 auto;min-height:0;display:flex;align-items:center;justify-content:center;padding:20px 0;}
 .lb__img{display:block;width:auto;height:auto;max-width:100%;max-height:100%;object-fit:contain;background:var(--paper-2);}
+/* the stage never shows a blank box: the next image is decoded off-screen behind a short fade (main.js showLightbox) */
+.lb__img{transition:opacity .3s cubic-bezier(.16,1,.3,1);}
+.lb--swapping .lb__img{opacity:0;}
 .lb__arrow{position:absolute;top:0;bottom:0;width:22%;background:none;border:none;padding:0;cursor:pointer;
   font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--faint-2);opacity:0;transition:opacity .25s ease;}
 .lb__arrow--prev{left:0;text-align:left;}
@@ -388,6 +391,9 @@ body.lb-open{overflow:hidden;}
 .plate{margin:0;}
 .plate__img{position:relative;background:var(--paper-2);}
 .plate__img > img{display:block;width:100%;height:auto;object-fit:unset;}
+/* `blend: true`: a black-on-white line drawing sits on the paper instead of in a white box */
+.plate--blend .plate__img{background:none;}
+.plate--blend .plate__img > img{mix-blend-mode:multiply;}
 .plate__cap{display:flex;gap:14px;margin-top:12px;font-size:12.5px;line-height:1.5;color:var(--faint);max-width:38em;}
 .plate__cap .n{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--faint-2);white-space:nowrap;padding-top:2px;}
 /* two plates side by side */
@@ -526,6 +532,10 @@ body.lb-open{overflow:hidden;}
   .strip::-webkit-scrollbar{display:none;}
   .strip > div{flex:0 0 auto;height:150px;scroll-snap-align:start;}
   .strip img{width:auto;height:100%;}
+  /* an in-column strip (two supporting photos under a hero) stacks full width instead of half-filling a scroll row */
+  .strip--col .strip{display:grid;gap:12px;overflow:visible;margin-inline:0;padding-inline:0;}
+  .strip--col .strip > div{height:auto;}
+  .strip--col .strip img{width:100%;height:auto;}
   .detail__outcome > div{grid-column:1 / -1;}
   .chap--coda .chap__txt,.chap--coda .chap__pl{grid-column:1 / -1;grid-row:auto;}
   .stats{grid-template-columns:1fr 1fr;}

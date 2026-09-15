@@ -11,6 +11,11 @@ Optional size hint in the filename: 03-lg-name.jpg -> size: lg (lg | md | sm | x
 Add "natural" after the size (03-lg-natural-name.jpg) -> fit: natural (never cropped).
 Add "resolve" after that (06-lg-natural-resolve-name.jpg) -> also writes NN-r.jpg, long edge
 <= 1280px, for a viewer that prefetches many images (state of cities) — emitted as resolve:.
+Add "trim" (02-natural-trim-name.jpg) -> crop the white border first: a photo exported onto a
+white square (the CEPT construction-technology set is 2000x2000 with the photo inside) loses its
+padding. "trim3" keeps a 3% margin, for line drawings so the ink never touches the edge (with
+`blend: true` on the plate the white then multiplies into the paper). A trim that removes more
+than 30% of the long edge is refused — a sky-white edge was eaten, check the source.
 Without a hint, size is suggested from the aspect ratio.
 
 --grid  composites every non-thumb pick into one contact-grid image (for tile sets like
@@ -25,7 +30,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageOps
+from PIL import Image, ImageChops, ImageOps
 
 Image.MAX_IMAGE_PIXELS = None  # the water-urbanism scans are 14k px wide
 
@@ -40,7 +45,9 @@ RESOLVE_QUALITY = 72  # fifteen of these are prefetched at once; keep the set ne
 QUALITY = 82
 SIZES = ("lg", "md", "sm", "xs", "tall")
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-.*)?$", re.I)
+NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-(trim3?))?(?:-.*)?$", re.I)
+TRIM_WHITE = 243      # a border row/column is "white" when >= 99% of its pixels are at least this bright
+TRIM_KEEP = 0.70      # refuse a trim that keeps less than this share of the long edge
 
 
 def suggest_size(w, h):
@@ -62,6 +69,28 @@ def load(path):
         bg.paste(im.convert("RGBA"), mask=im.convert("RGBA").split()[-1])
         im = bg
     return im.convert("RGB")
+
+
+def trim(im, margin=0.0):
+    """Crop uniform near-white borders. Rows/columns are dropped from each edge while at least
+    99% of their pixels are >= TRIM_WHITE in every channel; `margin` (0–1) of the trimmed size
+    is then added back on every side, clamped to the source. PIL only (no numpy)."""
+    r, g, b = im.split()
+    dark = ImageChops.darker(r, ImageChops.darker(g, b)).point(lambda v: 255 if v < TRIM_WHITE else 0)
+    w, h = im.size
+    rows = [v > 2.55 for v in dark.resize((1, h), Image.BOX).tobytes()]   # mean of a row > 1% non-white
+    cols = [v > 2.55 for v in dark.resize((w, 1), Image.BOX).tobytes()]
+    if not any(rows) or not any(cols):
+        return im
+    t, bt = rows.index(True), h - rows[::-1].index(True)
+    l, rt = cols.index(True), w - cols[::-1].index(True)
+    if margin:
+        my, mx = round((bt - t) * margin), round((rt - l) * margin)
+        t, bt, l, rt = max(0, t - my), min(h, bt + my), max(0, l - mx), min(w, rt + mx)
+    keep = max(rt - l, bt - t) / max(w, h)
+    if keep < TRIM_KEEP:
+        sys.exit(f"  refused: trim would keep only {keep:.0%} of the long edge — check the source for a white edge")
+    return im.crop((l, t, rt, bt))
 
 
 def shrink(im, max_edge):
@@ -109,7 +138,7 @@ def main():
         if not m:
             print(f"  skip (no NN- prefix): {p.name}")
             continue
-        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), p))
+        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), (m.group(5) or "").lower(), p))
     if not picks:
         sys.exit("nothing to do — files need a two-digit prefix, e.g. 01-map.jpg")
 
@@ -121,8 +150,12 @@ def main():
     thumb = None
     items = []
     grid_src = []
-    for n, hint, natural, resolve, p in picks:
+    for n, hint, natural, resolve, tr, p in picks:
         im = load(p)
+        if tr:
+            before = im.size
+            im = trim(im, 0.03 if tr == "trim3" else 0.0)
+            print(f"  trim {p.name}: {before[0]}x{before[1]} -> {im.size[0]}x{im.size[1]}")
         if n == "00":
             im = shrink(im, THUMB_EDGE)
             kb = save(im, dest / "00.jpg") // 1024

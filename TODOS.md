@@ -50,3 +50,14 @@
   and/or 2× export of the spreads from the PDF (needs the PDF).
 - Chapter 03 duplicates: keep the ledger, move `SOC_06` to the lightbox set.
 - Detail crops 00–02 recut from the 2× files.
+
+## One is to one (from /plan-design-review, 2026-09-15)
+
+### Reading order (`next:` routing)
+- **What:** decide where `/work/one-is-to-one/` sits in the `(next)` chain and which page points
+  at it. Options weighed: pune metro → one is to one → living heritage (recommended in review);
+  one is to one → sama with no incoming; climate code → one is to one → pune metro.
+- **Why:** every page ends with `(next)`; without an incoming pointer the page is reachable only
+  from the grid. Raghav: "we'll figure out routing at the end" — decide before the push, or when
+  the remaining project pages are in and the whole chain can be set once.
+- **Depends on:** `docs/plans/2026-09-15-one-is-to-one.md` T6/T9; the 2026-09-16 batch.

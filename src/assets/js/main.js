@@ -452,14 +452,25 @@
       var k = parseInt(m[2], 10) + i;
       if (k <= parseInt(m[3], 10)) n = m[1] + (k < 10 ? "0" + k : "" + k);
     }
+    // a strip cell may carry its own caption (data-cap) for the carousel; the page keeps the shared one
+    var cell = img.closest(".strip > div");
+    if (cell && cell.dataset.cap) t = cell.dataset.cap;
     return { n: n, t: t };
   }
 
+  var lbToken = 0;
   function showLightbox(i) {
     lbIdx = (i + lbItems.length) % lbItems.length;
     var it = lbItems[lbIdx];
-    lbImg.src = it.src;
-    lbImg.alt = it.alt;
+    // fade out, decode the next image off-screen, swap, fade in — never a blank stage (same as the city carousel)
+    var my = ++lbToken;
+    lb.classList.add("lb--swapping");
+    var pre = new Image(); pre.src = it.src;
+    (pre.decode ? pre.decode() : Promise.resolve()).then(function () {
+      if (my !== lbToken) return;
+      lbImg.src = it.src; lbImg.alt = it.alt;
+      lb.classList.remove("lb--swapping");
+    }, function () { if (my === lbToken) { lbImg.src = it.src; lbImg.alt = it.alt; lb.classList.remove("lb--swapping"); } });
     if (it.w && it.h) { lbImg.width = it.w; lbImg.height = it.h; }
     lbN.textContent = it.n;
     lbT.textContent = it.t;

@@ -3,16 +3,18 @@ layout: base.njk
 ---
 {#- One figure system for every project image: natural ratio, width/height reserved,
     mono fig label + caption BELOW the image (never overlaid). -#}
-{% macro plate(p) %}
-<figure class="plate{% if p.wide %} plate--wide{% endif %}">
-  <div class="plate__img"><img src="{{ p.src }}" alt="{{ p.alt or p.cap }}"{% if p.w and p.h %} width="{{ p.w }}" height="{{ p.h }}"{% endif %} loading="lazy" /></div>
+{% macro plate(p, eager) %}
+<figure class="plate{% if p.wide %} plate--wide{% endif %}{% if p.blend %} plate--blend{% endif %}">
+  <div class="plate__img"><img src="{{ p.src }}" alt="{{ p.alt or p.cap }}"{% if p.w and p.h %} width="{{ p.w }}" height="{{ p.h }}"{% endif %}{% if eager %} loading="eager" fetchpriority="high"{% else %} loading="lazy"{% endif %} /></div>
   {% if p.fig or p.cap %}<figcaption class="plate__cap">{% if p.fig %}<span class="n">{{ p.fig }}</span>{% endif %}{% if p.cap %}<span>{{ p.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
 {% endmacro %}
-{#- Justified strip: widths proportional to w/h so every photo shares one height. -#}
+{#- Justified strip: widths proportional to w/h so every photo shares one height. `col: true` places
+    it inside the plates column under the chapter's hero (stacks on the phone); an item's own `cap`
+    becomes data-cap, the caption the lightbox shows for that photo (main.js captionFor). -#}
 {% macro strip(s) %}
-<figure class="plate">
-  <div class="strip">{% for it in s.items %}<div style="--ar:{{ (it.ar or (it.w / it.h)) | round(3) }}"><img src="{{ it.src }}" alt="{{ it.alt or '' }}"{% if it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
+<figure class="plate{% if s.col %} strip--col{% endif %}">
+  <div class="strip">{% for it in s.items %}<div style="--ar:{{ (it.ar or (it.w / it.h)) | round(3) }}"{% if it.cap %} data-cap="{{ it.cap }}"{% endif %}><img src="{{ it.src }}" alt="{{ it.alt or it.cap or '' }}"{% if it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
   {% if s.fig or s.cap %}<figcaption class="plate__cap">{% if s.fig %}<span class="n">{{ s.fig }}</span>{% endif %}{% if s.cap %}<span>{{ s.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
 {% endmacro %}
@@ -64,7 +66,7 @@ layout: base.njk
       Body markdown is split at `## NN name` headings; each piece joins the chapter with that
       number. Text before the first numbered heading opens the first chapter. -#}
   {% set ch = content | chapters %}
-  {% if open %}<div class="detail__open reveal">{{ plate(open) }}</div>{% endif %}
+  {% if open %}<div class="detail__open reveal">{{ plate(open, true) }}</div>{% endif %}
 
   {% for c in chapters %}
   {% set body = ch.byNum[c.n] or '' %}
@@ -93,13 +95,14 @@ layout: base.njk
     </div>
     {% endif %}
     {% if c.carousel %}<div class="chap__pl">{{ ledger(c.carousel, rows) }}</div>{% endif %}
-    {% if (c.plates or c.pair) and not c.carousel %}
+    {% if (c.plates or c.pair or (c.strip and c.strip.col)) and not c.carousel %}
     <div class="chap__pl">
       {% for p in c.plates %}{{ plate(p) }}{% endfor %}
       {% if c.pair %}<div class="pair">{% for p in c.pair %}{{ plate(p) }}{% endfor %}</div>{% endif %}
+      {% if c.strip and c.strip.col %}{{ strip(c.strip) }}{% endif %}
     </div>
     {% endif %}
-    {% if c.strip %}<div class="chap__full">{{ strip(c.strip) }}</div>{% endif %}
+    {% if c.strip and not c.strip.col %}<div class="chap__full">{{ strip(c.strip) }}</div>{% endif %}
   </section>
   {% endfor %}
 
