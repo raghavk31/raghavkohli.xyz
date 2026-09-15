@@ -14,6 +14,10 @@ legible, and participatory?* — pursued with escalating instruments:
 
 The reading order of the site (`next:` links) should trace this arc.
 
+**2026-09-16 — the Media Lab plan supersedes the tracker below where they differ:**
+`docs/plans/2026-09-16-media-lab-site-plan.md` (card order, the GCAP analytics page, the (now)
+block, archive rows, week-by-week sequence to Dec 1). Rebel bodies moved from TBD to live.
+
 **Anything marked `[confirm]` is a fact I could not verify from the archive — fill it in,
 don't let it ship as-is.**
 
