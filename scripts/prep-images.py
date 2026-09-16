@@ -16,6 +16,10 @@ white square (the CEPT construction-technology set is 2000x2000 with the photo i
 padding. "trim3" keeps a 3% margin, for line drawings so the ink never touches the edge (with
 `blend: true` on the plate the white then multiplies into the paper). A trim that removes more
 than 30% of the long edge is refused — a sky-white edge was eaten, check the source.
+Add "tile" (12-natural-tile-name.jpg) -> also writes NN-t.jpg, a small tile (long edge <= 640px) for a
+`tiles:` grid: the page shows the tile, the lightbox opens the full NN.jpg. "tile" alone crops a
+two-page spread to its more colourful half (the map or the drawing, not the text page); "tilel" /
+"tiler" force a half; "tilew" keeps the whole spread. Emitted as tile: / tw: / th:.
 Without a hint, size is suggested from the aspect ratio.
 
 --grid  composites every non-thumb pick into one contact-grid image (for tile sets like
@@ -45,7 +49,9 @@ RESOLVE_QUALITY = 72  # fifteen of these are prefetched at once; keep the set ne
 QUALITY = 82
 SIZES = ("lg", "md", "sm", "xs", "tall")
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-(trim3?))?(?:-.*)?$", re.I)
+NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-(trim3?))?(?:-(tile[lrw]?))?(?:-.*)?$", re.I)
+TILE_EDGE = 640       # a tiles: grid cell is never wider than ~200px; 640 covers 3x
+TILE_QUALITY = 70
 TRIM_WHITE = 243      # a border row/column is "white" when >= 99% of its pixels are at least this bright
 TRIM_KEEP = 0.70      # refuse a trim that keeps less than this share of the long edge
 
@@ -71,7 +77,7 @@ def load(path):
     return im.convert("RGB")
 
 
-def trim(im, margin=0.0):
+def trim(im, margin=0.0, strict=True):
     """Crop uniform near-white borders. Rows/columns are dropped from each edge while at least
     99% of their pixels are >= TRIM_WHITE in every channel; `margin` (0–1) of the trimmed size
     is then added back on every side, clamped to the source. PIL only (no numpy)."""
@@ -89,8 +95,27 @@ def trim(im, margin=0.0):
         t, bt, l, rt = max(0, t - my), min(h, bt + my), max(0, l - mx), min(w, rt + mx)
     keep = max(rt - l, bt - t) / max(w, h)
     if keep < TRIM_KEEP:
+        if not strict:
+            return im
         sys.exit(f"  refused: trim would keep only {keep:.0%} of the long edge — check the source for a white edge")
     return im.crop((l, t, rt, bt))
+
+
+def tile_of(im, mode):
+    """The small grid image for a spread: one page of it (the more colourful one, or the one asked
+    for), white margins trimmed gently, long edge <= TILE_EDGE. "w" keeps the whole spread."""
+    w, h = im.size
+    if mode != "w" and w / h > 1.2:                      # a two-page spread
+        left, right = im.crop((0, 0, w // 2, h)), im.crop((w // 2, 0, w, h))
+        if mode == "l":
+            im = left
+        elif mode == "r":
+            im = right
+        else:
+            def colour(p):
+                return sum(p.convert("HSV").resize((64, 64)).split()[1].tobytes())
+            im = left if colour(left) >= colour(right) else right
+    return shrink(trim(im, 0.02, strict=False), TILE_EDGE)
 
 
 def shrink(im, max_edge):
@@ -138,7 +163,7 @@ def main():
         if not m:
             print(f"  skip (no NN- prefix): {p.name}")
             continue
-        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), (m.group(5) or "").lower(), p))
+        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), (m.group(5) or "").lower(), (m.group(6) or "").lower(), p))
     if not picks:
         sys.exit("nothing to do — files need a two-digit prefix, e.g. 01-map.jpg")
 
@@ -150,7 +175,7 @@ def main():
     thumb = None
     items = []
     grid_src = []
-    for n, hint, natural, resolve, tr, p in picks:
+    for n, hint, natural, resolve, tr, tile, p in picks:
         im = load(p)
         if tr:
             before = im.size
@@ -168,7 +193,13 @@ def main():
         full = shrink(im, MAX_EDGE)
         kb = save(full, dest / f"{n}.jpg") // 1024
         size = hint or suggest_size(*full.size)
-        items.append((n, size, natural, resolve, full.size[0], full.size[1]))
+        tdims = None
+        if tile:
+            t = tile_of(im, tile[4:])
+            tkb = save(t, dest / f"{n}-t.jpg", TILE_QUALITY) // 1024
+            tdims = t.size
+            print(f"  {n}-t.jpg  {t.size[0]}x{t.size[1]}  {tkb}K  tile")
+        items.append((n, size, natural, resolve, full.size[0], full.size[1], tdims))
         print(f"  {n}.jpg  {full.size[0]}x{full.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
         if resolve:
             r = shrink(im, RESOLVE_EDGE)
@@ -178,7 +209,7 @@ def main():
     if args.grid and grid_src:
         im = shrink(make_grid(grid_src, args.cols), MAX_EDGE)
         kb = save(im, dest / "01.jpg") // 1024
-        items.append(("01", "lg", True, False, im.size[0], im.size[1]))
+        items.append(("01", "lg", True, False, im.size[0], im.size[1], None))
         print(f"  01.jpg  {im.size[0]}x{im.size[1]}  {kb}K  lg    <- grid of {len(grid_src)}")
 
     print("\n# --- paste into frontmatter ---")
@@ -187,12 +218,13 @@ def main():
         print(f"thumbw: {thumb[1]}")
         print(f"thumbh: {thumb[2]}")
     print("gallery:")
-    for n, size, natural, resolve, w, h in items:
+    for n, size, natural, resolve, w, h, tdims in items:
         fit = ", fit: natural" if natural else ""
         res = f", resolve: /assets/projects/{args.slug}/{n}-r.jpg" if resolve else ""
-        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}{res}, fig: fig.{n}, cap: "" }}')
+        tl = f", tile: /assets/projects/{args.slug}/{n}-t.jpg, tw: {tdims[0]}, th: {tdims[1]}" if tdims else ""
+        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}{res}{tl}, fig: fig.{n}, cap: "" }}')
     print("# w/h let the browser reserve space before the image loads (no layout jump) and size strips.")
-    print("# Chapter pages: move items into `open:` / `chapters[].plates` / `chapters[].strip.items` — see docs/plans/2026-09-13-project-page.md")
+    print("# Chapter pages: move items into `open:` / `chapters[].plates` / `chapters[].strip.items` / `chapters[].tiles.items` — see docs/plans/2026-09-13-project-page.md")
 
 
 if __name__ == "__main__":

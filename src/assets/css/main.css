@@ -405,6 +405,10 @@ body.lb-open{overflow:hidden;}
 .strip{display:flex;gap:clamp(10px,1.2vw,16px);align-items:stretch;}
 .strip > div{flex:var(--ar) 1 0%;min-width:0;background:var(--paper-2);}
 .strip img{display:block;width:100%;height:auto;object-fit:unset;}
+/* tile grid: an atlas of spreads at thumbnail size; the lightbox opens the full file (data-full) */
+.tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:clamp(10px,1.2vw,16px);align-items:start;}
+.tiles > div{background:var(--paper-2);aspect-ratio:var(--tar,0.707);overflow:hidden;}   /* one cell ratio per grid: rows stay even */
+.tiles img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;}
 
 /* ---------- chapters: argument beside its evidence ----------
    .chap is one 12-col row: text in 5 cols, plates in 6, one col of air between. `side: left`
@@ -417,7 +421,7 @@ body.lb-open{overflow:hidden;}
 .chap__pl{grid-column:7 / -1;display:flex;flex-direction:column;gap:28px;}
 .chap--left .chap__txt{grid-column:8 / -1;grid-row:1;}
 .chap--left .chap__pl{grid-column:1 / span 6;grid-row:1;}
-.chap--long .chap__txt,.chap--noplates .chap__txt{position:static;}
+.chap--long .chap__txt,.chap--noplates .chap__txt,.chap--wide .chap__txt{position:static;}   /* --wide: a full-width row follows; sticky text would slide over it */
 .chap--noplates .chap__txt{grid-column:1 / span 8;}
 .chap--notext .chap__pl{grid-column:1 / -1;}
 /* `narrow: true` on a text-less chapter: plates sit in the middle ten columns instead of all twelve */

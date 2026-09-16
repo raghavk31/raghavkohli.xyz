@@ -445,7 +445,7 @@
       var tEl = Array.prototype.filter.call(cap.children, function (c) { return c !== nEl; })[0];
       t = tEl ? tEl.textContent.trim() : "";
     }
-    var strip = img.closest(".strip");
+    var strip = img.closest(".strip, .tiles");
     var m = /^(fig\.)(\d+)[–-](\d+)$/.exec(n);
     if (strip && m) {
       var i = Array.prototype.indexOf.call(strip.querySelectorAll("img"), img);
@@ -453,7 +453,7 @@
       if (k <= parseInt(m[3], 10)) n = m[1] + (k < 10 ? "0" + k : "" + k);
     }
     // a strip cell may carry its own caption (data-cap) for the carousel; the page keeps the shared one
-    var cell = img.closest(".strip > div");
+    var cell = img.closest(".strip > div, .tiles > div");
     if (cell && cell.dataset.cap) t = cell.dataset.cap;
     return { n: n, t: t };
   }
@@ -580,15 +580,16 @@
 
   function initLightbox(root) {
     if (!root) return;
-    var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .g__frame img"))
+    var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .tiles img, .g__frame img"))
       .filter(function (img) { return !img.closest("[data-carousel]"); }); // the city carousel registers its own set
     if (!imgs.length) return;
     var items = imgs.map(function (img) {
       var c = captionFor(img);
-      return { src: img.currentSrc || img.src, alt: img.alt || c.t, w: img.getAttribute("width"), h: img.getAttribute("height"), n: c.n, t: c.t };
+      // a tile shows a small file and names the full one (data-full, with its own size)
+      return { src: img.dataset.full || img.currentSrc || img.src, alt: img.alt || c.t, w: img.dataset.w || img.getAttribute("width"), h: img.dataset.h || img.getAttribute("height"), n: c.n, t: c.t };
     });
     imgs.forEach(function (img, i) {
-      var box = img.closest(".plate__img, .strip > div, .g__frame") || img;
+      var box = img.closest(".plate__img, .strip > div, .tiles > div, .g__frame") || img;
       box.classList.add("lb-src");
       box.setAttribute("tabindex", "0");
       box.setAttribute("role", "button");
