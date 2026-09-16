@@ -7,7 +7,7 @@ topics: [carbon, data, analytics]
 size: md
 offset: ""
 qsize: 22px
-fig: fig.39 — the solid waste gaps, drawn
+fig: fig.26 — every hazard against every fragile system
 role: co-author · sector strategies · book design
 period: 2024 — 2025
 context: surat · c40 cities · iclei south asia
