@@ -7,7 +7,7 @@ topics: [carbon, data, analytics]
 size: md
 offset: ""
 qsize: 22px
-fig: fig.01 — the net-zero pathway, 2023–2047
+fig: fig.39 — the solid waste gaps, drawn
 role: co-author · sector strategies · book design
 period: 2024 — 2025
 context: surat · c40 cities · iclei south asia
@@ -27,51 +27,52 @@ chapters:
     plates:
       - { src: /assets/projects/surat-crcap/02.jpg, w: 1800, h: 1272, fig: fig.02, cap: "Demography — the city by zone and ward, and the population the plan is written for." }
       - { src: /assets/projects/surat-crcap/03.jpg, w: 1800, h: 1272, fig: fig.03, cap: "Land use — the development plan the city already has, and the region the climate plan sits inside." }
+      - { src: /assets/projects/surat-crcap/04.jpg, w: 1800, h: 1272, fig: fig.04, cap: "Where it breaks — the stormwater gaps, drawn: silted creeks, drains blocked by waste, the wards that flood, and the projects budgeted to fix them." }
   - n: "01"
     name: the atlas
     title: The city, drawn one layer at a time
     tiles:
-      fig: fig.04–25
+      fig: fig.05–26
       cap: "Twenty-two ward-level maps — infrastructure, access, hazard, then hazard crossed with infrastructure. Every map is the same city; only the question changes. Click any to read it."
       items:
-        - { src: /assets/projects/surat-crcap/04.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/04-t.jpg, tw: 453, th: 640, cap: "Wastewater network and infrastructure — sewage treatment plants, pumping stations and the sewer network." }
-        - { src: /assets/projects/surat-crcap/05.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/05-t.jpg, tw: 453, th: 640, cap: "Flood area assessment — waterlogging points against the drainage network." }
-        - { src: /assets/projects/surat-crcap/06.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/06-t.jpg, tw: 453, th: 640, cap: "Solid waste management facilities — transfer stations, processing plants, the Khajod landfill." }
-        - { src: /assets/projects/surat-crcap/07.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/07-t.jpg, tw: 453, th: 640, cap: "Accessibility to public transport — BRTS and city-bus stops, and the wards beyond a 400 m walk." }
-        - { src: /assets/projects/surat-crcap/08.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/08-t.jpg, tw: 453, th: 640, cap: "Green cover map of Surat, 2024." }
-        - { src: /assets/projects/surat-crcap/09.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/09-t.jpg, tw: 453, th: 640, cap: "Accessibility to public parks and gardens." }
-        - { src: /assets/projects/surat-crcap/10.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/10-t.jpg, tw: 453, th: 640, cap: "Accessibility for fire stations — response reach across the zones." }
-        - { src: /assets/projects/surat-crcap/11.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/11-t.jpg, tw: 453, th: 640, cap: "Distance from slum dwellings to government healthcare facilities." }
-        - { src: /assets/projects/surat-crcap/12.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/12-t.jpg, tw: 453, th: 640, cap: "Air pollution sources, 2024 — industry, traffic and the monitoring stations." }
-        - { src: /assets/projects/surat-crcap/13.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/13-t.jpg, tw: 453, th: 640, cap: "Population of slums impacted by urban heat." }
-        - { src: /assets/projects/surat-crcap/14.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/14-t.jpg, tw: 453, th: 640, cap: "Municipal schools and anganwadis impacted by urban heat." }
-        - { src: /assets/projects/surat-crcap/15.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/15-t.jpg, tw: 453, th: 640, cap: "Flood-prone areas with a high incidence of water- and vector-borne disease complaints." }
-        - { src: /assets/projects/surat-crcap/16.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/16-t.jpg, tw: 453, th: 640, cap: "Population vulnerable to urban flooding." }
-        - { src: /assets/projects/surat-crcap/17.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/17-t.jpg, tw: 453, th: 640, cap: "Municipal schools and anganwadis vulnerable to urban flooding." }
-        - { src: /assets/projects/surat-crcap/18.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/18-t.jpg, tw: 453, th: 640, cap: "Wards impacted by issues related to urban heat and water supply — hazard crossed with infrastructure." }
-        - { src: /assets/projects/surat-crcap/19.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/19-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and water-quality issues." }
-        - { src: /assets/projects/surat-crcap/20.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/20-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and wastewater management issues." }
-        - { src: /assets/projects/surat-crcap/21.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/21-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and solid waste management issues." }
-        - { src: /assets/projects/surat-crcap/22.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/22-t.jpg, tw: 453, th: 640, cap: "Public transport stations and traffic junctions impacted by urban heat." }
-        - { src: /assets/projects/surat-crcap/23.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/23-t.jpg, tw: 453, th: 640, cap: "Wards with compromised road infrastructure, vulnerable to urban flooding." }
-        - { src: /assets/projects/surat-crcap/24.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/24-t.jpg, tw: 453, th: 640, cap: "Emergency services vulnerable to urban flooding or waterlogging." }
-        - { src: /assets/projects/surat-crcap/25.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/25-t.jpg, tw: 453, th: 640, cap: "Wards impacted by climate hazards and fragile urban systems — the composite." }
+        - { src: /assets/projects/surat-crcap/05.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/05-t.jpg, tw: 453, th: 640, cap: "Wastewater network and infrastructure — sewage treatment plants, pumping stations and the sewer network." }
+        - { src: /assets/projects/surat-crcap/06.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/06-t.jpg, tw: 453, th: 640, cap: "Flood area assessment — waterlogging points against the drainage network." }
+        - { src: /assets/projects/surat-crcap/07.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/07-t.jpg, tw: 453, th: 640, cap: "Solid waste management facilities — transfer stations, processing plants, the Khajod landfill." }
+        - { src: /assets/projects/surat-crcap/08.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/08-t.jpg, tw: 453, th: 640, cap: "Accessibility to public transport — BRTS and city-bus stops, and the wards beyond a 400 m walk." }
+        - { src: /assets/projects/surat-crcap/09.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/09-t.jpg, tw: 453, th: 640, cap: "Green cover map of Surat, 2024." }
+        - { src: /assets/projects/surat-crcap/10.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/10-t.jpg, tw: 453, th: 640, cap: "Accessibility to public parks and gardens." }
+        - { src: /assets/projects/surat-crcap/11.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/11-t.jpg, tw: 453, th: 640, cap: "Accessibility for fire stations — response reach across the zones." }
+        - { src: /assets/projects/surat-crcap/12.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/12-t.jpg, tw: 453, th: 640, cap: "Distance from slum dwellings to government healthcare facilities." }
+        - { src: /assets/projects/surat-crcap/13.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/13-t.jpg, tw: 453, th: 640, cap: "Air pollution sources, 2024 — industry, traffic and the monitoring stations." }
+        - { src: /assets/projects/surat-crcap/14.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/14-t.jpg, tw: 453, th: 640, cap: "Population of slums impacted by urban heat." }
+        - { src: /assets/projects/surat-crcap/15.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/15-t.jpg, tw: 453, th: 640, cap: "Municipal schools and anganwadis impacted by urban heat." }
+        - { src: /assets/projects/surat-crcap/16.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/16-t.jpg, tw: 453, th: 640, cap: "Flood-prone areas with a high incidence of water- and vector-borne disease complaints." }
+        - { src: /assets/projects/surat-crcap/17.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/17-t.jpg, tw: 453, th: 640, cap: "Population vulnerable to urban flooding." }
+        - { src: /assets/projects/surat-crcap/18.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/18-t.jpg, tw: 453, th: 640, cap: "Municipal schools and anganwadis vulnerable to urban flooding." }
+        - { src: /assets/projects/surat-crcap/19.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/19-t.jpg, tw: 453, th: 640, cap: "Wards impacted by issues related to urban heat and water supply — hazard crossed with infrastructure." }
+        - { src: /assets/projects/surat-crcap/20.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/20-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and water-quality issues." }
+        - { src: /assets/projects/surat-crcap/21.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/21-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and wastewater management issues." }
+        - { src: /assets/projects/surat-crcap/22.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/22-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and solid waste management issues." }
+        - { src: /assets/projects/surat-crcap/23.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/23-t.jpg, tw: 453, th: 640, cap: "Public transport stations and traffic junctions impacted by urban heat." }
+        - { src: /assets/projects/surat-crcap/24.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/24-t.jpg, tw: 453, th: 640, cap: "Wards with compromised road infrastructure, vulnerable to urban flooding." }
+        - { src: /assets/projects/surat-crcap/25.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/25-t.jpg, tw: 453, th: 640, cap: "Emergency services vulnerable to urban flooding or waterlogging." }
+        - { src: /assets/projects/surat-crcap/26.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/26-t.jpg, tw: 453, th: 640, cap: "Wards impacted by climate hazards and fragile urban systems — the composite." }
   - n: "02"
     name: the inventory
     title: A number the city can be held to
     side: left
     plates:
-      - { src: /assets/projects/surat-crcap/26.jpg, w: 1800, h: 1272, fig: fig.26, cap: "The inventory — energy use and emissions by sector and by source, 2023–24: 10.43 million tCO₂e, manufacturing first, transport second." }
+      - { src: /assets/projects/surat-crcap/27.jpg, w: 1800, h: 1272, fig: fig.27, cap: "The inventory — energy use and emissions by sector and by source, 2023–24: 10.43 million tCO₂e, manufacturing first, transport second." }
     tiles:
-      fig: fig.27–32
+      fig: fig.28–33
       cap: "Sector by sector — energy use and emissions, 2019–20 to 2023–24: residential, commercial, industry, transport, waste, municipal operations."
       items:
-        - { src: /assets/projects/surat-crcap/27.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/27-t.jpg, tw: 640, th: 455, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
-        - { src: /assets/projects/surat-crcap/28.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/28-t.jpg, tw: 640, th: 458, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
-        - { src: /assets/projects/surat-crcap/29.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/29-t.jpg, tw: 640, th: 467, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
-        - { src: /assets/projects/surat-crcap/30.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/30-t.jpg, tw: 640, th: 456, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
-        - { src: /assets/projects/surat-crcap/31.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/31-t.jpg, tw: 640, th: 463, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
-        - { src: /assets/projects/surat-crcap/32.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/32-t.jpg, tw: 640, th: 452, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
+        - { src: /assets/projects/surat-crcap/28.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/28-t.jpg, tw: 640, th: 455, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
+        - { src: /assets/projects/surat-crcap/29.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/29-t.jpg, tw: 640, th: 458, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
+        - { src: /assets/projects/surat-crcap/30.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/30-t.jpg, tw: 640, th: 467, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
+        - { src: /assets/projects/surat-crcap/31.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/31-t.jpg, tw: 640, th: 456, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
+        - { src: /assets/projects/surat-crcap/32.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/32-t.jpg, tw: 640, th: 463, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
+        - { src: /assets/projects/surat-crcap/33.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/33-t.jpg, tw: 640, th: 452, cap: "Inventory detail — energy use and emissions by sector, 2019–20 to 2023–24." }
     stats:
       src: "Surat Net-Zero CRCAP, GHG emissions inventory 2023–24 · GPC BASIC · five-year series 2019–20 to 2023–24"
       items:
@@ -83,45 +84,45 @@ chapters:
     name: the pathway
     title: Three lines to 2047
     plates:
-      - { src: /assets/projects/surat-crcap/33.jpg, w: 1800, h: 1272, fig: fig.33, cap: "The pathway, whole — mitigation potential of every action in the net-zero pathway, 2023–2047, and the table beside it: 46.3% below BAU in 2030, 54.8% in 2035, 74.3% in 2047." }
-      - { src: /assets/projects/surat-crcap/34.jpg, w: 1800, h: 1272, fig: fig.34, cap: "The progressive action scenario — every scheme already on the books, pushed as far as it goes." }
-      - { src: /assets/projects/surat-crcap/35.jpg, w: 1800, h: 1272, fig: fig.35, cap: "What remains — the residual emissions in 2047 and the barriers between the pathway and zero." }
+      - { src: /assets/projects/surat-crcap/34.jpg, w: 1800, h: 1272, fig: fig.34, cap: "The pathway, whole — mitigation potential of every action in the net-zero pathway, 2023–2047, and the table beside it: 46.3% below BAU in 2030, 54.8% in 2035, 74.3% in 2047." }
+      - { src: /assets/projects/surat-crcap/35.jpg, w: 1800, h: 1272, fig: fig.35, cap: "The progressive action scenario — every scheme already on the books, pushed as far as it goes." }
+      - { src: /assets/projects/surat-crcap/36.jpg, w: 1800, h: 1272, fig: fig.36, cap: "What remains — the residual emissions in 2047 and the barriers between the pathway and zero." }
   - n: "04"
     name: strategies
     title: Nine sectors, one goal each
     side: left
     plates:
-      - { src: /assets/projects/surat-crcap/36.jpg, w: 1800, h: 1272, fig: fig.36, cap: "The strategy sheet — nine sectors across the page: built environment and energy, transport, water, wastewater, stormwater, solid waste, greening, health, air." }
+      - { src: /assets/projects/surat-crcap/37.jpg, w: 1800, h: 1272, fig: fig.37, cap: "The strategy sheet — nine sectors across the page: built environment and energy, transport, water, wastewater, stormwater, solid waste, greening, health, air." }
     tiles:
-      fig: fig.37–44
+      fig: fig.38–45
       cap: "The sector goals, drawn, and the targets by decade behind them."
       items:
-        - { src: /assets/projects/surat-crcap/37.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/37-t.jpg, tw: 640, th: 463, cap: "Executive summary — the sector goals, drawn: built environment, transport, water." }
-        - { src: /assets/projects/surat-crcap/38.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/38-t.jpg, tw: 640, th: 475, cap: "Executive summary — wastewater, stormwater, solid waste." }
-        - { src: /assets/projects/surat-crcap/39.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/39-t.jpg, tw: 640, th: 469, cap: "Executive summary — urban greening, health, air quality." }
-        - { src: /assets/projects/surat-crcap/40.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/40-t.jpg, tw: 640, th: 461, cap: "Sector targets — built environment and energy; transport." }
-        - { src: /assets/projects/surat-crcap/41.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/41-t.jpg, tw: 640, th: 461, cap: "Sector targets — water; wastewater." }
-        - { src: /assets/projects/surat-crcap/42.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/42-t.jpg, tw: 640, th: 461, cap: "Sector targets — stormwater; solid waste." }
-        - { src: /assets/projects/surat-crcap/43.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/43-t.jpg, tw: 640, th: 452, cap: "Sector targets — urban greening and biodiversity; health." }
-        - { src: /assets/projects/surat-crcap/44.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/44-t.jpg, tw: 640, th: 452, cap: "Sector targets — air quality." }
+        - { src: /assets/projects/surat-crcap/38.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/38-t.jpg, tw: 640, th: 463, cap: "Executive summary — the sector goals, drawn: built environment, transport, water." }
+        - { src: /assets/projects/surat-crcap/39.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/39-t.jpg, tw: 640, th: 475, cap: "Executive summary — wastewater, stormwater, solid waste." }
+        - { src: /assets/projects/surat-crcap/40.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/40-t.jpg, tw: 640, th: 469, cap: "Executive summary — urban greening, health, air quality." }
+        - { src: /assets/projects/surat-crcap/41.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/41-t.jpg, tw: 640, th: 461, cap: "Sector targets — built environment and energy; transport." }
+        - { src: /assets/projects/surat-crcap/42.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/42-t.jpg, tw: 640, th: 461, cap: "Sector targets — water; wastewater." }
+        - { src: /assets/projects/surat-crcap/43.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/43-t.jpg, tw: 640, th: 461, cap: "Sector targets — stormwater; solid waste." }
+        - { src: /assets/projects/surat-crcap/44.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/44-t.jpg, tw: 640, th: 452, cap: "Sector targets — urban greening and biodiversity; health." }
+        - { src: /assets/projects/surat-crcap/45.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/45-t.jpg, tw: 640, th: 452, cap: "Sector targets — air quality." }
   - n: "05"
     name: actions
     title: Sheets a department can pick up
     plates:
-      - { src: /assets/projects/surat-crcap/45.jpg, w: 1800, h: 1272, fig: fig.45, cap: "An action sheet — built environment: adaptation strategies with their targets, implementing entities, financing modes, indicative costs and resilience impact." }
+      - { src: /assets/projects/surat-crcap/46.jpg, w: 1800, h: 1272, fig: fig.46, cap: "An action sheet — built environment: adaptation strategies with their targets, implementing entities, financing modes, indicative costs and resilience impact." }
     tiles:
-      fig: fig.46–54
+      fig: fig.47–55
       cap: "One sheet per sector — the 2023–24 baseline, key statistics, and the opportunities and gaps the actions answer."
       items:
-        - { src: /assets/projects/surat-crcap/46.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/46-t.jpg, tw: 386, th: 640, cap: "Built environment and energy — the sector sheet: 2023–24 baseline, key statistics, opportunities and gaps." }
-        - { src: /assets/projects/surat-crcap/47.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/47-t.jpg, tw: 385, th: 640, cap: "Transport — sector sheet." }
-        - { src: /assets/projects/surat-crcap/48.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/48-t.jpg, tw: 385, th: 640, cap: "Water — sector sheet." }
-        - { src: /assets/projects/surat-crcap/49.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/49-t.jpg, tw: 385, th: 640, cap: "Wastewater — sector sheet." }
-        - { src: /assets/projects/surat-crcap/50.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/50-t.jpg, tw: 382, th: 640, cap: "Stormwater — sector sheet." }
-        - { src: /assets/projects/surat-crcap/51.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/51-t.jpg, tw: 384, th: 640, cap: "Solid waste — sector sheet." }
-        - { src: /assets/projects/surat-crcap/52.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/52-t.jpg, tw: 385, th: 640, cap: "Urban greening and biodiversity — sector sheet." }
-        - { src: /assets/projects/surat-crcap/53.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/53-t.jpg, tw: 382, th: 640, cap: "Health — sector sheet." }
-        - { src: /assets/projects/surat-crcap/54.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/54-t.jpg, tw: 385, th: 640, cap: "Air quality — sector sheet." }
+        - { src: /assets/projects/surat-crcap/47.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/47-t.jpg, tw: 386, th: 640, cap: "Built environment and energy — the sector sheet: 2023–24 baseline, key statistics, opportunities and gaps." }
+        - { src: /assets/projects/surat-crcap/48.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/48-t.jpg, tw: 385, th: 640, cap: "Transport — sector sheet." }
+        - { src: /assets/projects/surat-crcap/49.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/49-t.jpg, tw: 385, th: 640, cap: "Water — sector sheet." }
+        - { src: /assets/projects/surat-crcap/50.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/50-t.jpg, tw: 385, th: 640, cap: "Wastewater — sector sheet." }
+        - { src: /assets/projects/surat-crcap/51.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/51-t.jpg, tw: 382, th: 640, cap: "Stormwater — sector sheet." }
+        - { src: /assets/projects/surat-crcap/52.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/52-t.jpg, tw: 384, th: 640, cap: "Solid waste — sector sheet." }
+        - { src: /assets/projects/surat-crcap/53.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/53-t.jpg, tw: 385, th: 640, cap: "Urban greening and biodiversity — sector sheet." }
+        - { src: /assets/projects/surat-crcap/54.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/54-t.jpg, tw: 382, th: 640, cap: "Health — sector sheet." }
+        - { src: /assets/projects/surat-crcap/55.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/55-t.jpg, tw: 385, th: 640, cap: "Air quality — sector sheet." }
 outcome:
   built: "Net-Zero Climate Resilient City Action Plan, Surat — June 2025. Published by the Surat Municipal Corporation with C40 Cities and ICLEI South Asia. The third Gujarat plan after Ahmedabad and Vadodara, and the first to commit to net zero by 2047."
   next: "Put the three cities on one instrument — the same sectors, the same baseline year, the same chart — so that a reader can see which city is furthest from its line and why."
