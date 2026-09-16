@@ -49,6 +49,8 @@ title: Raghav Kohli — invisible systems, made visible
 {%- set oto = P | find("title", "one is to one") -%}
 {%- set rbrc = P | find("title", "rebel bodies rebel cities") -%}
 {%- set amd = P | find("title", "ahmedabad climate action plan") -%}
+{%- set vad = P | find("title", "vadodara climate action plan") -%}
+{%- set sur = P | find("title", "surat climate action plan") -%}
 
 <h1 class="vh">Raghav Kohli — making invisible urban systems visible, legible, and participatory</h1>
 
@@ -82,6 +84,9 @@ title: Raghav Kohli — invisible systems, made visible
     {# frame matches the net-zero pathway page (787×1200). Eleventh card: left-set, five columns;
        the homepage reorder (docs/plans/2026-09-16-media-lab-site-plan.md §1) will move it up. #}
     {{ card(amd, "11", "1 / 6", 60, "0.656", 30, 3) }}
+    {# the other two plans: pathway pages 849×1200 and 663×1200; right-set beside 11, then left again #}
+    {{ card(vad, "12", "8 / 13", 160, "0.708", 30, 3) }}
+    {{ card(sur, "13", "2 / 6", 40, "0.553", 30, 3) }}
   </div>
 </section>
 
