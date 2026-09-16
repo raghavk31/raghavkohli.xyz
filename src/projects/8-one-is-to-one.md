@@ -18,7 +18,7 @@ thumb: /assets/projects/one-is-to-one/00.jpg
 thumbfit: contain
 lead: A one-to-one studio at CEPT — a small tower drawn in five material systems and then built by the people who drew it. The drawing named bamboo, concrete, metal, brick and wood as if they were interchangeable layers. The site disagreed at every joint. [confirm]
 # routing deferred — see TODOS.md "Reading order"; placeholder label until decided
-next: living heritage — embedded participatory method
+next: ahmedabad climate action plan — the same instrument, first city
 open: { src: /assets/projects/one-is-to-one/00.jpg, w: 1108, h: 1200, fig: fig.01, cap: "The tower, drawn — brick base, timber floor, bamboo roof frame, tile. Sited in the grove behind the workshop. [confirm]" }
 chapters:
   - n: "00"

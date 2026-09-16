@@ -18,7 +18,7 @@ thumb: /assets/projects/rebel-bodies/00.jpg
 thumbfit: contain
 lead: Bhadra Plaza, in the core of Ahmedabad's walled city, was cleared, paved and redesigned — and the city has been redesigning it back ever since. Families with nowhere else claimed the gardens to live in; vendors held the edges they considered theirs. This studio asked what those bodies were actually doing, drew it, performed it, and only then designed for it — six inserts around the plaza, tuned to how the plaza is used rather than how it was meant to be.
 # routing deferred — see TODOS.md "Reading order"; placeholder label until decided
-next: living heritage — embedded participatory method
+next: one is to one — the tower, drawn at scale
 open: { src: /assets/projects/rebel-bodies/01.jpg, w: 1800, h: 1329, fig: fig.01, blend: true, cap: "Life in boxes — a visual ethnography of Bhadra Plaza. The drawing follows the everyday path of the families living inside the plaza; the orange boxes are the places that hold it together." }
 chapters:
   - n: "00"

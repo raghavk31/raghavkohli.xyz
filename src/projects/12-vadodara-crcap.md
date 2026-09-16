@@ -7,7 +7,7 @@ topics: [carbon, data, analytics]
 size: md
 offset: ""
 qsize: 22px
-fig: fig.01 — the net-zero pathway, 2021–2070
+fig: fig.35 — the sector goals, drawn
 role: co-author · sector strategies · book design
 period: 2023 — 2024
 context: vadodara · capacities · iclei south asia

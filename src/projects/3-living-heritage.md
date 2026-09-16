@@ -17,7 +17,7 @@ date: 2020-05-01
 thumb: /assets/projects/living-heritage/00.jpg
 thumbfit: contain
 lead: A village of 40,000 square metres and fourteen communities, running on a boundary system no map recorded — caste, religion, age, mobility, wealth. This work instrumented that system by asking the residents least able to conceal it, and designed into the pockets where the boundaries overlapped.
-next: koliwadas — embedded participatory method
+next: rebel bodies rebel cities — six inserts, one walk
 open: { src: /assets/projects/living-heritage/11.jpg, w: 1212, h: 1240, fig: fig.01, cap: "The village, whole — interventions sited only where the boundaries overlapped." }
 chapters:
   - n: "00"

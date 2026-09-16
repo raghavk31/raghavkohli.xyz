@@ -38,14 +38,8 @@ title: Raghav Kohli — invisible systems, made visible
 {% endmacro %}
 
 {%- set P = collections.projects -%}
-{%- set sama = P | find("title", "sama") -%}
 {%- set livingheritage = P | find("title", "living heritage") -%}
-{%- set koliwadas = P | find("title", "koliwadas") -%}
-{%- set perspectives = P | find("title", "perspectives") -%}
-{%- set city = P | find("title", "city-scale climate") -%}
 {%- set soc = P | find("title", "state of cities") -%}
-{%- set climatecode = P | find("title", "climate code india") -%}
-{%- set punemetro = P | find("title", "pune metro") -%}
 {%- set oto = P | find("title", "one is to one") -%}
 {%- set rbrc = P | find("title", "rebel bodies rebel cities") -%}
 {%- set amd = P | find("title", "ahmedabad climate action plan") -%}
@@ -65,29 +59,24 @@ title: Raghav Kohli — invisible systems, made visible
        composed, floating landing layout; the filter reorders + resizes within
        this one container (it flips to flex while a chip is active). -->
   <div class="work__grid" data-grid>
-    {{ card(sama, "01", "1 / 7", 70, "4/5", 36, 4) }}
-    {{ card(koliwadas, "02", "9 / 13", 0, "3/4", 30, 3) }}
-    {{ card(perspectives, "03", "1 / 5", 36, "4/5", 30, 3) }}
-    {{ card(city, "04", "7 / 13", 130, "5/4", 36, 4) }}
+    {# Only cards with real images for now (2026-09-17); empty frames come back one at a time as they
+       are filled. Order follows docs/plans/2026-09-16-media-lab-site-plan.md §1: the three plans, then
+       state of cities, then the participatory work. Each --car matches its cover image exactly. #}
+    {# ahmedabad = the net-zero pathway page (787×1200); vadodara = the sector-goal illustrations
+       (811×502); surat = the composite hazard map (849×1200). Zigzag: left, right, left. #}
+    {{ card(amd, "01", "1 / 6", 70, "0.656", 30, 3) }}
+    {{ card(vad, "02", "8 / 13", 0, "1.616", 30, 3) }}
+    {{ card(sur, "03", "2 / 6", 40, "0.708", 30, 3) }}
+    {# frame matches the crossroads drawing (7200×3797). Four columns: at ≤1440 the hover panel flips
+       left and must land in the gap, not on 03. #}
+    {{ card(soc, "04", "9 / 13", 120, "1.896", 20, 3) }}
     {{ card(livingheritage, "05", "1 / 7", 30, "1/1", 36, 4) }}
-    {# frame matches the crossroads drawing (7200×3797); nothing on the index is cropped or padded.
-       Four columns, like 02: at ≤1440 the hover panel flips left and must land in the gap, not on 05. #}
-    {{ card(soc, "06", "9 / 13", 120, "1.896", 20, 3) }}
-    {{ card(climatecode, "07", "1 / 6", 0, "5/6", 30, 3) }}
-    {{ card(punemetro, "08", "8 / 13", 48, "4/5", 30, 3) }}
-    {# frame matches the tower drawing (1108×1200); left-set continues the zigzag. Four columns, not
-       five: the hover panel (172px + 22px) needs two free columns before 10, or it lands on its drawing. #}
-    {{ card(oto, "09", "2 / 6", 40, "0.923", 30, 3) }}
-    {# frame matches the life-in-boxes cartography (1200×886). Tenth card: right-set on the last row
-       beside 09, five columns like 08 so the caption holds one line. #}
-    {{ card(rbrc, "10", "8 / 13", 130, "1.354", 30, 3) }}
-    {# frame matches the net-zero pathway page (787×1200). Eleventh card: left-set, five columns;
-       the homepage reorder (docs/plans/2026-09-16-media-lab-site-plan.md §1) will move it up. #}
-    {{ card(amd, "11", "1 / 6", 60, "0.656", 30, 3) }}
-    {# the other two plans read differently from 11's chart: vadodara = the sector-goal illustrations
-       (811×502), surat = the composite hazard map (849×1200); right-set beside 11, then left again #}
-    {{ card(vad, "12", "8 / 13", 160, "1.616", 30, 3) }}
-    {{ card(sur, "13", "2 / 6", 40, "0.708", 30, 3) }}
+    {# frame matches the life-in-boxes cartography (1200×886); right-set, five columns so the caption
+       holds one line. #}
+    {{ card(rbrc, "06", "8 / 13", 130, "1.354", 30, 3) }}
+    {# frame matches the tower drawing (1108×1200). Four columns, not five: the hover panel
+       (172px + 22px) needs two free columns to its right. #}
+    {{ card(oto, "07", "2 / 6", 40, "0.923", 30, 3) }}
   </div>
 </section>
 
