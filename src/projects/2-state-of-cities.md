@@ -60,6 +60,13 @@ chapters:
     narrow: true
     plates:
       - { src: /assets/projects/state-of-cities/21.jpg, w: 1800, h: 900, fig: fig.21, cap: "Planning climate action — the book's closing loop: assess, commit, plan, implement, monitor, revise." }
+  - n: "05"
+    name: the cost
+    title: What the loop costs, in two horizons
+    narrow: true
+    plates:
+      - { src: /assets/projects/state-of-cities/23.jpg, w: 3200, h: 1800, fig: fig.22, cap: "2030 — eight of the fifteen cities, costed: 21.47 million tCO₂e of reduction for 8,399 million USD of interventions, 7,243 of it mitigation. Built environment and energy is three-quarters of the reduction everywhere; the yellow tags are each city's total." }
+      - { src: /assets/projects/state-of-cities/24.jpg, w: 3200, h: 1800, fig: fig.23, cap: "2070 — the same eight cities at net zero: 160.77 million tCO₂e, 86,532 million USD. Ahmedabad alone is 90 million tonnes and 52 billion dollars; Tirunelveli is under two million tonnes. The template makes the range legible." }
 outcome:
   built: "A 72-page public report — four sections, fifteen city profiles on one template, and the first side-by-side reading of Indian city inventories."
   recognised: "Published by NIUA's Climate Centre for Cities (C-Cube) under the Ministry of Housing and Urban Affairs. [confirm]"
@@ -110,3 +117,18 @@ still makes legible.
 Assess, commit, plan, implement, monitor, revise. The book draws it as a loop.
 The loop needs one thing most cities do not have: a data layer they can maintain
 themselves — which is where the next five years of this work went.
+
+## 05 the cost
+
+Reading the cities together was the first step; the second was putting a number on each.
+At the CapaCITIES Phase II workshop, eight of the fifteen — Ahmedabad, Vadodara, Rajkot,
+Coimbatore, Tiruchirappalli, Tirunelveli, Udaipur, Siliguri — costed their actions on the
+same sheet: the reduction each sector delivers, and the indicative cost of the interventions
+that deliver it, for 2030 and for net zero in 2070.
+
+The two sheets are the same drawing at two scales, and the scale is the point. To 2030 the
+eight cities cut 21 million tonnes for 8.4 billion dollars; to 2070, 161 million tonnes for
+87 billion. Almost all of it is buildings and energy. Adaptation is a seventh of the money in
+2030 and a fifth in 2070 — **the bill for living with the climate grows faster than the bill
+for changing it.** One template, eight cities, two horizons: the same instrument, now with
+prices.
