@@ -34,7 +34,9 @@ import shutil
 import sys
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageOps
+import io as _io
+
+from PIL import Image, ImageChops, ImageCms, ImageOps
 
 Image.MAX_IMAGE_PIXELS = None  # the water-urbanism scans are 14k px wide
 
@@ -70,6 +72,14 @@ def suggest_size(w, h):
 def load(path):
     im = Image.open(path)
     im = ImageOps.exif_transpose(im)
+    if im.mode == "CMYK":
+        # InDesign/Photoshop CMYK exports carry their press profile (SWOP, FOGRA); a bare
+        # convert("RGB") ignores it and comes out saturated. Go through the profile to sRGB.
+        icc = im.info.get("icc_profile")
+        if icc:
+            src = ImageCms.ImageCmsProfile(_io.BytesIO(icc))
+            im = ImageCms.profileToProfile(im, src, ImageCms.createProfile("sRGB"), outputMode="RGB",
+                                           renderingIntent=ImageCms.Intent.PERCEPTUAL)
     if im.mode in ("RGBA", "LA", "P"):
         bg = Image.new("RGB", im.size, (255, 255, 255))
         bg.paste(im.convert("RGBA"), mask=im.convert("RGBA").split()[-1])
