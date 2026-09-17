@@ -465,6 +465,10 @@ body.lb-open{overflow:hidden;}
 .carousel__rule a::after{content:"";position:absolute;left:0;right:0;top:5px;height:2px;background:var(--line);opacity:.55;}
 .carousel__rule a:hover::after,.carousel__rule a:focus-visible::after{opacity:1;}
 .carousel__rule a.on::after{background:var(--accent);opacity:1;}
+/* autoplay: the active segment fills over one interval (main.js initCarousel, 4s) */
+.carousel.is-auto .carousel__rule a.on::after{transform-origin:left;animation:carfill 4s linear;}
+@keyframes carfill{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+@media (prefers-reduced-motion:reduce){.carousel.is-auto .carousel__rule a.on::after{animation:none;}}
 .carousel__rule a:focus-visible{outline:none;} .carousel__rule a:focus-visible::after{height:4px;top:4px;}
 .short,.touch-only,.js-only{display:none;}
 .js .js-only{display:inline;}

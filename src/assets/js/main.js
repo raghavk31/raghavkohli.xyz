@@ -539,13 +539,33 @@
         }, function () { if (my === token) { car.classList.remove("is-swapping"); row.classList.add("err"); } });
         if (scroll) car.scrollIntoView({ block: "nearest", behavior: "smooth" });
       }
-      prev.addEventListener("click", function (e) { e.preventDefault(); show(idx - 1); });
-      next.addEventListener("click", function (e) { e.preventDefault(); show(idx + 1); });
-      segs.forEach(function (a, k) { a.addEventListener("click", function (e) { e.preventDefault(); show(k); }); });
-      rows.forEach(function (r, k) { r.addEventListener("click", function (e) { e.preventDefault(); show(k, true); }); });
+      // autoplay: the spreads rotate while the carousel is in view; the pointer over the chapter
+      // or keyboard focus inside it pauses; any manual step hands control to the reader for good
+      var AUTO_MS = 4000, auto = null, inView = false, held = false, taken = false;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function tick() { auto = null; if (!inView || held || taken || document.hidden) return; show(idx + 1); auto = setTimeout(tick, AUTO_MS); }
+      function sync() {
+        var run = inView && !held && !taken && !reduce && !document.hidden;
+        if (run && auto === null) auto = setTimeout(tick, AUTO_MS);
+        if (!run && auto !== null) { clearTimeout(auto); auto = null; }
+        car.classList.toggle("is-auto", run);
+      }
+      function take() { taken = true; sync(); }
+      chap.addEventListener("mouseenter", function () { held = true; sync(); });
+      chap.addEventListener("mouseleave", function () { held = false; sync(); });
+      chap.addEventListener("focusin", function () { held = true; sync(); });
+      chap.addEventListener("focusout", function (e) { if (!chap.contains(e.relatedTarget)) { held = false; sync(); } });
+      document.addEventListener("visibilitychange", sync);
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (en) { inView = en[0].isIntersecting; sync(); }, { threshold: 0.4 }).observe(car);
+      }
+      prev.addEventListener("click", function (e) { e.preventDefault(); take(); show(idx - 1); });
+      next.addEventListener("click", function (e) { e.preventDefault(); take(); show(idx + 1); });
+      segs.forEach(function (a, k) { a.addEventListener("click", function (e) { e.preventDefault(); take(); show(k); }); });
+      rows.forEach(function (r, k) { r.addEventListener("click", function (e) { e.preventDefault(); take(); show(k, true); }); });
       chap.addEventListener("keydown", function (e) {
-        if (e.key === "ArrowRight") { e.preventDefault(); show(idx + 1); }
-        else if (e.key === "ArrowLeft") { e.preventDefault(); show(idx - 1); }
+        if (e.key === "ArrowRight") { e.preventDefault(); take(); show(idx + 1); }
+        else if (e.key === "ArrowLeft") { e.preventDefault(); take(); show(idx - 1); }
       });
       // swipe on touch
       var px = null, box = car.querySelector(".plate__img");
@@ -553,7 +573,7 @@
       box.addEventListener("pointerup", function (e) {
         if (px === null) return;
         var dx = e.clientX - px; px = null;
-        if (Math.abs(dx) > 40) { e.preventDefault(); show(dx < 0 ? idx + 1 : idx - 1); box.dataset.swiped = "1"; }
+        if (Math.abs(dx) > 40) { e.preventDefault(); take(); show(dx < 0 ? idx + 1 : idx - 1); box.dataset.swiped = "1"; }
       });
       // the image opens the lightbox on the full set, at the current city
       var items = rows.map(function (row) {
@@ -563,7 +583,7 @@
       box.setAttribute("tabindex", "0");
       box.setAttribute("role", "button");
       box.setAttribute("aria-label", "open the city spreads");
-      function openSet() { if (box.dataset.swiped) { delete box.dataset.swiped; return; } openLightbox(items, idx, box); }
+      function openSet() { if (box.dataset.swiped) { delete box.dataset.swiped; return; } take(); openLightbox(items, idx, box); }
       box.addEventListener("click", openSet);
       box.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSet(); } });
       // prefetch the renditions once the carousel is near the viewport
