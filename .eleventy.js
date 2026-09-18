@@ -13,7 +13,7 @@ module.exports = function (eleventyConfig) {
 
   // Simple readable date filter, e.g. "2026" or "March 2026"
   eleventyConfig.addFilter("year", (dateObj) =>
-    new Date(dateObj).getFullYear()
+    (dateObj ? new Date(dateObj) : new Date()).getFullYear()
   );
 
   // Find one item in a list by a data key — used to compose the homepage grid
