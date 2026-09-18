@@ -17,6 +17,12 @@ date: 2020-11-15
 thumb: /assets/projects/eco-machine/00.jpg
 thumbw: 1200
 thumbh: 675
+covers:
+  - { t: /assets/projects/eco-machine/c1.jpg, f: /assets/projects/eco-machine/c1-f.jpg, w: 900, h: 506 }
+  - { t: /assets/projects/eco-machine/c2.jpg, f: /assets/projects/eco-machine/c2-f.jpg, w: 900, h: 506 }
+  - { t: /assets/projects/eco-machine/c3.jpg, f: /assets/projects/eco-machine/c3-f.jpg, w: 900, h: 506 }
+  - { t: /assets/projects/eco-machine/c4.jpg, f: /assets/projects/eco-machine/c4-f.jpg, w: 640, h: 360 }
+  - { t: /assets/projects/eco-machine/c5.jpg, f: /assets/projects/eco-machine/c5-f.jpg, w: 900, h: 506 }
 lead: "Mumbai mismanages 93 per cent of its waste; a great deal of it goes into the drains, and the drains go into the sea. The same drains carry 2,142 mm of rain a year through a storm-water system sized for 25 mm a day, and by 2050 sea-level rise puts two-fifths of the city under regular flooding. Both problems meet at the eastern waterfront — 966 hectares of docks, sixteen kilometres of post-industrial edge. This studio took thirty hectares of it and asked one question: what is the inclusionary script, and how do we re-think the relationship between land and sea while addressing toxicity and flooding?"
 next: koliwadas — reverse effekt, twelve fishing villages
 open: { src: /assets/projects/eco-machine/01.jpg, w: 1800, h: 1012, fig: fig.01, cap: "The eco-machine — the waterfront as one working landscape: tidal pier, mangrove edge, floating labs, wetland system, water plaza, urban farming, an eco-machine hub. The proposal, redrawn in 2026." }

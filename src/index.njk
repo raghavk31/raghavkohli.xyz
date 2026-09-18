@@ -17,6 +17,9 @@ title: Raghav Kohli — invisible systems, made visible
     </div>
     <div class="card__frame">
       {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}"{% if p.data.thumbfit == 'contain' %} class="contain"{% endif %} loading="lazy" onerror="this.remove()" />{% endif %}
+      {#- rotating covers (scripts/prep-covers.py): each cK-f.jpg is pre-cropped to this card's --car,
+          so it fills the frame whatever the thumb's fit; main.js initCovers crossfades them -#}
+      {% for c in p.data.covers %}<img class="card__alt" src="{{ c.f }}" alt="" width="{{ c.w }}" height="{{ c.h }}" loading="lazy" data-i="{{ loop.index }}" />{% endfor %}
       <div class="card__fig">{{ p.data.fig }}</div>
       <div class="card__overlay">
         <span class="card__qlabel">(research question)</span>
@@ -31,7 +34,11 @@ title: Raghav Kohli — invisible systems, made visible
       {% if p.data.live %}<span class="status">({{ p.data.status }})</span>{% endif %}
     </figcaption>
     <div class="card__thumbs">
+      {%- if p.data.covers -%}
+      {% for c in p.data.covers %}<div class="card__thumb" data-i="{{ loop.index }}"><img src="{{ c.t }}" alt="" width="400" height="400" loading="lazy" /></div>{% endfor %}
+      {%- else -%}
       {% for i in range(0, thumbs) %}<div class="card__thumb"><span>{{ ["a","b","c","d"][i] }}</span></div>{% endfor %}
+      {%- endif -%}
     </div>
   </a>
 </figure>

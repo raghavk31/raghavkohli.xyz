@@ -16,6 +16,12 @@ live: false
 date: 2018-12-01
 thumb: /assets/projects/rebel-bodies/00.jpg
 thumbfit: contain
+covers:
+  - { t: /assets/projects/rebel-bodies/c1.jpg, f: /assets/projects/rebel-bodies/c1-f.jpg, w: 1200, h: 886 }
+  - { t: /assets/projects/rebel-bodies/c2.jpg, f: /assets/projects/rebel-bodies/c2-f.jpg, w: 1200, h: 886 }
+  - { t: /assets/projects/rebel-bodies/c3.jpg, f: /assets/projects/rebel-bodies/c3-f.jpg, w: 1200, h: 886 }
+  - { t: /assets/projects/rebel-bodies/c4.jpg, f: /assets/projects/rebel-bodies/c4-f.jpg, w: 1200, h: 887 }
+  - { t: /assets/projects/rebel-bodies/c5.jpg, f: /assets/projects/rebel-bodies/c5-f.jpg, w: 1200, h: 886 }
 lead: Bhadra Plaza, in the core of Ahmedabad's walled city, was cleared, paved and redesigned — and the city has been redesigning it back ever since. Families with nowhere else claimed the gardens to live in; vendors held the edges they considered theirs. This studio asked what those bodies were actually doing, drew it, performed it, and only then designed for it — six inserts around the plaza, tuned to how the plaza is used rather than how it was meant to be.
 # routing deferred — see TODOS.md "Reading order"; placeholder label until decided
 next: one is to one — the tower, drawn at scale

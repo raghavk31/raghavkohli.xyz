@@ -16,6 +16,12 @@ live: false
 date: 2020-05-01
 thumb: /assets/projects/living-heritage/00.jpg
 thumbfit: contain
+covers:
+  - { t: /assets/projects/living-heritage/c1.jpg, f: /assets/projects/living-heritage/c1-f.jpg, w: 433, h: 433 }
+  - { t: /assets/projects/living-heritage/c2.jpg, f: /assets/projects/living-heritage/c2-f.jpg, w: 776, h: 776 }
+  - { t: /assets/projects/living-heritage/c3.jpg, f: /assets/projects/living-heritage/c3-f.jpg, w: 1200, h: 1200 }
+  - { t: /assets/projects/living-heritage/c4.jpg, f: /assets/projects/living-heritage/c4-f.jpg, w: 1200, h: 1200 }
+  - { t: /assets/projects/living-heritage/c5.jpg, f: /assets/projects/living-heritage/c5-f.jpg, w: 1060, h: 1060 }
 lead: A village of 40,000 square metres and fourteen communities, running on a boundary system no map recorded — caste, religion, age, mobility, wealth. This work instrumented that system by asking the residents least able to conceal it, and designed into the pockets where the boundaries overlapped.
 next: rebel bodies rebel cities — six inserts, one walk
 open: { src: /assets/projects/living-heritage/11.jpg, w: 1212, h: 1240, fig: fig.01, cap: "The village, whole — interventions sited only where the boundaries overlapped." }

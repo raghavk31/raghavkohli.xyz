@@ -17,6 +17,12 @@ date: 2020-05-01
 thumb: /assets/projects/generative-techniques/00.jpg
 thumbw: 1200
 thumbh: 848
+covers:
+  - { t: /assets/projects/generative-techniques/c1.jpg, f: /assets/projects/generative-techniques/c1-f.jpg, w: 1200, h: 848 }
+  - { t: /assets/projects/generative-techniques/c2.jpg, f: /assets/projects/generative-techniques/c2-f.jpg, w: 1200, h: 848 }
+  - { t: /assets/projects/generative-techniques/c3.jpg, f: /assets/projects/generative-techniques/c3-f.jpg, w: 758, h: 536 }
+  - { t: /assets/projects/generative-techniques/c4.jpg, f: /assets/projects/generative-techniques/c4-f.jpg, w: 900, h: 636 }
+  - { t: /assets/projects/generative-techniques/c5.jpg, f: /assets/projects/generative-techniques/c5-f.jpg, w: 1200, h: 848 }
 lead: "India will need to hold most of its population growth inside cities that already exist, and the usual answer — stack more floors on the same plan — throws away the ground. This studio took a 1.45 sq km site beside the Sabarmati, between Gandhi Ashram and a sewage treatment plant, and asked what densification would look like if the design were written as relationships instead of drawn as a masterplan: what should be dense, what should stay quiet, what must be kept open. Then it let an evolutionary algorithm search the plans those rules allow."
 next: eco-machine — mumbai's eastern waterfront as a living machine
 open: { src: /assets/projects/generative-techniques/01.jpg, w: 1674, h: 1357, fig: fig.01, blend: true, cap: "Density as a rule — bus stops, street edges and junctions attract high density so that the most people sit closest to transit; the swale, Gandhi Ashram, Kalam Kush and the treatment plant push density away, to keep their value and identity." }

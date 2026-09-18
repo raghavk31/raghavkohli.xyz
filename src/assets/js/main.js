@@ -32,6 +32,49 @@
     });
   });
 
+  /* ---------- card: rotating covers ----------
+     The frame holds the thumb plus N pre-cropped alternates (.card__alt); one is "on" at a time.
+     While a card is in view it steps every COVER_MS, each card offset by its position so the grid
+     never blinks in unison. Hovering a square in the strip shows that cover; the pointer over the
+     card otherwise holds the current one. Reduced motion: the strip still works, nothing rotates. */
+  (function () {
+    var COVER_MS = 5200, STAGGER = 900;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var cards = Array.prototype.slice.call(document.querySelectorAll(".card__click"));
+    cards.forEach(function (card, ci) {
+      var alts = Array.prototype.slice.call(card.querySelectorAll(".card__alt"));
+      if (!alts.length) return;
+      var squares = Array.prototype.slice.call(card.querySelectorAll(".card__thumb[data-i]"));
+      var n = alts.length + 1, idx = 0, timer = null, inView = false, held = false;
+      var frame = card.querySelector(".card__frame");
+      function show(i) {
+        idx = (i + n) % n;
+        frame.classList.toggle("is-alt", idx !== 0); // the fig label names the thumb only
+        alts.forEach(function (im, k) { im.classList.toggle("on", k + 1 === idx); });
+        squares.forEach(function (sq, k) { sq.classList.toggle("on", k + 1 === idx); });
+      }
+      function tick() { timer = null; if (!inView || held || document.hidden) return; show(idx + 1); timer = setTimeout(tick, COVER_MS); }
+      function sync(delay) {
+        var run = inView && !held && !reduce && !document.hidden;
+        if (run && timer === null) timer = setTimeout(tick, delay == null ? COVER_MS : delay);
+        if (!run && timer !== null) { clearTimeout(timer); timer = null; }
+      }
+      squares.forEach(function (sq, k) {
+        sq.addEventListener("mouseenter", function () { show(k + 1); });
+      });
+      card.addEventListener("mouseenter", function () { held = true; sync(); });
+      card.addEventListener("mouseleave", function () { held = false; sync(); });
+      document.addEventListener("visibilitychange", function () { sync(); });
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(function (en) {
+          inView = en[0].isIntersecting;
+          // first step after a stagger keyed to the card's place in the grid
+          sync(COVER_MS + (ci % 4) * STAGGER);
+        }, { threshold: 0.35 }).observe(card);
+      }
+    });
+  })();
+
   /* ---------- (index) hover-preview ---------- */
   var idxList = document.querySelector("[data-idxlist]");
   if (idxList) {

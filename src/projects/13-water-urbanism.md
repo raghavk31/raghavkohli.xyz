@@ -17,6 +17,12 @@ date: 2021-12-01
 thumb: /assets/projects/water-urbanism/00.jpg
 thumbw: 1200
 thumbh: 814
+covers:
+  - { t: /assets/projects/water-urbanism/c1.jpg, f: /assets/projects/water-urbanism/c1-f.jpg, w: 783, h: 531 }
+  - { t: /assets/projects/water-urbanism/c2.jpg, f: /assets/projects/water-urbanism/c2-f.jpg, w: 1200, h: 814 }
+  - { t: /assets/projects/water-urbanism/c3.jpg, f: /assets/projects/water-urbanism/c3-f.jpg, w: 894, h: 607 }
+  - { t: /assets/projects/water-urbanism/c4.jpg, f: /assets/projects/water-urbanism/c4-f.jpg, w: 618, h: 419 }
+  - { t: /assets/projects/water-urbanism/c5.jpg, f: /assets/projects/water-urbanism/c5-f.jpg, w: 1200, h: 814 }
 lead: "Rajgir, the first capital of the Magadha kingdom, is a small town under heavy development pressure — a new Nalanda University, a sports complex, a highway, and a floodplain between the hills and the railway that floods every monsoon and dries every summer. The studio's premise was Ian McHarg's — water and cities understood as one constructed ecosystem — and its site had a precedent already in the ground: the aahar-pyne, south Bihar's centuries-old network of channels and catchment basins. This plan reverses the usual order. The water system is drawn first; the streets, the food, the built fabric are negotiated around it."
 next: generative techniques — a neighbourhood as rules, not a plan
 open: { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, fig: fig.01, cap: "The plan on its terrain — eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn." }

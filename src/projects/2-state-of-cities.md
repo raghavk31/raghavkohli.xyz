@@ -17,6 +17,11 @@ date: 2023-07-01
 thumb: /assets/projects/state-of-cities/00.jpg
 thumbw: 1200
 thumbh: 633
+covers:
+  - { t: /assets/projects/state-of-cities/c1.jpg, f: /assets/projects/state-of-cities/c1-f.jpg, w: 1200, h: 633 }
+  - { t: /assets/projects/state-of-cities/c2.jpg, f: /assets/projects/state-of-cities/c2-f.jpg, w: 900, h: 475 }
+  - { t: /assets/projects/state-of-cities/c3.jpg, f: /assets/projects/state-of-cities/c3-f.jpg, w: 1200, h: 633 }
+  - { t: /assets/projects/state-of-cities/c4.jpg, f: /assets/projects/state-of-cities/c4-f.jpg, w: 1200, h: 633 }
 lead: A 72-page report that puts fifteen Indian cities on the same page — literally. One template, fifteen times, so that a city's energy, emissions, risks and plans can be read against its neighbours' for the first time. This is what a country's cities look like once someone insists they be read in one format.
 next: living heritage — embedded participatory method
 open: { src: /assets/projects/state-of-cities/01.jpg, w: 1800, h: 900, fig: fig.01, cap: "Cities at crossroads — the argument, drawn: what climate change costs a city that cannot read itself." }

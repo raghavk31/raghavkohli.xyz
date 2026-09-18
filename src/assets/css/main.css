@@ -99,9 +99,15 @@ figure.card{margin-top:var(--cmt,0);max-width:100%;min-width:0;
 .card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--stripe);
   container-type:inline-size;transition:transform .6s cubic-bezier(.16,1,.3,1);}
 .card__frame > img{position:absolute;inset:0;transition:transform .9s cubic-bezier(.16,1,.3,1);}
+/* rotating covers: the alternates sit over the thumb, hidden, and fade in one at a time (main.js
+   initCovers). Every alternate is pre-cropped to the frame ratio, so object-fit never matters. */
+.card__frame > img.card__alt{width:100%;height:100%;object-fit:cover;opacity:0;
+  transition:opacity 1.1s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.16,1,.3,1);}
+.card__frame > img.card__alt.on{opacity:1;}
 /* thumbfit: contain — show the whole drawing on the --stripe ground instead of cover-cropping */
 .card__frame > img.contain{object-fit:contain;}
-.card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);}
+.card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);transition:opacity .6s ease;}
+.card__frame.is-alt .card__fig{opacity:0;}
 /* frosted-glass + halftone screen over the image, question text on top */
 .card__overlay{position:absolute;inset:0;background:rgba(250,250,248,.5);
   backdrop-filter:blur(9px) saturate(1.15);-webkit-backdrop-filter:blur(9px) saturate(1.15);
@@ -145,6 +151,9 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
   transition:max-height .55s cubic-bezier(.16,1,.3,1), opacity .4s ease;}
 .card__thumb{flex:0 0 auto;width:78px;height:78px;background:var(--stripe);position:relative;}
 .card__thumb span{position:absolute;left:6px;bottom:5px;font-family:var(--mono);font-size:9px;color:#9A988F;}
+.card__thumb img{display:block;width:100%;height:100%;object-fit:cover;opacity:.82;transition:opacity .3s ease;}
+.card__thumb.on img,.card__thumb:hover img{opacity:1;}
+.card__thumb.on::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1.5px;background:var(--accent);}
 
 /* hover-only interactions — gated so touch devices never get stuck states */
 @media (hover:hover){
@@ -153,7 +162,9 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
   .card__click:hover .card__frame > img{transform:scale(1.04);}
   .card__click:hover .card__overlay{opacity:1;}
   .card__click:hover .card__meta{opacity:1;transform:translateX(0);}
-  .card__click:hover .card__thumbs{max-height:78px;opacity:1;}
+  .card__click:hover .card__thumbs{max-height:82px;opacity:1;}
+  /* over the strip the glass lifts, so the cover the pointer picks is seen clean */
+  .card__click:has(.card__thumbs:hover) .card__overlay{opacity:0;}
 }
 
 /* ---------- about ---------- */
