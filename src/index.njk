@@ -75,42 +75,26 @@ title: Raghav Kohli — invisible systems, made visible
        composed, floating landing layout; the filter reorders + resizes within
        this one container (it flips to flex while a chip is active). -->
   <div class="work__grid" data-grid>
-    {# Only cards with real images for now (2026-09-17); empty frames come back one at a time as they
-       are filled. Order follows docs/plans/2026-09-16-media-lab-site-plan.md §1: the three plans, then
-       state of cities, then the participatory work. Each --car matches its cover image exactly. #}
-    {# ahmedabad = the net-zero pathway page (787×1200); vadodara = the sector-goal illustrations
-       (811×502); surat = the composite hazard map (849×1200). Zigzag: left, right, left. #}
+    {# Order follows docs/plans/2026-09-16-media-lab-site-plan.md §1 with the missing cards (resilience ai,
+       gcap, climate code, perspectives) skipped: the professional books first, then the participatory and
+       computational studio work, then the rest. Each --car matches its cover image; left/right alternate;
+       four-column cards (2/6, 9/13) keep the hover panel clear of the neighbour at ≤1440. #}
     {{ card(amd, "01", "1 / 6", 70, "0.656", 30, 3) }}
     {{ card(vad, "02", "8 / 13", 0, "1.616", 30, 3) }}
     {{ card(sur, "03", "2 / 6", 40, "0.708", 30, 3) }}
-    {# frame matches the crossroads drawing (7200×3797). Four columns: at ≤1440 the hover panel flips
-       left and must land in the gap, not on 03. #}
     {{ card(soc, "04", "9 / 13", 120, "1.896", 20, 3) }}
-    {{ card(livingheritage, "05", "1 / 7", 30, "1/1", 36, 4) }}
-    {# frame matches the life-in-boxes cartography (1200×886); right-set, five columns so the caption
-       holds one line. #}
-    {{ card(rbrc, "06", "8 / 13", 130, "1.354", 30, 3) }}
-    {# frame matches the tower drawing (1108×1200). Four columns, not five: the hover panel
-       (172px + 22px) needs two free columns to its right. #}
-    {{ card(oto, "07", "2 / 6", 40, "0.923", 30, 3) }}
-    {# frame matches the rajgir masterplan on its terrain (1200×814); right-set beside 07 #}
-    {{ card(wu, "08", "8 / 13", 130, "1.474", 30, 3) }}
-    {# frame matches the density-attractor drawing (1200×848); left-set, five columns #}
+    {{ card(ugp, "05", "2 / 6", 30, "0.707", 30, 3) }}
+    {{ card(kw, "06", "9 / 13", 150, "0.707", 30, 3) }}
+    {{ card(livingheritage, "07", "1 / 7", 30, "1/1", 36, 4) }}
+    {{ card(rbrc, "08", "8 / 13", 130, "1.354", 30, 3) }}
     {{ card(gen, "09", "1 / 6", 40, "1.415", 30, 3) }}
-    {# frame matches the eco-machine illustration (1200×675); right-set beside 09 #}
-    {{ card(eco, "10", "8 / 13", 160, "1.778", 30, 3) }}
-    {# frame matches the model photo (1200×800); left-set, five columns #}
-    {{ card(uto, "11", "1 / 6", 40, "1.5", 30, 3) }}
-    {# frame matches the massing axo (1200×744); right-set beside 11 #}
-    {{ card(pm, "12", "8 / 13", 150, "1.613", 30, 3) }}
-    {# frame matches the worli-tip cartography (848×1200); left-set, four columns like 03 #}
-    {{ card(kw, "13", "2 / 6", 40, "0.707", 30, 3) }}
-    {# frame matches the banyan page (848×1200); right-set, four columns #}
-    {{ card(ugp, "14", "9 / 13", 150, "0.707", 30, 3) }}
-    {# square instagram frames (1080×1080); left-set, four columns #}
-    {{ card(perf, "15", "1 / 5", 40, "1", 30, 3) }}
-    {# frame matches the homestead axo (1200×881); right-set beside 15 #}
-    {{ card(mj, "16", "8 / 13", 150, "1.362", 30, 3) }}
+    {{ card(oto, "10", "9 / 13", 150, "0.923", 30, 3) }}
+    {{ card(wu, "11", "1 / 6", 40, "1.474", 30, 3) }}
+    {{ card(eco, "12", "8 / 13", 160, "1.778", 30, 3) }}
+    {{ card(uto, "13", "1 / 6", 40, "1.5", 30, 3) }}
+    {{ card(perf, "14", "9 / 13", 150, "1", 30, 3) }}
+    {{ card(mj, "15", "1 / 6", 40, "1.362", 30, 3) }}
+    {{ card(pm, "16", "8 / 13", 150, "1.613", 30, 3) }}
   </div>
 </section>
 
