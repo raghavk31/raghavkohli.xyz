@@ -1,11 +1,8 @@
 // The fuller archive shown in the (index) section — everything real that is not (yet) a card.
 // One row per item, same register as the cards. `media` + `blurb` drive the sticky hover-preview
 // pane on the right; point `href` at a page or PDF when one exists. Numbering continues after the
-// homepage cards (16 as of 2026-09-18). Sources: D:\Work — see memory/pipeline-2026-09-17.
+// homepage cards (17 as of 2026-09-18). Sources: D:\Work — see memory/pipeline-2026-09-17.
 module.exports = [
-  { n: "17", name: "malaysia gcap", cat: "iclei south asia · city profiles & ghg inventory", year: "2023",
-    media: "fig.17 — kota bharu, city profile",
-    blurb: "Four Malaysian cities — Kota Bharu, Langkawi, Padawan, Penang Island — profiled on one template, with a GPC-compliant GHG inventory for Penang. Page in preparation." },
   { n: "18", name: "flood resilience strategy", cat: "niua · aligarh", year: "2023",
     media: "fig.18 — ward-level blue-green map",
     blurb: "A flood resilience strategy template, tested on Aligarh — ward-level blue-green mapping for a city that grew as ribbon sprawl along its highways." },
