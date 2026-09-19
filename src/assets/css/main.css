@@ -43,13 +43,8 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
   padding:20px var(--gutter);background:rgba(250,250,248,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
 .head .mark{font-family:var(--serif-alt);font-size:22px;font-weight:500;letter-spacing:-0.01em;line-height:1;color:var(--ink);}
 .head nav{display:flex;gap:26px;font-size:13px;}
-.head nav a{color:var(--mute);position:relative;}
+.head nav a{color:var(--mute);}
 .head nav a:hover{color:var(--ink);}
-/* nav hover reveals a small stack of sub-labels (mouse only — see @media hover) */
-.head nav .navsub{position:absolute;top:calc(100% + 11px);right:0;display:flex;flex-direction:column;gap:5px;
-  text-align:right;opacity:0;transform:translateY(-4px);pointer-events:none;
-  transition:opacity .3s ease,transform .35s cubic-bezier(.16,1,.3,1);}
-.head nav .navsub span{white-space:nowrap;font-size:11px;letter-spacing:.01em;color:var(--faint-2);}
 
 /* ---------- work section ---------- */
 .work{padding:clamp(36px,5vw,72px) var(--gutter) 0;max-width:var(--maxw);margin:0 auto;}
@@ -178,7 +173,6 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 
 /* hover-only interactions — gated so touch devices never get stuck states */
 @media (hover:hover){
-  .head nav a:hover .navsub{opacity:1;transform:translateY(0);}
   /* the reveal fires on hover and on keyboard focus alike (D12) */
   .card__click:hover .card__frame,.card__click:focus-within .card__frame{transform:translateY(-8px);}
   .card__click:hover .card__frame > img,.card__click:focus-within .card__frame > img{transform:scale(1.04);}
@@ -410,7 +404,6 @@ body.lb-open{overflow:hidden;}
   .card__overlay::before{display:none;}
   .card__q{font-size:1.15rem;}
   .card__qlabel{color:var(--faint);}
-  .head nav .navsub{display:none;}
   .index__grid{grid-template-columns:1fr;}
   .index__preview{display:none;}
   .cv-line{grid-template-columns:1fr;gap:4px;}
