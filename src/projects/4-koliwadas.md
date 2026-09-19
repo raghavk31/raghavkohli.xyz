@@ -14,7 +14,7 @@ context: worli koliwada · mumbai · cept undergraduate thesis
 status: thesis
 live: false
 date: 2022-05-16
-size: L
+card: L
 thumb: /assets/projects/koliwadas/00.jpg
 thumbw: 848
 thumbh: 1200

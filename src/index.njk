@@ -4,14 +4,14 @@ title: Raghav Kohli — invisible systems, made visible
 ---
 
 {#- The card: frame (thumb + rotating covers), glass overlay with the research question, floating meta
-    panel, caption, and the strip of covers. Width comes from `size:` — L → span 6, two per row;
+    panel, caption, and the strip of covers. Width comes from `card:` — L → span 6, two per row;
     M → span 4, three per row; S → span 3, four per row (internal only, never displayed) — the grid's auto-placement packs rows to
     twelve columns and wraps a card that would not fit, so packing is free. The frame ratio follows
     the cover: landscape keeps its own ratio, near-square becomes 1:1, portrait becomes 4:5 with the
     image contained on the stripe ground — nothing is cropped (plan 2026-09-19, D8/D11). -#}
 {% macro card(p, num) %}
-{#- size: L | M | S in the frontmatter (internal — never shown); numeric weight 1|2|3 still accepted -#}
-{%- set sz = (p.data.size or '') | upper -%}
+{#- card: L | M | S in the frontmatter (internal — never shown); numeric weight 1|2|3 still accepted -#}
+{%- set sz = (p.data.card or '') | upper -%}
 {%- set w = 1 if sz == 'L' else (3 if sz == 'S' else (p.data.weight or 2)) -%}
 {%- set span = 6 if w == 1 else (4 if w == 2 else 3) -%}
 {%- set r = (p.data.thumbw / p.data.thumbh) if (p.data.thumbw and p.data.thumbh) else 1.333 -%}

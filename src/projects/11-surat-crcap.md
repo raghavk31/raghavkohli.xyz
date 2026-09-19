@@ -14,7 +14,7 @@ context: surat · c40 cities · iclei south asia
 status: published · june 2025
 live: false
 date: 2025-06-01
-size: M
+card: M
 thumb: /assets/projects/surat-crcap/00.jpg
 thumbw: 849
 thumbh: 1200

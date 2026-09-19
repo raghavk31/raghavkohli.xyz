@@ -14,7 +14,7 @@ context: ahmedabad · capacities · iclei south asia
 status: published · july 2023
 live: false
 date: 2023-07-01
-size: L
+card: L
 thumb: /assets/projects/ahmedabad-crcap/00.jpg
 thumbw: 787
 thumbh: 1200

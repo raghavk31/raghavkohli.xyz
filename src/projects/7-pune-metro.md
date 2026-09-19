@@ -14,7 +14,7 @@ context: pune metro line 3 · ccba designs
 status: office work
 live: false
 date: 2021-01-08
-size: S
+card: S
 thumb: /assets/projects/pune-metro/00.jpg
 thumbw: 1200
 thumbh: 744

@@ -14,7 +14,7 @@ context: amdavad municipal corporation · iclei south asia · studio commons
 status: policy document · 2025
 live: false
 date: 2025-02-19
-size: L
+card: L
 thumb: /assets/projects/urban-greening/00.jpg
 thumbw: 848
 thumbh: 1200

@@ -14,7 +14,7 @@ context: amritvarshini vav · khadia · ahmedabad
 status: performance
 live: false
 date: 2018-10-01
-size: S
+card: S
 thumb: /assets/projects/urban-performances/00.jpg
 thumbw: 774
 thumbh: 774
