@@ -1,16 +1,16 @@
 ---
 layout: base.njk
-title: Raghav Kohli — invisible systems, made visible
+title: "Raghav Kohli · invisible systems, made visible"
 ---
 
 {#- The card: frame (thumb + rotating covers), glass overlay with the research question, floating meta
-    panel, caption, and the strip of covers. Width comes from `card:` — L → span 6, two per row;
-    M → span 4, three per row; S → span 3, four per row (internal only, never displayed) — the grid's auto-placement packs rows to
+    panel, caption, and the strip of covers. Width comes from `card:`. L → span 6, two per row;
+    M → span 4, three per row; S → span 3, four per row (internal only, never displayed): the grid's auto-placement packs rows to
     twelve columns and wraps a card that would not fit, so packing is free. The frame ratio follows
     the cover: landscape keeps its own ratio, near-square becomes 1:1, portrait becomes 4:5 with the
-    image contained on the stripe ground — nothing is cropped (plan 2026-09-19, D8/D11). -#}
+    image contained on the stripe ground: nothing is cropped (plan 2026-09-19, D8/D11). -#}
 {% macro card(p, num) %}
-{#- card: L | M | S in the frontmatter (internal — never shown); numeric weight 1|2|3 still accepted -#}
+{#- card: L | M | S in the frontmatter (internal: never shown); numeric weight 1|2|3 still accepted -#}
 {%- set sz = (p.data.card or '') | upper -%}
 {%- set w = 1 if sz == 'L' else (3 if sz == 'S' else (p.data.weight or 2)) -%}
 {%- set span = 6 if w == 1 else (4 if w == 2 else 3) -%}
@@ -63,13 +63,13 @@ title: Raghav Kohli — invisible systems, made visible
 {%- set P = collections.projects -%}
 {#- Groups by method (plan 2026-09-19, D4). Order inside a group = the media lab plan's order. -#}
 {%- set groups = [
-  ["(plans & policy)",          ["malaysia gcap", "ahmedabad climate action plan", "state of cities", "urban greening policy", "vadodara climate action plan", "surat climate action plan"]],
-  ["(participatory)",           ["koliwadas", "living heritage", "rebel bodies rebel cities", "urban performances"]],
-  ["(computational & spatial)", ["generative techniques", "one is to one", "water urbanism", "eco-machine"]],
-  ["(early work)",              ["utopias to heterotopias", "exploring majuli", "pune metro"]]
+  ["(plans & policy)",          ["Malaysia GCAP", "Ahmedabad Climate Action Plan", "State of Cities", "Urban Greening Policy", "Vadodara Climate Action Plan", "Surat Climate Action Plan"]],
+  ["(participatory)",           ["Koliwadas", "Living Heritage", "Rebel Bodies Rebel Cities", "Urban Performances"]],
+  ["(computational & spatial)", ["Generative Techniques", "One is to One", "Water Urbanism", "Eco-Machine"]],
+  ["(early work)",              ["Utopias to Heterotopias", "Exploring Majuli", "Pune Metro"]]
 ] -%}
 
-<h1 class="vh">Raghav Kohli — making invisible urban systems visible, legible, and participatory</h1>
+<h1 class="vh">Raghav Kohli: making invisible urban systems visible, legible, and participatory</h1>
 
 <section class="work" id="work">
   <div class="work__head reveal" data-reveal>
@@ -109,15 +109,16 @@ title: Raghav Kohli — invisible systems, made visible
   <div class="reveal" data-reveal>
     <h2 class="eyebrow">(about) <span class="about__now">· (now)</span></h2>
     {#- the (now) statement: the current research question, in the register the tagline used to
-        hold here (plan 2026-09-19, D7). Draft — Raghav edits once the sama paragraph lands. -#}
-    <blockquote class="about__quote">one question, escalating instruments &mdash; what would a city&rsquo;s climate ledger look like if the people inside it could <em>read</em> it, <em>argue</em> with it, and <em>change</em> it?</blockquote>
+        hold here (plan 2026-09-19, D7). Draft. Raghav edits once the sama paragraph lands. -#}
+    <blockquote class="about__quote">what would a city&rsquo;s climate ledger look like if the people inside it could <em>read</em> it, <em>argue</em> with it, and <em>change</em> it?</blockquote>
 
     <p class="about__body">
-      I work from inside the systems I study &mdash; energy, carbon, the street &mdash;
-      building tools that let the people already living there read and reshape their
-      own flows. The practice is single-minded rather than broad: one obsession,
-      pursued through instrumentation, participatory method, and design that stays
-      close to the ground.
+      I work from inside the systems I study, energy, carbon, the street, and build the
+      tools that let the people already living there read and reshape their own flows.
+      Most of the work on this page asks one question at a different scale each time:
+      what does a place need to see about itself before it can change? The methods are
+      fieldwork, participatory mapping, climate inventories and design that stays close
+      to the ground.
     </p>
 
     <button type="button" class="about__expand" aria-expanded="false" aria-controls="about-cv">
@@ -136,28 +137,28 @@ title: Raghav Kohli — invisible systems, made visible
             <div class="cv-head"><span class="cv-role">Co-founder &middot; Perspectives</span><span class="cv-year">2025</span></div>
             <ul class="cv-bullets">
               <li>Built a community platform to 1,000+ members, entirely word of mouth. Designed every touchpoint: onboarding, session frameworks, facilitation methodology.</li>
-              <li>5,000+ stories taught me: a billion humans, a handful of emotions. The most consistent need was finding someone going through the same thing &mdash; built the product around that insight.</li>
-              <li>Used frontier language models throughout &mdash; moving from raw qualitative data to testable product decisions in hours.</li>
+              <li>5,000+ stories taught me: a billion humans, a handful of emotions. The most consistent need was finding someone going through the same thing, and the product was built around that.</li>
+              <li>Used frontier language models throughout, moving from raw qualitative data to testable product decisions in hours.</li>
             </ul>
           </div>
           <div class="cv-item">
             <div class="cv-head"><span class="cv-role">Project Officer, Climate &amp; Energy &middot; ICLEI South Asia</span><span class="cv-year">2024</span></div>
             <ul class="cv-bullets">
               <li>Built climate resilience action plans for 10+ South Asian cities; wrote Loss &amp; Damage policy briefs for international climate negotiations.</li>
-              <li>Led the Urban95 Child-Friendly Cities assessment in Udaipur &mdash; ethnographic fieldwork with children and caregivers, translated into spatial design recommendations.</li>
+              <li>Led the Urban95 Child-Friendly Cities assessment in Udaipur: ethnographic fieldwork with children and caregivers, translated into spatial design recommendations.</li>
             </ul>
           </div>
           <div class="cv-item">
             <div class="cv-head"><span class="cv-role">Climate Fellow &middot; NIUA / MoHUA India</span><span class="cv-year">2023</span></div>
             <ul class="cv-bullets">
-              <li>Co-authored <em>State of Cities</em> &mdash; national policy report across 15+ Indian cities, published by the Ministry of Housing and Urban Affairs.</li>
-              <li>Built a Nature-based Solutions Toolkit of community micro-interventions &mdash; adopted by urban local bodies across India.</li>
+              <li>Co-authored <em>State of Cities</em>, a national policy report across 15+ Indian cities, published by the Ministry of Housing and Urban Affairs.</li>
+              <li>Built a Nature-based Solutions Toolkit of community micro-interventions, adopted by urban local bodies across India.</li>
             </ul>
           </div>
           <div class="cv-item">
             <div class="cv-head"><span class="cv-role">Urban Design Consultant &middot; CCBA Designs</span><span class="cv-year">2021</span></div>
             <ul class="cv-bullets">
-              <li>Designed pedestrian connectivity and last-mile access for Pune Metro station interfaces &mdash; turning infrastructure constraints into human-scale spatial experience.</li>
+              <li>Drew station layouts and a station-area massing study for Pune Metro Line 3, working on how the structure meets the street.</li>
             </ul>
           </div>
         </div>
@@ -167,8 +168,8 @@ title: Raghav Kohli — invisible systems, made visible
           <div class="cv-item">
             <div class="cv-head"><span class="cv-role">Bachelor of Urban Design &middot; CEPT University</span><span class="cv-year">2017&ndash;2022</span></div>
             <ul class="cv-bullets">
-              <li>Student Excellence Award &mdash; <em>Living Heritage</em>: a community co-design process with residents who had never been asked what they wanted.</li>
-              <li><em>Reverse Effekt</em> &mdash; five months embedded across 12 Koliwada fishing communities in Mumbai, surfacing invisible territorial systems through storytelling and deep listening.</li>
+              <li>Student Excellence Award for <em>Living Heritage</em>, a community co-design process with residents who had never been asked what they wanted.</li>
+              <li><em>Reverse Effect</em>, an undergraduate thesis on Mumbai's koliwadas: a semester of fieldwork in Worli Koliwada, reading the fishing village's commons as a model for the city.</li>
             </ul>
           </div>
         </div>
@@ -185,7 +186,7 @@ title: Raghav Kohli — invisible systems, made visible
         <div class="cv-sec">
           <span class="eyebrow">(additional)</span>
           <div class="cv-line"><span class="cv-key">certifications</span><span class="cv-val">IBM Data Science &middot; ESRI GIS for Climate Action &middot; Computational Design Workshop, UPenn</span></div>
-          <div class="cv-line"><span class="cv-key">recognition</span><span class="cv-val">Urban design competition wins &mdash; Blankspace, Project Platypus, Gaudi &middot; Big O&rsquo;s installation, International Literature Festival Ahmedabad</span></div>
+          <div class="cv-line"><span class="cv-key">recognition</span><span class="cv-val">Urban design competition wins: Blankspace, Project Platypus, Gaudi &middot; Big O&rsquo;s installation, International Literature Festival Ahmedabad</span></div>
           <div class="cv-line"><span class="cv-key">leadership</span><span class="cv-val">Founded Urban Informal Talk Series &middot; G20 Urban-20 Forum contributor</span></div>
         </div>
 
@@ -197,7 +198,7 @@ title: Raghav Kohli — invisible systems, made visible
 <section class="index" id="index">
   <div class="index__head reveal" data-reveal>
     <h2 class="eyebrow">(index)</h2>
-    <span class="index__hint">the fuller archive &mdash; hover a line to preview</span>
+    <span class="index__hint">the fuller archive · hover a line to preview</span>
   </div>
   <div class="index__grid reveal" data-reveal>
     <div class="index__list" data-idxlist>
@@ -235,7 +236,7 @@ title: Raghav Kohli — invisible systems, made visible
   </div>
 </footer>
 
-<!-- Project detail — zooms open from the clicked card (progressive enhancement;
+<!-- Project detail. Zooms open from the clicked card (progressive enhancement;
      the card's href still deep-links to /work/<slug>/ when JS is off) -->
 <div class="pv" id="pv" aria-hidden="true">
   <div class="pv__backdrop" data-pv-close></div>

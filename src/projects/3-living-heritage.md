@@ -1,5 +1,5 @@
 ---
-title: living heritage
+title: Living Heritage
 subtitle: Co-design to revive and strengthen collective spatial associations.
 question: what are the invisible boundaries inside a village, and where do they overlap?
 desc: ambli · participatory systems mapping
@@ -7,9 +7,9 @@ topics: [community]
 size: md
 offset: ""
 qsize: 25px
-fig: fig.01 — the village, whole · ambli
+fig: fig.01 · the village, whole · ambli
 role: embedded fieldwork · participatory systems mapping
-period: 2019 — 2020
+period: 2019–2020
 context: ambli · ahmedabad · 14 communities
 status: excellence award
 live: false
@@ -25,21 +25,21 @@ covers:
   - { t: /assets/projects/living-heritage/c3.jpg, f: /assets/projects/living-heritage/c3-f.jpg, w: 1200, h: 1200 }
   - { t: /assets/projects/living-heritage/c4.jpg, f: /assets/projects/living-heritage/c4-f.jpg, w: 1200, h: 1200 }
   - { t: /assets/projects/living-heritage/c5.jpg, f: /assets/projects/living-heritage/c5-f.jpg, w: 1060, h: 1060 }
-lead: A village of 40,000 square metres and fourteen communities, running on a boundary system no map recorded — caste, religion, age, mobility, wealth. This work instrumented that system by asking the residents least able to conceal it, and designed into the pockets where the boundaries overlapped.
-next: rebel bodies rebel cities — six inserts, one walk
-open: { src: /assets/projects/living-heritage/11.jpg, w: 1212, h: 1240, fig: fig.01, cap: "The village, whole — interventions sited only where the boundaries overlapped." }
+lead: "Ambli is an urban village on the western edge of Ahmedabad: fourteen communities inside forty thousand square metres, and a set of boundaries between them that no plan records. Caste, religion, age, mobility and wealth decide where a person walks and where they stop. This studio spent a semester inside the village, most of it with its children, and used their drawings to map those boundaries and the few places where they overlap. The interventions were designed only there."
+next: Rebel Bodies Rebel Cities · six inserts, one walk
+open: { src: /assets/projects/living-heritage/11.jpg, w: 1212, h: 1240, fig: fig.01, cap: "The village, whole. Interventions sited only where the boundaries overlapped." }
 chapters:
   - n: "00"
     name: context
     title: The system nobody had mapped
     plates:
-      - { src: /assets/projects/living-heritage/01.jpg, w: 1800, h: 1356, fig: fig.02, cap: "Ambli's evolution, 1800 to 2019 — the city arriving at the village edge, mapped from residents' accounts." }
+      - { src: /assets/projects/living-heritage/01.jpg, w: 1800, h: 1356, fig: fig.02, cap: "Ambli's evolution, 1800 to 2019. The city arriving at the village edge, mapped from residents' accounts." }
   - n: "01"
     name: embed
     title: Access before research
     strip:
       fig: fig.03–06
-      cap: "Months in the village before proposing anything about it — mostly with children: playing, listening, helping with homework."
+      cap: "Months in the village before proposing anything about it. Mostly with children: playing, listening, helping with homework."
       items:
         - { src: /assets/projects/living-heritage/02.jpg, w: 867, h: 736 }
         - { src: /assets/projects/living-heritage/03.jpg, w: 867, h: 514 }
@@ -47,80 +47,87 @@ chapters:
         - { src: /assets/projects/living-heritage/05.jpg, w: 1553, h: 840 }
   - n: "02"
     name: instrument
-    title: Children as instrument
+    title: Participation as the instrument
     side: left
     plates:
-      - { src: /assets/projects/living-heritage/06.jpg, w: 906, h: 1280, fig: fig.07, cap: "The instrument — roughly two hundred drawings from a transect walk, assembled and categorised. A map of attachment the village had never seen of itself." }
+      - { src: /assets/projects/living-heritage/06.jpg, w: 906, h: 1280, fig: fig.07, cap: "About two hundred drawings from the transect walk, sorted by what they show: the ambli tree, the temple gate, the chabutra, the playground, a lane where a game happens. Together they are a map of what the children of Ambli are attached to." }
   - n: "03"
     name: locate
     title: The mesh, and where it overlaps
     plates:
-      - { src: /assets/projects/living-heritage/09.jpg, w: 1800, h: 1356, fig: fig.08, cap: "Perception map — the boundary mesh and its varying degrees of discernability. Blue: spaces generally liked; red: collectively not." }
-      - { src: /assets/projects/living-heritage/10.jpg, w: 1693, h: 1242, fig: fig.09, cap: "Strategy — attachments overlaid against community boundaries to locate the pockets of overlap." }
+      - { src: /assets/projects/living-heritage/09.jpg, w: 1800, h: 1356, fig: fig.08, cap: "Perception map. The boundary mesh and its varying degrees of discernability. Blue: spaces generally liked; red: collectively not." }
+      - { src: /assets/projects/living-heritage/10.jpg, w: 1693, h: 1242, fig: fig.09, cap: "Strategy. Attachments overlaid against community boundaries to locate the pockets of overlap." }
   - n: "04"
     name: co-design
     title: Designing into the overlap
     side: left
     pair:
-      - { src: /assets/projects/living-heritage/08.jpg, w: 1288, h: 1800, fig: fig.10, cap: "The workshop call — re-imagining Ambli, 22.09.19. For kids, aged 5 and above." }
-      - { src: /assets/projects/living-heritage/07.jpg, w: 1392, h: 1800, fig: fig.11, wide: true, cap: "Co-design — what the children built, in lego, on the sites their own drawings had identified." }
+      - { src: /assets/projects/living-heritage/08.jpg, w: 1288, h: 1800, fig: fig.10, cap: "The workshop call. Re-imagining Ambli, 22.09.19. For kids, aged 5 and above." }
+      - { src: /assets/projects/living-heritage/07.jpg, w: 1392, h: 1800, fig: fig.11, wide: true, cap: "Co-design. What the children built, in lego, on the sites their own drawings had identified." }
   - n: "05"
     name: model
     narrow: true
     plates:
-      - { src: /assets/projects/living-heritage/12.jpg, w: 1591, h: 1060, fig: fig.12, cap: "The model — the village whole, with the interventions built into the pockets where the boundaries overlap." }
-      - { src: /assets/projects/living-heritage/13.jpg, w: 1748, h: 1100, fig: fig.13, cap: "The interventions — play, grow, celebrate together. Shade, water and community; food, learning and sustainability; culture, expression and belonging." }
+      - { src: /assets/projects/living-heritage/12.jpg, w: 1591, h: 1060, fig: fig.12, cap: "The model. The village whole, with the interventions built into the pockets where the boundaries overlap." }
+      - { src: /assets/projects/living-heritage/13.jpg, w: 1748, h: 1100, fig: fig.13, cap: "The interventions. Play, grow, celebrate together. Shade, water and community; food, learning and sustainability; culture, expression and belonging." }
 outcome:
-  built: "Non-programmatic play structures carrying micro-climate functions — greenhouses, water harvesting, study areas, small farms — sited only in the pockets where more than one community's attachments overlapped."
+  built: "Non-programmatic play structures carrying micro-climate functions, greenhouses, water harvesting, study areas, small farms, sited only in the pockets where more than one community's attachments overlapped."
   recognised: "CEPT University Student Excellence Award. The jury: “identified and mapped the invisible and virtual boundaries and thresholds that exist in our communities … through the resultant mesh, he identified pockets of potentiality and greater commonality.”"
-  next: "Return with the same instrument five years on and redraw the mesh: did the pockets hold, and did the children who drew them stay?"
+  next: "Go back five years on, run the same exercise with the next set of children, and redraw the map. Did the pockets hold, and did the children who drew them stay in the village?"
 ---
 
 ## 00 context
 
-Urban villages inside Indian cities do not decay from neglect. They decay from
-**dissociation** — the city grows around them, long-time residents leave, and what
-remains is fabric no one is attached to any more. Ambli, on Ahmedabad's western
-periphery, was midway through that process.
+Urban villages inside Indian cities change fast once the city reaches them. Long-time
+residents move to the new neighbourhoods next door, the care for the old houses and open
+spaces goes with them, and the fabric decays. The studio's concern was the tie between
+residents and village space, and how design might strengthen it. Ambli, on Ahmedabad's
+western periphery, was midway through that transition when we arrived.
 
-The village ran on boundaries that appeared on no plan: caste, religion, age,
-mobility, wealth. Fourteen communities inside forty thousand square metres, each
-with its own territory, its own thresholds, its own degrees of permeability. The
-boundaries were real enough to govern where a person could walk, and invisible
-enough that the village could not discuss them.
+The first weeks were spent watching and listening. People in Ambli live outside their
+houses more than inside them, so the lanes and the open spaces carry most of daily life;
+the narrow lanes are shaded and private, the wide ones less used; men occupy the outer
+parts of the village and women the inner; the temples, more than anything built, hold the
+place together. Underneath all of it ran a set of boundaries that appeared on no plan:
+caste, religion, age, mobility, wealth. Fourteen communities, each with its own territory
+and its own thresholds. Real enough to decide where someone could walk, and not something
+the village would discuss.
 
 ## 01 embed
 
-Months inside the settlement before proposing anything about it — mostly with
-children: playing, listening, helping with homework. Access came before research.
+Access came before research. Months inside the settlement, mostly with the children,
+playing, listening, helping with homework, before proposing anything about it.
 
 ## 02 instrument
 
-The measurement problem was the whole problem: how do you survey a boundary system
-that its own inhabitants will not name? I went to the people with the least
-incentive to conceal it, and the largest stake in the outcome — **the children, who
-hold the decision that actually determines the village's future: stay, or leave.**
+How do you survey a boundary system that its own inhabitants will not name? The answer was
+to ask the people with the least reason to hide it and the most at stake in the outcome.
+Children are clear about what they want from a place, and they are the ones who will decide,
+in a decade, whether to stay in the village or leave it.
 
-A transect walk, and a simple ask: draw the places you like. What came back was a
-dataset — roughly two hundred drawings of a particular *ambli* tree, a chabutra, a
-temple gate, a festival ground, a lane where a game happens. Assembled and
-categorised, the drawings became a map of attachment.
+Play was the way in. Children between five and fifteen were gathered on the common ground
+by the village boundary, given sketch pens and paper, and asked to draw the places around
+the village they liked or disliked, from memory. As the group grew we walked a transect
+through the whole village with them, collecting what they thought of each place in drawings,
+in writing, out loud, and in their faces. About two hundred drawings came back: the ambli
+tree, a chabutra, the temple gate, the festival ground, the gates where they meet friends
+from other communities, a lane where a game happens. Sorted into categories, the drawings
+became a map of attachment.
 
 ## 03 locate
 
-Overlaid against the community boundaries, the drawings revealed the thing I was
-looking for: **the few sites claimed by more than one group.** The mesh has degrees —
-some boundaries are walls, some are habits — and the pockets sit where the softer
-ones cross.
+Laid over the community boundaries, the drawings showed the few places claimed by more
+than one group. The boundaries have degrees: some are walls, some are habits. Where the
+softer ones cross, there is a pocket, and the pockets were where the design could go.
 
 ## 04 co-design
 
-Those pockets got the interventions. Back with lego blocks, letting children build
-in the sites their own drawings had identified. The structures came from them; the
-climate programming came from me — greenhouses, water harvesting, study areas,
-meditation space, small farms, hydroponics.
+Posters went up at ten places around the village, and the children came to the temple hall
+at the entrance. After a set of photographs of the village they were split into teams and
+given Lego to build what they wanted to see in Ambli, on the sites their own drawings had
+identified. The structures came from them; the climate programme came from me: greenhouses,
+rainwater harvesting, study areas, a place to sit quietly, small farms.
 
-The structures were deliberately unprogrammed: they create the occasion for
-different communities to occupy the same ground without prescribing what happens
-there. Identity was never the thing to design. The **associations that produce it**
-were.
+The structures are deliberately left without a fixed use. They make an occasion for
+different communities to be on the same ground without saying what should happen there.
+Identity was never the thing to design; the associations that produce it were.
