@@ -14,7 +14,7 @@ context: iclei south asia · imt-gt jbc malaysia · four local governments
 status: published · 2024
 live: false
 date: 2024-05-02
-weight: 1
+size: L
 thumb: /assets/projects/gcap/00.jpg
 thumbw: 1036
 thumbh: 1200

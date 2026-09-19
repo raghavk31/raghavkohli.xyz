@@ -14,7 +14,7 @@ context: eastern waterfront · mumbai · cept L3 studio
 status: studio
 live: false
 date: 2020-11-15
-weight: 2
+size: M
 thumb: /assets/projects/eco-machine/00.jpg
 thumbw: 1200
 thumbh: 675

@@ -14,7 +14,7 @@ context: ambli · ahmedabad · 14 communities
 status: excellence award
 live: false
 date: 2020-05-01
-weight: 1
+size: L
 thumb: /assets/projects/living-heritage/00.jpg
 thumbw: 1173
 thumbh: 1200

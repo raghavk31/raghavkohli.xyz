@@ -14,7 +14,7 @@ context: sabarmati · north ahmedabad · cept L2 studio
 status: studio
 live: false
 date: 2020-05-01
-weight: 1
+size: L
 thumb: /assets/projects/generative-techniques/00.jpg
 thumbw: 1200
 thumbh: 848

@@ -14,7 +14,7 @@ context: maan darwaza · surat · cept L2 studio
 status: studio
 live: false
 date: 2019-05-01
-weight: 2
+size: M
 thumb: /assets/projects/utopias/00.jpg
 thumbw: 1200
 thumbh: 800

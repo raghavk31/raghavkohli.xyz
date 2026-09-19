@@ -14,7 +14,7 @@ context: bhadra fort precinct · ahmedabad · cept L2 studio
 status: studio
 live: false
 date: 2018-12-01
-weight: 2
+size: M
 thumb: /assets/projects/rebel-bodies/00.jpg
 thumbw: 1200
 thumbh: 886

@@ -9,10 +9,10 @@ module.exports = function (eleventyConfig) {
     const items = collectionApi
       .getFilteredByGlob("src/projects/*.md")
       .sort((a, b) => a.inputPath.localeCompare(b.inputPath));
-    // A homepage card (one with a `weight:`) without `covers:` renders no hover strip (plan 2026-09-19, D6) — say so at
+    // A homepage card (one with a `size:`) without `covers:` renders no hover strip (plan 2026-09-19, D6) — say so at
     // build time so a half-finished card cannot ship unnoticed.
     for (const p of items) {
-      if (p.data.weight && !(p.data.covers && p.data.covers.length)) {
+      if ((p.data.size || p.data.weight) && !(p.data.covers && p.data.covers.length)) {
         console.warn(`[covers] card "${p.data.title}" has no covers — run scripts/prep-covers.py ${p.fileSlug.replace(/^\d+-/, "")}`);
       }
     }
