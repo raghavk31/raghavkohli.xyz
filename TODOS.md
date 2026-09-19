@@ -20,6 +20,19 @@
   site — needs focus trap, Esc, mobile pinch fallback.
 - **Depends on:** chapter template; water urbanism pick folder. Decide when that project is curated.
 
+## Design debt (from /plan-design-review, 2026-09-19 — homepage grid)
+
+### Device QA for the new grid
+- **What:** after `docs/plans/2026-09-19-homepage-grid.md` ships, open the homepage on an iPhone
+  (Safari) and an Android (Chrome): one-column frames follow the D8 rule (landscape native,
+  portrait 4:5 contained), the overlay is static and readable, chips hit 44px, the focus reveal
+  works with an external keyboard on iPad, reduced motion off/on.
+- **Why:** every screenshot in the review came from a headless desktop browser at 1440; touch and
+  focus behaviour is not observable there.
+- **Pros:** the first screen most readers get is checked where they get it. **Cons:** 15 min with
+  two phones; a fix cycle if something fails.
+- **Depends on:** the grid deployed. Do together with the state-of-cities device QA below.
+
 ## Design debt (from /plan-design-review, 2026-09-14 — state of cities)
 
 ### Device QA for the ghost viewer

@@ -3,11 +3,22 @@ layout: base.njk
 title: Raghav Kohli — invisible systems, made visible
 ---
 
-{#- Faithful port of Portfolio.dc.html: composed grid, hover reveals, zoom-open detail -#}
-{% macro card(p, num, col, mt, aspect, pad, thumbs) %}
-<figure class="card reveal" data-reveal
-        data-topics="{{ (p.data.topics or []) | join(' ') }}"
-        style="grid-column:{{ col }};--cmt:{{ mt }}px;--car:{{ aspect }};--cpad:{{ pad }}px;--cq:{{ p.data.qsize or '24px' }};">
+{#- The card: frame (thumb + rotating covers), glass overlay with the research question, floating meta
+    panel, caption, and the strip of covers. Width comes from `weight:` (1 → span 6, two per row;
+    2 → span 4, three per row; 3 → span 3, four per row) — the grid's auto-placement packs rows to
+    twelve columns and wraps a card that would not fit, so packing is free. The frame ratio follows
+    the cover: landscape keeps its own ratio, near-square becomes 1:1, portrait becomes 4:5 with the
+    image contained on the stripe ground — nothing is cropped (plan 2026-09-19, D8/D11). -#}
+{% macro card(p, num) %}
+{%- set w = p.data.weight or 2 -%}
+{%- set span = 6 if w == 1 else (4 if w == 2 else 3) -%}
+{%- set r = (p.data.thumbw / p.data.thumbh) if (p.data.thumbw and p.data.thumbh) else 1.333 -%}
+{%- if r < 0.9 %}{% set car = "0.8" %}{% set contain = true %}
+{%- elif r <= 1.1 %}{% set car = "1" %}{% set contain = true %}
+{%- else %}{% set car = r | round(3) %}{% set contain = (p.data.thumbfit == 'contain') %}{% endif -%}
+<figure class="card w{{ w }}"
+        data-topics="{{ (p.data.topics or []) | join(' ') }}" data-weight="{{ w }}"
+        style="grid-column:span {{ span }};--car:{{ car }};--cpad:{{ 36 if w == 1 else (30 if w == 2 else 22) }}px;--cq:{{ p.data.qsize or '24px' }};">
   <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}">
     <div class="card__meta right">
       <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
@@ -16,10 +27,9 @@ title: Raghav Kohli — invisible systems, made visible
       <div><span class="lbl">(status)</span><span class="val{% if p.data.live %} live{% endif %}">{{ p.data.status }}</span></div>
     </div>
     <div class="card__frame">
-      {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}"{% if p.data.thumbfit == 'contain' %} class="contain"{% endif %} loading="lazy" onerror="this.remove()" />{% endif %}
-      {#- rotating covers (scripts/prep-covers.py): each cK-f.jpg is pre-cropped to this card's --car,
-          so it fills the frame whatever the thumb's fit; main.js initCovers crossfades them -#}
-      {% for c in p.data.covers %}<img class="card__alt" src="{{ c.f }}" alt="" width="{{ c.w }}" height="{{ c.h }}" loading="lazy" data-i="{{ loop.index }}" />{% endfor %}
+      {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}"{% if contain %} class="contain"{% endif %} loading="lazy" onerror="this.remove()" />{% endif %}
+      {#- rotating covers (scripts/prep-covers.py): pre-cropped to the frame ratio; main.js initCovers crossfades them -#}
+      {% for c in p.data.covers %}<img class="card__alt{% if contain %} contain{% endif %}" src="{{ c.f }}" alt="" width="{{ c.w }}" height="{{ c.h }}" loading="lazy" data-i="{{ loop.index }}" />{% endfor %}
       <div class="card__fig">{{ p.data.fig }}</div>
       <div class="card__overlay">
         <span class="card__qlabel">(research question)</span>
@@ -33,77 +43,61 @@ title: Raghav Kohli — invisible systems, made visible
       <span class="desc">{{ p.data.desc }}</span>
       {% if p.data.live %}<span class="status">({{ p.data.status }})</span>{% endif %}
     </figcaption>
-    <div class="card__thumbs">
-      {%- if p.data.covers -%}
-      {% for c in p.data.covers %}<div class="card__thumb" data-i="{{ loop.index }}"><img src="{{ c.t }}" alt="" width="400" height="400" loading="lazy" /></div>{% endfor %}
-      {%- else -%}
-      {% for i in range(0, thumbs) %}<div class="card__thumb"><span>{{ ["a","b","c","d"][i] }}</span></div>{% endfor %}
-      {%- endif -%}
+    {%- if p.data.covers and p.data.covers.length -%}
+    <div class="card__thumbs" aria-hidden="true">
+      {% for c in p.data.covers %}<div class="card__thumb" data-i="{{ loop.index }}" tabindex="-1"><img src="{{ c.t }}" alt="" width="400" height="400" loading="lazy" /></div>{% endfor %}
     </div>
+    {%- endif %}
   </a>
 </figure>
 {% endmacro %}
 
+{#- A group break: a 12-column hairline with the (label) under it. Hidden while a chip filter is
+    active (main.js adds .filtering to the grid). -#}
+{% macro brk(label) %}
+<div class="work__break" role="presentation"><span class="eyebrow">{{ label }}</span></div>
+{% endmacro %}
+
 {%- set P = collections.projects -%}
-{%- set livingheritage = P | find("title", "living heritage") -%}
-{%- set soc = P | find("title", "state of cities") -%}
-{%- set oto = P | find("title", "one is to one") -%}
-{%- set rbrc = P | find("title", "rebel bodies rebel cities") -%}
-{%- set amd = P | find("title", "ahmedabad climate action plan") -%}
-{%- set vad = P | find("title", "vadodara climate action plan") -%}
-{%- set sur = P | find("title", "surat climate action plan") -%}
-{%- set wu = P | find("title", "water urbanism") -%}
-{%- set gen = P | find("title", "generative techniques") -%}
-{%- set eco = P | find("title", "eco-machine") -%}
-{%- set uto = P | find("title", "utopias to heterotopias") -%}
-{%- set pm = P | find("title", "pune metro") -%}
-{%- set kw = P | find("title", "koliwadas") -%}
-{%- set ugp = P | find("title", "urban greening policy") -%}
-{%- set perf = P | find("title", "urban performances") -%}
-{%- set mj = P | find("title", "exploring majuli") -%}
-{%- set gcap = P | find("title", "malaysia gcap") -%}
+{#- Groups by method (plan 2026-09-19, D4). Order inside a group = the media lab plan's order. -#}
+{%- set groups = [
+  ["(plans & policy)",          ["malaysia gcap", "ahmedabad climate action plan", "state of cities", "urban greening policy", "vadodara climate action plan", "surat climate action plan"]],
+  ["(participatory)",           ["koliwadas", "living heritage", "rebel bodies rebel cities", "urban performances"]],
+  ["(computational & spatial)", ["generative techniques", "one is to one", "water urbanism", "eco-machine"]],
+  ["(early work)",              ["utopias to heterotopias", "exploring majuli", "pune metro"]]
+] -%}
 
 <h1 class="vh">Raghav Kohli — making invisible urban systems visible, legible, and participatory</h1>
 
 <section class="work" id="work">
   <div class="work__head reveal" data-reveal>
     <h2 class="eyebrow">(selected work)</h2>
-    <!-- keyword chips injected by main.js from each card's data-topics -->
-    <div class="work__filters" data-filters aria-label="filter by keyword"></div>
+    <div class="work__lead">
+      <p class="work__tag">making invisible urban systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</p>
+      <!-- keyword chips injected by main.js from each card's data-topics -->
+      <div class="work__filters" data-filters aria-label="filter by keyword"></div>
+    </div>
   </div>
 
-  <!-- 12-column grid. Per-card grid-column span + --cmt offset reproduce the
-       composed, floating landing layout; the filter reorders + resizes within
-       this one container (it flips to flex while a chip is active). -->
+  <!-- 12-column grid. Card width = weight (span 6 / 4 / 3); rows pack themselves. A chip filter
+       re-weights every card by its relevance to the tag and repacks (main.js). -->
   <div class="work__grid" data-grid>
-    {# Order follows docs/plans/2026-09-16-media-lab-site-plan.md §1 with the missing cards (resilience ai,
-       gcap, climate code, perspectives) skipped: the professional books first, then the participatory and
-       computational studio work, then the rest. Each --car matches its cover image; left/right alternate;
-       four-column cards (2/6, 9/13) keep the hover panel clear of the neighbour at ≤1440. #}
-    {{ card(gcap, "01", "1 / 6", 70, "0.863", 30, 3) }}
-    {{ card(amd, "02", "8 / 13", 0, "0.656", 30, 3) }}
-    {{ card(vad, "03", "1 / 6", 40, "1.616", 30, 3) }}
-    {{ card(sur, "04", "9 / 13", 120, "0.708", 30, 3) }}
-    {{ card(soc, "05", "2 / 6", 30, "1.896", 20, 3) }}
-    {{ card(ugp, "06", "9 / 13", 150, "0.707", 30, 3) }}
-    {{ card(kw, "07", "2 / 6", 30, "0.707", 30, 3) }}
-    {{ card(livingheritage, "08", "7 / 13", 130, "1/1", 36, 4) }}
-    {{ card(rbrc, "09", "1 / 6", 40, "1.354", 30, 3) }}
-    {{ card(gen, "10", "8 / 13", 150, "1.415", 30, 3) }}
-    {{ card(oto, "11", "2 / 6", 40, "0.923", 30, 3) }}
-    {{ card(wu, "12", "8 / 13", 160, "1.474", 30, 3) }}
-    {{ card(eco, "13", "1 / 6", 40, "1.778", 30, 3) }}
-    {{ card(uto, "14", "8 / 13", 150, "1.5", 30, 3) }}
-    {{ card(perf, "15", "2 / 6", 40, "1", 30, 3) }}
-    {{ card(mj, "16", "8 / 13", 150, "1.362", 30, 3) }}
-    {{ card(pm, "17", "1 / 6", 40, "1.613", 30, 3) }}
+    {%- set n = 0 -%}
+    {%- for g in groups %}
+    {{ brk(g[0]) }}
+    {%- for title in g[1] %}{% set n = n + 1 %}
+    {{ card(P | find("title", title), ("0" + n) if n < 10 else n) }}
+    {%- endfor %}
+    {%- endfor %}
   </div>
 </section>
 
 <section class="about" id="about">
   <div class="reveal" data-reveal>
-    <h2 class="eyebrow">(about)</h2>
-    <blockquote class="about__quote">making invisible systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</blockquote>
+    <h2 class="eyebrow">(about) <span class="about__now">· (now)</span></h2>
+    {#- the (now) statement: the current research question, in the register the tagline used to
+        hold here (plan 2026-09-19, D7). Draft — Raghav edits once the sama paragraph lands. -#}
+    <blockquote class="about__quote">one question, escalating instruments &mdash; what would a city&rsquo;s climate ledger look like if the people inside it could <em>read</em> it, <em>argue</em> with it, and <em>change</em> it?</blockquote>
 
     <p class="about__body">
       I work from inside the systems I study &mdash; energy, carbon, the street &mdash;

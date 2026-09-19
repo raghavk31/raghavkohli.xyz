@@ -14,14 +14,17 @@ context: ahmedabad · capacities · iclei south asia
 status: published · july 2023
 live: false
 date: 2023-07-01
+weight: 1
 thumb: /assets/projects/ahmedabad-crcap/00.jpg
+thumbw: 787
+thumbh: 1200
 thumbfit: contain
 covers:
-  - { t: /assets/projects/ahmedabad-crcap/c1.jpg, f: /assets/projects/ahmedabad-crcap/c1-f.jpg, w: 787, h: 1200 }
-  - { t: /assets/projects/ahmedabad-crcap/c2.jpg, f: /assets/projects/ahmedabad-crcap/c2-f.jpg, w: 787, h: 1200 }
-  - { t: /assets/projects/ahmedabad-crcap/c3.jpg, f: /assets/projects/ahmedabad-crcap/c3-f.jpg, w: 787, h: 1200 }
-  - { t: /assets/projects/ahmedabad-crcap/c4.jpg, f: /assets/projects/ahmedabad-crcap/c4-f.jpg, w: 787, h: 1200 }
-  - { t: /assets/projects/ahmedabad-crcap/c5.jpg, f: /assets/projects/ahmedabad-crcap/c5-f.jpg, w: 787, h: 1200 }
+  - { t: /assets/projects/ahmedabad-crcap/c1.jpg, f: /assets/projects/ahmedabad-crcap/c1-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/ahmedabad-crcap/c2.jpg, f: /assets/projects/ahmedabad-crcap/c2-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/ahmedabad-crcap/c3.jpg, f: /assets/projects/ahmedabad-crcap/c3-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/ahmedabad-crcap/c4.jpg, f: /assets/projects/ahmedabad-crcap/c4-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/ahmedabad-crcap/c5.jpg, f: /assets/projects/ahmedabad-crcap/c5-f.jpg, w: 900, h: 1125 }
 lead: Ahmedabad's Climate Resilient City Action Plan is a 200-page instrument built for one municipality — a ward-level audit of how the city works and where it breaks, a greenhouse-gas inventory that puts a number on it, and a pathway from that number to net zero by 2070, sector by sector, action by action. Published by the Ahmedabad Municipal Corporation with the Government of Gujarat under CapaCities (SDC), with ICLEI South Asia, South Pole, econcept and NIUA. I co-authored the sector strategies and designed the book.
 # routing deferred — see TODOS.md "Reading order"; placeholder label until decided
 next: state of cities — fifteen cities, one instrument

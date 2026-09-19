@@ -14,15 +14,16 @@ context: iclei south asia · imt-gt jbc malaysia · four local governments
 status: published · 2024
 live: false
 date: 2024-05-02
+weight: 1
 thumb: /assets/projects/gcap/00.jpg
 thumbw: 1036
 thumbh: 1200
 covers:
-  - { t: /assets/projects/gcap/c1.jpg, f: /assets/projects/gcap/c1-f.jpg, w: 1036, h: 1200 }
-  - { t: /assets/projects/gcap/c2.jpg, f: /assets/projects/gcap/c2-f.jpg, w: 1035, h: 1200 }
-  - { t: /assets/projects/gcap/c3.jpg, f: /assets/projects/gcap/c3-f.jpg, w: 1035, h: 1200 }
-  - { t: /assets/projects/gcap/c4.jpg, f: /assets/projects/gcap/c4-f.jpg, w: 1036, h: 1200 }
-  - { t: /assets/projects/gcap/c5.jpg, f: /assets/projects/gcap/c5-f.jpg, w: 1036, h: 1200 }
+  - { t: /assets/projects/gcap/c1.jpg, f: /assets/projects/gcap/c1-f.jpg, w: 960, h: 1200 }
+  - { t: /assets/projects/gcap/c2.jpg, f: /assets/projects/gcap/c2-f.jpg, w: 960, h: 1200 }
+  - { t: /assets/projects/gcap/c3.jpg, f: /assets/projects/gcap/c3-f.jpg, w: 960, h: 1200 }
+  - { t: /assets/projects/gcap/c4.jpg, f: /assets/projects/gcap/c4-f.jpg, w: 960, h: 1200 }
+  - { t: /assets/projects/gcap/c5.jpg, f: /assets/projects/gcap/c5-f.jpg, w: 960, h: 1200 }
 lead: "A Green City Action Plan is a city's first climate ledger: what it is, what it is exposed to, what it emits, and what it should build next. ICLEI South Asia prepared four of them for the Indonesia–Malaysia–Thailand Growth Triangle — Kota Bharu on the east coast, Langkawi and Penang Island off the west, Kuching's Padawan council in Sarawak — on one method, so that a state secretariat can read them side by side. Each runs the same four sections: a city profile built in GIS, a climate risk and vulnerability assessment, a GPC-compliant GHG inventory for 2017–2022, and the priority sectors and investment projects that follow. My work ran across all four: the maps, the inventory, the sector diagrams that open each city's services, and the books themselves."
 next: ahmedabad climate action plan — the same instrument, first city
 open: { src: /assets/projects/gcap/01.jpg, w: 1800, h: 1272, fig: fig.01, cap: "Penang Island — land surface temperature, 2017 and 2022. The island runs 20–34 °C at the surface; the hottest ground is George Town and the Bayan Lepas industrial zone, the coolest the forested hill at its centre." }

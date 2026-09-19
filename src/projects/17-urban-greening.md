@@ -14,14 +14,15 @@ context: amdavad municipal corporation · iclei south asia · studio commons
 status: policy document · 2025
 live: false
 date: 2025-02-19
+weight: 1
 thumb: /assets/projects/urban-greening/00.jpg
 thumbw: 848
 thumbh: 1200
 covers:
-  - { t: /assets/projects/urban-greening/c1.jpg, f: /assets/projects/urban-greening/c1-f.jpg, w: 848, h: 1200 }
-  - { t: /assets/projects/urban-greening/c2.jpg, f: /assets/projects/urban-greening/c2-f.jpg, w: 848, h: 1200 }
-  - { t: /assets/projects/urban-greening/c3.jpg, f: /assets/projects/urban-greening/c3-f.jpg, w: 848, h: 1200 }
-  - { t: /assets/projects/urban-greening/c4.jpg, f: /assets/projects/urban-greening/c4-f.jpg, w: 848, h: 1200 }
+  - { t: /assets/projects/urban-greening/c1.jpg, f: /assets/projects/urban-greening/c1-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/urban-greening/c2.jpg, f: /assets/projects/urban-greening/c2-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/urban-greening/c3.jpg, f: /assets/projects/urban-greening/c3-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/urban-greening/c4.jpg, f: /assets/projects/urban-greening/c4-f.jpg, w: 900, h: 1125 }
 lead: "Ahmedabad has about 60 square kilometres of tree cover, 12.5 per cent of the city, and 8.4 square metres of green per person against the WHO's nine. The climate action plan committed the corporation to closing that gap; the Urban Green Policy 2030 is the instrument. It covers what a greening policy usually covers — avenues, parks, private greens, heritage trees, pruning, penalties, a fund — and one thing most do not: who gets the green, ward by ward. Studio Commons designed the book for ICLEI South Asia and the Amdavad Municipal Corporation: the maps, the infographics, and an illustrated city that runs under every chapter so the policy reads as a place rather than a rulebook."
 next: state of cities — fifteen cities, one instrument
 open: { src: /assets/projects/urban-greening/01.jpg, w: 1800, h: 1273, fig: fig.01, cap: "Urban Green Policy 2030 — the objectives, the international and national commitments it aligns with, the challenges it names, and the illustrated city that carries the reader through the book." }

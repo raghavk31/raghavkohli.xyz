@@ -14,13 +14,16 @@ context: cept campus · ahmedabad · five materials [confirm]
 status: built
 live: false
 date: 2018-04-01
+weight: 2
 thumb: /assets/projects/one-is-to-one/00.jpg
+thumbw: 1108
+thumbh: 1200
 thumbfit: contain
 covers:
-  - { t: /assets/projects/one-is-to-one/c1.jpg, f: /assets/projects/one-is-to-one/c1-f.jpg, w: 1107, h: 1200 }
-  - { t: /assets/projects/one-is-to-one/c2.jpg, f: /assets/projects/one-is-to-one/c2-f.jpg, w: 902, h: 977 }
-  - { t: /assets/projects/one-is-to-one/c3.jpg, f: /assets/projects/one-is-to-one/c3-f.jpg, w: 1107, h: 1200 }
-  - { t: /assets/projects/one-is-to-one/c4.jpg, f: /assets/projects/one-is-to-one/c4-f.jpg, w: 1108, h: 1200 }
+  - { t: /assets/projects/one-is-to-one/c1.jpg, f: /assets/projects/one-is-to-one/c1-f.jpg, w: 1200, h: 1200 }
+  - { t: /assets/projects/one-is-to-one/c2.jpg, f: /assets/projects/one-is-to-one/c2-f.jpg, w: 902, h: 902 }
+  - { t: /assets/projects/one-is-to-one/c3.jpg, f: /assets/projects/one-is-to-one/c3-f.jpg, w: 1200, h: 1200 }
+  - { t: /assets/projects/one-is-to-one/c4.jpg, f: /assets/projects/one-is-to-one/c4-f.jpg, w: 1200, h: 1200 }
 lead: A one-to-one studio at CEPT — a small tower drawn in five material systems and then built by the people who drew it. The drawing named bamboo, concrete, metal, brick and wood as if they were interchangeable layers. The site disagreed at every joint. [confirm]
 # routing deferred — see TODOS.md "Reading order"; placeholder label until decided
 next: ahmedabad climate action plan — the same instrument, first city

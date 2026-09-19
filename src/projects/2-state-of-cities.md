@@ -14,6 +14,7 @@ context: niua · c-cube · fifteen indian cities
 status: published
 live: false
 date: 2023-07-01
+weight: 1
 thumb: /assets/projects/state-of-cities/00.jpg
 thumbw: 1200
 thumbh: 633

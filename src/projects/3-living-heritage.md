@@ -14,11 +14,14 @@ context: ambli · ahmedabad · 14 communities
 status: excellence award
 live: false
 date: 2020-05-01
+weight: 1
 thumb: /assets/projects/living-heritage/00.jpg
+thumbw: 1173
+thumbh: 1200
 thumbfit: contain
 covers:
-  - { t: /assets/projects/living-heritage/c1.jpg, f: /assets/projects/living-heritage/c1-f.jpg, w: 433, h: 433 }
-  - { t: /assets/projects/living-heritage/c2.jpg, f: /assets/projects/living-heritage/c2-f.jpg, w: 776, h: 776 }
+  - { t: /assets/projects/living-heritage/c1.jpg, f: /assets/projects/living-heritage/c1-f.jpg, w: 514, h: 514 }
+  - { t: /assets/projects/living-heritage/c2.jpg, f: /assets/projects/living-heritage/c2-f.jpg, w: 840, h: 840 }
   - { t: /assets/projects/living-heritage/c3.jpg, f: /assets/projects/living-heritage/c3-f.jpg, w: 1200, h: 1200 }
   - { t: /assets/projects/living-heritage/c4.jpg, f: /assets/projects/living-heritage/c4-f.jpg, w: 1200, h: 1200 }
   - { t: /assets/projects/living-heritage/c5.jpg, f: /assets/projects/living-heritage/c5-f.jpg, w: 1060, h: 1060 }

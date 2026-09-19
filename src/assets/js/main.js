@@ -61,7 +61,12 @@
       }
       squares.forEach(function (sq, k) {
         sq.addEventListener("mouseenter", function () { show(k + 1); });
+        sq.addEventListener("focus", function () { show(k + 1); });
       });
+      // the squares join the tab order only while the card holds focus (D12), so a keyboard
+      // reader tabs card → its covers → next card, not through every square on the page
+      card.addEventListener("focusin", function () { squares.forEach(function (sq) { sq.tabIndex = 0; }); });
+      card.addEventListener("focusout", function (e) { if (!card.contains(e.relatedTarget)) squares.forEach(function (sq) { sq.tabIndex = -1; }); });
       card.addEventListener("mouseenter", function () { held = true; sync(); });
       card.addEventListener("mouseleave", function () { held = false; sync(); });
       document.addEventListener("visibilitychange", function () { sync(); });
@@ -116,14 +121,26 @@
       // FLIP: measure, mutate, invert, play — so the reflow animates smoothly
       var first = cards.map(function (c) { return c.getBoundingClientRect(); });
 
+      // relevance re-weights the grid: the tag's position in a card's ordered topics decides its
+      // width — first topic → two per row, a later topic → three, absent → four and receded.
+      // Without a topic every card returns to its resting weight (data-weight).
+      var SPAN = { 1: 6, 2: 4, 3: 3 };
       if (topic) {
         grid.classList.add("filtering");
         cards.forEach(function (c) {
-          c.classList.toggle("match", topicsOf(c).indexOf(topic) !== -1);
+          var k = topicsOf(c).indexOf(topic);
+          var w = k === 0 ? 1 : (k > 0 ? 2 : 3);
+          c.classList.toggle("match", k !== -1);
+          c.style.gridColumn = "span " + SPAN[w];
+          c.style.order = w - 1; // primary matches first, then secondary, then the rest
         });
       } else {
         grid.classList.remove("filtering");
-        cards.forEach(function (c) { c.classList.remove("match"); });
+        cards.forEach(function (c) {
+          c.classList.remove("match");
+          c.style.gridColumn = "span " + SPAN[c.getAttribute("data-weight") || 2];
+          c.style.order = "";
+        });
       }
 
       cards.forEach(function (c, i) {

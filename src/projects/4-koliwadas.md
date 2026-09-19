@@ -14,13 +14,16 @@ context: worli koliwada · mumbai · cept undergraduate thesis
 status: thesis
 live: false
 date: 2022-05-16
+weight: 1
 thumb: /assets/projects/koliwadas/00.jpg
+thumbw: 848
+thumbh: 1200
 thumbfit: contain
 covers:
-  - { t: /assets/projects/koliwadas/c1.jpg, f: /assets/projects/koliwadas/c1-f.jpg, w: 834, h: 1179 }
-  - { t: /assets/projects/koliwadas/c2.jpg, f: /assets/projects/koliwadas/c2-f.jpg, w: 801, h: 1133 }
-  - { t: /assets/projects/koliwadas/c3.jpg, f: /assets/projects/koliwadas/c3-f.jpg, w: 849, h: 1200 }
-  - { t: /assets/projects/koliwadas/c4.jpg, f: /assets/projects/koliwadas/c4-f.jpg, w: 798, h: 1129 }
+  - { t: /assets/projects/koliwadas/c1.jpg, f: /assets/projects/koliwadas/c1-f.jpg, w: 943, h: 1179 }
+  - { t: /assets/projects/koliwadas/c2.jpg, f: /assets/projects/koliwadas/c2-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/koliwadas/c3.jpg, f: /assets/projects/koliwadas/c3-f.jpg, w: 960, h: 1200 }
+  - { t: /assets/projects/koliwadas/c4.jpg, f: /assets/projects/koliwadas/c4-f.jpg, w: 903, h: 1129 }
 lead: "The Kolis are Mumbai's first inhabitants — artisanal fishers who have lived on its shore for five hundred years and are now hemmed in by reclamation, a coastal road, coastal-zone rules written for someone else, and a development plan that reads their villages as slum. The thesis asks the question the other way round. Not how to redevelop a koliwada, but what the city could learn from one: how a community modifies, develops and shares its common resources without anyone planning it — open source urbanism, practised for centuries. After walking villages on both coasts, it settles on Worli Koliwada, eight hundred years old, at the foot of the sea link, and reads its commons as a manual."
 next: perspectives — participatory systems design
 open: { src: /assets/projects/koliwadas/01.jpg, w: 1800, h: 1179, fig: fig.01, cap: "A day at the Worli tip — 4 am the boats go out; sorting, cleaning, drying and selling through the morning; net repair, the market, play, and the boats back by evening. One open space, twenty hours of use." }

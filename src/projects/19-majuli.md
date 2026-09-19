@@ -14,6 +14,7 @@ context: garmur · majuli island · assam · cept winter school
 status: documentation
 live: false
 date: 2017-12-27
+weight: 3
 thumb: /assets/projects/majuli/00.jpg
 thumbw: 1200
 thumbh: 881

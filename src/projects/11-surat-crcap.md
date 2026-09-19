@@ -14,13 +14,16 @@ context: surat · c40 cities · iclei south asia
 status: published · june 2025
 live: false
 date: 2025-06-01
+weight: 2
 thumb: /assets/projects/surat-crcap/00.jpg
+thumbw: 849
+thumbh: 1200
 thumbfit: contain
 covers:
-  - { t: /assets/projects/surat-crcap/c1.jpg, f: /assets/projects/surat-crcap/c1-f.jpg, w: 850, h: 1200 }
-  - { t: /assets/projects/surat-crcap/c2.jpg, f: /assets/projects/surat-crcap/c2-f.jpg, w: 850, h: 1200 }
-  - { t: /assets/projects/surat-crcap/c3.jpg, f: /assets/projects/surat-crcap/c3-f.jpg, w: 850, h: 1200 }
-  - { t: /assets/projects/surat-crcap/c4.jpg, f: /assets/projects/surat-crcap/c4-f.jpg, w: 850, h: 1200 }
+  - { t: /assets/projects/surat-crcap/c1.jpg, f: /assets/projects/surat-crcap/c1-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/surat-crcap/c2.jpg, f: /assets/projects/surat-crcap/c2-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/surat-crcap/c3.jpg, f: /assets/projects/surat-crcap/c3-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/surat-crcap/c4.jpg, f: /assets/projects/surat-crcap/c4-f.jpg, w: 900, h: 1125 }
 lead: Surat's Net-Zero Climate Resilient City Action Plan is the most ambitious of the three Gujarat plans — the same ward-level audit, the same greenhouse-gas inventory, but a pathway that reaches net zero in 2047, twenty-three years ahead of the national target. Published by the Surat Municipal Corporation with C40 Cities and ICLEI South Asia. I co-authored the sector strategies and designed the book.
 # routing deferred — see TODOS.md "Reading order"; placeholder label until decided
 next: ahmedabad climate action plan — the same instrument, first city

@@ -25,25 +25,25 @@ SQUARE = 400
 FRAME = 1200
 QUALITY = 80
 
-# slug: (frame ratio w/h — the card's --car — , picks)
+# slug: (frame ratio w/h — the card's --car: landscape = the thumb's own ratio, near-square = 1, portrait = 0.8 (4:5, contained) — , picks)
 COVERS = {
-    "ahmedabad-crcap":       (0.656, ["17:r", "13:r", "09:r", "30:l", "54:l"]),
+    "ahmedabad-crcap":       (0.8, ["17:r", "13:r", "09:r", "30:l", "54:l"]),
     "vadodara-crcap":        (1.616, ["02:r", "10:l", "10:r", "23:r", "36:l"]),
-    "surat-crcap":           (0.708, ["12:l", "26:l", "02:r", "13:r"]),
+    "surat-crcap":           (0.8, ["12:l", "26:l", "02:r", "13:r"]),
     "state-of-cities":       (1.896, ["02", "06:l", "21", "23"]),
     "living-heritage":       (1.0,   ["03", "05", "07", "09", "12"]),
     "rebel-bodies":          (1.354, ["03", "06", "08", "11", "20"]),
-    "one-is-to-one":         (0.923, ["04", "06", "12", "14"]),
+    "one-is-to-one":         (1.0, ["04", "06", "12", "14"]),
     "water-urbanism":        (1.474, ["03", "09", "13", "18", "21"]),
     "generative-techniques": (1.415, ["05", "08", "15", "19:l", "25"]),
     "eco-machine":           (1.778, ["04", "08", "12", "14", "16"]),
     "utopias":               (1.5,   ["03", "10", "14", "17", "19"]),
     "pune-metro":            (1.613, ["03", "06", "08", "14", "16"]),
-    "koliwadas":             (0.707, ["01", "07:r", "11", "24"]),
-    "urban-greening":        (0.707, ["03:r", "04:r", "09:l", "25:l"]),
+    "koliwadas":             (0.8, ["01", "07:r", "11", "24"]),
+    "urban-greening":        (0.8, ["03:r", "04:r", "09:l", "25:l"]),
     "urban-performances":    (1.0,   ["04", "06", "07", "09"]),
     "majuli":                (1.362, ["02", "03", "04", "06"]),
-    "gcap":                  (0.863, ["01", "12", "18", "26", "29"]),
+    "gcap":                  (0.8, ["01", "12", "18", "26", "29"]),
 }
 
 
