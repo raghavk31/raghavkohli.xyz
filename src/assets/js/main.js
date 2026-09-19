@@ -102,6 +102,15 @@
   var filterBar = document.querySelector("[data-filters]");
   if (grid && filterBar) {
     var cards = Array.prototype.slice.call(grid.querySelectorAll(".card"));
+    // the authored structure: each group break followed by its cards, in resting order
+    var resting = [];
+    Array.prototype.forEach.call(Array.prototype.slice.call(grid.children), function (el) {
+      if (el.classList.contains("work__break")) resting.push({ brk: el, cards: [] });
+      else if (el.classList.contains("work__row")) {
+        if (!resting.length) resting.push({ brk: null, cards: [] });
+        Array.prototype.push.apply(resting[resting.length - 1].cards, Array.prototype.slice.call(el.children));
+      }
+    });
 
     // union of every card's topics, in first-seen order
     var topics = [];
@@ -125,22 +134,37 @@
       // width — first topic → two per row, a later topic → three, absent → four and receded.
       // Without a topic every card returns to its resting weight (data-weight).
       var SPAN = { 1: 6, 2: 4, 3: 3 };
+      function pack(list, into) {
+        // the same greedy packing as index.njk: rows of up to twelve units, cards grow by --span
+        var row = null, fill = 0;
+        list.forEach(function (c) {
+          var span = +c.style.getPropertyValue("--span") || 4;
+          if (!row || fill + span > 12) { row = document.createElement("div"); row.className = "work__row"; into.appendChild(row); fill = 0; }
+          row.appendChild(c); fill += span;
+        });
+      }
+      grid.querySelectorAll(".work__row, .work__rest").forEach(function (r) { r.remove(); });
       if (topic) {
         grid.classList.add("filtering");
+        var primary = [], secondary = [], rest = [];
         cards.forEach(function (c) {
           var k = topicsOf(c).indexOf(topic);
           var w = k === 0 ? 1 : (k > 0 ? 2 : 3);
           c.classList.toggle("match", k !== -1);
-          c.style.gridColumn = "span " + SPAN[w];
-          c.style.order = w - 1; // primary matches first, then secondary, then the rest
+          c.style.setProperty("--span", SPAN[w]);
+          (k === 0 ? primary : (k > 0 ? secondary : rest)).push(c);
         });
+        // matches first (primary, then secondary), the rest after; the breaks stay in place, hidden
+        pack(primary.concat(secondary), grid);
+        var restWrap = document.createElement("div"); restWrap.className = "work__rest"; pack(rest, restWrap); grid.appendChild(restWrap);
       } else {
         grid.classList.remove("filtering");
         cards.forEach(function (c) {
           c.classList.remove("match");
-          c.style.gridColumn = "span " + SPAN[c.getAttribute("data-weight") || 2];
-          c.style.order = "";
+          c.style.setProperty("--span", SPAN[c.getAttribute("data-weight") || 2]);
         });
+        // restore the authored structure: each break, then its cards repacked
+        resting.forEach(function (seg) { if (seg.brk) grid.appendChild(seg.brk); pack(seg.cards, grid); });
       }
 
       cards.forEach(function (c, i) {

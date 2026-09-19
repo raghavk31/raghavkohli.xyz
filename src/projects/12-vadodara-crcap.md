@@ -14,7 +14,7 @@ context: vadodara · capacities · iclei south asia
 status: published · august 2024
 live: false
 date: 2024-08-01
-card: M
+card: L
 thumb: /assets/projects/vadodara-crcap/00.jpg
 thumbw: 811
 thumbh: 502

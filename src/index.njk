@@ -20,7 +20,7 @@ title: Raghav Kohli — invisible systems, made visible
 {%- else %}{% set car = r | round(3) %}{% set contain = (p.data.thumbfit == 'contain') %}{% endif -%}
 <figure class="card w{{ w }}"
         data-topics="{{ (p.data.topics or []) | join(' ') }}" data-weight="{{ w }}"
-        style="grid-column:span {{ span }};--car:{{ car }};--cpad:{{ 36 if w == 1 else (30 if w == 2 else 22) }}px;--cq:{{ p.data.qsize or '24px' }};">
+        style="--span:{{ span }};--car:{{ car }};--cpad:{{ 36 if w == 1 else (30 if w == 2 else 22) }}px;--cq:{{ p.data.qsize or '24px' }};">
   <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}">
     <div class="card__meta right">
       <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
@@ -87,8 +87,19 @@ title: Raghav Kohli — invisible systems, made visible
     {%- set n = 0 -%}
     {%- for g in groups %}
     {{ brk(g[0]) }}
-    {%- for title in g[1] %}{% set n = n + 1 %}
-    {{ card(P | find("title", title), ("0" + n) if n < 10 else n) }}
+    {#- rows: pack cards greedily to twelve column-units; a card that would overflow starts a new
+        row. Inside a row the cards stretch in proportion (flex-grow = span), so every row fills the
+        width and a size is read against its neighbours. main.js repacks the same way when filtering. -#}
+    {%- set fill = 0 -%}
+    {%- for title in g[1] %}
+      {%- set p = P | find("title", title) -%}
+      {%- set sz = (p.data.card or '') | upper -%}
+      {%- set span = 6 if sz == 'L' else (3 if sz == 'S' else 4) -%}
+      {%- if loop.first %}<div class="work__row">{% elif fill + span > 12 %}</div><div class="work__row">{% set fill = 0 %}{% endif -%}
+      {%- set fill = fill + span -%}
+      {%- set n = n + 1 -%}
+      {{ card(p, ("0" + n) if n < 10 else n) }}
+      {%- if loop.last %}</div>{% endif -%}
     {%- endfor %}
     {%- endfor %}
   </div>

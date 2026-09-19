@@ -14,7 +14,7 @@ context: rajgir · nalanda · bihar · cept L3 studio
 status: studio
 live: false
 date: 2021-12-01
-card: M
+card: L
 thumb: /assets/projects/water-urbanism/00.jpg
 thumbw: 1200
 thumbh: 814

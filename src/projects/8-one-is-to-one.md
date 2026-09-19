@@ -14,7 +14,7 @@ context: cept campus · ahmedabad · five materials [confirm]
 status: built
 live: false
 date: 2018-04-01
-card: M
+card: S
 thumb: /assets/projects/one-is-to-one/00.jpg
 thumbw: 1108
 thumbh: 1200
