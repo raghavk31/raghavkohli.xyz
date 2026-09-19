@@ -24,7 +24,7 @@ layout: base.njk
 {% macro tiles(t) %}
 <figure class="plate">
   {%- set f = t.items[0] -%}
-  <div class="tiles" style="--tar:{{ (t.ar or ((f.tw or f.w) / (f.th or f.h))) | round(3) }}{% if t.min %};--tmin:{{ t.min }}px{% endif %}">{% for it in t.items %}<div{% if it.cap %} data-cap="{{ it.cap }}"{% endif %}><img src="{{ it.tile or it.src }}" data-full="{{ it.src }}" data-w="{{ it.w }}" data-h="{{ it.h }}" alt="{{ it.alt or it.cap or '' }}"{% if it.tw and it.th %} width="{{ it.tw }}" height="{{ it.th }}"{% elif it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
+  <div class="tiles{% if t.fit == 'contain' %} tiles--contain{% endif %}" style="--tar:{{ (t.ar or ((f.tw or f.w) / (f.th or f.h))) | round(3) }}{% if t.min %};--tmin:{{ t.min }}px{% endif %}">{% for it in t.items %}<div{% if it.cap %} data-cap="{{ it.cap }}"{% endif %}><img src="{{ it.tile or it.src }}" data-full="{{ it.src }}" data-w="{{ it.w }}" data-h="{{ it.h }}" alt="{{ it.alt or it.cap or '' }}"{% if it.tw and it.th %} width="{{ it.tw }}" height="{{ it.th }}"{% elif it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
   {% if t.fig or t.cap %}<figcaption class="plate__cap">{% if t.fig %}<span class="n">{{ t.fig }}</span>{% endif %}{% if t.cap %}<span>{{ t.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
 {% endmacro %}
@@ -83,7 +83,7 @@ layout: base.njk
   {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
   {% set hasPlates = c.plates or c.pair or c.strip or c.carousel %}
   {% set hasText = body or c.title %}
-  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
     {% if c.carousel %}
     {#- carousel chapters: eyebrow, stat row, any full-width plates, the carousel, then text | ledger -#}
     <span class="chap__eyebrow chap__eyebrow--row"><b>({{ c.n }})</b> {{ c.name }}</span>

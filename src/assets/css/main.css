@@ -456,6 +456,9 @@ body.lb-open{overflow:hidden;}
 .tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(var(--tmin,148px),100%),1fr));gap:clamp(10px,1.2vw,16px);align-items:start;}
 .tiles > div{background:var(--paper-2);aspect-ratio:var(--tar,0.707);overflow:hidden;}   /* one cell ratio per grid: rows stay even */
 .tiles img{display:block;width:100%;height:100%;object-fit:cover;object-position:center top;}
+/* `fit: contain` on a tiles: grid: drawings of mixed ratios sit whole on white instead of being cropped to the cell */
+.tiles--contain > div{background:#fff;}
+.tiles--contain img{object-fit:contain;object-position:center;}
 
 /* ---------- chapters: argument beside its evidence ----------
    .chap is one 12-col row: text in 5 cols, plates in 6, one col of air between. `side: left`
@@ -471,6 +474,9 @@ body.lb-open{overflow:hidden;}
 .chap--long .chap__txt,.chap--noplates .chap__txt,.chap--wide .chap__txt{position:static;}   /* --wide: a full-width row follows; sticky text would slide over it */
 .chap--noplates .chap__txt{grid-column:1 / span 8;}
 .chap--notext .chap__pl{grid-column:1 / -1;}
+/* `plw: true`: the plates column takes seven columns instead of six, the text four (one plate that needs a little more room) */
+.chap--plw .chap__txt{grid-column:1 / span 4;}
+.chap--plw .chap__pl{grid-column:6 / -1;}
 /* `narrow: true` on a text-less chapter: plates sit in the middle ten columns instead of all twelve */
 .chap--notext.chap--narrow .chap__pl{grid-column:2 / span 10;}
 .chap__full{grid-column:1 / -1;}
@@ -578,7 +584,7 @@ body.lb-open{overflow:hidden;}
 .g--natural .g__frame > img{position:static;height:auto;object-fit:unset;}
 
 @media(max-width:820px){
-  .chap__txt,.chap__pl,.chap--left .chap__txt,.chap--left .chap__pl,.chap--noplates .chap__txt{grid-column:1 / -1;grid-row:auto;position:static;}
+  .chap__txt,.chap__pl,.chap--left .chap__txt,.chap--left .chap__pl,.chap--plw .chap__txt,.chap--plw .chap__pl,.chap--noplates .chap__txt{grid-column:1 / -1;grid-row:auto;position:static;}
   .chap{row-gap:28px;margin-top:clamp(56px,12vw,80px);}
   .pair{grid-template-columns:1fr;}
   /* strip stays one row at one height and scrolls sideways, bleeding to the screen edge */
