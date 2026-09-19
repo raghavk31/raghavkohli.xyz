@@ -99,6 +99,12 @@ chapters:
       items:
         - { src: /assets/projects/pune-metro/16.jpg, w: 1800, h: 1041, cap: "Longitudinal section — roof, concourse, mezzanine, road; the platform's length against the road below." }
         - { src: /assets/projects/pune-metro/17.jpg, w: 1800, h: 1057, cap: "Material isometric — the station with each material called out: aluminium roof, steel louvres, skylight, glazing, ACP, epoxy floor, tactile strips." }
+  - n: "06"
+    name: beyond the line
+    title: HyperPort — where the metro would meet the high-speed rail
+    narrow: true
+    plates:
+      - { src: /assets/projects/pune-metro/18.jpg, w: 1800, h: 1200, fig: fig.18, cap: "Pune HyperPort, conceptual diagram — a satellite air terminal at the Talegaon toll plaza on the Mumbai–Pune expressway: arrival and departure on the high-speed rail deck at G+2, security and baggage on the metro deck at G+1 where Lines 1 and 3 would be extended to meet it, retail, lobby and parking at ground, freight looping round the back. Concept with Christopher Benninger and Karan Gandhi, 2021." }
 outcome:
   built: "Station design drawings for Pune Metro Line 3 — typical station layouts at road, mezzanine and platform level, sections, the material isometric — and a massing study for the PMR-12 station plot. Internship at CCBA Designs, Pune, January–July 2021, in the team of Christopher Benninger, Daraius Choksi (project head), Nikhil Kalambe, Aditi Agrawal, Sanjiv Kapila, Darshan Lineswala and Bhargav Khurjekar. The stations are the office's design; the drawings shown are mine within it."
   next: "The layouts count the paid and unpaid area; they do not count the walk. The version worth doing measures how many people reach each platform on foot in ten minutes, and what the plaza and the public development do to that number."
@@ -153,3 +159,15 @@ platforms so the street below stays open. Standing-seam aluminium roofing, mild-
 louvres, skylights over the concourse, high-performance glass, cast in-situ epoxy floors, tactile
 paving for the blind. The isometric names every material. It was the last drawing of the
 internship, and the first time a building I had drawn was measured in tender quantities.
+
+## 06 beyond the line
+
+The internship ended on a proposal rather than a drawing set. Pune has been trying to build an
+international airport for twenty years — Chakan, Khed, Purandar — and every site has run into
+land, cost, farmers or distance. Meanwhile Navi Mumbai's airport, with four times the capacity,
+is rising ninety minutes up the expressway. HyperPort asks the obvious question: why not check
+in at Pune and fly from Navi Mumbai? A full departure and arrival terminal at the Talegaon toll
+plaza, stacked on the movement that already passes there — the expressway at ground, the metro
+extended from Pimpri and Hinjewadi at the first deck, a high-speed rail to the airport at the
+second. The diagram is the whole argument in section: **a station is a piece of the network, and
+the network is what a city owes its region.**
