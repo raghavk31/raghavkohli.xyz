@@ -43,9 +43,9 @@ chapters:
     strip:
       col: true
       fig: fig.04
-      cap: "The layer-cake: street network, contours at 5 m, hillshade, lithology, hydrology, soil drainage, slope, geology. McHarg's method, run in GIS."
+      cap: "The layer cake. Street network, contours at 5 m, slope, hillshade, lithology, geology, hydrology, soil drainage and soil, over the same ground. McHarg's method, run in GIS."
       items:
-        - { src: /assets/projects/water-urbanism/05.jpg, w: 847, h: 1800, cap: "Site study for circularity. Eight GIS layers over the same eight square kilometres, to find which ground is buildable and which ground is doing the hydrological work." }
+        - { src: /assets/projects/water-urbanism/05.jpg, w: 1800, h: 1799, cap: "The layer cake. Nine GIS layers over the same eight square kilometres, to find which ground is buildable and which ground is doing the hydrological work." }
   - n: "02"
     name: precedent
     title: The aahar-pyne, read as a plan
