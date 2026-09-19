@@ -97,31 +97,28 @@ chapters:
   - n: "05"
     name: eco-village
     title: The cluster and the living machine
-    side: left
     plates:
-      - { src: /assets/projects/water-urbanism/22.jpg, w: 1236, h: 744, fig: fig.22, blend: true, cap: "The eco-village, grown — residential rings around a shared court, social amenities and kitchens on the ring, the living machine at the centre where the loops meet." }
+      - { src: /assets/projects/water-urbanism/23.jpg, w: 1493, h: 458, fig: fig.22, blend: true, cap: "The cluster in section — the built rings stepping down to the court, the living machine at its heart." }
     strip:
-      col: true
-      fig: fig.23–24
-      cap: "The cluster at its first phase, and in section — the built rings stepping down to the court, the treatment structure at its heart."
+      fig: fig.23
+      cap: "The eco-lab, axonometric — neighbourhood clusters around a central plaza; the learning centre, cultural centre and market on the aahar; health and wellness; skill and craft workshops; the riverside ghat and the pedestrian bridge; the riparian forest, agroecology fields and community farms; the eco-park, biodiversity habitat and nature trail on the cycle-and-pedestrian loop, the Rajgir hills behind."
       items:
-        - { src: /assets/projects/water-urbanism/23.jpg, w: 1236, h: 743, cap: "Phase one — the first ring of the cluster and the centre." }
-        - { src: /assets/projects/water-urbanism/24.jpg, w: 1493, h: 458, cap: "Section through the cluster — staggered heights toward the central court and the living machine." }
+        - { src: /assets/projects/water-urbanism/22.jpg, w: 1672, h: 941, cap: "The eco-lab, axonometric — a landscape of learning, production and everyday life, where the city and its ecology coexist." }
   - n: "06"
     name: eco-lab
     title: Living with the water, not beside it
     plates:
-      - { src: /assets/projects/water-urbanism/25.jpg, w: 1672, h: 941, fig: fig.25, cap: "The living machine on the aahar — the brick tower and the shaded hall at the water's edge, the Rajgir hills behind; the treatment structure as the cluster's public room." }
+      - { src: /assets/projects/water-urbanism/24.jpg, w: 1672, h: 941, fig: fig.24, cap: "The living machine on the aahar — the brick tower and the shaded hall at the water's edge, the Rajgir hills behind; the treatment structure as the cluster's public room." }
     tiles:
       ar: 1.4
       min: 440
-      fig: fig.26–29
+      fig: fig.25–28
       cap: "Along the trail — the courts between the houses, the wetland cells, the bridges and the farms: the eco-lab at eye level. Design renders, 2025."
       items:
-        - { src: /assets/projects/water-urbanism/26.jpg, w: 1536, h: 1024, cap: "A court in the cluster — the shared ground between the houses, a rill through it, the tower beyond." }
-        - { src: /assets/projects/water-urbanism/27.jpg, w: 1254, h: 1254, cap: "The wetland edge — reeds, palms, the kitchens' roofs and the towers across the water." }
-        - { src: /assets/projects/water-urbanism/28.jpg, w: 1448, h: 1086, cap: "The aahar as the public realm — a boardwalk, a bridge, the trail on its far bank." }
-        - { src: /assets/projects/water-urbanism/29.jpg, w: 1448, h: 1086, cap: "The eco-trail — cycling past the farms, the wetland cells and the cluster's edge." }
+        - { src: /assets/projects/water-urbanism/25.jpg, w: 1536, h: 1024, cap: "A court in the cluster — the shared ground between the houses, a rill through it, the tower beyond." }
+        - { src: /assets/projects/water-urbanism/26.jpg, w: 1254, h: 1254, cap: "The wetland edge — reeds, palms, the kitchens' roofs and the towers across the water." }
+        - { src: /assets/projects/water-urbanism/27.jpg, w: 1448, h: 1086, cap: "The aahar as the public realm — a boardwalk, a bridge, the trail on its far bank." }
+        - { src: /assets/projects/water-urbanism/28.jpg, w: 1448, h: 1086, cap: "The eco-trail — cycling past the farms, the wetland cells and the cluster's edge." }
 outcome:
   built: "Eco-Lab Rajgir — a masterplan for 8 sq km and a projected 1,20,000 people, with the aahar-pyne system as its primary infrastructure. L3 studio, Bachelor of Urban Design, CEPT University, with Rajiv Kadam and Piyas Choudhari; TA Vaishnavi Akilla. December 2021. Renders revisited in 2025."
   next: "The four loops were sized on paper — water, food, waste and energy for 1,20,000 people. The instrument to test them is the one built two years later for fifteen cities: a climate inventory, run on a plan instead of on a municipality."
