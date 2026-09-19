@@ -7,7 +7,7 @@ topics: [water]
 size: md
 offset: ""
 qsize: 24px
-fig: fig.01 — the plan on its terrain
+fig: fig.01 — rajgir across the centuries
 role: urban design studio · gis analysis · masterplan
 period: 2021 · one semester
 context: rajgir · nalanda · bihar · cept L3 studio
@@ -26,27 +26,22 @@ covers:
   - { t: /assets/projects/water-urbanism/c5.jpg, f: /assets/projects/water-urbanism/c5-f.jpg, w: 1200, h: 814 }
 lead: "Rajgir was the first capital of Magadha — a valley ringed by five hills, walled in cyclopean stone, where the Buddha preached and Mahavira taught, and where the hot springs still draw pilgrims. Today it is a small town in Nalanda district under heavy development pressure: a new Nalanda University, a sports stadium, a highway, and a floodplain between the hills and the railway that floods every monsoon and dries every summer. The studio's premise was Ian McHarg's — water and the city as one constructed ecosystem — and the site had a precedent already in the ground: the aahar-pyne, south Bihar's centuries-old network of channels and catchment basins. This plan reverses the usual order. The water is drawn first; streets, food and built fabric are negotiated around it."
 next: generative techniques — a neighbourhood as rules, not a plan
-open: { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, fig: fig.01, cap: "The plan on its terrain — eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn." }
+open: { src: /assets/projects/water-urbanism/02.jpg, w: 1800, h: 637, fig: fig.01, cap: "Rajgir across the centuries — the cyclopean walls of Magadha, the Buddha at Griddhakuta, the Jain shrines on the hills, the hot springs, the ropeway and the stupa, the new university: a collage of what the valley has been asked to hold." }
 chapters:
   - n: "00"
     name: rajgir
     title: A valley that has been a city for 2,500 years
     plates:
       - { src: /assets/projects/water-urbanism/03.jpg, w: 1800, h: 1262, fig: fig.02, cap: "The region — the hills as a ring, the old city inside it, the villages, the railway and the highway; the site in the floodplain to the north, 4 km long, between the sports stadium and the new Nalanda University, with the ruins of Nalanda beyond." }
-    strip:
-      fig: fig.03
-      cap: "Rajgir across the centuries — the cyclopean walls of Magadha, the Buddha at Griddhakuta, the Jain shrines on the hills, the hot springs, the ropeway and the stupa, the new university: a collage of what the valley has been asked to hold."
-      items:
-        - { src: /assets/projects/water-urbanism/02.jpg, w: 1800, h: 637, cap: "Rajgir across the centuries — a timeline collage of the valley's layers." }
   - n: "01"
     name: the ground
     title: Reading the site in layers
     side: left
     plates:
-      - { src: /assets/projects/water-urbanism/04.jpg, w: 1800, h: 1355, fig: fig.04, cap: "The site contour model, 1:5000 — the ridges and the low ground between them; the hill at the southern edge; the flow paths the water already takes." }
+      - { src: /assets/projects/water-urbanism/04.jpg, w: 1800, h: 1355, fig: fig.03, cap: "The site contour model, 1:5000 — the ridges and the low ground between them; the hill at the southern edge; the flow paths the water already takes." }
     strip:
       col: true
-      fig: fig.05
+      fig: fig.04
       cap: "The layer-cake: street network, contours at 5 m, hillshade, lithology, hydrology, soil drainage, slope, geology — McHarg's method, run in GIS."
       items:
         - { src: /assets/projects/water-urbanism/05.jpg, w: 847, h: 1800, cap: "Site study for circularity — eight GIS layers over the same eight square kilometres, to find which ground is buildable and which ground is doing the hydrological work." }
@@ -54,10 +49,10 @@ chapters:
     name: precedent
     title: The aahar-pyne, read as a plan
     plates:
-      - { src: /assets/projects/water-urbanism/06.jpg, w: 1566, h: 640, fig: fig.06, blend: true, cap: "The aahar-pyne network on the site — pynes are the channels that carry runoff off the hills; aahars the embanked basins that hold it. Drawn here as the first layer of the plan." }
+      - { src: /assets/projects/water-urbanism/06.jpg, w: 1566, h: 640, fig: fig.05, blend: true, cap: "The aahar-pyne network on the site — pynes are the channels that carry runoff off the hills; aahars the embanked basins that hold it. Drawn here as the first layer of the plan." }
     strip:
       col: true
-      fig: fig.07
+      fig: fig.06
       cap: "The low-lying network — every area below the ridge pattern, which becomes the wetland and bio-retention system."
       items:
         - { src: /assets/projects/water-urbanism/07.jpg, w: 1651, h: 736, cap: "The wetland network — the site's low-lying zones, derived from the surface drainage pattern and the ridges." }
@@ -66,7 +61,12 @@ chapters:
     title: The plan, drawn in the water's order
     side: left
     plates:
-      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.08, cap: "The plan exploded — from the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
+      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.07, cap: "The plan exploded — from the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
+    strip:
+      fig: fig.08
+      cap: "The plan on its terrain — eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn."
+      items:
+        - { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, cap: "The masterplan — the whole, on its terrain." }
     tiles:
       ar: 1.414
       min: 200
