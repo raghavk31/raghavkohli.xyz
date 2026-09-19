@@ -112,7 +112,7 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 figure.card{max-width:100%;min-width:0;transition:opacity .45s ease,filter .45s ease;}
 .card__click{cursor:pointer;position:relative;display:block;color:inherit;}
 /* container-type lets the question below size to the card's own width */
-.card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--stripe);
+.card__frame{position:relative;aspect-ratio:var(--car);overflow:hidden;background:var(--paper);
   container-type:inline-size;transition:transform .6s cubic-bezier(.16,1,.3,1);}
 .card__frame > img{position:absolute;inset:0;transition:transform .9s cubic-bezier(.16,1,.3,1);}
 /* rotating covers: the alternates sit over the thumb, hidden, and fade in one at a time (main.js
@@ -120,7 +120,7 @@ figure.card{max-width:100%;min-width:0;transition:opacity .45s ease,filter .45s 
 .card__frame > img.card__alt{width:100%;height:100%;object-fit:cover;opacity:0;
   transition:opacity 1.1s cubic-bezier(.4,0,.2,1), transform .9s cubic-bezier(.16,1,.3,1);}
 .card__frame > img.card__alt.on{opacity:1;}
-/* thumbfit: contain — show the whole drawing on the --stripe ground instead of cover-cropping */
+/* thumbfit: contain — show the whole drawing on the page's own paper instead of cover-cropping */
 .card__frame > img.contain{object-fit:contain;}
 .card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);transition:opacity .6s ease;}
 .card__frame.is-alt .card__fig{opacity:0;}
@@ -402,7 +402,7 @@ body.lb-open{overflow:hidden;}
   /* on the phone the frame takes the thumb's own height and the question flows below the image
      instead of over it: the thumb goes static, the rotating alternates stay absolute inside it */
   .card__frame{aspect-ratio:auto;overflow:visible;background:none;}
-  .card__frame > img:first-child{position:static;height:auto;width:100%;background:var(--stripe);}
+  .card__frame > img:first-child{position:static;height:auto;width:100%;background:var(--paper);}
   .card__frame > img.card__alt{position:absolute;inset:0;height:100%;}
   .card__fig{display:none;}
   .card__overlay{opacity:1;position:static;background:none;padding:16px 0 0;pointer-events:auto;
