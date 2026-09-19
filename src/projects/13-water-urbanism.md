@@ -51,9 +51,10 @@ chapters:
     title: The aahar-pyne, read as a plan
     plates:
       - { src: /assets/projects/water-urbanism/06.jpg, w: 1566, h: 640, fig: fig.05, blend: true, cap: "The aahar-pyne network on the site. Pynes are the channels that carry runoff off the hills; aahars the embanked basins that hold it. Drawn here as the first layer of the plan." }
+      - { src: /assets/projects/water-urbanism/30.jpg, w: 1800, h: 1775, fig: fig.06, cap: "The first drawing, by hand. The wetland network in blue, the riparian edge in green, the farms in yellow and the trail along the hills in brown, with the arithmetic in the margins: how many people a cluster holds, how many schools, community centres and market squares that number needs, and where on the network they land. Below, the first two passes: the low ground traced from the contours, and the street loop over it." }
     strip:
       col: true
-      fig: fig.06
+      fig: fig.07
       cap: "The low-lying network. Every area below the ridge pattern, which becomes the wetland and bio-retention system."
       items:
         - { src: /assets/projects/water-urbanism/07.jpg, w: 1651, h: 736, cap: "The wetland network. The site's low-lying zones, derived from the surface drainage pattern and the ridges." }
@@ -62,9 +63,9 @@ chapters:
     title: The plan, drawn in the water's order
     side: left
     plates:
-      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.07, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
+      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.08, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
     strip:
-      fig: fig.08
+      fig: fig.09
       cap: "The plan on its terrain. Eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn."
       items:
         - { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, cap: "The masterplan. The whole, on its terrain." }
@@ -72,7 +73,7 @@ chapters:
       ar: 1.414
       min: 170
       fit: contain
-      fig: fig.09–21
+      fig: fig.10–22
       cap: "The layers, in the order they were drawn. Aahars, the wetland network, the eco-trail, riparian edge and green cover, the street network, program, built clusters, the whole; then the program diagram and the four systems on their own: eco-trail, riparian edge, food loop, streets. Open any to see it at full size."
       items:
         - { src: /assets/projects/water-urbanism/09.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/09-t.jpg, tw: 640, th: 453, cap: "Layer 1. The aahars: the basins that hold the hills' runoff, placed on the existing low ground." }
@@ -91,8 +92,6 @@ chapters:
   - n: "04"
     name: four loops
     title: Water, food, waste, energy
-    plates:
-      - { src: /assets/projects/water-urbanism/30.jpg, w: 1800, h: 1775, fig: fig.22, cap: "The program, worked out by hand. The wetland network in blue, the riparian edge in green, the farms in yellow and the trail along the hills in brown, with the arithmetic in the margins: how many people a cluster holds, how many schools, community centres and market squares that number needs, and where on the network they land. Below, the first two passes: the low ground traced from the contours, and the street loop over it." }
   - n: "05"
     name: eco-village
     title: The cluster and the living machine
