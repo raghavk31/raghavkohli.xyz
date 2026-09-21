@@ -226,30 +226,63 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .cv-val{font-size:14px;font-weight:300;line-height:1.55;color:var(--ink-soft);}
 
 /* ---------- thoughts: the journal ----------
-   The list is every thought in full, newest first; a rule between entries, the date in mono above
-   the title, the body in the project prose. One thought's own page uses the same block. */
-.journal__list{margin-top:clamp(56px,8vw,96px);}
-.thought{max-width:62ch;padding:clamp(40px,5vw,56px) 0;border-top:1px solid rgba(28,27,24,.09);}
-.journal__list .thought:last-child{border-bottom:1px solid rgba(28,27,24,.09);}
-.journal > .thought{padding-top:0;border-top:0;}
+   The composer sits at the top; every earlier thought is a white post-it on the board beneath it —
+   title, body, the date at the foot — pinned at a slight tilt and drifting a little. One thought's own
+   page keeps the plain block. `rotate` and `translate` are their own properties here so the tilt and
+   the drift do not fight `.reveal`, which owns `transform`. */
+.thought{max-width:62ch;}
 .thought__date{display:block;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
-.thought__title{font-family:var(--serif);font-weight:500;font-size:var(--t-serif-2);line-height:1.15;letter-spacing:-0.01em;color:var(--ink);margin:14px 0 0;}
-.journal > .thought .thought__title{font-weight:400;font-size:var(--t-serif);line-height:1.16;max-width:15em;margin-top:26px;}
+.thought__title{font-family:var(--serif);font-weight:500;font-size:var(--t-serif-2);line-height:1.15;letter-spacing:-0.01em;color:var(--ink);}
 .thought__title a{color:inherit;}
-.thought__body{margin-top:1.2em;font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:300;}
+.thought__body{font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:300;}
 .thought__body p{margin-bottom:1.1em;} .thought__body p:last-child{margin-bottom:0;}
 .thought__body strong{color:var(--ink);font-weight:500;}
 .thought__body a{border-bottom:1px solid var(--faint-2);}
 .thought__body img{width:100%;height:auto;margin:2em 0;background:var(--paper-2);}
 .thought__body blockquote{margin:1.4em 0;padding-left:1.2em;border-left:1px solid var(--line);color:var(--ink-2);}
+/* one thought on its own page */
+.journal > .thought .thought__title{font-weight:400;font-size:var(--t-serif);line-height:1.16;max-width:15em;margin-top:26px;}
+.journal > .thought .thought__body{margin-top:1.2em;}
 .thought__empty{margin-top:clamp(56px,8vw,96px);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .journal .detail__next{max-width:62ch;}
 .journal__note{max-width:62ch;margin:clamp(20px,3vw,28px) 0 0;font-size:var(--t-small);color:var(--faint);}
-/* the composer: a plain field, the name and the post beneath it */
+/* the board: notes flow down columns, newest first, top-left */
+.board{margin-top:clamp(56px,8vw,96px);columns:15.5rem;column-gap:clamp(28px,3.5vw,48px);padding:12px 0 24px;}
+.board .thought{--tilt:0deg;--drift:7s;--wait:0s;
+  display:inline-block;width:100%;max-width:none;margin:0 0 clamp(28px,3.5vw,48px);padding:24px 22px 18px;break-inside:avoid;
+  background:#fff;color:var(--ink);rotate:var(--tilt);position:relative;cursor:default;
+  box-shadow:0 1px 1px rgba(28,27,24,.06),0 6px 14px -4px rgba(28,27,24,.14),0 22px 36px -18px rgba(28,27,24,.22);
+  animation:note-drift var(--drift) ease-in-out var(--wait) infinite alternate;
+  transition:box-shadow .5s cubic-bezier(.16,1,.3,1),rotate .5s cubic-bezier(.16,1,.3,1),opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1);}
+.board .thought::before{content:"";position:absolute;inset:0 0 auto;height:22px;background:linear-gradient(rgba(28,27,24,.045),rgba(28,27,24,0));pointer-events:none;}
+.board .thought:hover{rotate:0deg;z-index:2;
+  box-shadow:0 1px 1px rgba(28,27,24,.06),0 10px 20px -6px rgba(28,27,24,.18),0 34px 50px -22px rgba(28,27,24,.28);}
+/* each note pinned a little differently — a cycle of tilts and drifts, so a new note has one too */
+.board .thought:nth-child(6n+1){--tilt:-1.6deg;--drift:7.4s;--wait:-1.2s;}
+.board .thought:nth-child(6n+2){--tilt:1.1deg;--drift:8.6s;--wait:-4.1s;}
+.board .thought:nth-child(6n+3){--tilt:-0.5deg;--drift:6.8s;--wait:-2.6s;}
+.board .thought:nth-child(6n+4){--tilt:1.8deg;--drift:9.2s;--wait:-5.5s;}
+.board .thought:nth-child(6n+5){--tilt:-1.2deg;--drift:7.9s;--wait:-0.4s;}
+.board .thought:nth-child(6n+6){--tilt:0.7deg;--drift:8.1s;--wait:-3.3s;}
+@keyframes note-drift{from{translate:0 0;}to{translate:0 -7px;}}
+.board .thought__title{font-size:1.2rem;line-height:1.25;margin:0 0 12px;}
+.board .thought__body{font-size:var(--t-small);line-height:1.6;}
+.board .thought__body p{margin-bottom:.8em;}
+.board .thought__body img{margin:1em 0;}
+.board .thought__body blockquote{margin:.9em 0;}
+.board .thought__date{margin-top:18px;}
+/* a long note shows its first lines and opens on a click */
+.board .thought:not(.is-open) .thought__body{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:10;overflow:hidden;}
+.board .thought.is-clipped{cursor:pointer;}
+.board .thought.is-clipped:not(.is-open) .thought__body{-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);}
+.board .thought.is-clipped:not(.is-open) .thought__date::after,.board .thought.is-open .thought__date::after{content:" · (more)";color:var(--line);}
+.board .thought.is-open .thought__date::after{content:" · (less)";}
+/* the composer: a title bar, the thought, the name and the post beneath it */
 .composer{max-width:62ch;margin-top:clamp(40px,6vw,64px);}
 .composer textarea,.composer input{display:block;width:100%;border:0;border-bottom:1px solid var(--line);background:none;
   font:inherit;font-size:var(--t-prose);line-height:1.6;font-weight:300;color:var(--ink);padding:10px 0;border-radius:0;}
-.composer textarea{resize:vertical;min-height:5.5em;}
+.composer__title{font-family:var(--serif) !important;font-size:var(--t-serif-2) !important;font-weight:500 !important;letter-spacing:-0.01em;line-height:1.25 !important;}
+.composer textarea{resize:vertical;min-height:5.5em;margin-top:6px;}
 .composer textarea:focus,.composer input:focus{outline:none;border-bottom-color:var(--ink);}
 .composer ::placeholder{color:var(--faint-2);opacity:1;}
 .composer__row{display:flex;align-items:center;gap:20px;margin-top:8px;}
@@ -261,7 +294,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .composer__msg{margin:10px 0 0;min-height:1.4em;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .thought__by{color:var(--faint-2);}
 .thought--owner .thought__by{color:var(--ink);}
-.thought__del{display:inline-block;margin-top:14px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+.thought__del{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .thought__del:hover{color:var(--ink);}
 .journal__foot{max-width:62ch;margin-top:24px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;}
 .journal__foot a{color:var(--line);} .journal__foot a:hover{color:var(--ink);}
@@ -435,6 +468,7 @@ body.lb-open{overflow:hidden;}
 }
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
 @media(prefers-reduced-motion:reduce){
+  .board .thought{animation:none;}
   *,*::before,*::after{transition-duration:.001ms !important;scroll-behavior:auto !important;}
   .reveal{opacity:1;transform:none;}
 }

@@ -807,17 +807,30 @@
       art.className = "thought thought--live" + (t.owner ? " thought--owner" : "");
       art.dataset.created = t.created; art.dataset.id = t.id;
       var paras = String(t.body).split(/\n{2,}/).map(function (p) { return "<p>" + esc(p).replace(/\n/g, "<br />") + "</p>"; }).join("");
-      art.innerHTML = '<span class="thought__date">' + day(t.created) + '<span class="thought__by"> · ' + esc(t.owner ? "raghav" : (t.name || "someone")) + "</span></span>" +
+      art.innerHTML = (t.title ? '<h2 class="thought__title">' + esc(t.title) + "</h2>" : "") +
         '<div class="thought__body">' + paras + "</div>" +
+        '<span class="thought__date">' + day(t.created) + '<span class="thought__by"> · ' + esc(t.owner ? "raghav" : (t.name || "someone")) + "</span></span>" +
         (key ? '<a class="thought__del" href="#" data-del>(delete)</a>' : "");
       return art;
     }
+    // a note shows its first lines; one that runs longer opens in place on a click (a link still works)
+    function clip(art) {
+      var body = art.querySelector(".thought__body"); if (!body) return;
+      art.classList.toggle("is-clipped", body.scrollHeight > body.clientHeight + 2);
+    }
+    wall.addEventListener("click", function (e) {
+      if (e.target.closest("a")) return;
+      var art = e.target.closest(".thought.is-clipped, .thought.is-open"); if (!art) return;
+      art.classList.toggle("is-open");
+    });
+    wall.querySelectorAll(".thought").forEach(clip);
     function place(art) {
       // newest first: before the first entry that is older
       var c = Number(art.dataset.created);
       var rows = Array.prototype.slice.call(wall.querySelectorAll(".thought"));
       var next = rows.filter(function (r) { return Number(r.dataset.created) < c; })[0];
       wall.insertBefore(art, next || null);
+      clip(art);
       var empty = wall.querySelector("[data-empty]"); if (empty) empty.remove();
     }
     function load() {
@@ -840,7 +853,7 @@
       form.addEventListener("submit", function (e) {
         e.preventDefault();
         var body = form.body.value.trim(); if (!body) return;
-        var payload = { body: body, name: form.name.value.trim() };
+        var payload = { body: body, title: form.title.value.trim(), name: form.name.value.trim() };
         if (key) payload.key = key;
         if (widget !== null && window.turnstile) payload.turnstile = window.turnstile.getResponse(widget);
         form.classList.add("is-busy"); msg.textContent = "";
@@ -850,7 +863,7 @@
             form.classList.remove("is-busy");
             if (!res.ok) { msg.textContent = res.j.error || "that did not go through"; return; }
             var art = render(res.j.thought); place(art); art.classList.add("in");
-            form.body.value = ""; msg.textContent = "posted.";
+            form.body.value = ""; form.title.value = ""; msg.textContent = "posted.";
             if (widget !== null && window.turnstile) window.turnstile.reset(widget);
           })
           .catch(function () { form.classList.remove("is-busy"); msg.textContent = "that did not go through"; });

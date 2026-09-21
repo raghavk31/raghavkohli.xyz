@@ -3,9 +3,10 @@ layout: base.njk
 title: "Thoughts · Raghav Kohli"
 permalink: /thoughts/
 ---
-{#- The journal: a composer anyone can write in, then every thought in full, newest first — live posts
-    from the worker (main.js initWall) and the markdown entries in src/thoughts/ together. Without JS,
-    or before the API is configured, the markdown entries stand on their own. -#}
+{#- The journal: a composer anyone can write in (a title bar, the thought, a name), then every earlier
+    thought as a white post-it on the board below, newest first — live posts from the worker (main.js
+    initWall) and the markdown entries in src/thoughts/ together. Without JS, or before the API is
+    configured, the markdown entries stand on their own. -#}
 <section class="detail journal">
   <a class="detail__back" href="/">(&larr; home)</a>
   <span class="detail__qlabel">(thoughts)</span>
@@ -14,6 +15,7 @@ permalink: /thoughts/
 
   {% if site.thoughtsApi %}
   <form class="composer reveal" data-composer hidden>
+    <input class="composer__title" name="title" type="text" maxlength="80" placeholder="a title (optional)" autocomplete="off" />
     <textarea name="body" rows="4" maxlength="2000" placeholder="a thought…" required></textarea>
     <div class="composer__row">
       <input name="name" type="text" maxlength="40" placeholder="your name (optional)" autocomplete="off" />
@@ -24,12 +26,13 @@ permalink: /thoughts/
   </form>
   {% endif %}
 
-  <div class="journal__list" data-wall data-api="{{ site.thoughtsApi }}" data-turnstile-key="{{ site.turnstileKey }}">
+  {#- the board: each thought is a note — title, body, the date at its foot -#}
+  <div class="journal__list board" data-wall data-api="{{ site.thoughtsApi }}" data-turnstile-key="{{ site.turnstileKey }}">
     {% for t in collections.thoughts %}
     <article class="thought reveal" id="{{ t.fileSlug }}" data-created="{{ t.date.getTime() }}">
-      <span class="thought__date">{{ t.date | day }}</span>
       <h2 class="thought__title"><a href="{{ t.url }}">{{ t.data.title }}</a></h2>
       <div class="thought__body">{{ t.templateContent | safe }}</div>
+      <span class="thought__date">{{ t.date | day }}</span>
     </article>
     {% else %}
     <p class="thought__empty" data-empty>nothing written yet.</p>

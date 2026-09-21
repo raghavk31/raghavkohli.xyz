@@ -1,9 +1,9 @@
 /* The thoughts API. Anyone can read and post; nobody logs in.
-   GET    /thoughts?before=<ms>&limit=<n>   the newest posts (id, body, name, owner, created)
-   POST   /thoughts  {body, name?, turnstile?, key?}   a new post; `key` = OWNER_KEY marks it as Raghav's
+   GET    /thoughts?before=<ms>&limit=<n>   the newest posts (id, title, body, name, owner, created)
+   POST   /thoughts  {body, title?, name?, turnstile?, key?}   a new post; `key` = OWNER_KEY marks it as Raghav's
    DELETE /thoughts/<id>   with header X-Owner-Key: OWNER_KEY
    Guards, all without login: a Turnstile token when TURNSTILE_SECRET is set, RATE_PER_HOUR posts per
-   IP (IPs are stored only as a salted hash), MAX_BODY / MAX_NAME lengths. */
+   IP (IPs are stored only as a salted hash), MAX_BODY / MAX_TITLE / MAX_NAME lengths. */
 
 export default {
   async fetch(req, env) {
@@ -29,7 +29,7 @@ export default {
       const before = Number(url.searchParams.get("before")) || Date.now() + 1;
       const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 50, 1), 100);
       const { results } = await env.DB.prepare(
-        "SELECT id, body, name, owner, created FROM thoughts WHERE created < ? ORDER BY created DESC LIMIT ?"
+        "SELECT id, title, body, name, owner, created FROM thoughts WHERE created < ? ORDER BY created DESC LIMIT ?"
       ).bind(before, limit).all();
       return json({ thoughts: results });
     }
@@ -38,6 +38,7 @@ export default {
       let data;
       try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
       const body = String(data.body || "").replace(/\r\n?/g, "\n").trim();
+      const title = String(data.title || "").replace(/\s+/g, " ").trim().slice(0, Number(env.MAX_TITLE) || 80);
       const name = String(data.name || "").trim().slice(0, Number(env.MAX_NAME) || 40);
       if (!body) return json({ error: "write something first" }, 400);
       if (body.length > (Number(env.MAX_BODY) || 2000)) return json({ error: "too long" }, 400);
@@ -54,14 +55,14 @@ export default {
         const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM thoughts WHERE ip_hash = ? AND created > ?")
           .bind(ipHash, Date.now() - 3600_000).first();
         if (count >= (Number(env.RATE_PER_HOUR) || 3)) return json({ error: "that is enough for one hour; come back later" }, 429);
-        const row = { id: newId(), body, name: name || null, owner: 0, created: Date.now() };
-        await env.DB.prepare("INSERT INTO thoughts (id, body, name, owner, ip_hash, created) VALUES (?, ?, ?, ?, ?, ?)")
-          .bind(row.id, row.body, row.name, 0, ipHash, row.created).run();
+        const row = { id: newId(), title: title || null, body, name: name || null, owner: 0, created: Date.now() };
+        await env.DB.prepare("INSERT INTO thoughts (id, title, body, name, owner, ip_hash, created) VALUES (?, ?, ?, ?, ?, ?, ?)")
+          .bind(row.id, row.title, row.body, row.name, 0, ipHash, row.created).run();
         return json({ thought: row }, 201);
       }
-      const row = { id: newId(), body, name: name || null, owner: 1, created: Date.now() };
-      await env.DB.prepare("INSERT INTO thoughts (id, body, name, owner, ip_hash, created) VALUES (?, ?, ?, ?, ?, ?)")
-        .bind(row.id, row.body, row.name, 1, "owner", row.created).run();
+      const row = { id: newId(), title: title || null, body, name: name || null, owner: 1, created: Date.now() };
+      await env.DB.prepare("INSERT INTO thoughts (id, title, body, name, owner, ip_hash, created) VALUES (?, ?, ?, ?, ?, ?, ?)")
+        .bind(row.id, row.title, row.body, row.name, 1, "owner", row.created).run();
       return json({ thought: row }, 201);
     }
 

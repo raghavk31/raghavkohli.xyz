@@ -2,6 +2,7 @@
 #   npx wrangler login                       (once, opens the browser)
 #   npx wrangler d1 create thoughts          (once; paste the database_id below)
 #   npx wrangler d1 execute thoughts --remote --file=schema.sql
+#   (a database older than migrations/ : run each file there in order, the same way)
 #   npx wrangler secret put OWNER_KEY        (the word that marks Raghav's posts and allows delete)
 #   npx wrangler secret put TURNSTILE_SECRET (from the Turnstile widget for raghavkohli.xyz; leave unset to skip the bot check)
 #   npx wrangler secret put IP_SALT          (any long random string; IPs are only ever stored hashed with it)
@@ -20,4 +21,5 @@ database_id = "51f01c72-3941-41a7-b7c5-8d71c64271c2"
 ALLOWED_ORIGINS = "https://raghavkohli.xyz,https://www.raghavkohli.xyz,http://localhost:8087,http://localhost:8080"
 MAX_BODY = "2000"
 MAX_NAME = "40"
+MAX_TITLE = "80"
 RATE_PER_HOUR = "3"
