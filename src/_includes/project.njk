@@ -32,7 +32,8 @@ layout: base.njk
     Every item is a full frame that already contains the frames before it, so the fade from one to
     the next reads as a layer being drawn. `fig: fig.NN–MM` numbers the frames; each item's `name`
     is its entry in the key under the stage and its `cap` the caption while it is on top. Without
-    JS the last frame (the whole) stands, with its own caption. -#}
+    JS the last frame (the whole) stands, with its own caption. `beside:` is a plate that shares the
+    stack's row, on its left (five columns to the stack's seven; stacked on the phone). -#}
 {% macro stack(s) %}
 {%- set f = s.items[0] -%}
 {%- set l = s.items[s.items.length - 1] -%}
@@ -128,7 +129,7 @@ layout: base.njk
       {% if c.strip and c.strip.col %}{{ strip(c.strip) }}{% endif %}
     </div>
     {% endif %}
-    {% if c.stack %}{{ stack(c.stack) }}{% endif %}
+    {% if c.stack %}{% if c.stack.beside %}<div class="chap__full stackrow">{{ plate(c.stack.beside) }}{{ stack(c.stack) }}</div>{% else %}{{ stack(c.stack) }}{% endif %}{% endif %}
     {% if c.strip and not c.strip.col %}<div class="chap__full">{{ strip(c.strip) }}</div>{% endif %}
     {% if c.tiles %}<div class="chap__full">{{ tiles(c.tiles) }}</div>{% endif %}
     {% if c.stats and not c.carousel %}

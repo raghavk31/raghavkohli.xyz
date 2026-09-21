@@ -54,11 +54,9 @@ chapters:
   - n: "03"
     name: layers
     title: The plan, drawn in the water's order
-    side: left
-    plates:
-      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.06, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
     stack:
       fig: fig.07–14
+      beside: { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.06, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
       items:
         - { src: /assets/projects/water-urbanism/09.jpg, w: 1800, h: 1273, name: aahars, cap: "The aahars first. The embanked basins go where the hills' runoff already collects, on the low ground the contour model found. Nothing is built yet; the water has its places." }
         - { src: /assets/projects/water-urbanism/10.jpg, w: 1800, h: 1273, name: wetlands, cap: "Then the pynes. The channels that join basin to basin become the wetland network and the bio-retention zones: the flood's route through the site, drawn before any street." }
