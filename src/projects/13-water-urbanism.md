@@ -64,8 +64,19 @@ chapters:
     side: left
     plates:
       - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.08, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
+    stack:
+      fig: fig.09–16
+      items:
+        - { src: /assets/projects/water-urbanism/09.jpg, w: 1800, h: 1273, name: aahars, cap: "The aahars first. The embanked basins go where the hills' runoff already collects, on the low ground the contour model found. Nothing is built yet; the water has its places." }
+        - { src: /assets/projects/water-urbanism/10.jpg, w: 1800, h: 1273, name: wetlands, cap: "Then the pynes. The channels that join basin to basin become the wetland network and the bio-retention zones: the flood's route through the site, drawn before any street." }
+        - { src: /assets/projects/water-urbanism/11.jpg, w: 1800, h: 1273, name: eco-trail, cap: "The trail follows the pynes, because that is where the shade and the water are. It is the first thing a person gets: a cycle and pedestrian loop the length of the site." }
+        - { src: /assets/projects/water-urbanism/12.jpg, w: 1800, h: 1273, name: green cover, cap: "Riparian edge and green cover. A planted margin along every channel and basin, and the forest edge held against the hills: the water's banks before the city's." }
+        - { src: /assets/projects/water-urbanism/13.jpg, w: 1800, h: 1273, name: streets, cap: "Only now the streets, in red. The existing portals of entry set the primary connections; the railway station becomes the multimodal hub where the loop turns north to the highway." }
+        - { src: /assets/projects/water-urbanism/14.jpg, w: 1800, h: 1273, name: program, cap: "Program. Farms on the aahar-pyne, the food loop; social centres and workshops where the trail meets the water." }
+        - { src: /assets/projects/water-urbanism/15.jpg, w: 1800, h: 1273, name: clusters, cap: "The built clusters. The eco-villages sit on the ridges between the wetlands, 160 to 200 metres across, sized to the dry ground each ridge offers." }
+        - { src: /assets/projects/water-urbanism/16.jpg, w: 1800, h: 1273, name: the whole, cap: "The whole, in one tone. Water, trail, green, street and built as a single fabric: at every stage the city worked, and at no stage against the water." }
     strip:
-      fig: fig.09
+      fig: fig.17
       cap: "The plan on its terrain. Eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn."
       items:
         - { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, cap: "The masterplan. The whole, on its terrain." }
@@ -73,17 +84,9 @@ chapters:
       ar: 1.414
       min: 170
       fit: contain
-      fig: fig.10–22
-      cap: "The layers, in the order they were drawn. Aahars, the wetland network, the eco-trail, riparian edge and green cover, the street network, program, built clusters, the whole; then the program diagram and the four systems on their own: eco-trail, riparian edge, food loop, streets. Open any to see it at full size."
+      fig: fig.18–22
+      cap: "The program diagram, and the four systems on their own: eco-trail, riparian edge, food loop, streets. Open any to see it at full size."
       items:
-        - { src: /assets/projects/water-urbanism/09.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/09-t.jpg, tw: 640, th: 453, cap: "Layer 1. The aahars: the basins that hold the hills' runoff, placed on the existing low ground." }
-        - { src: /assets/projects/water-urbanism/10.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/10-t.jpg, tw: 640, th: 453, cap: "Layer 2. The wetland network: pynes and bio-retention zones connecting the aahars across the site." }
-        - { src: /assets/projects/water-urbanism/11.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/11-t.jpg, tw: 640, th: 453, cap: "Layer 3. The eco-trail: the primary cycle and pedestrian network, following the pynes." }
-        - { src: /assets/projects/water-urbanism/12.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/12-t.jpg, tw: 640, th: 453, cap: "Layer 4. Riparian edge and green cover along every channel, and the forest edge against the hills." }
-        - { src: /assets/projects/water-urbanism/13.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/13-t.jpg, tw: 640, th: 453, cap: "Layer 5. The street network, in red: portals of entry set by the existing roads, the multimodal hub at the railway." }
-        - { src: /assets/projects/water-urbanism/14.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/14-t.jpg, tw: 640, th: 453, cap: "Layer 6. Program: the food loop on the aahar-pyne, social centres and workshops on the trail." }
-        - { src: /assets/projects/water-urbanism/15.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/15-t.jpg, tw: 640, th: 453, cap: "Layer 7. The built clusters: the eco-villages, sized to the ridges between the wetlands." }
-        - { src: /assets/projects/water-urbanism/16.jpg, w: 1800, h: 1273, tile: /assets/projects/water-urbanism/16-t.jpg, tw: 640, th: 453, cap: "Layer 8. The whole, in one tone: water, trail, green, street and built as a single fabric." }
         - { src: /assets/projects/water-urbanism/17.jpg, w: 1789, h: 960, tile: /assets/projects/water-urbanism/17-t.jpg, tw: 640, th: 343, cap: "The program diagram. The four loops of ecology zoned across the site: water in blue, the wetland cells in cyan, food and energy in yellow and green, the institutional block in pink. The arrows are where water enters and leaves." }
         - { src: /assets/projects/water-urbanism/18.jpg, w: 1649, h: 813, tile: /assets/projects/water-urbanism/18-t.jpg, tw: 640, th: 314, cap: "The eco-trail. The primary bicycle and pedestrian network, taking the aahars and pynes as its reference." }
         - { src: /assets/projects/water-urbanism/19.jpg, w: 1653, h: 788, tile: /assets/projects/water-urbanism/19-t.jpg, tw: 640, th: 305, cap: "Riparian edge and green cover. The planted margin along every channel and basin." }

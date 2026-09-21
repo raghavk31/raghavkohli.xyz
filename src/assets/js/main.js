@@ -416,6 +416,7 @@
       });
       pageBody.appendChild(clone);
       initCarousel(clone);
+      initStack(clone);
       initLightbox(clone);
       pageBody.hidden = false;
       if (jsonBody) jsonBody.hidden = true;
@@ -682,10 +683,105 @@
     });
   }
 
+  /* ---------- layer stack — registered drawings of one ground, built up a layer at a time ----------
+     Every frame contains the ones before it, so fading the next frame in over the last reads as a
+     layer being drawn. The stack builds itself once: when it scrolls into view and the frames have
+     decoded, the whole dissolves to the first layer and the layers come back one a second, ending on
+     the whole again. The key under it, the arrow keys and a swipe step it by hand, and any of those
+     ends the build for good. Clicking the stage opens the lightbox on the frames at the current
+     layer. Reduced motion: no build, the whole stands and the key steps it. Without JS: the last
+     frame and its caption. */
+  function initStack(root) {
+    if (!root) return;
+    root.querySelectorAll("[data-stack]").forEach(function (st) {
+      var layers = Array.prototype.slice.call(st.querySelectorAll(".stack__stage > img"));
+      var keys = Array.prototype.slice.call(st.querySelectorAll(".stack__key a"));
+      var stage = st.querySelector(".stack__stage"), capN = st.querySelector(".plate__cap .n"), capT = st.querySelector(".plate__cap .t");
+      var n = layers.length;
+      if (n < 2 || !stage) return;
+      var m = /^(fig\.)(\d+)/.exec(st.dataset.fig || ""), start = m ? parseInt(m[2], 10) : 0;
+      var idx = n - 1, taken = false, built = false, auto = null, capTimer = null;
+      var STEP_MS = 1000;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      st.classList.add("stack--js");
+
+      function show(i) {
+        idx = Math.max(0, Math.min(n - 1, i));
+        layers.forEach(function (im, k) { im.classList.toggle("on", k <= idx); });
+        keys.forEach(function (a, k) {
+          a.classList.toggle("done", k <= idx); a.classList.toggle("on", k === idx);
+          if (k === idx) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+        });
+        // the caption follows the layer: fade the old line out, swap, fade in
+        st.classList.add("is-swapping");
+        if (capTimer) clearTimeout(capTimer);
+        capTimer = setTimeout(function () {
+          if (m) capN.textContent = m[1] + (start + idx);
+          capT.textContent = layers[idx].dataset.cap || "";
+          st.classList.remove("is-swapping");
+        }, reduce ? 0 : 180);
+      }
+      function tick() {
+        auto = null;
+        if (taken || idx >= n - 1) { st.classList.remove("is-auto"); return; }
+        if (document.hidden) { auto = setTimeout(tick, STEP_MS); return; }   // wait for the tab
+        show(idx + 1);
+        auto = setTimeout(tick, STEP_MS);
+      }
+      function take() { taken = true; if (auto !== null) { clearTimeout(auto); auto = null; } st.classList.remove("is-auto"); }
+      function load() { layers.forEach(function (im) { im.loading = "eager"; }); }
+      function build() {
+        if (built || taken || reduce) return;
+        built = true;
+        load();
+        Promise.all(layers.map(function (im) { return im.decode ? im.decode().catch(function () {}) : Promise.resolve(); })).then(function () {
+          if (taken) return;
+          st.classList.add("is-auto");
+          auto = setTimeout(function () { show(0); auto = setTimeout(tick, STEP_MS + 200); }, 500);
+        });
+      }
+      if ("IntersectionObserver" in window) {
+        var near = new IntersectionObserver(function (en) {
+          if (en.some(function (e) { return e.isIntersecting; })) { load(); near.disconnect(); }
+        }, { rootMargin: "400px" });
+        near.observe(st);
+        var seen = new IntersectionObserver(function (en) {
+          if (en.some(function (e) { return e.isIntersecting; })) { build(); seen.disconnect(); }
+        }, { threshold: 0.45 });
+        seen.observe(stage);
+      } else { load(); }
+
+      keys.forEach(function (a, k) { a.addEventListener("click", function (e) { e.preventDefault(); take(); show(k); }); });
+      st.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { e.preventDefault(); take(); show(idx + 1); }
+        else if (e.key === "ArrowLeft") { e.preventDefault(); take(); show(idx - 1); }
+      });
+      // swipe on touch steps a layer
+      var px = null;
+      stage.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") px = e.clientX; }, { passive: true });
+      stage.addEventListener("pointerup", function (e) {
+        if (px === null) return;
+        var dx = e.clientX - px; px = null;
+        if (Math.abs(dx) > 40) { e.preventDefault(); take(); show(dx < 0 ? idx + 1 : idx - 1); stage.dataset.swiped = "1"; }
+      });
+      // the stage opens the lightbox on the frames, at the current layer
+      var items = layers.map(function (im, k) {
+        return { src: im.src, alt: im.alt, w: im.getAttribute("width"), h: im.getAttribute("height"), n: m ? m[1] + (start + k) : (st.dataset.fig || ""), t: im.dataset.cap || "" };
+      });
+      stage.classList.add("lb-src");
+      stage.setAttribute("tabindex", "0");
+      stage.setAttribute("role", "button");
+      stage.setAttribute("aria-label", "open the layers");
+      function openSet() { if (stage.dataset.swiped) { delete stage.dataset.swiped; return; } take(); openLightbox(items, idx, stage); }
+      stage.addEventListener("click", openSet);
+      stage.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSet(); } });
+      show(n - 1);
+    });
+  }
   function initLightbox(root) {
     if (!root) return;
     var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .tiles img, .g__frame img"))
-      .filter(function (img) { return !img.closest("[data-carousel]"); }); // the city carousel registers its own set
+      .filter(function (img) { return !img.closest("[data-carousel], [data-stack]"); }); // the city carousel and the layer stack register their own sets
     if (!imgs.length) return;
     var items = imgs.map(function (img) {
       var c = captionFor(img);
@@ -705,5 +801,6 @@
     });
   }
   initCarousel(document.querySelector("article.detail"));
+  initStack(document.querySelector("article.detail"));
   initLightbox(document.querySelector("article.detail"));
 })();

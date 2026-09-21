@@ -28,6 +28,22 @@ layout: base.njk
   {% if t.fig or t.cap %}<figcaption class="plate__cap">{% if t.fig %}<span class="n">{{ t.fig }}</span>{% endif %}{% if t.cap %}<span>{{ t.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
 {% endmacro %}
+{#- Layer stack: registered drawings of one ground, built up a layer at a time (main.js initStack).
+    Every item is a full frame that already contains the frames before it, so the fade from one to
+    the next reads as a layer being drawn. `fig: fig.NN–MM` numbers the frames; each item's `name`
+    is its entry in the key under the stage and its `cap` the caption while it is on top. Without
+    JS the last frame (the whole) stands, with its own caption. -#}
+{% macro stack(s) %}
+{%- set f = s.items[0] -%}
+{%- set l = s.items[s.items.length - 1] -%}
+<div class="chap__full stack" data-stack data-fig="{{ s.fig }}">
+  <figure class="plate">
+    <div class="plate__img stack__stage" style="aspect-ratio:{{ f.w }} / {{ f.h }}">{% for it in s.items %}<img src="{{ it.src }}" alt="{{ it.alt or it.cap }}" width="{{ it.w }}" height="{{ it.h }}" loading="lazy" decoding="async" data-name="{{ it.name }}" data-cap="{{ it.cap }}" />{% endfor %}</div>
+    <figcaption class="plate__cap" aria-live="polite"><span class="n">{{ s.fig }}</span><span class="t">{{ l.cap }}</span></figcaption>
+  </figure>
+  <ol class="stack__key">{% for it in s.items %}<li><a href="{{ it.src }}" data-i="{{ loop.index0 }}"><span class="k">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>{{ it.name }}</a></li>{% endfor %}</ol>
+</div>
+{% endmacro %}
 {#- City carousel: one spread at full width, a mono pager and a fifteen-segment rule; the ledger
     beside the text is its index (main.js initCarousel). Without JS: the first city, and every rule
     segment / ledger row is a real link to that spread. -#}
@@ -83,7 +99,7 @@ layout: base.njk
   {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
   {% set hasPlates = c.plates or c.pair or c.strip or c.carousel %}
   {% set hasText = body or c.title %}
-  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or c.stack or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
     {% if c.carousel %}
     {#- carousel chapters: eyebrow, stat row, any full-width plates, the carousel, then text | ledger -#}
     <span class="chap__eyebrow chap__eyebrow--row"><b>({{ c.n }})</b> {{ c.name }}</span>
@@ -112,6 +128,7 @@ layout: base.njk
       {% if c.strip and c.strip.col %}{{ strip(c.strip) }}{% endif %}
     </div>
     {% endif %}
+    {% if c.stack %}{{ stack(c.stack) }}{% endif %}
     {% if c.strip and not c.strip.col %}<div class="chap__full">{{ strip(c.strip) }}</div>{% endif %}
     {% if c.tiles %}<div class="chap__full">{{ tiles(c.tiles) }}</div>{% endif %}
     {% if c.stats and not c.carousel %}
