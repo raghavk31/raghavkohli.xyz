@@ -58,10 +58,8 @@ chapters:
     plates:
       - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.06, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
     stack:
-      fig: fig.07–16
+      fig: fig.07–14
       items:
-        - { src: /assets/projects/water-urbanism/31.jpg, w: 1800, h: 1273, name: aahar-pyne, cap: "The precedent, on the site. Pynes carry the runoff off the hills; aahars, the embanked basins, hold it through the dry months. South Bihar's network, traced where it would sit here: the first thing drawn, on blank paper." }
-        - { src: /assets/projects/water-urbanism/32.jpg, w: 1800, h: 1273, name: low ground, cap: "The low ground. Every area below the ridge pattern, found from the surface drainage: the wetland and bio-retention system falls out of the terrain on its own, before any plan." }
         - { src: /assets/projects/water-urbanism/09.jpg, w: 1800, h: 1273, name: aahars, cap: "The aahars first. The embanked basins go where the hills' runoff already collects, on the low ground the contour model found. Nothing is built yet; the water has its places." }
         - { src: /assets/projects/water-urbanism/10.jpg, w: 1800, h: 1273, name: wetlands, cap: "Then the pynes. The channels that join basin to basin become the wetland network and the bio-retention zones: the flood's route through the site, drawn before any street." }
         - { src: /assets/projects/water-urbanism/11.jpg, w: 1800, h: 1273, name: eco-trail, cap: "The trail follows the pynes, because that is where the shade and the water are. It is the first thing a person gets: a cycle and pedestrian loop the length of the site." }
@@ -71,7 +69,7 @@ chapters:
         - { src: /assets/projects/water-urbanism/15.jpg, w: 1800, h: 1273, name: clusters, cap: "The built clusters. The eco-villages sit on the ridges between the wetlands, 160 to 200 metres across, sized to the dry ground each ridge offers." }
         - { src: /assets/projects/water-urbanism/16.jpg, w: 1800, h: 1273, name: the whole, cap: "The whole, in one tone. Water, trail, green, street and built as a single fabric: at every stage the city worked, and at no stage against the water." }
     strip:
-      fig: fig.17
+      fig: fig.15
       cap: "The plan on its terrain. Eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn."
       items:
         - { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, cap: "The masterplan. The whole, on its terrain." }
@@ -82,9 +80,9 @@ chapters:
     name: eco-village
     title: The cluster and the living machine
     plates:
-      - { src: /assets/projects/water-urbanism/29.jpg, w: 1230, h: 1150, fig: fig.18, cap: "Twenty-four building typologies in four families, each with its plan and section. Culture and community: the cultural centre, the community hub, library and learning, the wellness centre, prayer and meditation, the stepped ghat. Livelihoods and production: the skill and craft workshop, the local market, food processing, the agroecology centre, cold storage, the service block. Ecology and water: the water pavilion, the bird hide, the wetland platform, the bridge pavilion, the nature shelter, the eco-restoration shed. Housing, stay and infrastructure: community housing, the homestay, the researcher residence, the temporary shelter, the digital kiosk, the observation deck. Brick, timber and tile throughout, the villages' own materials." }
+      - { src: /assets/projects/water-urbanism/29.jpg, w: 1230, h: 1150, fig: fig.16, cap: "Twenty-four building typologies in four families, each with its plan and section. Culture and community: the cultural centre, the community hub, library and learning, the wellness centre, prayer and meditation, the stepped ghat. Livelihoods and production: the skill and craft workshop, the local market, food processing, the agroecology centre, cold storage, the service block. Ecology and water: the water pavilion, the bird hide, the wetland platform, the bridge pavilion, the nature shelter, the eco-restoration shed. Housing, stay and infrastructure: community housing, the homestay, the researcher residence, the temporary shelter, the digital kiosk, the observation deck. Brick, timber and tile throughout, the villages' own materials." }
     strip:
-      fig: fig.19
+      fig: fig.17
       cap: "The eco-lab, axonometric. Neighbourhood clusters around a central plaza; the learning centre, cultural centre and market on the aahar; health and wellness; skill and craft workshops; the riverside ghat and the pedestrian bridge; the riparian forest, agroecology fields and community farms; the eco-park, biodiversity habitat and nature trail on the cycle-and-pedestrian loop, the Rajgir hills behind."
       items:
         - { src: /assets/projects/water-urbanism/22.jpg, w: 1672, h: 941, cap: "The eco-lab, axonometric. A landscape of learning, production and everyday life, where the city and its ecology coexist." }
@@ -92,11 +90,11 @@ chapters:
     name: eco-lab
     title: Living with the water, not beside it
     plates:
-      - { src: /assets/projects/water-urbanism/24.jpg, w: 1672, h: 941, fig: fig.20, cap: "The living machine on the aahar. The brick tower and the shaded hall at the water's edge, the Rajgir hills behind; the treatment structure as the cluster's public room." }
+      - { src: /assets/projects/water-urbanism/24.jpg, w: 1672, h: 941, fig: fig.18, cap: "The living machine on the aahar. The brick tower and the shaded hall at the water's edge, the Rajgir hills behind; the treatment structure as the cluster's public room." }
     tiles:
       ar: 1.4
       min: 440
-      fig: fig.21–24
+      fig: fig.19–22
       cap: "Along the trail. The courts between the houses, the wetland cells, the bridges and the farms: the eco-lab at eye level. Design renders, 2025."
       items:
         - { src: /assets/projects/water-urbanism/25.jpg, w: 1536, h: 1024, cap: "A court in the cluster. The shared ground between the houses, a rill through it, the tower beyond." }
