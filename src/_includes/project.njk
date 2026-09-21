@@ -98,7 +98,8 @@ layout: base.njk
   {% for c in chapters %}
   {% set body = ch.byNum[c.n] or '' %}
   {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
-  {% set hasPlates = c.plates or c.pair or c.strip or c.carousel %}
+  {#- a stack chapter's plates all sit in the stack row, so its text takes the wide (noplates) measure -#}
+  {% set hasPlates = (c.plates or c.pair or c.strip or c.carousel) and not c.stack %}
   {% set hasText = body or c.title %}
   <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or c.stack or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
     {% if c.carousel %}
