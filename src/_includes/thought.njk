@@ -1,0 +1,16 @@
+---
+layout: base.njk
+---
+{#- One thought on its own page: the journal's entry, with a way back to the journal. -#}
+<section class="detail journal">
+  <a class="detail__back" href="/thoughts/">(&larr; thoughts)</a>
+  <article class="thought">
+    <span class="thought__date">{{ page.date | day }}</span>
+    <h1 class="thought__title">{{ title }}</h1>
+    <div class="thought__body">{{ content | safe }}</div>
+  </article>
+  {% set older = collections.thoughts | after(page.url) %}
+  {% if older %}
+  <a class="detail__next" href="{{ older.url }}"><span class="lbl">(older)</span><span class="nm">{{ older.data.title }}</span><span class="lbl">&rarr;</span></a>
+  {% endif %}
+</section>

@@ -1,0 +1,22 @@
+---
+layout: base.njk
+title: "Thoughts · Raghav Kohli"
+permalink: /thoughts/
+---
+{#- The journal: every thought in full, newest first. Each title is a link to the thought's own page. -#}
+<section class="detail journal">
+  <a class="detail__back" href="/">(&larr; home)</a>
+  <span class="detail__qlabel">(thoughts)</span>
+  <h1 class="detail__q reveal">a journal, of sorts.</h1>
+  <div class="journal__list">
+    {% for t in collections.thoughts %}
+    <article class="thought reveal" id="{{ t.fileSlug }}">
+      <span class="thought__date">{{ t.date | day }}</span>
+      <h2 class="thought__title"><a href="{{ t.url }}">{{ t.data.title }}</a></h2>
+      <div class="thought__body">{{ t.templateContent | safe }}</div>
+    </article>
+    {% else %}
+    <p class="thought__empty">nothing written yet.</p>
+    {% endfor %}
+  </div>
+</section>

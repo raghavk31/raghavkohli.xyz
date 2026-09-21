@@ -19,6 +19,23 @@ module.exports = function (eleventyConfig) {
     return items;
   });
 
+  // The journal: every file in src/thoughts/, newest first by its `date`
+  eleventyConfig.addCollection("thoughts", (api) =>
+    api.getFilteredByGlob("src/thoughts/*.md").sort((a, b) => b.date - a.date)
+  );
+
+  // "21 september 2026" — the journal's date, lowercase like every label on the site
+  eleventyConfig.addFilter("day", (d) => {
+    const x = d ? new Date(d) : new Date();
+    return `${x.getUTCDate()} ${x.toLocaleString("en-GB", { month: "long", timeZone: "UTC" }).toLowerCase()} ${x.getUTCFullYear()}`;
+  });
+
+  // The item after the one at `url` in a collection (the next older thought), or null
+  eleventyConfig.addFilter("after", (arr, url) => {
+    const i = (arr || []).findIndex((x) => x.url === url);
+    return i >= 0 && i + 1 < arr.length ? arr[i + 1] : null;
+  });
+
   // Simple readable date filter, e.g. "2026" or "March 2026"
   eleventyConfig.addFilter("year", (dateObj) =>
     (dateObj ? new Date(dateObj) : new Date()).getFullYear()

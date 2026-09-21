@@ -225,6 +225,26 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .cv-key{font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--faint-2);padding-top:2px;}
 .cv-val{font-size:14px;font-weight:300;line-height:1.55;color:var(--ink-soft);}
 
+/* ---------- thoughts: the journal ----------
+   The list is every thought in full, newest first; a rule between entries, the date in mono above
+   the title, the body in the project prose. One thought's own page uses the same block. */
+.journal__list{margin-top:clamp(56px,8vw,96px);}
+.thought{max-width:62ch;padding:clamp(40px,5vw,56px) 0;border-top:1px solid rgba(28,27,24,.09);}
+.journal__list .thought:last-child{border-bottom:1px solid rgba(28,27,24,.09);}
+.journal > .thought{padding-top:0;border-top:0;}
+.thought__date{display:block;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+.thought__title{font-family:var(--serif);font-weight:500;font-size:var(--t-serif-2);line-height:1.15;letter-spacing:-0.01em;color:var(--ink);margin:14px 0 0;}
+.journal > .thought .thought__title{font-weight:400;font-size:var(--t-serif);line-height:1.16;max-width:15em;margin-top:26px;}
+.thought__title a{color:inherit;}
+.thought__body{margin-top:1.2em;font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:300;}
+.thought__body p{margin-bottom:1.1em;} .thought__body p:last-child{margin-bottom:0;}
+.thought__body strong{color:var(--ink);font-weight:500;}
+.thought__body a{border-bottom:1px solid var(--faint-2);}
+.thought__body img{width:100%;height:auto;margin:2em 0;background:var(--paper-2);}
+.thought__body blockquote{margin:1.4em 0;padding-left:1.2em;border-left:1px solid var(--line);color:var(--ink-2);}
+.thought__empty{margin-top:clamp(56px,8vw,96px);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+.journal .detail__next{max-width:62ch;}
+
 /* ---------- contact ---------- */
 .contact{max-width:var(--maxw);margin:0 auto;padding:clamp(80px,11vw,150px) var(--gutter) clamp(90px,12vw,160px);}
 .contact__row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-top:28px;}
