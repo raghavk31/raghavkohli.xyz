@@ -7,6 +7,6 @@ module.exports = {
   substack: "",  // <-- Substack URL, or "" to hide
   url: "https://raghavkohli.xyz",
   // the thoughts wall (worker/): the API's URL once deployed, and the Turnstile site key ("" = no bot check)
-  thoughtsApi: "",
-  turnstileKey: "",
+  thoughtsApi: "https://thoughts.raghavkohli31.workers.dev",
+  turnstileKey: "0x4AAAAAAE-12jodayntsBSg",
 };
