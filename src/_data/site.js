@@ -6,4 +6,7 @@ module.exports = {
   scholar: "",   // <-- Google Scholar URL, or "" to hide
   substack: "",  // <-- Substack URL, or "" to hide
   url: "https://raghavkohli.xyz",
+  // the thoughts wall (worker/): the API's URL once deployed, and the Turnstile site key ("" = no bot check)
+  thoughtsApi: "",
+  turnstileKey: "",
 };

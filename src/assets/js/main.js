@@ -784,6 +784,107 @@
       });
     });
   }
+  /* ---------- thoughts: the wall ----------
+     Anyone can post; nobody logs in. Posts come from the worker (data-api) and are merged with the
+     markdown entries already on the page, newest first. A Turnstile widget (data-turnstile-key) sits
+     in the composer when configured. The owner key, typed once via (key) and kept in localStorage,
+     marks posts as Raghav's and shows a (delete) on every post — the worker checks it, the page only
+     remembers it. */
+  function initWall() {
+    var wall = document.querySelector("[data-wall]");
+    if (!wall || !wall.dataset.api) return;
+    var api = wall.dataset.api.replace(/\/$/, ""), tsKey = wall.dataset.turnstileKey;
+    var form = document.querySelector("[data-composer]"), msg = form && form.querySelector(".composer__msg");
+    var keyLink = document.querySelector("[data-owner-key]");
+    var key = ""; try { key = localStorage.getItem("thoughts-key") || ""; } catch (e) {}
+    var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
+    var day = function (ms) {
+      var d = new Date(ms);
+      return d.getDate() + " " + d.toLocaleString("en-GB", { month: "long" }).toLowerCase() + " " + d.getFullYear();
+    };
+    function render(t) {
+      var art = document.createElement("article");
+      art.className = "thought thought--live" + (t.owner ? " thought--owner" : "");
+      art.dataset.created = t.created; art.dataset.id = t.id;
+      var paras = String(t.body).split(/\n{2,}/).map(function (p) { return "<p>" + esc(p).replace(/\n/g, "<br />") + "</p>"; }).join("");
+      art.innerHTML = '<span class="thought__date">' + day(t.created) + '<span class="thought__by"> · ' + esc(t.owner ? "raghav" : (t.name || "someone")) + "</span></span>" +
+        '<div class="thought__body">' + paras + "</div>" +
+        (key ? '<a class="thought__del" href="#" data-del>(delete)</a>' : "");
+      return art;
+    }
+    function place(art) {
+      // newest first: before the first entry that is older
+      var c = Number(art.dataset.created);
+      var rows = Array.prototype.slice.call(wall.querySelectorAll(".thought"));
+      var next = rows.filter(function (r) { return Number(r.dataset.created) < c; })[0];
+      wall.insertBefore(art, next || null);
+      var empty = wall.querySelector("[data-empty]"); if (empty) empty.remove();
+    }
+    function load() {
+      fetch(api + "/thoughts?limit=100").then(function (r) { return r.json(); }).then(function (j) {
+        (j.thoughts || []).forEach(function (t) { if (!wall.querySelector('[data-id="' + t.id + '"]')) place(render(t)); });
+      }).catch(function () {});
+    }
+    // the composer
+    var widget = null;
+    if (form) {
+      form.hidden = false;
+      var tsBox = form.querySelector("[data-turnstile]");
+      if (tsKey && tsBox) {
+        var mount = function () {
+          if (!window.turnstile) return setTimeout(mount, 200);
+          widget = window.turnstile.render(tsBox, { sitekey: tsKey, appearance: "interaction-only", theme: "light" });
+        };
+        mount();
+      }
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var body = form.body.value.trim(); if (!body) return;
+        var payload = { body: body, name: form.name.value.trim() };
+        if (key) payload.key = key;
+        if (widget !== null && window.turnstile) payload.turnstile = window.turnstile.getResponse(widget);
+        form.classList.add("is-busy"); msg.textContent = "";
+        fetch(api + "/thoughts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+          .then(function (res) {
+            form.classList.remove("is-busy");
+            if (!res.ok) { msg.textContent = res.j.error || "that did not go through"; return; }
+            var art = render(res.j.thought); place(art); art.classList.add("in");
+            form.body.value = ""; msg.textContent = "posted.";
+            if (widget !== null && window.turnstile) window.turnstile.reset(widget);
+          })
+          .catch(function () { form.classList.remove("is-busy"); msg.textContent = "that did not go through"; });
+      });
+    }
+    // delete, with the key
+    wall.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-del]"); if (!a) return;
+      e.preventDefault();
+      var art = a.closest(".thought"); if (!art || !confirm("delete this thought?")) return;
+      fetch(api + "/thoughts/" + art.dataset.id, { method: "DELETE", headers: { "X-Owner-Key": key } })
+        .then(function (r) { if (r.ok) art.remove(); });
+    });
+    // the owner key: typed once, kept on this device
+    if (keyLink) {
+      keyLink.textContent = key ? "(key ✓)" : "(key)";
+      keyLink.addEventListener("click", function (e) {
+        e.preventDefault();
+        var v = prompt("the owner key (leave empty to forget it)", key || "");
+        if (v === null) return;
+        key = v.trim();
+        try { key ? localStorage.setItem("thoughts-key", key) : localStorage.removeItem("thoughts-key"); } catch (err) {}
+        keyLink.textContent = key ? "(key ✓)" : "(key)";
+        wall.querySelectorAll(".thought--live").forEach(function (art) {
+          var del = art.querySelector("[data-del]");
+          if (key && !del) art.insertAdjacentHTML("beforeend", '<a class="thought__del" href="#" data-del>(delete)</a>');
+          if (!key && del) del.remove();
+        });
+      });
+    }
+    load();
+  }
+  initWall();
+
   initCarousel(document.querySelector("article.detail"));
   initStack(document.querySelector("article.detail"));
   initLightbox(document.querySelector("article.detail"));

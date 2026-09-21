@@ -3,20 +3,40 @@ layout: base.njk
 title: "Thoughts · Raghav Kohli"
 permalink: /thoughts/
 ---
-{#- The journal: every thought in full, newest first. Each title is a link to the thought's own page. -#}
+{#- The journal: a composer anyone can write in, then every thought in full, newest first — live posts
+    from the worker (main.js initWall) and the markdown entries in src/thoughts/ together. Without JS,
+    or before the API is configured, the markdown entries stand on their own. -#}
 <section class="detail journal">
   <a class="detail__back" href="/">(&larr; home)</a>
   <span class="detail__qlabel">(thoughts)</span>
   <h1 class="detail__q reveal">a journal, of sorts.</h1>
-  <div class="journal__list">
+  <p class="journal__note reveal">open to anyone. write a thought and it is on the page.</p>
+
+  {% if site.thoughtsApi %}
+  <form class="composer reveal" data-composer hidden>
+    <textarea name="body" rows="4" maxlength="2000" placeholder="a thought…" required></textarea>
+    <div class="composer__row">
+      <input name="name" type="text" maxlength="40" placeholder="your name (optional)" autocomplete="off" />
+      <div class="composer__ts" data-turnstile></div>
+      <button type="submit">(post)</button>
+    </div>
+    <p class="composer__msg" aria-live="polite"></p>
+  </form>
+  {% endif %}
+
+  <div class="journal__list" data-wall data-api="{{ site.thoughtsApi }}" data-turnstile-key="{{ site.turnstileKey }}">
     {% for t in collections.thoughts %}
-    <article class="thought reveal" id="{{ t.fileSlug }}">
+    <article class="thought reveal" id="{{ t.fileSlug }}" data-created="{{ t.date.getTime() }}">
       <span class="thought__date">{{ t.date | day }}</span>
       <h2 class="thought__title"><a href="{{ t.url }}">{{ t.data.title }}</a></h2>
       <div class="thought__body">{{ t.templateContent | safe }}</div>
     </article>
     {% else %}
-    <p class="thought__empty">nothing written yet.</p>
+    <p class="thought__empty" data-empty>nothing written yet.</p>
     {% endfor %}
   </div>
+  {% if site.thoughtsApi %}
+  <p class="journal__foot"><a href="#" data-owner-key>(key)</a></p>
+  {% endif %}
 </section>
+{% if site.thoughtsApi and site.turnstileKey %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>{% endif %}
