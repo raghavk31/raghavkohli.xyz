@@ -7,7 +7,7 @@ topics: [carbon, data, analytics]
 size: md
 offset: ""
 qsize: 22px
-fig: fig.01 · the net-zero pathway, 2022–2070
+fig: fig.17 · feel-like temperature, may 2021
 role: co-author · sector strategies · book design
 period: 2022–2023
 context: ahmedabad · capacities · iclei south asia
@@ -16,8 +16,8 @@ live: false
 date: 2023-07-01
 card: L
 thumb: /assets/projects/ahmedabad-crcap/00.jpg
-thumbw: 787
-thumbh: 1200
+thumbw: 900
+thumbh: 1158
 thumbfit: contain
 covers:
   - { t: /assets/projects/ahmedabad-crcap/c1.jpg, f: /assets/projects/ahmedabad-crcap/c1-f.jpg, w: 900, h: 1125 }

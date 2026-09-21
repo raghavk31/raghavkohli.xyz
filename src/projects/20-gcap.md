@@ -7,7 +7,7 @@ topics: [carbon, data, analytics]
 size: md
 offset: ""
 qsize: 22px
-fig: fig.26 · penang island · energy
+fig: fig.11 · langkawi · land use 2022
 role: co-author · gis analysis · ghg inventory · sector diagrams · book design
 period: 2023–2024
 context: iclei south asia · imt-gt jbc malaysia · four local governments
@@ -16,7 +16,7 @@ live: false
 date: 2024-05-02
 card: M
 thumb: /assets/projects/gcap/00.jpg
-thumbw: 1036
+thumbw: 855
 thumbh: 1200
 covers:
   - { t: /assets/projects/gcap/c1.jpg, f: /assets/projects/gcap/c1-f.jpg, w: 960, h: 1200 }
