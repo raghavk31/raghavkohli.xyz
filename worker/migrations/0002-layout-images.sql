@@ -1,15 +1,7 @@
-CREATE TABLE IF NOT EXISTS thoughts (
-  id       TEXT PRIMARY KEY,
-  title    TEXT,
-  body     TEXT NOT NULL,
-  name     TEXT,
-  owner    INTEGER NOT NULL DEFAULT 0,
-  ip_hash  TEXT NOT NULL,
-  created  INTEGER NOT NULL,
-  images   TEXT
-);
-CREATE INDEX IF NOT EXISTS thoughts_created ON thoughts (created DESC);
-CREATE INDEX IF NOT EXISTS thoughts_ip ON thoughts (ip_hash, created);
+-- 2026-09-22: notes can be moved, scaled and carry images. For a database created before this:
+--   npx wrangler d1 execute thoughts --remote --file=migrations/0002-layout-images.sql
+-- the image ids a thought carries, as a JSON array
+ALTER TABLE thoughts ADD COLUMN images TEXT;
 -- where a note sits on the board (a live id or a markdown slug); a note with no row flows by itself
 CREATE TABLE IF NOT EXISTS layout (
   id       TEXT PRIMARY KEY,
@@ -19,7 +11,7 @@ CREATE TABLE IF NOT EXISTS layout (
   z        INTEGER NOT NULL DEFAULT 0,
   updated  INTEGER NOT NULL
 );
--- the images notes carry, downscaled in the browser before upload
+-- the images themselves, downscaled in the browser before upload
 CREATE TABLE IF NOT EXISTS images (
   id          TEXT PRIMARY KEY,
   thought_id  TEXT,

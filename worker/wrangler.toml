@@ -23,3 +23,5 @@ MAX_BODY = "2000"
 MAX_NAME = "40"
 MAX_TITLE = "80"
 RATE_PER_HOUR = "3"
+# the largest image the worker keeps, in bytes (D1 rows cap at 2 MB; the browser downscales first)
+MAX_IMAGE = "1500000"

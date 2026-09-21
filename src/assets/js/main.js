@@ -788,8 +788,13 @@
      Anyone can post; nobody logs in. Posts come from the worker (data-api) and are merged with the
      markdown entries already on the page, newest first. A Turnstile widget (data-turnstile-key) sits
      in the composer when configured. The owner key, typed once via (key) and kept in localStorage,
-     marks posts as Raghav's and shows a (delete) on every post — the worker checks it, the page only
-     remembers it. */
+     marks posts as Raghav's and opens the board for editing — the worker checks it, the page only
+     remembers it.
+     The board is a free canvas on desktop: a note that has been placed (worker: /layout/<id>) sits at
+     its own x/y/width; every other note packs itself into the free space, newest first, top-left.
+     With the key a note drags, scales from its corner (the type scales with the width), comes to the
+     front when touched, and can be unpinned back into the flow; the composer takes images, which are
+     downscaled here before they go up. Under 820px the notes keep the CSS-columns flow. */
   function initWall() {
     var wall = document.querySelector("[data-wall]");
     if (!wall || !wall.dataset.api) return;
@@ -802,26 +807,55 @@
       var d = new Date(ms);
       return d.getDate() + " " + d.toLocaleString("en-GB", { month: "long" }).toLowerCase() + " " + d.getFullYear();
     };
+    var NOTE_W = 248, GAP = 40, MIN_W = 160, MAX_W = 720;   // the flow width (matches .board columns), the gap, the scale limits
+    var layout = {}, maxZ = 0;                                // id -> {x, y, w, z}, from the worker
+    var free = window.matchMedia("(min-width: 821px)");      // the free canvas; below it, columns
+    var idOf = function (art) { return art.dataset.id; };
+    var imgUrl = function (id) { return api + "/images/" + id; };
+
     function render(t) {
       var art = document.createElement("article");
       art.className = "thought thought--live" + (t.owner ? " thought--owner" : "");
       art.dataset.created = t.created; art.dataset.id = t.id;
-      var paras = String(t.body).split(/\n{2,}/).map(function (p) { return "<p>" + esc(p).replace(/\n/g, "<br />") + "</p>"; }).join("");
-      art.innerHTML = (t.title ? '<h2 class="thought__title">' + esc(t.title) + "</h2>" : "") +
-        '<div class="thought__body">' + paras + "</div>" +
-        '<span class="thought__date">' + day(t.created) + '<span class="thought__by"> · ' + esc(t.owner ? "raghav" : (t.name || "someone")) + "</span></span>" +
-        (key ? '<a class="thought__del" href="#" data-del>(delete)</a>' : "");
+      var paras = String(t.body || "").split(/\n{2,}/).filter(Boolean).map(function (p) { return "<p>" + esc(p).replace(/\n/g, "<br />") + "</p>"; }).join("");
+      var imgs = (t.images || []).map(function (id) { return '<img src="' + imgUrl(id) + '" alt="" draggable="false" />'; }).join("");
+      art.innerHTML = (imgs ? '<div class="thought__imgs">' + imgs + "</div>" : "") +
+        (t.title ? '<h2 class="thought__title">' + esc(t.title) + "</h2>" : "") +
+        (paras ? '<div class="thought__body">' + paras + "</div>" : "") +
+        '<span class="thought__date">' + day(t.created) + '<span class="thought__by"> · ' + esc(t.owner ? "raghav" : (t.name || "someone")) + "</span></span>";
+      tools(art);
       return art;
+    }
+    // the owner's handles on a note: (delete) on live posts, (unpin) on a placed note, the corner grip
+    function tools(art) {
+      var old = art.querySelector(".thought__tools"); if (old) old.remove();
+      var grip = art.querySelector(".thought__grip"); if (grip) grip.remove();
+      if (!key) return;
+      var html = "";
+      if (art.classList.contains("thought--live")) html += '<a class="thought__del" href="#" data-del>(delete)</a>';
+      if (layout[idOf(art)]) html += '<a class="thought__del" href="#" data-unpin>(unpin)</a>';
+      art.insertAdjacentHTML("beforeend", '<span class="thought__tools">' + html + '</span><span class="thought__grip" data-grip aria-hidden="true"></span>');
     }
     // a note shows its first lines; one that runs longer opens in place on a click (a link still works)
     function clip(art) {
       var body = art.querySelector(".thought__body"); if (!body) return;
       art.classList.toggle("is-clipped", body.scrollHeight > body.clientHeight + 2);
     }
+    var swallowClick = false; // the click that ends a drag is not a tap
     wall.addEventListener("click", function (e) {
+      if (swallowClick) { swallowClick = false; e.preventDefault(); return; }
       if (e.target.closest("a")) return;
+      var img = e.target.closest(".thought__imgs img");
+      if (img) {
+        // the note's images in the lightbox
+        var art0 = img.closest(".thought"), all = Array.prototype.slice.call(art0.querySelectorAll(".thought__imgs img"));
+        var t = art0.querySelector(".thought__title"), title = t ? t.textContent : "";
+        openLightbox(all.map(function (im, i) { return { src: im.src, alt: title || "image " + (i + 1), n: "", t: title }; }), all.indexOf(img), img);
+        return;
+      }
       var art = e.target.closest(".thought.is-clipped, .thought.is-open"); if (!art) return;
       art.classList.toggle("is-open");
+      schedule();
     });
     wall.querySelectorAll(".thought").forEach(clip);
     function place(art) {
@@ -829,17 +863,179 @@
       var c = Number(art.dataset.created);
       var rows = Array.prototype.slice.call(wall.querySelectorAll(".thought"));
       var next = rows.filter(function (r) { return Number(r.dataset.created) < c; })[0];
+      art.classList.add("is-arriving");
       wall.insertBefore(art, next || null);
       clip(art);
+      art.querySelectorAll("img").forEach(function (im) { if (!im.complete) im.addEventListener("load", schedule); });
       var empty = wall.querySelector("[data-empty]"); if (empty) empty.remove();
     }
     function load() {
       fetch(api + "/thoughts?limit=100").then(function (r) { return r.json(); }).then(function (j) {
+        layout = j.layout || {};
+        Object.keys(layout).forEach(function (id) { maxZ = Math.max(maxZ, layout[id].z || 0); });
         (j.thoughts || []).forEach(function (t) { if (!wall.querySelector('[data-id="' + t.id + '"]')) place(render(t)); });
-      }).catch(function () {});
+        wall.querySelectorAll(".thought").forEach(tools);
+        relayout();
+      }).catch(function () { relayout(); });
     }
-    // the composer
-    var widget = null;
+
+    /* the board: pinned notes at their spot, the rest packed into the free space */
+    var zoomFor = function (w) { return Math.sqrt(w / NOTE_W); };
+    function size(art, w) { art.style.width = w + "px"; art.style.setProperty("--zoom", zoomFor(w).toFixed(3)); }
+    function freeY(x, w, h, placed) {
+      // the highest y at which a w×h box at x clears every placed rect, GAP included
+      var y = 0, hits = placed.filter(function (r) { return r.x < x + w + GAP && x < r.x + r.w + GAP; }), moved = true;
+      while (moved) {
+        moved = false;
+        for (var i = 0; i < hits.length; i++) {
+          var r = hits[i];
+          if (r.y < y + h + GAP && y < r.y + r.h + GAP) { y = r.y + r.h + GAP; moved = true; }
+        }
+      }
+      return y;
+    }
+    var raf = 0;
+    function schedule() { if (!raf) raf = requestAnimationFrame(function () { raf = 0; relayout(); }); }
+    function relayout() {
+      if (drag && drag.moved) return; // the note in hand settles first; onUp lays out again
+      var notes = Array.prototype.slice.call(wall.querySelectorAll(".thought"));
+      if (!free.matches) {
+        wall.classList.remove("board--free", "is-laid"); wall.style.height = "";
+        notes.forEach(function (art) { art.style.cssText = ""; art.classList.remove("is-pinned"); });
+        return;
+      }
+      wall.classList.add("board--free");
+      var W = wall.clientWidth, placed = [], bottom = 0;
+      notes.forEach(function (art) {
+        var L = layout[idOf(art)];
+        if (!L) { art.classList.remove("is-pinned"); art.style.zIndex = ""; if (art !== (drag && drag.art)) size(art, NOTE_W); return; }
+        var w = Math.min(L.w, W); size(art, w);
+        var x = Math.max(0, Math.min(L.x, W - w)), y = Math.max(0, L.y);
+        art.style.left = x + "px"; art.style.top = y + "px"; art.style.zIndex = L.z || 1;
+        art.classList.add("is-pinned");
+        var h = art.offsetHeight; placed.push({ x: x, y: y, w: w, h: h }); bottom = Math.max(bottom, y + h);
+      });
+      var cols = Math.max(1, Math.floor((W + GAP) / (NOTE_W + GAP))), colX = [];
+      for (var i = 0; i < cols; i++) colX.push(i * (NOTE_W + GAP));
+      notes.forEach(function (art) {
+        if (layout[idOf(art)]) return;
+        var h = art.offsetHeight, best = null;
+        colX.forEach(function (x) { var y = freeY(x, NOTE_W, h, placed); if (!best || y < best.y - 0.5) best = { x: x, y: y }; });
+        art.style.left = best.x + "px"; art.style.top = best.y + "px";
+        placed.push({ x: best.x, y: best.y, w: NOTE_W, h: h }); bottom = Math.max(bottom, best.y + h);
+      });
+      wall.style.height = (bottom + 24) + "px";
+      // moves ease from the second layout on; a note that has just arrived takes its spot without easing
+      requestAnimationFrame(function () { wall.classList.add("is-laid"); notes.forEach(function (art) { art.classList.remove("is-arriving"); }); });
+    }
+    free.addEventListener ? free.addEventListener("change", schedule) : free.addListener(schedule);
+    window.addEventListener("resize", schedule);
+    relayout();
+
+    /* moving and scaling, with the key */
+    var drag = null;
+    function savePos(id) {
+      var L = layout[id];
+      fetch(api + "/layout/" + id, { method: "PUT", headers: { "Content-Type": "application/json", "X-Owner-Key": key }, body: JSON.stringify(L) })
+        .then(function (r) { if (!r.ok) throw 0; })
+        .catch(function () { if (msg) msg.textContent = "that move did not save"; });
+    }
+    function pin(art) {
+      var id = idOf(art), L = layout[id] || {};
+      layout[id] = { x: parseFloat(art.style.left) || 0, y: parseFloat(art.style.top) || 0, w: art.offsetWidth, z: L.z || ++maxZ };
+      tools(art);
+      savePos(id);
+    }
+    wall.addEventListener("pointerdown", function (e) {
+      if (!key || !free.matches || e.button !== 0) return;
+      var art = e.target.closest(".thought"); if (!art || e.target.closest("a")) return;
+      e.preventDefault(); // no text selection or image drag while a note is in hand
+      drag = { art: art, id: idOf(art), mode: e.target.closest("[data-grip]") ? "scale" : "move", sx: e.clientX, sy: e.clientY,
+               ox: parseFloat(art.style.left) || 0, oy: parseFloat(art.style.top) || 0, ow: art.offsetWidth, moved: false, ptr: e.pointerId };
+      document.addEventListener("pointermove", onMove);
+      document.addEventListener("pointerup", onUp);
+      document.addEventListener("pointercancel", onUp);
+    });
+    function onMove(e) {
+      if (!drag || e.pointerId !== drag.ptr) return;
+      var dx = e.clientX - drag.sx, dy = e.clientY - drag.sy;
+      if (!drag.moved) {
+        if (Math.hypot(dx, dy) < 4) return;
+        drag.moved = true;
+        drag.art.classList.add("is-dragging");
+        drag.art.style.zIndex = maxZ + 1;
+      }
+      var W = wall.clientWidth;
+      if (drag.mode === "move") {
+        var w = drag.art.offsetWidth;
+        drag.art.style.left = Math.max(0, Math.min(drag.ox + dx, W - w)) + "px";
+        drag.art.style.top = Math.max(0, drag.oy + dy) + "px";
+      } else {
+        size(drag.art, Math.max(MIN_W, Math.min(drag.ow + dx, MAX_W, W - drag.ox)));
+      }
+    }
+    function onUp(e) {
+      if (!drag || e.pointerId !== drag.ptr) return;
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("pointerup", onUp);
+      document.removeEventListener("pointercancel", onUp);
+      var d = drag; drag = null;
+      d.art.classList.remove("is-dragging");
+      if (!d.moved) return;
+      swallowClick = true; setTimeout(function () { swallowClick = false; }, 0);
+      if (d.mode === "move" || !layout[d.id]) layout[d.id] = { x: 0, y: 0, w: 0, z: ++maxZ };
+      pin(d.art);
+      clip(d.art);
+      relayout();
+    }
+    wall.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-unpin]"); if (!a) return;
+      e.preventDefault();
+      var art = a.closest(".thought"), id = idOf(art);
+      delete layout[id]; tools(art); relayout();
+      fetch(api + "/layout/" + id, { method: "DELETE", headers: { "X-Owner-Key": key } }).catch(function () {});
+    });
+
+    /* the composer */
+    var widget = null, picks = [];  // picks: {blob, url} — images chosen, downscaled, not yet posted
+    var pickLabel = form && form.querySelector("[data-pick]"), pickInput = pickLabel && pickLabel.querySelector("input"), imgsBox = form && form.querySelector("[data-imgs]");
+    function shrink(file) {
+      // the long edge to 1600px, JPEG at .85 — a gif that is small enough goes up as it is
+      if (file.type === "image/gif" && file.size < 1200000) return Promise.resolve(file);
+      return new Promise(function (resolve, reject) {
+        var url = URL.createObjectURL(file), im = new Image();
+        im.onload = function () {
+          URL.revokeObjectURL(url);
+          var s = Math.min(1, 1600 / Math.max(im.naturalWidth, im.naturalHeight));
+          var c = document.createElement("canvas"); c.width = Math.round(im.naturalWidth * s); c.height = Math.round(im.naturalHeight * s);
+          var ctx = c.getContext("2d"); ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(im, 0, 0, c.width, c.height);
+          c.toBlob(function (b) { b ? resolve(b) : reject(); }, "image/jpeg", 0.85);
+        };
+        im.onerror = function () { URL.revokeObjectURL(url); reject(); };
+        im.src = url;
+      });
+    }
+    function showPicks() {
+      if (!imgsBox) return;
+      imgsBox.innerHTML = picks.map(function (p, i) { return '<span class="composer__thumb"><img src="' + p.url + '" alt="" /><a href="#" data-rm="' + i + '">(×)</a></span>'; }).join("");
+      form.body.required = !picks.length;
+    }
+    if (pickInput) {
+      pickInput.addEventListener("change", function () {
+        Array.prototype.slice.call(pickInput.files).slice(0, 6 - picks.length).forEach(function (f) {
+          shrink(f).then(function (b) { picks.push({ blob: b, url: URL.createObjectURL(b) }); showPicks(); }, function () { msg.textContent = "could not read " + f.name; });
+        });
+        pickInput.value = "";
+      });
+      imgsBox.addEventListener("click", function (e) {
+        var a = e.target.closest("[data-rm]"); if (!a) return;
+        e.preventDefault(); URL.revokeObjectURL(picks[a.dataset.rm].url); picks.splice(a.dataset.rm, 1); showPicks();
+      });
+    }
+    function upload(p) {
+      return fetch(api + "/images", { method: "POST", headers: { "Content-Type": p.blob.type, "X-Owner-Key": key }, body: p.blob })
+        .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "upload failed"); return j.id; }); });
+    }
     if (form) {
       form.hidden = false;
       var tsBox = form.querySelector("[data-turnstile]");
@@ -852,21 +1048,27 @@
       }
       form.addEventListener("submit", function (e) {
         e.preventDefault();
-        var body = form.body.value.trim(); if (!body) return;
+        var body = form.body.value.trim(); if (!body && !picks.length) return;
         var payload = { body: body, title: form.title.value.trim(), name: form.name.value.trim() };
         if (key) payload.key = key;
         if (widget !== null && window.turnstile) payload.turnstile = window.turnstile.getResponse(widget);
-        form.classList.add("is-busy"); msg.textContent = "";
-        fetch(api + "/thoughts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
-          .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+        form.classList.add("is-busy"); msg.textContent = picks.length ? "sending the images…" : "";
+        // the images go up one by one, then the note that carries them
+        picks.reduce(function (chain, p) { return chain.then(function (ids) { return upload(p).then(function (id) { return ids.concat(id); }); }); }, Promise.resolve([]))
+          .then(function (ids) {
+            if (ids.length) payload.images = ids;
+            return fetch(api + "/thoughts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+              .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); });
+          })
           .then(function (res) {
             form.classList.remove("is-busy");
             if (!res.ok) { msg.textContent = res.j.error || "that did not go through"; return; }
-            var art = render(res.j.thought); place(art); art.classList.add("in");
+            var art = render(res.j.thought); place(art); art.classList.add("in"); relayout();
             form.body.value = ""; form.title.value = ""; msg.textContent = "posted.";
+            picks.forEach(function (p) { URL.revokeObjectURL(p.url); }); picks = []; showPicks();
             if (widget !== null && window.turnstile) window.turnstile.reset(widget);
           })
-          .catch(function () { form.classList.remove("is-busy"); msg.textContent = "that did not go through"; });
+          .catch(function (err) { form.classList.remove("is-busy"); msg.textContent = (err && err.message) || "that did not go through"; });
       });
     }
     // delete, with the key
@@ -875,23 +1077,25 @@
       e.preventDefault();
       var art = a.closest(".thought"); if (!art || !confirm("delete this thought?")) return;
       fetch(api + "/thoughts/" + art.dataset.id, { method: "DELETE", headers: { "X-Owner-Key": key } })
-        .then(function (r) { if (r.ok) art.remove(); });
+        .then(function (r) { if (r.ok) { delete layout[art.dataset.id]; art.remove(); relayout(); } });
     });
-    // the owner key: typed once, kept on this device
+    // the owner key: typed once, kept on this device; with it the board is editable
+    function applyKey() {
+      wall.classList.toggle("is-editable", !!key);
+      if (keyLink) keyLink.textContent = key ? "(key ✓)" : "(key)";
+      if (pickLabel) pickLabel.hidden = !key;
+      if (!key) { picks.forEach(function (p) { URL.revokeObjectURL(p.url); }); picks = []; showPicks(); }
+      wall.querySelectorAll(".thought").forEach(tools);
+    }
+    applyKey();
     if (keyLink) {
-      keyLink.textContent = key ? "(key ✓)" : "(key)";
       keyLink.addEventListener("click", function (e) {
         e.preventDefault();
         var v = prompt("the owner key (leave empty to forget it)", key || "");
         if (v === null) return;
         key = v.trim();
         try { key ? localStorage.setItem("thoughts-key", key) : localStorage.removeItem("thoughts-key"); } catch (err) {}
-        keyLink.textContent = key ? "(key ✓)" : "(key)";
-        wall.querySelectorAll(".thought--live").forEach(function (art) {
-          var del = art.querySelector("[data-del]");
-          if (key && !del) art.insertAdjacentHTML("beforeend", '<a class="thought__del" href="#" data-del>(delete)</a>');
-          if (!key && del) del.remove();
-        });
+        applyKey();
       });
     }
     load();

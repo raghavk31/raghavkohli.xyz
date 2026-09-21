@@ -277,6 +277,34 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .board .thought.is-clipped:not(.is-open) .thought__body{-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);}
 .board .thought.is-clipped:not(.is-open) .thought__date::after,.board .thought.is-open .thought__date::after{content:" · (more)";color:var(--line);}
 .board .thought.is-open .thought__date::after{content:" · (less)";}
+/* the free board (main.js relayout, desktop only): every note sits at its own left/top; a placed note keeps
+   its width and its type scales with it (--zoom = sqrt(width / 248)). Moves ease once the first layout is down. */
+.board--free{position:relative;columns:auto;padding:0;}
+.board--free .thought{position:absolute;display:block;margin:0;box-sizing:border-box;
+  padding:calc(24px * var(--zoom,1)) calc(22px * var(--zoom,1)) calc(18px * var(--zoom,1));}
+.board--free.is-laid .thought{transition:box-shadow .5s cubic-bezier(.16,1,.3,1),rotate .5s cubic-bezier(.16,1,.3,1),opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1),
+  left .6s cubic-bezier(.16,1,.3,1),top .6s cubic-bezier(.16,1,.3,1);}
+.board--free .thought.is-arriving,.board--free .thought.is-dragging{transition:none !important;}
+.board--free .thought:hover{z-index:9000 !important;}
+.board--free .thought.is-dragging{z-index:9001 !important;rotate:0deg;animation:none;cursor:grabbing;
+  box-shadow:0 1px 1px rgba(28,27,24,.06),0 16px 28px -8px rgba(28,27,24,.22),0 48px 64px -26px rgba(28,27,24,.32);}
+.board--free .thought__title{font-size:calc(1.2rem * var(--zoom,1));margin-bottom:calc(12px * var(--zoom,1));}
+.board--free .thought__body{font-size:calc(var(--t-small) * var(--zoom,1));}
+.board--free .thought__date{font-size:calc(var(--t-mono) * var(--zoom,1));margin-top:calc(18px * var(--zoom,1));}
+/* the pictures a note carries: pinned at its top, the text beneath */
+.thought__imgs{margin:calc(-24px * var(--zoom,1)) calc(-22px * var(--zoom,1)) calc(16px * var(--zoom,1));}
+.thought__imgs img{display:block;width:100%;height:auto;background:var(--paper-2);cursor:zoom-in;}
+.thought__imgs img + img{margin-top:4px;}
+.board:not(.board--free) .thought__imgs{margin:-24px -22px 16px;}
+/* with the key: notes take the hand, and a grip in the corner scales them */
+.board.is-editable.board--free .thought{cursor:grab;user-select:none;-webkit-user-select:none;}
+.board.is-editable.board--free .thought a{cursor:pointer;}
+.thought__tools{display:block;}
+.thought__tools a + a{margin-left:14px;}
+.thought__grip{display:none;position:absolute;right:0;bottom:0;width:22px;height:22px;cursor:nwse-resize;opacity:0;transition:opacity .3s;
+  background:linear-gradient(135deg,transparent 0 50%,var(--line) 50% 58%,transparent 58% 72%,var(--line) 72% 80%,transparent 80%);}
+.board.is-editable.board--free .thought__grip{display:block;}
+.board .thought:hover .thought__grip,.board .thought.is-dragging .thought__grip{opacity:1;}
 /* the composer: a title bar, the thought, the name and the post beneath it */
 .composer{max-width:62ch;margin-top:clamp(40px,6vw,64px);}
 .composer textarea,.composer input{display:block;width:100%;border:0;border-bottom:1px solid var(--line);background:none;
@@ -292,6 +320,16 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .composer button:hover{color:var(--ink);}
 .composer.is-busy button{opacity:.4;pointer-events:none;}
 .composer__msg{margin:10px 0 0;min-height:1.4em;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+/* images chosen for a note (with the key): a picker in the row, thumbnails beneath until they are posted */
+.composer__pick{font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--mute);cursor:pointer;padding:10px 0;}
+.composer__pick:hover{color:var(--ink);}
+.composer__pick input{display:none;}
+.composer__imgs{display:flex;flex-wrap:wrap;gap:12px;}
+.composer__imgs:not(:empty){margin-top:14px;}
+.composer__thumb{position:relative;width:72px;}
+.composer__thumb img{display:block;width:72px;height:72px;object-fit:cover;background:var(--paper-2);}
+.composer__thumb a{display:block;margin-top:4px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+.composer__thumb a:hover{color:var(--ink);}
 .thought__by{color:var(--faint-2);}
 .thought--owner .thought__by{color:var(--ink);}
 .thought__del{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
