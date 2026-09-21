@@ -50,23 +50,18 @@ chapters:
     name: precedent
     title: The aahar-pyne, read as a plan
     plates:
-      - { src: /assets/projects/water-urbanism/06.jpg, w: 1566, h: 640, fig: fig.05, blend: true, cap: "The aahar-pyne network on the site. Pynes are the channels that carry runoff off the hills; aahars the embanked basins that hold it. Drawn here as the first layer of the plan." }
-      - { src: /assets/projects/water-urbanism/30.jpg, w: 1800, h: 1775, fig: fig.06, cap: "The first drawing, by hand. The wetland network in blue, the riparian edge in green, the farms in yellow and the trail along the hills in brown, with the arithmetic in the margins: how many people a cluster holds, how many schools, community centres and market squares that number needs, and where on the network they land. Below, the first two passes: the low ground traced from the contours, and the street loop over it." }
-    strip:
-      col: true
-      fig: fig.07
-      cap: "The low-lying network. Every area below the ridge pattern, which becomes the wetland and bio-retention system."
-      items:
-        - { src: /assets/projects/water-urbanism/07.jpg, w: 1651, h: 736, cap: "The wetland network. The site's low-lying zones, derived from the surface drainage pattern and the ridges." }
+      - { src: /assets/projects/water-urbanism/30.jpg, w: 1800, h: 1775, fig: fig.05, cap: "The first drawing, by hand. The wetland network in blue, the riparian edge in green, the farms in yellow and the trail along the hills in brown, with the arithmetic in the margins: how many people a cluster holds, how many schools, community centres and market squares that number needs, and where on the network they land. Below, the first two passes: the low ground traced from the contours, and the street loop over it." }
   - n: "03"
     name: layers
     title: The plan, drawn in the water's order
     side: left
     plates:
-      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.08, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
+      - { src: /assets/projects/water-urbanism/08.jpg, w: 1694, h: 1800, fig: fig.06, cap: "The plan exploded. From the bottom: topography and villages; site connectivity and the intersections for transit; the university and the stadium; agriculture as productive landscape; the aahar-pyne network; the drainage channels and catchments; the wetlands (valleys) and pathways (ridges) on top. Photographs of the site's water at every season along the edge." }
     stack:
-      fig: fig.09–16
+      fig: fig.07–16
       items:
+        - { src: /assets/projects/water-urbanism/31.jpg, w: 1800, h: 1273, name: aahar-pyne, cap: "The precedent, on the site. Pynes carry the runoff off the hills; aahars, the embanked basins, hold it through the dry months. South Bihar's network, traced where it would sit here: the first thing drawn, on blank paper." }
+        - { src: /assets/projects/water-urbanism/32.jpg, w: 1800, h: 1273, name: low ground, cap: "The low ground. Every area below the ridge pattern, found from the surface drainage: the wetland and bio-retention system falls out of the terrain on its own, before any plan." }
         - { src: /assets/projects/water-urbanism/09.jpg, w: 1800, h: 1273, name: aahars, cap: "The aahars first. The embanked basins go where the hills' runoff already collects, on the low ground the contour model found. Nothing is built yet; the water has its places." }
         - { src: /assets/projects/water-urbanism/10.jpg, w: 1800, h: 1273, name: wetlands, cap: "Then the pynes. The channels that join basin to basin become the wetland network and the bio-retention zones: the flood's route through the site, drawn before any street." }
         - { src: /assets/projects/water-urbanism/11.jpg, w: 1800, h: 1273, name: eco-trail, cap: "The trail follows the pynes, because that is where the shade and the water are. It is the first thing a person gets: a cycle and pedestrian loop the length of the site." }
