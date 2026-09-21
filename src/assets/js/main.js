@@ -80,23 +80,6 @@
     });
   })();
 
-  /* ---------- (index) hover-preview ---------- */
-  var idxList = document.querySelector("[data-idxlist]");
-  if (idxList) {
-    var pvMedia = document.querySelector('.index__pv-img [data-pv="media"]');
-    var pvName = document.querySelector('.index__pv-name[data-pv="name"]');
-    var pvBlurb = document.querySelector('.index__pv-blurb[data-pv="blurb"]');
-    idxList.querySelectorAll(".index__row").forEach(function (row) {
-      row.addEventListener("mouseenter", function () {
-        idxList.querySelectorAll(".index__row").forEach(function (r) { r.classList.remove("on"); });
-        row.classList.add("on");
-        if (pvMedia) pvMedia.textContent = row.getAttribute("data-media");
-        if (pvName) pvName.textContent = row.getAttribute("data-name");
-        if (pvBlurb) pvBlurb.textContent = row.getAttribute("data-blurb");
-      });
-    });
-  }
-
   /* ---------- (work) keyword filter — reorders + resizes the grid, FLIP-animated ---------- */
   var grid = document.querySelector("[data-grid]");
   var filterBar = document.querySelector("[data-filters]");

@@ -195,32 +195,6 @@ title: "Raghav Kohli · invisible systems, made visible"
   </div>
 </section>
 
-<section class="index" id="index">
-  <div class="index__head reveal" data-reveal>
-    <h2 class="eyebrow">(index)</h2>
-    <span class="index__hint">the fuller archive · hover a line to preview</span>
-  </div>
-  <div class="index__grid reveal" data-reveal>
-    <div class="index__list" data-idxlist>
-      {% for e in archive %}
-      <a class="index__row{% if loop.first %} on{% endif %}" href="{{ e.href or '#index' }}"
-         data-media="{{ e.media }}" data-name="{{ e.name }}" data-blurb="{{ e.blurb }}">
-        <span class="n">{{ e.n }}</span>
-        <span class="nm">{{ e.name }}</span>
-        <span class="cat">{{ e.cat }}</span>
-        <span class="yr">{{ e.year }}</span>
-      </a>
-      {% endfor %}
-      <div class="index__end"></div>
-    </div>
-    <div class="index__preview">
-      <div class="index__pv-img"><div class="fig" data-pv="media">{{ archive[0].media }}</div></div>
-      <div class="index__pv-name" data-pv="name">{{ archive[0].name }}</div>
-      <p class="index__pv-blurb" data-pv="blurb">{{ archive[0].blurb }}</p>
-    </div>
-  </div>
-</section>
-
 <footer class="contact" id="contact" role="contentinfo">
   <div class="reveal" data-reveal>
     <h2 class="eyebrow">(contact)</h2>
