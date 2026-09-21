@@ -701,6 +701,7 @@
       if (n < 2 || !stage) return;
       var m = /^(fig\.)(\d+)/.exec(st.dataset.fig || ""), start = m ? parseInt(m[2], 10) : 0;
       var idx = n - 1, taken = false, built = false, auto = null, capTimer = null;
+      var fig = function (k) { var v = start + k; return m ? m[1] + (v < 10 ? "0" : "") + v : (st.dataset.fig || ""); };
       var STEP_MS = 1000;
       var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
       st.classList.add("stack--js");
@@ -716,7 +717,7 @@
         st.classList.add("is-swapping");
         if (capTimer) clearTimeout(capTimer);
         capTimer = setTimeout(function () {
-          if (m) capN.textContent = m[1] + (start + idx);
+          if (m) capN.textContent = fig(idx);
           capT.textContent = layers[idx].dataset.cap || "";
           st.classList.remove("is-swapping");
         }, reduce ? 0 : 180);
@@ -766,7 +767,7 @@
       });
       // the stage opens the lightbox on the frames, at the current layer
       var items = layers.map(function (im, k) {
-        return { src: im.src, alt: im.alt, w: im.getAttribute("width"), h: im.getAttribute("height"), n: m ? m[1] + (start + k) : (st.dataset.fig || ""), t: im.dataset.cap || "" };
+        return { src: im.src, alt: im.alt, w: im.getAttribute("width"), h: im.getAttribute("height"), n: fig(k), t: im.dataset.cap || "" };
       });
       stage.classList.add("lb-src");
       stage.setAttribute("tabindex", "0");

@@ -80,18 +80,6 @@ chapters:
       cap: "The plan on its terrain. Eight square kilometres between the Rajgir hills and the railway; wetlands and aahars as the civic structure, the ridge line as the first line drawn."
       items:
         - { src: /assets/projects/water-urbanism/01.jpg, w: 1800, h: 1222, cap: "The masterplan. The whole, on its terrain." }
-    tiles:
-      ar: 1.414
-      min: 170
-      fit: contain
-      fig: fig.18–22
-      cap: "The program diagram, and the four systems on their own: eco-trail, riparian edge, food loop, streets. Open any to see it at full size."
-      items:
-        - { src: /assets/projects/water-urbanism/17.jpg, w: 1789, h: 960, tile: /assets/projects/water-urbanism/17-t.jpg, tw: 640, th: 343, cap: "The program diagram. The four loops of ecology zoned across the site: water in blue, the wetland cells in cyan, food and energy in yellow and green, the institutional block in pink. The arrows are where water enters and leaves." }
-        - { src: /assets/projects/water-urbanism/18.jpg, w: 1649, h: 813, tile: /assets/projects/water-urbanism/18-t.jpg, tw: 640, th: 314, cap: "The eco-trail. The primary bicycle and pedestrian network, taking the aahars and pynes as its reference." }
-        - { src: /assets/projects/water-urbanism/19.jpg, w: 1653, h: 788, tile: /assets/projects/water-urbanism/19-t.jpg, tw: 640, th: 305, cap: "Riparian edge and green cover. The planted margin along every channel and basin." }
-        - { src: /assets/projects/water-urbanism/20.jpg, w: 1534, h: 629, tile: /assets/projects/water-urbanism/20-t.jpg, tw: 640, th: 261, cap: "The food loop. Farms on the traditional irrigation network, sized to the projected 1,20,000 people." }
-        - { src: /assets/projects/water-urbanism/21.jpg, w: 1800, h: 988, tile: /assets/projects/water-urbanism/21-t.jpg, tw: 640, th: 348, cap: "The street network. The existing portals of entry made into a transit loop, with the railway station as its hub." }
   - n: "04"
     name: four loops
     title: Water, food, waste, energy
@@ -99,9 +87,9 @@ chapters:
     name: eco-village
     title: The cluster and the living machine
     plates:
-      - { src: /assets/projects/water-urbanism/29.jpg, w: 1230, h: 1150, fig: fig.23, cap: "Twenty-four building typologies in four families, each with its plan and section. Culture and community: the cultural centre, the community hub, library and learning, the wellness centre, prayer and meditation, the stepped ghat. Livelihoods and production: the skill and craft workshop, the local market, food processing, the agroecology centre, cold storage, the service block. Ecology and water: the water pavilion, the bird hide, the wetland platform, the bridge pavilion, the nature shelter, the eco-restoration shed. Housing, stay and infrastructure: community housing, the homestay, the researcher residence, the temporary shelter, the digital kiosk, the observation deck. Brick, timber and tile throughout, the villages' own materials." }
+      - { src: /assets/projects/water-urbanism/29.jpg, w: 1230, h: 1150, fig: fig.18, cap: "Twenty-four building typologies in four families, each with its plan and section. Culture and community: the cultural centre, the community hub, library and learning, the wellness centre, prayer and meditation, the stepped ghat. Livelihoods and production: the skill and craft workshop, the local market, food processing, the agroecology centre, cold storage, the service block. Ecology and water: the water pavilion, the bird hide, the wetland platform, the bridge pavilion, the nature shelter, the eco-restoration shed. Housing, stay and infrastructure: community housing, the homestay, the researcher residence, the temporary shelter, the digital kiosk, the observation deck. Brick, timber and tile throughout, the villages' own materials." }
     strip:
-      fig: fig.24
+      fig: fig.19
       cap: "The eco-lab, axonometric. Neighbourhood clusters around a central plaza; the learning centre, cultural centre and market on the aahar; health and wellness; skill and craft workshops; the riverside ghat and the pedestrian bridge; the riparian forest, agroecology fields and community farms; the eco-park, biodiversity habitat and nature trail on the cycle-and-pedestrian loop, the Rajgir hills behind."
       items:
         - { src: /assets/projects/water-urbanism/22.jpg, w: 1672, h: 941, cap: "The eco-lab, axonometric. A landscape of learning, production and everyday life, where the city and its ecology coexist." }
@@ -109,11 +97,11 @@ chapters:
     name: eco-lab
     title: Living with the water, not beside it
     plates:
-      - { src: /assets/projects/water-urbanism/24.jpg, w: 1672, h: 941, fig: fig.25, cap: "The living machine on the aahar. The brick tower and the shaded hall at the water's edge, the Rajgir hills behind; the treatment structure as the cluster's public room." }
+      - { src: /assets/projects/water-urbanism/24.jpg, w: 1672, h: 941, fig: fig.20, cap: "The living machine on the aahar. The brick tower and the shaded hall at the water's edge, the Rajgir hills behind; the treatment structure as the cluster's public room." }
     tiles:
       ar: 1.4
       min: 440
-      fig: fig.26–29
+      fig: fig.21–24
       cap: "Along the trail. The courts between the houses, the wetland cells, the bridges and the farms: the eco-lab at eye level. Design renders, 2025."
       items:
         - { src: /assets/projects/water-urbanism/25.jpg, w: 1536, h: 1024, cap: "A court in the cluster. The shared ground between the houses, a rill through it, the tower beyond." }
