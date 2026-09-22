@@ -1084,7 +1084,6 @@
       wall.classList.toggle("is-editable", !!key);
       if (keyLink) keyLink.textContent = key ? "(key ✓)" : "(key)";
       if (pickLabel) pickLabel.hidden = !key;
-      if (form) { key ? form.body.removeAttribute("maxlength") : form.body.setAttribute("maxlength", "2000"); } // no cap on Raghav's own text
       if (!key) { picks.forEach(function (p) { URL.revokeObjectURL(p.url); }); picks = []; showPicks(); }
       wall.querySelectorAll(".thought").forEach(tools);
     }
