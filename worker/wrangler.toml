@@ -19,7 +19,7 @@ database_id = "51f01c72-3941-41a7-b7c5-8d71c64271c2"
 [vars]
 # origins allowed to call the API (the site, and the dev server)
 ALLOWED_ORIGINS = "https://raghavkohli.xyz,https://www.raghavkohli.xyz,http://localhost:8087,http://localhost:8080"
-MAX_BODY = "2000"
+MAX_BODY = "2000"      # visitors only; a post with the owner key has no length cap
 MAX_NAME = "40"
 MAX_TITLE = "80"
 RATE_PER_HOUR = "3"

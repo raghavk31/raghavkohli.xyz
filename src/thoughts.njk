@@ -18,7 +18,7 @@ permalink: /thoughts/
   {% if site.thoughtsApi %}
   <form class="composer reveal" data-composer hidden>
     <input class="composer__title" name="title" type="text" maxlength="80" placeholder="a title (optional)" autocomplete="off" />
-    <textarea name="body" rows="4" maxlength="2000" placeholder="a thought…" required></textarea>
+    <textarea name="body" rows="4" maxlength="2000" placeholder="a thought…" required></textarea>{#- the cap lifts with the key (main.js applyKey) -#}
     <div class="composer__row">
       <input name="name" type="text" maxlength="40" placeholder="your name (optional)" autocomplete="off" />
       <div class="composer__ts" data-turnstile></div>

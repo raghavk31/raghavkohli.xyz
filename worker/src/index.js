@@ -8,7 +8,7 @@
    POST   /images      <image bytes>        an image for a note (owner); Content-Type is the mime; returns {id}
    GET    /images/<id>                      the image, cached for a year
    Guards, all without login: a Turnstile token when TURNSTILE_SECRET is set, RATE_PER_HOUR posts per
-   IP (IPs are stored only as a salted hash), MAX_BODY / MAX_TITLE / MAX_NAME lengths. Images live in
+   IP (IPs are stored only as a salted hash), MAX_BODY (visitors only) / MAX_TITLE / MAX_NAME lengths. Images live in
    D1 as blobs (R2 is not enabled on the account); the browser downscales them first, MAX_IMAGE caps
    what the worker accepts, and only the owner can attach them. */
 
@@ -61,7 +61,7 @@ export default {
       let images = Array.isArray(data.images) ? data.images.filter((s) => typeof s === "string" && /^[a-z0-9]+$/.test(s)).slice(0, MAX_IMAGES) : [];
       if (!owner) images = [];
       if (!body && !images.length) return json({ error: "write something first" }, 400);
-      if (body.length > (Number(env.MAX_BODY) || 2000)) return json({ error: "too long" }, 400);
+      if (!owner && body.length > (Number(env.MAX_BODY) || 2000)) return json({ error: "too long" }, 400); // the owner's text has no cap
       const ip = req.headers.get("CF-Connecting-IP") || "0.0.0.0";
       let ipHash = "owner";
       if (!owner) {
