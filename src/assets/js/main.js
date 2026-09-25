@@ -1073,31 +1073,37 @@
     /* Opening a note: the same element goes fixed and square, scaled from where it sat, so it reads
        as the note growing rather than a panel arriving. The scrim, Escape and a second click close
        it, and the note goes back to the board exactly where it was. */
-    var zoomed = null, scrim = null, zoomFocus = null, zoomStyle = "";
+    var zoomed = null, scrim = null, zoomFocus = null, zoomStyle = "", zoomAnim = null;
+    // the house curve is so front-loaded that a grow reads as a jump; this one lets it be seen
+    var MORPH = 420, EASE = "cubic-bezier(.32,.72,.32,1)";
     function closeZoom() {
       if (!zoomed) return;
       var art = zoomed; zoomed = null;
       var from = art.getBoundingClientRect();
       art.classList.remove("is-zoomed");
       art.setAttribute("style", zoomStyle);             // back to the width and spot it had
-      var to = art.getBoundingClientRect();
-      art.style.transition = "none";
-      art.style.transform = flip(from, to);
-      art.offsetWidth;                                  // let the browser take that as the start
-      art.style.transition = "";
-      requestAnimationFrame(function () { art.style.transform = ""; });
-      setTimeout(function () { if (!zoomed) { art.style.transform = ""; art.style.transition = ""; } }, 600);
+      morph(art, from);
       if (scrim) scrim.classList.remove("on");
       document.body.classList.remove("note-open");
       clip(art);
       if (zoomFocus && zoomFocus.focus) zoomFocus.focus();
       zoomFocus = null;
     }
-    function flip(from, to) {
+    // grow (or shrink) the note from where it was to where it now is. The Web Animations API runs
+    // this off its own timeline, so it does not fight the note's own transition or its inline styles.
+    function morph(art, from) {
+      var to = art.getBoundingClientRect();
+      if (!to.width || !from.width || !art.animate) return;
       var sx = from.width / to.width, sy = from.height / to.height;
       var dx = from.left + from.width / 2 - (to.left + to.width / 2);
       var dy = from.top + from.height / 2 - (to.top + to.height / 2);
-      return "translate(" + dx + "px," + dy + "px) scale(" + sx + "," + sy + ")";
+      if (Math.abs(dx) < 1 && Math.abs(dy) < 1 && Math.abs(sx - 1) < .01) return;
+      if (zoomAnim) zoomAnim.cancel();
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      zoomAnim = art.animate(
+        [{ transform: "translate(" + dx + "px," + dy + "px) scale(" + sx + "," + sy + ")" }, { transform: "none" }],
+        { duration: reduce ? 0 : MORPH, easing: EASE }
+      );
     }
     function zoom(art) {
       if (zoomed === art) return closeZoom();
@@ -1112,16 +1118,14 @@
       var from = art.getBoundingClientRect();
       // a placed note carries its width, spot and --zoom inline, and inline beats the zoomed rule
       zoomStyle = art.getAttribute("style") || "";
+      // a placed note carries its width, spot, stacking and --zoom inline, and inline beats the
+      // stylesheet — the z-index especially, which otherwise leaves the card under the scrim
       art.style.width = ""; art.style.height = ""; art.style.left = ""; art.style.top = "";
+      art.style.zIndex = ""; art.style.transform = ""; art.style.transition = "";
       art.style.removeProperty("--zoom");
       art.classList.add("is-zoomed");
       art.classList.remove("is-clipped");
-      var to = art.getBoundingClientRect();
-      art.style.transition = "none";
-      art.style.transform = flip(from, to);
-      art.offsetWidth;
-      art.style.transition = "";
-      requestAnimationFrame(function () { art.style.transform = "none"; });
+      morph(art, from);
       scrim.offsetWidth; scrim.classList.add("on");
       document.body.classList.add("note-open");
       zoomed = art;
@@ -1185,7 +1189,7 @@
         var L = layout[idOf(art)];
         if (!L) { art.classList.remove("is-pinned"); art.style.zIndex = ""; if (art !== (drag && drag.art)) size(art, NOTE_W); return; }
         var w = Math.min(L.w, W); size(art, w);
-        var x = Math.max(0, Math.min(L.x, W - w)), y = Math.max(0, L.y);
+        var x = Math.max(40 - w, Math.min(L.x, W - 40)), y = Math.max(0, L.y);
         art.style.left = x + "px"; art.style.top = y + "px"; art.style.zIndex = L.z || 1;
         art.classList.add("is-pinned");
         var h = art.offsetHeight; placed.push({ x: x, y: y, w: w, h: h }); bottom = Math.max(bottom, y + h);
@@ -1243,8 +1247,10 @@
       }
       var W = wall.clientWidth;
       if (drag.mode === "move") {
-        var w = drag.art.offsetWidth;
-        drag.art.style.left = Math.max(0, Math.min(drag.ox + dx, W - w)) + "px";
+        // anywhere on the board, which is the whole window: only enough of the note is held on
+        // screen to grab it again, and downward is open — the board grows to whatever it is given
+        var w = drag.art.offsetWidth, EDGE = 40;
+        drag.art.style.left = Math.max(EDGE - w, Math.min(drag.ox + dx, W - EDGE)) + "px";
         drag.art.style.top = Math.max(0, drag.oy + dy) + "px";
       } else {
         size(drag.art, Math.max(MIN_W, Math.min(drag.ow + dx, MAX_W, W - drag.ox)));
