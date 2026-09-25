@@ -14,7 +14,6 @@
   --line:#C2C0B7;
   --accent:#2E3A57;
   --serif:'Fraunces',Georgia,serif;
-  --serif-alt:'Cormorant',Georgia,serif;
   --sans:'Geist',system-ui,-apple-system,sans-serif;
   --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
   --stripe:repeating-linear-gradient(135deg,#EEEDE7 0px,#EEEDE7 1px,#F4F3EE 1px,#F4F3EE 11px);
@@ -39,22 +38,53 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
   clip:rect(0 0 0 0);white-space:nowrap;border:0;}
 
 /* ---------- header ---------- */
-.head{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
-  padding:20px var(--gutter);background:rgba(250,250,248,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
-.head .mark{font-family:var(--serif-alt);font-size:22px;font-weight:500;letter-spacing:-0.01em;line-height:1;color:var(--ink);}
+/* The bar bleeds to the window so the blur covers the full width; its contents sit inside the same
+   box as every section below it (max-width + gutter), so the page has one left edge, not two. */
+.head{position:sticky;top:0;z-index:50;background:rgba(250,250,248,.72);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+.head__in{display:flex;align-items:center;justify-content:space-between;gap:24px;
+  max-width:var(--maxw);margin:0 auto;padding:20px var(--gutter);}
+.head .mark{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-0.01em;line-height:1;color:var(--ink);}
 .head nav{display:flex;gap:26px;font-size:13px;}
 .head nav a{color:var(--mute);}
 .head nav a:hover{color:var(--ink);}
+/* On a phone the four links plus the mark are wider than the screen. Tighten first; below 560px
+   drop (selected work) — the mark already goes there, and the homepage names itself at the top. */
+@media(max-width:820px){
+  .head__in{gap:16px;}
+  .head nav{gap:18px;font-size:12.5px;}
+}
+@media(max-width:560px){
+  .head nav{gap:16px;}
+  .head__work{display:none;}
+}
 
 /* ---------- work section ---------- */
 .work{padding:clamp(36px,5vw,72px) var(--gutter) 0;max-width:var(--maxw);margin:0 auto;}
-.work__head{display:flex;align-items:baseline;justify-content:space-between;gap:20px 40px;flex-wrap:wrap;
-  margin-bottom:clamp(40px,6vw,72px);}
+.work__head{display:block;}   /* eyebrow, then the masthead row beneath it */
 
 /* keyword filter chips */
 /* the lead row: the tagline (the argument, once) with the topic chips to its right, smaller
    (plan 2026-09-19, D3 + D5). Chips wrap under the tagline below 1200px. */
-.work__lead{display:flex;justify-content:space-between;align-items:flex-end;gap:24px 40px;flex-wrap:wrap;margin-top:22px;}
+.work__lead{display:flex;justify-content:space-between;align-items:flex-start;gap:28px 48px;flex-wrap:wrap;margin-top:24px;}
+/* the contents, as a ledger: what is below, and how much of it. Gives the masthead a right-hand
+   weight so the corner is composed rather than left over. */
+.work__index{display:grid;gap:5px;margin:0;justify-items:end;}
+.work__index > div{display:grid;grid-template-columns:1fr 2.2em;gap:0 14px;align-items:baseline;
+  font-family:var(--mono);font-size:11px;letter-spacing:.04em;white-space:nowrap;}
+.work__index dt{color:var(--faint-2);text-align:right;}
+.work__index dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums;text-align:right;}
+/* on a phone the masthead is one column, so the ledger reads from the left like everything else */
+@media(max-width:820px){
+  .work__index{justify-items:start;}
+  .work__index > div{grid-template-columns:auto auto;gap:0 12px;}
+  .work__index dt{text-align:left;}
+}
+/* the filter, beside the grid it filters */
+.work__filterbar{display:flex;align-items:center;gap:16px 20px;flex-wrap:wrap;
+  margin:clamp(40px,5vw,64px) 0 clamp(28px,3.5vw,40px);padding-top:18px;border-top:1px solid var(--line);}
+.work__filterbar .eyebrow{flex:none;}
+/* the chips are injected by main.js; with no JS there is nothing to filter with */
+.work__filterbar:not(:has(.work__chip)){display:none;}
 .work__tag{font-family:var(--serif);font-weight:400;font-size:clamp(20px,2.1vw,28px);line-height:1.28;letter-spacing:-0.01em;
   color:var(--ink);max-width:18em;margin:0;}
 .work__tag em{font-style:italic;color:var(--accent);}
@@ -117,7 +147,11 @@ figure.card{max-width:100%;min-width:0;transition:opacity .45s ease,filter .45s 
 .card__frame > img.card__alt.on{opacity:1;}
 /* thumbfit: contain — show the whole drawing on the page's own paper instead of cover-cropping */
 .card__frame > img.contain{object-fit:contain;}
-.card__fig{position:absolute;left:16px;bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:var(--faint);transition:opacity .6s ease;}
+/* the label sits on the image, and the images are dense maps — it needs its own ground */
+.card__fig{position:absolute;left:12px;bottom:10px;max-width:calc(100% - 24px);padding:4px 8px;
+  background:rgba(250,250,248,.88);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;line-height:1.3;color:var(--faint-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:opacity .6s ease;}
 .card__frame.is-alt .card__fig{opacity:0;}
 /* frosted-glass + halftone screen over the image, question text on top */
 .card__overlay{position:absolute;inset:0;background:rgba(250,250,248,.5);
@@ -144,7 +178,7 @@ figure.card{max-width:100%;min-width:0;transition:opacity .45s ease,filter .45s 
 
 figcaption{display:flex;align-items:baseline;gap:12px;margin-top:18px;font-size:13.5px;flex-wrap:wrap;}
 figcaption .n{color:var(--line);font-variant-numeric:tabular-nums;}
-figcaption .name{font-weight:500;color:var(--ink);}
+figcaption .name{font:inherit;font-weight:500;color:var(--ink);}   /* an h3: the work list is headings, not spans */
 figcaption .desc{color:var(--faint);}
 figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 
@@ -155,7 +189,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .card__meta.right{left:100%;margin-left:22px;transform:translateX(-10px);text-align:left;align-items:flex-start;}
 .card__meta.left{right:100%;margin-right:22px;transform:translateX(10px);text-align:right;align-items:flex-end;}
 .card__meta > div{display:flex;flex-direction:column;gap:3px;align-items:inherit;}
-.card__meta .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.05em;color:#B7B5AC;}
+.card__meta .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.05em;color:var(--faint-2);}
 .card__meta .val{font-size:12px;color:var(--ink-2);}
 .card__meta > div{background:var(--paper);}
 .card__meta > div:nth-child(4) .val{color:var(--faint);}
@@ -166,7 +200,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
   transition:max-height .55s cubic-bezier(.16,1,.3,1), opacity .4s ease;}
 /* squares shrink to share the card's width (five fit a three-column card), never exceeding 78px */
 .card__thumb{flex:1 1 0;min-width:0;max-width:78px;aspect-ratio:1;background:var(--stripe);position:relative;}
-.card__thumb span{position:absolute;left:6px;bottom:5px;font-family:var(--mono);font-size:9px;color:#9A988F;}
+.card__thumb span{position:absolute;left:6px;bottom:5px;font-family:var(--mono);font-size:10px;color:var(--faint-2);}
 .card__thumb img{display:block;width:100%;height:100%;object-fit:cover;opacity:.82;transition:opacity .3s ease;}
 .card__thumb.on img,.card__thumb:hover img{opacity:1;}
 .card__thumb.on::after{content:"";position:absolute;left:0;right:0;bottom:-4px;height:1.5px;background:var(--accent);}
@@ -190,7 +224,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .about__quote{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3.4vw,46px);line-height:1.14;
   letter-spacing:-0.01em;color:var(--ink);max-width:18em;margin:30px 0 0;}
 .about__quote em{font-style:normal;color:var(--accent);}
-.about__body{font-family:var(--sans);font-weight:300;font-size:16px;line-height:1.65;color:var(--ink-soft);
+.about__body{font-family:var(--sans);font-weight:400;font-size:16px;line-height:1.65;color:var(--ink-soft);
   max-width:32em;margin:40px 0 0;}
 
 /* full-cv disclosure */
@@ -234,7 +268,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .thought__date{display:block;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .thought__title{font-family:var(--serif);font-weight:500;font-size:var(--t-serif-2);line-height:1.15;letter-spacing:-0.01em;color:var(--ink);}
 .thought__title a{color:inherit;}
-.thought__body{font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:300;}
+.thought__body{font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:400;}
 .thought__body p{margin-bottom:1.1em;} .thought__body p:last-child{margin-bottom:0;}
 .thought__body strong{color:var(--ink);font-weight:500;}
 .thought__body a{border-bottom:1px solid var(--faint-2);}
@@ -340,7 +374,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 /* ---------- contact ---------- */
 .contact{max-width:var(--maxw);margin:0 auto;padding:clamp(80px,11vw,150px) var(--gutter) clamp(90px,12vw,160px);}
 .contact__row{display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:24px;margin-top:28px;}
-.contact__email{font-family:var(--serif-alt);font-size:clamp(26px,3.2vw,40px);font-weight:400;color:var(--ink);}
+.contact__email{font-family:var(--serif);font-size:clamp(26px,3.2vw,40px);font-weight:400;color:var(--ink);}
 .contact__links{display:flex;gap:22px;font-size:13.5px;}
 .contact__links a{color:var(--mute);}
 .contact__fine{margin-top:clamp(56px,8vw,90px);font-size:11.5px;color:var(--faint-2);letter-spacing:.02em;}
@@ -358,14 +392,14 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .detail__meta{display:flex;flex-wrap:wrap;gap:48px 72px;margin:clamp(48px,6vw,72px) 0 0;}
 .detail__meta .lbl{font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);margin-bottom:8px;}
 .detail__meta .val{font-size:var(--t-small);color:var(--ink-2);}
-.detail__lead{font-family:var(--sans);font-weight:300;font-size:var(--t-prose);line-height:1.7;
+.detail__lead{font-family:var(--sans);font-weight:400;font-size:var(--t-prose);line-height:1.7;
   color:var(--ink-2);max-width:30em;margin:clamp(48px,6vw,72px) 0 0;}
 .detail__hero-media{margin-top:clamp(56px,8vw,96px);aspect-ratio:16/9;background:var(--stripe);position:relative;}
 .detail__hero-media .fig{position:absolute;left:20px;bottom:16px;font-family:var(--mono);font-size:11px;color:var(--faint);}
 .detail__pair{display:flex;gap:28px;margin-top:28px;flex-wrap:wrap;}
 .detail__pair > div{flex:1;min-width:260px;aspect-ratio:4/3;background:var(--stripe);position:relative;}
 .detail__pair .fig{position:absolute;left:18px;bottom:14px;font-family:var(--mono);font-size:11px;color:var(--faint);}
-.detail__body{max-width:62ch;margin-top:clamp(56px,8vw,96px);font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:300;}
+.detail__body{max-width:32em;margin-top:clamp(56px,8vw,96px);font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:400;}
 .detail__body h2{font-family:var(--serif);font-weight:500;font-size:var(--t-serif-2);line-height:1.15;
   margin:1.6em 0 .5em;color:var(--ink);}
 .detail__body p{margin-bottom:1.1em;}
@@ -512,8 +546,9 @@ body.lb-open{overflow:hidden;}
 }
 
 /* ---------- project subtitle ---------- */
-.detail__sub{font-family:var(--sans);font-weight:300;font-size:var(--t-prose);line-height:1.6;
-  color:var(--faint);margin-top:20px;max-width:32em;}
+/* the deck: one step above body, so the ladder reads question -> deck -> body */
+.detail__sub{font-family:var(--sans);font-weight:400;font-size:clamp(18px,1.5vw,20px);line-height:1.5;
+  color:var(--mute);margin-top:20px;max-width:34ch;}
 
 /* ---------- plates: one figure system for every project image ----------
    Images always render at their own ratio (never cover-cropped). width/height attributes
@@ -558,8 +593,9 @@ body.lb-open{overflow:hidden;}
 .chap--long .chap__txt,.chap--noplates .chap__txt,.chap--wide .chap__txt{position:static;}   /* --wide: a full-width row follows; sticky text would slide over it */
 .chap--noplates .chap__txt{grid-column:1 / span 8;}
 .chap--notext .chap__pl{grid-column:1 / -1;}
-/* `plw: true`: the plates column takes seven columns instead of six, the text four (one plate that needs a little more room) */
-.chap--plw .chap__txt{grid-column:1 / span 4;}
+/* `plw: true`: the plates column takes seven columns instead of six (one plate that needs a little
+   more room). The text keeps its five, so the measure does not drop below the rest of the page. */
+.chap--plw .chap__txt{grid-column:1 / span 5;}
 .chap--plw .chap__pl{grid-column:6 / -1;}
 /* `narrow: true` on a text-less chapter: plates sit in the middle ten columns instead of all twelve */
 .chap--notext.chap--narrow .chap__pl{grid-column:2 / span 10;}
@@ -567,7 +603,10 @@ body.lb-open{overflow:hidden;}
 .chap__eyebrow{font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .chap__eyebrow b{font-weight:400;color:var(--accent);}
 .chap__title{font-family:var(--serif);font-weight:500;font-size:var(--t-serif-2);line-height:1.15;color:var(--ink);margin:14px 0 18px;}
-.chap__body{font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:300;}
+/* One measure for the whole page: the text column gives ~43 characters, and the 32em cap keeps a
+   chapter with no plates to ~63 instead of 72. Body is 400 — 300 at this size reads as a caption.
+   (Not `ch`: that unit is the width of "0", a third wider than an average character here.) */
+.chap__body{max-width:32em;font-size:var(--t-prose);line-height:1.7;color:var(--ink-soft);font-weight:400;}
 .chap__body p{margin-bottom:1.1em;}
 .chap__body strong{color:var(--ink);font-weight:500;}
 .chap__body a{border-bottom:1px solid var(--faint-2);}

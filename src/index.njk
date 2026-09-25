@@ -21,7 +21,7 @@ title: "Raghav Kohli · invisible systems, made visible"
 <figure class="card w{{ w }}"
         data-topics="{{ (p.data.topics or []) | join(' ') }}" data-weight="{{ w }}"
         style="--span:{{ span }};--car:{{ car }};--cpad:{{ 36 if w == 1 else (30 if w == 2 else 22) }}px;--cq:{{ p.data.qsize or '24px' }};">
-  <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}">
+  <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}" aria-label="{{ p.data.title }}">
     <div class="card__meta right">
       <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
       <div><span class="lbl">(period)</span><span class="val">{{ p.data.period }}</span></div>
@@ -41,7 +41,7 @@ title: "Raghav Kohli · invisible systems, made visible"
     </div>
     <figcaption>
       <span class="n">{{ num }}</span>
-      <span class="name">{{ p.data.title }}</span>
+      <h3 class="name">{{ p.data.title }}</h3>
       <span class="desc">{{ p.data.desc }}</span>
       {% if p.data.live %}<span class="status">({{ p.data.status }})</span>{% endif %}
     </figcaption>
@@ -62,23 +62,38 @@ title: "Raghav Kohli · invisible systems, made visible"
 
 {%- set P = collections.projects -%}
 {#- Groups by method (plan 2026-09-19, D4). Order inside a group = the media lab plan's order. -#}
+
+
+<h1 class="vh">Raghav Kohli: making invisible urban systems visible, legible, and participatory</h1>
+
 {%- set groups = [
   ["(plans & policy)",          ["Malaysia GCAP", "Ahmedabad Climate Action Plan", "State of Cities", "Urban Greening Policy", "Vadodara Climate Action Plan", "Surat Climate Action Plan"]],
   ["(participatory)",           ["Koliwadas", "Living Heritage", "Rebel Bodies Rebel Cities", "Urban Performances"]],
   ["(computational & spatial)", ["Generative Techniques", "One is to One", "Water Urbanism", "Eco-Machine"]],
   ["(early work)",              ["Utopias to Heterotopias", "Exploring Majuli", "Pune Metro"]]
 ] -%}
-
-<h1 class="vh">Raghav Kohli: making invisible urban systems visible, legible, and participatory</h1>
-
 <section class="work" id="work">
   <div class="work__head reveal" data-reveal>
     <h2 class="eyebrow">(selected work)</h2>
+    {#- The masthead: the argument on the left, and on the right the page's own contents — what is
+        below, in the ledger register the rest of the site uses. The right column used to hold only
+        the filter chips, which could not carry the weight and left the corner looking unfinished
+        (design review 2026-09-25, D2). -#}
     <div class="work__lead">
       <p class="work__tag">making invisible urban systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</p>
-      <!-- keyword chips injected by main.js from each card's data-topics -->
-      <div class="work__filters" data-filters aria-label="filter by keyword"></div>
+      <dl class="work__index">
+        {%- for g in groups %}
+        <div><dt>{{ g[0] }}</dt><dd>{{ "0" + (g[1].length | string) if g[1].length < 10 else g[1].length }}</dd></div>
+        {%- endfor %}
+      </dl>
     </div>
+  </div>
+
+  {#- The filter sits with the thing it filters, not with the thesis. -#}
+  <div class="work__filterbar reveal" data-reveal>
+    <span class="eyebrow">(filter)</span>
+    <!-- keyword chips injected by main.js from each card's data-topics -->
+    <div class="work__filters" data-filters aria-label="filter by keyword"></div>
   </div>
 
   <!-- 12-column grid. Card width = weight (span 6 / 4 / 3); rows pack themselves. A chip filter

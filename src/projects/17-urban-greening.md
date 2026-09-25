@@ -15,13 +15,15 @@ status: policy document · 2025
 live: false
 date: 2025-02-19
 card: M
-thumb: /assets/projects/urban-greening/00.jpg
-thumbw: 848
-thumbh: 1200
+# the card opened on the Heritage Trees text page, which reads as grey noise at card size
+# (design review 2026-09-25). c2 is the tree-cover map, cropped to the frame by prep-covers.py.
+thumb: /assets/projects/urban-greening/c2-f.jpg
+thumbw: 900
+thumbh: 1125
 covers:
   - { t: /assets/projects/urban-greening/c1.jpg, f: /assets/projects/urban-greening/c1-f.jpg, w: 900, h: 1125 }
   - { t: /assets/projects/urban-greening/c2.jpg, f: /assets/projects/urban-greening/c2-f.jpg, w: 900, h: 1125 }
-  - { t: /assets/projects/urban-greening/c3.jpg, f: /assets/projects/urban-greening/c3-f.jpg, w: 900, h: 1125 }
+  - { t: /assets/projects/urban-greening/c3.jpg, f: /assets/projects/urban-greening/c3-f.jpg, w: 960, h: 1200 }
   - { t: /assets/projects/urban-greening/c4.jpg, f: /assets/projects/urban-greening/c4-f.jpg, w: 900, h: 1125 }
 lead: "Ahmedabad has about 60 square kilometres of tree cover, 12.5 per cent of the city, and 8.4 square metres of green per person against the WHO's nine. The climate action plan committed the corporation to closing that gap; the Urban Green Policy 2030 is the instrument. It covers what a greening policy usually covers, avenues, parks, private greens, heritage trees, pruning, penalties, a fund, and one thing most do not: who gets the green, ward by ward. Studio Commons designed the book for ICLEI South Asia and the Amdavad Municipal Corporation: the maps, the infographics, and an illustrated city that runs under every chapter so the policy reads as a place rather than a rulebook."
 next: State of Cities · fifteen cities, one instrument

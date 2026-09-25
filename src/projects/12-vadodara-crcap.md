@@ -20,11 +20,11 @@ thumbw: 811
 thumbh: 502
 thumbfit: contain
 covers:
-  - { t: /assets/projects/vadodara-crcap/c1.jpg, f: /assets/projects/vadodara-crcap/c1-f.jpg, w: 900, h: 557 }
-  - { t: /assets/projects/vadodara-crcap/c2.jpg, f: /assets/projects/vadodara-crcap/c2-f.jpg, w: 900, h: 557 }
-  - { t: /assets/projects/vadodara-crcap/c3.jpg, f: /assets/projects/vadodara-crcap/c3-f.jpg, w: 900, h: 557 }
-  - { t: /assets/projects/vadodara-crcap/c4.jpg, f: /assets/projects/vadodara-crcap/c4-f.jpg, w: 900, h: 557 }
-  - { t: /assets/projects/vadodara-crcap/c5.jpg, f: /assets/projects/vadodara-crcap/c5-f.jpg, w: 900, h: 557 }
+  - { t: /assets/projects/vadodara-crcap/c1.jpg, f: /assets/projects/vadodara-crcap/c1-f.jpg, w: 792, h: 490 }
+  - { t: /assets/projects/vadodara-crcap/c2.jpg, f: /assets/projects/vadodara-crcap/c2-f.jpg, w: 792, h: 490 }
+  - { t: /assets/projects/vadodara-crcap/c3.jpg, f: /assets/projects/vadodara-crcap/c3-f.jpg, w: 792, h: 490 }
+  - { t: /assets/projects/vadodara-crcap/c4.jpg, f: /assets/projects/vadodara-crcap/c4-f.jpg, w: 792, h: 490 }
+  - { t: /assets/projects/vadodara-crcap/c5.jpg, f: /assets/projects/vadodara-crcap/c5-f.jpg, w: 792, h: 490 }
 lead: "Vadodara's Climate Resilient City Action Plan is the second of the CapaCities plans: a ward-level audit of how the city works and where it breaks, a greenhouse-gas inventory that puts a number on it, and a pathway from that number to net zero by 2070. Published by the Vadodara Municipal Corporation with the Government of Gujarat under CapaCities (SDC), with ICLEI South Asia, South Pole, econcept and NIUA. I co-authored the sector strategies and designed the book."
 # routing deferred, see TODOS.md "Reading order"; placeholder label until decided
 next: Surat Climate Action Plan · the same instrument, net zero by 2047

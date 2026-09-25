@@ -9,10 +9,15 @@ For each pick in COVERS[slug] it reads src/assets/projects/<slug>/NN.jpg and wri
             long edge FRAME px — what the frame crossfades to (main.js initCovers)
 and prints the `covers:` YAML block for the project's frontmatter.
 
-A pick is "NN" or "NN:hint". Hints: l / r cut a two-page spread to that page first (the CRCAP
-spreads are two A4 portraits, ratio 1.41 — the same ratio as a single landscape drawing, so the
-cut is never guessed); a — the more colourful half; t / b bias a portrait source toward its top
-or bottom. Otherwise the whole image is cover-cropped about its centre. Never touches images/.
+A pick is "NN", "NN:hint", or either with "@x,y,w,h" appended. Hints: l / r cut a two-page spread
+to that page first (the CRCAP spreads are two A4 portraits, ratio 1.41 — the same ratio as a single
+landscape drawing, so the cut is never guessed); a — the more colourful half; t / b bias a portrait
+source toward its top or bottom. Otherwise the whole image is cover-cropped about its centre.
+
+"@x,y,w,h" (fractions of the page, after any l/r cut) takes a window of it before the cover crop:
+a report map sits in the middle of an A4 with its legend in one corner and its title in another,
+so without a window the card frames the legend. Example: "17:r@0.03,0.04,0.94,0.70".
+Never touches images/.
 """
 import sys
 from pathlib import Path
@@ -27,9 +32,11 @@ QUALITY = 80
 
 # slug: (frame ratio w/h — the card's --car: landscape = the thumb's own ratio, near-square = 1, portrait = 0.8 (4:5, contained) — , picks)
 COVERS = {
-    "ahmedabad-crcap":       (0.8, ["17:r", "13:r", "09:r", "30:l", "54:l"]),
-    "vadodara-crcap":        (1.616, ["02:r", "10:l", "10:r", "23:r", "36:l"]),
-    "surat-crcap":           (0.8, ["12:l", "26:l", "02:r", "13:r"]),
+    "ahmedabad-crcap":       (0.8, ["17:r@0,.02,1,.74", "13:r@0,.02,1,.74", "09:r@0,.02,1,.74", "30:l@0,.02,1,.74", "12:a@0,.02,1,.74"]),
+    "vadodara-crcap":        (1.616, ["02:r@.06,.19,.88,.40", "10:l@.06,.19,.88,.40", "10:r@.06,.19,.88,.40",
+                                  "23:r@.06,.19,.88,.40", "16:r@.06,.19,.88,.40"]),   # a landscape card on portrait
+                                  # map pages: the window fills the frame with the city rather than floating it in margin
+    "surat-crcap":           (0.8, ["12:l@0,.02,1,.74", "26:r@0,.02,1,.74", "02:r@0,.02,1,.74", "13:r@0,.02,1,.74"]),
     "state-of-cities":       (1.896, ["02", "06:l", "21", "23"]),
     "living-heritage":       (1.0,   ["03", "05", "07", "09", "12"]),
     "rebel-bodies":          (1.354, ["03", "06", "08", "11", "20"]),
@@ -40,10 +47,10 @@ COVERS = {
     "utopias":               (1.5,   ["03", "10", "14", "17", "19"]),
     "pune-metro":            (1.83,  ["02", "07", "09", "12", "17"]),
     "koliwadas":             (0.8, ["01", "07:r", "11", "24"]),
-    "urban-greening":        (0.8, ["03:r", "04:r", "09:l", "25:l"]),
+    "urban-greening":        (0.8, ["05:r", "04:r", "24", "25:l"]),
     "urban-performances":    (1.0,   ["04", "06", "07", "09"]),
     "majuli":                (1.362, ["02", "03", "04", "06"]),
-    "gcap":                  (0.8, ["07:l", "13", "22", "33", "41"]),
+    "gcap":                  (0.8, ["02", "03", "04", "05", "13"]),
 }
 
 
@@ -62,6 +69,19 @@ def page_of(im, hint):
     if hint == "r":
         return right
     return left if saturation(left) >= saturation(right) else right
+
+
+def window(im, box):
+    """The part of the page the card should show: x,y,w,h as fractions, clamped to the image."""
+    if not box:
+        return im
+    x, y, w, h = (float(v) for v in box.split(","))
+    W, H = im.size
+    l, t = max(0, round(x * W)), max(0, round(y * H))
+    r, b = min(W, round((x + w) * W)), min(H, round((y + h) * H))
+    if r - l < 8 or b - t < 8:
+        sys.exit(f"  window {box} leaves nothing to crop")
+    return im.crop((l, t, r, b))
 
 
 def cover(im, ratio, bias):
@@ -88,16 +108,17 @@ def run(slug):
     d = OUT / slug
     rows = []
     for k, pick in enumerate(picks, 1):
-        nn, _, hint = pick.partition(":")
+        spec, _, box = pick.partition("@")
+        nn, _, hint = spec.partition(":")
         src = d / f"{nn}.jpg"
         im = Image.open(src).convert("RGB")
-        page = page_of(im, hint)
+        page = window(page_of(im, hint), box)
         bias = hint if hint in ("t", "b") else ""
         sq = fit(cover(page, 1.0, bias), SQUARE)
         fr = fit(cover(page, ratio, bias), FRAME)
         sq.save(d / f"c{k}.jpg", quality=QUALITY, optimize=True)
         fr.save(d / f"c{k}-f.jpg", quality=QUALITY, optimize=True)
-        print(f"  c{k}  {sq.size[0]}x{sq.size[1]} + frame {fr.size[0]}x{fr.size[1]}  <- {nn}.jpg{(' ' + hint) if hint else ''}")
+        print(f"  c{k}  {sq.size[0]}x{sq.size[1]} + frame {fr.size[0]}x{fr.size[1]}  <- {nn}.jpg{(' ' + hint) if hint else ''}{(' @' + box) if box else ''}")
         rows.append(f"  - {{ t: /assets/projects/{slug}/c{k}.jpg, f: /assets/projects/{slug}/c{k}-f.jpg, w: {fr.size[0]}, h: {fr.size[1]} }}")
     print(f"\n# --- {slug}: paste into frontmatter ---\ncovers:\n" + "\n".join(rows) + "\n")
 
