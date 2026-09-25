@@ -996,8 +996,9 @@
   }
   /* ---------- thoughts: the wall ----------
      Anyone can post; nobody logs in. Posts come from the worker (data-api) and are merged with the
-     markdown entries already on the page, newest first. A Turnstile widget (data-turnstile-key) sits
-     in the composer when configured. The owner key, typed once via (key) and kept in localStorage,
+     markdown entries already on the page, newest first. Reading is open; writing is not — the
+     composer stays hidden until the owner key is entered, and the worker refuses every write without
+     it. The owner key, typed once via (key) and kept in localStorage,
      marks posts as Raghav's and opens the board for editing — the worker checks it, the page only
      remembers it.
      The board is a free canvas on desktop: a note that has been placed (worker: /layout/<id>) sits at
@@ -1008,7 +1009,7 @@
   function initWall() {
     var wall = document.querySelector("[data-wall]");
     if (!wall || !wall.dataset.api) return;
-    var api = wall.dataset.api.replace(/\/$/, ""), tsKey = wall.dataset.turnstileKey;
+    var api = wall.dataset.api.replace(/\/$/, "");
     var form = document.querySelector("[data-composer]"), msg = form && form.querySelector(".composer__msg");
     var keyLink = document.querySelector("[data-owner-key]");
     var key = ""; try { key = localStorage.getItem("thoughts-key") || ""; } catch (e) {}
@@ -1019,11 +1020,13 @@
     };
     var NOTE_W = 248, GAP = 40, MIN_W = 160, MAX_W = 720;   // the flow width (matches .board columns), the gap, the scale limits
     var layout = {}, maxZ = 0;                                // id -> {x, y, w, z}, from the worker
+    var notes = {};                                           // id -> the thought as the worker has it
     var free = window.matchMedia("(min-width: 821px)");      // the free canvas; below it, columns
     var idOf = function (art) { return art.dataset.id; };
     var imgUrl = function (id) { return api + "/images/" + id; };
 
     function render(t) {
+      notes[t.id] = t;
       var art = document.createElement("article");
       art.className = "thought thought--live" + (t.owner ? " thought--owner" : "");
       art.dataset.created = t.created; art.dataset.id = t.id;
@@ -1042,7 +1045,7 @@
       var grip = art.querySelector(".thought__grip"); if (grip) grip.remove();
       if (!key) return;
       var html = "";
-      if (art.classList.contains("thought--live")) html += '<a class="thought__del" href="#" data-del>(delete)</a>';
+      if (art.classList.contains("thought--live")) html += '<a class="thought__del" href="#" data-edit>(edit)</a><a class="thought__del" href="#" data-del>(delete)</a>';
       if (layout[idOf(art)]) html += '<a class="thought__del" href="#" data-unpin>(unpin)</a>';
       art.insertAdjacentHTML("beforeend", '<span class="thought__tools">' + html + '</span><span class="thought__grip" data-grip aria-hidden="true"></span>');
     }
@@ -1083,7 +1086,7 @@
       fetch(api + "/thoughts?limit=100").then(function (r) { return r.json(); }).then(function (j) {
         layout = j.layout || {};
         Object.keys(layout).forEach(function (id) { maxZ = Math.max(maxZ, layout[id].z || 0); });
-        (j.thoughts || []).forEach(function (t) { if (!wall.querySelector('[data-id="' + t.id + '"]')) place(render(t)); });
+        (j.thoughts || []).forEach(function (t) { if (!wall.querySelector('[data-id="' + t.id + '"]')) place(render(t)); else notes[t.id] = t; });
         wall.querySelectorAll(".thought").forEach(tools);
         relayout();
       }).catch(function () { relayout(); });
@@ -1207,7 +1210,7 @@
     });
 
     /* the composer */
-    var widget = null, picks = [];  // picks: {blob, url} — images chosen, downscaled, not yet posted
+    var picks = [];  // {blob, url} — images chosen, downscaled, not yet posted
     var pickLabel = form && form.querySelector("[data-pick]"), pickInput = pickLabel && pickLabel.querySelector("input"), imgsBox = form && form.querySelector("[data-imgs]");
     function shrink(file) {
       // the long edge to 1600px, JPEG at .85 — a gif that is small enough goes up as it is
@@ -1247,27 +1250,17 @@
         .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error || "upload failed"); return j.id; }); });
     }
     if (form) {
-      form.hidden = false;
-      var tsBox = form.querySelector("[data-turnstile]");
-      if (tsKey && tsBox) {
-        var mount = function () {
-          if (!window.turnstile) return setTimeout(mount, 200);
-          widget = window.turnstile.render(tsBox, { sitekey: tsKey, appearance: "interaction-only", theme: "light" });
-        };
-        mount();
-      }
       form.addEventListener("submit", function (e) {
         e.preventDefault();
+        if (!key) return;
         var body = form.body.value.trim(); if (!body && !picks.length) return;
-        var payload = { body: body, title: form.title.value.trim(), name: form.name.value.trim() };
-        if (key) payload.key = key;
-        if (widget !== null && window.turnstile) payload.turnstile = window.turnstile.getResponse(widget);
+        var payload = { body: body, title: form.title.value.trim() };
         form.classList.add("is-busy"); msg.textContent = picks.length ? "sending the images…" : "";
         // the images go up one by one, then the note that carries them
         picks.reduce(function (chain, p) { return chain.then(function (ids) { return upload(p).then(function (id) { return ids.concat(id); }); }); }, Promise.resolve([]))
           .then(function (ids) {
             if (ids.length) payload.images = ids;
-            return fetch(api + "/thoughts", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) })
+            return fetch(api + "/thoughts", { method: "POST", headers: { "Content-Type": "application/json", "X-Owner-Key": key }, body: JSON.stringify(payload) })
               .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); });
           })
           .then(function (res) {
@@ -1276,11 +1269,79 @@
             var art = render(res.j.thought); place(art); art.classList.add("in"); relayout();
             form.body.value = ""; form.title.value = ""; msg.textContent = "posted.";
             picks.forEach(function (p) { URL.revokeObjectURL(p.url); }); picks = []; showPicks();
-            if (widget !== null && window.turnstile) window.turnstile.reset(widget);
           })
           .catch(function (err) { form.classList.remove("is-busy"); msg.textContent = (err && err.message) || "that did not go through"; });
       });
     }
+
+    /* editing a note in place: the note becomes a small form over its own text, saves with PUT and
+       renders again from what the worker returns. Only live notes — a markdown entry is a file. */
+    function edit(art) {
+      var t = notes[idOf(art)]; if (!t || art.classList.contains("is-editing")) return;
+      var keep = art.innerHTML, imgs = (t.images || []).slice();
+      var adds = [];  // {blob, url} chosen during this edit, uploaded on save
+      art.classList.add("is-editing");
+      function draw() {
+        art.innerHTML =
+          '<div class="edit__imgs">' + imgs.map(function (id) {
+            return '<span class="edit__thumb"><img src="' + imgUrl(id) + '" alt="" /><a href="#" data-drop="' + id + '">(×)</a></span>';
+          }).join("") + adds.map(function (a, i) {
+            return '<span class="edit__thumb"><img src="' + a.url + '" alt="" /><a href="#" data-undo="' + i + '">(×)</a></span>';
+          }).join("") + "</div>" +
+          '<input class="edit__title" type="text" maxlength="80" placeholder="a title (optional)" value="' + esc(t.title || "") + '" />' +
+          '<textarea class="edit__body" rows="6" placeholder="a thought…"></textarea>' +
+          '<div class="edit__row"><label class="edit__pick">(+ image)<input type="file" accept="image/*" multiple hidden /></label>' +
+          '<a href="#" data-cancel>(cancel)</a><a href="#" data-save>(save)</a></div>' +
+          '<p class="edit__msg" aria-live="polite"></p>';
+        art.querySelector(".edit__body").value = t.body || "";
+      }
+      draw();
+      var stop = function (e) { e.stopPropagation(); };
+      art.addEventListener("pointerdown", stop);   // typing in a note must not drag it
+      function finish(next) {
+        art.classList.remove("is-editing");
+        art.removeEventListener("pointerdown", stop);
+        adds.forEach(function (a) { URL.revokeObjectURL(a.url); });
+        if (next) { notes[next.id] = next; art.innerHTML = render(next).innerHTML; }
+        else art.innerHTML = keep;
+        tools(art); clip(art); schedule();
+      }
+      art.addEventListener("click", function (e) {
+        var a = e.target.closest("a"); if (!a || !art.classList.contains("is-editing")) return;
+        e.preventDefault(); e.stopPropagation();
+        if (a.dataset.drop !== undefined) { imgs = imgs.filter(function (i) { return i !== a.dataset.drop; }); draw(); return; }
+        if (a.dataset.undo !== undefined) { URL.revokeObjectURL(adds[a.dataset.undo].url); adds.splice(a.dataset.undo, 1); draw(); return; }
+        if (a.dataset.cancel !== undefined) { finish(null); return; }
+        if (a.dataset.save === undefined) return;
+        var m2 = art.querySelector(".edit__msg");
+        var payload = { title: art.querySelector(".edit__title").value.trim(), body: art.querySelector(".edit__body").value.trim() };
+        if (!payload.body && !imgs.length && !adds.length) { m2.textContent = "write something first"; return; }
+        m2.textContent = adds.length ? "sending the images…" : "saving…";
+        adds.reduce(function (chain, a2) { return chain.then(function (ids) { return upload(a2).then(function (id) { return ids.concat(id); }); }); }, Promise.resolve([]))
+          .then(function (ids) {
+            payload.images = imgs.concat(ids);
+            return fetch(api + "/thoughts/" + t.id, { method: "PUT", headers: { "Content-Type": "application/json", "X-Owner-Key": key }, body: JSON.stringify(payload) })
+              .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); });
+          })
+          .then(function (res) {
+            if (!res.ok) { m2.textContent = res.j.error || "that did not save"; return; }
+            finish(res.j.thought);
+          })
+          .catch(function (err) { m2.textContent = (err && err.message) || "that did not save"; });
+      });
+      art.addEventListener("change", function (e) {
+        var input = e.target.closest(".edit__pick input"); if (!input) return;
+        Array.prototype.slice.call(input.files).slice(0, 6 - imgs.length - adds.length).forEach(function (f) {
+          shrink(f).then(function (b) { adds.push({ blob: b, url: URL.createObjectURL(b) }); draw(); }, function () {});
+        });
+        input.value = "";
+      });
+    }
+    wall.addEventListener("click", function (e) {
+      var a = e.target.closest("[data-edit]"); if (!a) return;
+      e.preventDefault();
+      var art = a.closest(".thought"); if (art) edit(art);
+    });
     // delete, with the key
     wall.addEventListener("click", function (e) {
       var a = e.target.closest("[data-del]"); if (!a) return;
@@ -1293,7 +1354,8 @@
     function applyKey() {
       wall.classList.toggle("is-editable", !!key);
       if (keyLink) keyLink.textContent = key ? "(key ✓)" : "(key)";
-      if (pickLabel) pickLabel.hidden = !key;
+      // the composer is the owner's; the worker refuses a write without the key either way
+      if (form) form.hidden = !key;
       if (!key) { picks.forEach(function (p) { URL.revokeObjectURL(p.url); }); picks = []; showPicks(); }
       wall.querySelectorAll(".thought").forEach(tools);
     }

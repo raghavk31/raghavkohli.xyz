@@ -1,16 +1,18 @@
-/* The thoughts API. Anyone can read and post; nobody logs in.
+/* The thoughts API. Anyone can read; only the owner writes.
    GET    /thoughts?before=<ms>&limit=<n>   the newest posts (id, title, body, name, owner, images, created)
                                             plus `layout`: {id: {x, y, w, z}} for every note that has been placed
-   POST   /thoughts  {body, title?, name?, images?, turnstile?, key?}   a new post; `key` = OWNER_KEY marks it as Raghav's
-   DELETE /thoughts/<id>                    with header X-Owner-Key: OWNER_KEY (its images and layout go with it)
-   PUT    /layout/<id>  {x, y, w, z}        where a note sits on the board (owner); <id> is a live id or a markdown slug
-   DELETE /layout/<id>                      the note flows again (owner)
-   POST   /images      <image bytes>        an image for a note (owner); Content-Type is the mime; returns {id}
+   POST   /thoughts  {body, title?, name?, images?}       a new post          - X-Owner-Key
+   PUT    /thoughts/<id>  {body?, title?, name?, images?}  edit one in place   - X-Owner-Key
+   DELETE /thoughts/<id>                    its images and layout go with it   - X-Owner-Key
+   PUT    /layout/<id>  {x, y, w, z}        where a note sits; <id> is a live id or a markdown slug
+   DELETE /layout/<id>                      the note flows again
+   POST   /images      <image bytes>        an image for a note; Content-Type is the mime; returns {id}
    GET    /images/<id>                      the image, cached for a year
-   Guards, all without login: a Turnstile token when TURNSTILE_SECRET is set, RATE_PER_HOUR posts per
-   IP (IPs are stored only as a salted hash), MAX_TITLE / MAX_NAME lengths (the body has no cap). Images live in
-   D1 as blobs (R2 is not enabled on the account); the browser downscales them first, MAX_IMAGE caps
-   what the worker accepts, and only the owner can attach them. */
+   Every write takes the X-Owner-Key header and nothing else; there is no login and no public path.
+   Until 2026-09-25 anyone could post, guarded by a Turnstile token and a per-IP hourly limit; both
+   went with the public path, so reopening the wall means bringing them back, not relaxing a check.
+   MAX_TITLE / MAX_NAME cap those fields (the body has no cap). Images live in D1 as blobs (R2 is not
+   enabled on the account); the browser downscales them first and MAX_IMAGE caps what the worker takes. */
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_IMAGES = 6;
@@ -51,47 +53,56 @@ export default {
     }
 
     if (route === "thoughts" && req.method === "POST" && !id) {
+      if (!ownerHeader()) return json({ error: "no" }, 403);
       let data;
       try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
-      const body = String(data.body || "").replace(/\r\n?/g, "\n").trim();
-      const title = String(data.title || "").replace(/\s+/g, " ").trim().slice(0, Number(env.MAX_TITLE) || 80);
-      const name = String(data.name || "").trim().slice(0, Number(env.MAX_NAME) || 40);
-      const owner = isOwner(data.key);
-      // images: ids from POST /images, owner only (flip `owner` here to let anyone attach them)
-      let images = Array.isArray(data.images) ? data.images.filter((s) => typeof s === "string" && /^[a-z0-9]+$/.test(s)).slice(0, MAX_IMAGES) : [];
-      if (!owner) images = [];
-      if (!body && !images.length) return json({ error: "write something first" }, 400);
-      const ip = req.headers.get("CF-Connecting-IP") || "0.0.0.0";
-      let ipHash = "owner";
-      if (!owner) {
-        // the bot check, when the secret is configured
-        if (env.TURNSTILE_SECRET) {
-          const ok = await verifyTurnstile(env.TURNSTILE_SECRET, data.turnstile, ip);
-          if (!ok) return json({ error: "could not verify you are a person; try again" }, 403);
-        }
-        // the rate limit: RATE_PER_HOUR posts per IP, IPs as salted hashes only
-        ipHash = await sha256(`${env.IP_SALT || ""}:${ip}`);
-        const { count } = await env.DB.prepare("SELECT COUNT(*) AS count FROM thoughts WHERE ip_hash = ? AND created > ?")
-          .bind(ipHash, Date.now() - 3600_000).first();
-        if (count >= (Number(env.RATE_PER_HOUR) || 3)) return json({ error: "that is enough for one hour; come back later" }, 429);
-      }
-      if (images.length) {
-        // only images that were uploaded and not yet attached to a note
-        const q = `SELECT id FROM images WHERE thought_id IS NULL AND id IN (${images.map(() => "?").join(",")})`;
-        const { results } = await env.DB.prepare(q).bind(...images).all();
-        const ok = new Set(results.map((r) => r.id));
-        images = images.filter((i) => ok.has(i));
-      }
-      const row = { id: newId(), title: title || null, body, name: name || null, owner: owner ? 1 : 0, images, created: Date.now() };
+      const f = fields(data, env);
+      const images = await keepImages(env, f.images, null);
+      if (!f.body && !images.length) return json({ error: "write something first" }, 400);
+      const row = { id: newId(), title: f.title, body: f.body, name: f.name, owner: 1, images, created: Date.now() };
       const stmts = [
-        env.DB.prepare("INSERT INTO thoughts (id, title, body, name, owner, ip_hash, created, images) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")
-          .bind(row.id, row.title, row.body, row.name, row.owner, ipHash, row.created, images.length ? JSON.stringify(images) : null),
+        env.DB.prepare("INSERT INTO thoughts (id, title, body, name, owner, ip_hash, created, images) VALUES (?, ?, ?, ?, 1, 'owner', ?, ?)")
+          .bind(row.id, row.title, row.body, row.name, row.created, images.length ? JSON.stringify(images) : null),
       ];
       if (images.length) {
         stmts.push(env.DB.prepare(`UPDATE images SET thought_id = ? WHERE id IN (${images.map(() => "?").join(",")})`).bind(row.id, ...images));
       }
       await env.DB.batch(stmts);
       return json({ thought: row }, 201);
+    }
+
+    /* Edit a note in place. A field that is absent keeps its value, so the board can save just a
+       body; `images` is the note's whole list, and an image dropped from it is deleted with it. */
+    if (route === "thoughts" && req.method === "PUT" && id) {
+      if (!ownerHeader()) return json({ error: "no" }, 403);
+      let data;
+      try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
+      const cur = await env.DB.prepare("SELECT id, title, body, name, owner, images, created FROM thoughts WHERE id = ?").bind(id).first();
+      if (!cur) return json({ error: "not found" }, 404);
+      const f = fields(data, env);
+      const row = withImages(cur);
+      if ("title" in data) row.title = f.title;
+      if ("name" in data) row.name = f.name;
+      if ("body" in data) row.body = f.body;
+      let dropped = [];
+      if ("images" in data) {
+        const next = await keepImages(env, f.images, id);
+        dropped = row.images.filter((i) => !next.includes(i));
+        row.images = next;
+      }
+      if (!row.body && !row.images.length) return json({ error: "write something first" }, 400);
+      const stmts = [
+        env.DB.prepare("UPDATE thoughts SET title = ?, body = ?, name = ?, images = ? WHERE id = ?")
+          .bind(row.title, row.body, row.name, row.images.length ? JSON.stringify(row.images) : null, id),
+      ];
+      if (row.images.length) {
+        stmts.push(env.DB.prepare(`UPDATE images SET thought_id = ? WHERE id IN (${row.images.map(() => "?").join(",")})`).bind(id, ...row.images));
+      }
+      if (dropped.length) {
+        stmts.push(env.DB.prepare(`DELETE FROM images WHERE id IN (${dropped.map(() => "?").join(",")})`).bind(...dropped));
+      }
+      await env.DB.batch(stmts);
+      return json({ thought: row });
     }
 
     if (route === "thoughts" && req.method === "DELETE" && id) {
@@ -152,25 +163,32 @@ export default {
   },
 };
 
+// title and name are squeezed and capped; the body keeps its shape and has no cap
+function fields(data, env) {
+  return {
+    body: String(data.body || "").replace(/\r\n?/g, "\n").trim(),
+    title: String(data.title || "").replace(/\s+/g, " ").trim().slice(0, Number(env.MAX_TITLE) || 80) || null,
+    name: String(data.name || "").trim().slice(0, Number(env.MAX_NAME) || 40) || null,
+    images: Array.isArray(data.images) ? data.images.filter((v) => typeof v === "string" && /^[a-z0-9]+$/.test(v)).slice(0, MAX_IMAGES) : [],
+  };
+}
+
+// keep only ids that were really uploaded and are still free (or already on this note)
+async function keepImages(env, ids, thoughtId) {
+  if (!ids.length) return [];
+  const q = `SELECT id FROM images WHERE id IN (${ids.map(() => "?").join(",")}) AND (thought_id IS NULL${thoughtId ? " OR thought_id = ?" : ""})`;
+  const { results } = await env.DB.prepare(q).bind(...ids, ...(thoughtId ? [thoughtId] : [])).all();
+  const ok = new Set(results.map((r) => r.id));
+  return ids.filter((i) => ok.has(i));
+}
+
 function withImages(row) {
   let images = [];
   try { images = row.images ? JSON.parse(row.images) : []; } catch {}
   return { ...row, images };
 }
 
-async function verifyTurnstile(secret, token, ip) {
-  if (!token) return false;
-  const form = new FormData();
-  form.append("secret", secret); form.append("response", token); form.append("remoteip", ip);
-  const r = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: form });
-  const j = await r.json().catch(() => ({}));
-  return !!j.success;
-}
 
-async function sha256(s) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(s));
-  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
-}
 
 function newId() {
   // time-sortable, URL-safe: base36 time + 8 random chars

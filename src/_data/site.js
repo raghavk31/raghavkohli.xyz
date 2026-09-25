@@ -6,8 +6,8 @@ module.exports = {
   scholar: "",   // <-- Google Scholar URL, or "" to hide
   substack: "",  // <-- Substack URL, or "" to hide
   url: "https://raghavkohli.xyz",
-  // the thoughts wall (worker/): the API's URL once deployed, and the Turnstile site key ("" = no bot check).
-  // For a local build against `wrangler dev`: THOUGHTS_API=http://localhost:8788 TURNSTILE_KEY= npx eleventy --serve
+  // the thoughts journal (worker/): the API's URL once deployed. Only the owner key writes, so there
+  // is no bot check to configure. For a local build against `wrangler dev`:
+  //   THOUGHTS_API=http://localhost:8788 npx eleventy --serve
   thoughtsApi: process.env.THOUGHTS_API !== undefined ? process.env.THOUGHTS_API : "https://thoughts.raghavkohli31.workers.dev",
-  turnstileKey: process.env.TURNSTILE_KEY !== undefined ? process.env.TURNSTILE_KEY : "0x4AAAAAAE-12jodayntsBSg",
 };

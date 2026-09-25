@@ -3,27 +3,26 @@ layout: base.njk
 title: "Thoughts · Raghav Kohli"
 permalink: /thoughts/
 ---
-{#- The journal: a composer anyone can write in (a title bar, the thought, a name), then every earlier
-    thought as a white post-it on the board below, newest first — live posts from the worker (main.js
-    initWall) and the markdown entries in src/thoughts/ together. With the owner key the notes can be
-    dragged, scaled from the corner and given images; where they are put is kept by the worker
-    (data-id is the note's key there — a markdown slug or a live id). Without JS, or before the API
-    is configured, the markdown entries stand on their own in the flow. -#}
+{#- The journal: every thought as a white post-it on the board, newest first — live notes from the
+    worker (main.js initWall) and the markdown entries in src/thoughts/ together. Reading is open to
+    anyone; writing is not. The composer below only appears once the owner key is entered, and the
+    worker refuses every write without it, so hiding it here is presentation, not the lock. With the
+    key the notes can also be edited in place, dragged, scaled from the corner and given images;
+    where they are put is kept by the worker (data-id is the note's key there — a markdown slug or a
+    live id). Without JS, or before the API is configured, the markdown entries stand on their own. -#}
 <section class="detail journal">
   <a class="detail__back" href="/">(&larr; home)</a>
   <span class="detail__qlabel">(thoughts)</span>
   <h1 class="detail__q reveal">a journal, of sorts.</h1>
-  <p class="journal__note reveal">open to anyone. write a thought and it is on the page.</p>
+  <p class="journal__note reveal">notes to myself, left where anyone can read them.</p>
 
   {% if site.thoughtsApi %}
   <form class="composer reveal" data-composer hidden>
     <input class="composer__title" name="title" type="text" maxlength="80" placeholder="a title (optional)" autocomplete="off" />
     <textarea name="body" rows="4" placeholder="a thought…" required></textarea>
     <div class="composer__row">
-      <input name="name" type="text" maxlength="40" placeholder="your name (optional)" autocomplete="off" />
-      <div class="composer__ts" data-turnstile></div>
-      {#- images, with the key only: picked here, downscaled in the browser, shown as thumbnails until posted -#}
-      <label class="composer__pick" data-pick hidden>(+ image)<input type="file" accept="image/*" multiple hidden /></label>
+      {#- picked here, downscaled in the browser, shown as thumbnails until posted -#}
+      <label class="composer__pick" data-pick>(+ image)<input type="file" accept="image/*" multiple hidden /></label>
       <button type="submit">(post)</button>
     </div>
     <div class="composer__imgs" data-imgs></div>
@@ -32,7 +31,7 @@ permalink: /thoughts/
   {% endif %}
 
   {#- the board: each thought is a note — title, body, the date at its foot -#}
-  <div class="journal__list board" data-wall data-api="{{ site.thoughtsApi }}" data-turnstile-key="{{ site.turnstileKey }}">
+  <div class="journal__list board" data-wall data-api="{{ site.thoughtsApi }}">
     {% for t in collections.thoughts %}
     <article class="thought reveal" id="{{ t.fileSlug }}" data-id="{{ t.fileSlug }}" data-created="{{ t.date.getTime() }}">
       <h2 class="thought__title"><a href="{{ t.url }}">{{ t.data.title }}</a></h2>
@@ -47,4 +46,3 @@ permalink: /thoughts/
   <p class="journal__foot"><a href="#" data-owner-key>(key)</a></p>
   {% endif %}
 </section>
-{% if site.thoughtsApi and site.turnstileKey %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" async defer></script>{% endif %}

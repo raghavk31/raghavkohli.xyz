@@ -365,6 +365,32 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .composer__thumb a{display:block;margin-top:4px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .composer__thumb a:hover{color:var(--ink);}
 .thought__by{color:var(--faint-2);}
+
+/* ---------- editing a note in place (owner only) ----------
+   The note keeps its own frame and becomes a small form over its own text, so the edit happens
+   where the note sits rather than in a dialog somewhere else. */
+.thought.is-editing{cursor:auto;}
+.thought.is-editing::after{display:none;}   /* no clip fade over a field */
+.edit__title,.edit__body{width:100%;display:block;background:none;border:0;border-bottom:1px solid var(--line);
+  font:inherit;color:var(--ink);padding:6px 0;border-radius:0;}
+/* the same size the note's own title renders at, so the field does not outgrow the note */
+.edit__title{font:inherit;font-family:var(--serif);font-size:calc(1.2rem * var(--zoom,1));font-weight:500;
+  letter-spacing:-0.01em;line-height:1.25;}
+.edit__title::placeholder,.edit__body::placeholder{color:var(--faint-2);}
+.edit__body{margin-top:12px;font-size:var(--t-small);line-height:1.6;resize:vertical;min-height:7em;}
+.edit__title:focus,.edit__body:focus{outline:none;border-bottom-color:var(--accent);}
+.edit__row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-top:12px;
+  font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;}
+.edit__row a,.edit__pick{color:var(--mute);cursor:pointer;}
+.edit__row a:hover,.edit__pick:hover{color:var(--ink);}
+.edit__row [data-save]{color:var(--accent);}
+.edit__msg{margin-top:8px;min-height:1.3em;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+.edit__imgs{display:flex;flex-wrap:wrap;gap:10px;}
+.edit__imgs:not(:empty){margin-bottom:12px;}
+.edit__thumb{width:56px;}
+.edit__thumb img{display:block;width:56px;height:56px;object-fit:cover;background:var(--paper-2);}
+.edit__thumb a{display:block;margin-top:3px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
+.edit__thumb a:hover{color:var(--ink);}
 .thought--owner .thought__by{color:var(--ink);}
 .thought__del{display:inline-block;margin-top:8px;font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .thought__del:hover{color:var(--ink);}
