@@ -27,7 +27,7 @@ covers:
 lead: "Surat's Net-Zero Climate Resilient City Action Plan is the most ambitious of the three Gujarat plans: the same ward-level audit, the same greenhouse-gas inventory, but a pathway that reaches net zero in 2047, twenty-three years ahead of the national target. Published by the Surat Municipal Corporation with C40 Cities and ICLEI South Asia. I co-authored the sector strategies and designed the book."
 # routing deferred, see TODOS.md "Reading order"; placeholder label until decided
 next: Ahmedabad Climate Action Plan · the same instrument, first city
-open: { src: /assets/projects/surat-crcap/01.jpg, w: 750, h: 1357, fig: fig.01, cap: "The net-zero pathway. Annual emissions 2023 to 2047, business-as-usual on the left, each mitigation action peeled away by sector until the remaining line meets the target trajectory: 74.3% below BAU in 2047." }
+open: { src: /assets/projects/surat-crcap/01.jpg, w: 750, h: 1357, tall: true, fig: fig.01, cap: "The net-zero pathway. Annual emissions 2023 to 2047, business-as-usual on the left, each mitigation action peeled away by sector until the remaining line meets the target trajectory: 74.3% below BAU in 2047." }
 chapters:
   - n: "00"
     name: the city

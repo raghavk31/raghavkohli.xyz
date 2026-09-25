@@ -659,6 +659,12 @@ body.lb-open{overflow:hidden;}
    flips it. The text column is sticky so the words stay in view while a tall plate scrolls;
    .chap--long (set by the template for long bodies) turns that off so the end is reachable. */
 .detail__open{margin-top:clamp(56px,8vw,96px);}
+/* `tall: true` on the open plate: the CRCAP pathway graphs are portrait (0.55-0.71) and at the
+   full content width they run past a screen before the reader has met the page. Hold them to one
+   screen instead and let the figure shrink to whatever width that costs — the caption keeps its
+   own measure. */
+.detail__open--tall .plate__img{width:fit-content;}
+.detail__open--tall .plate__img > img{width:auto;max-width:100%;max-height:min(760px,78vh);}
 .chap{display:grid;grid-template-columns:repeat(12,1fr);column-gap:clamp(20px,3vw,40px);row-gap:32px;
   align-items:start;margin-top:clamp(72px,10vw,128px);}
 .chap__txt{grid-column:1 / span 5;position:sticky;top:96px;}
@@ -742,7 +748,7 @@ body.lb-open{overflow:hidden;}
    claim the set is making. Beside it, the atlas's table of contents — grouped the way the plan
    argues (systems, reach, hazard, the cross), each row the spread number and its subject. The
    frames cross-fade a little faster than the layer stack's, because here nothing accumulates. */
-.swap{display:grid;grid-template-columns:6fr 5fr;gap:clamp(20px,3vw,40px);align-items:start;}
+.swap{display:grid;grid-template-columns:7fr 4fr;gap:clamp(20px,3vw,40px);align-items:start;}
 .swap__stage > img{transition-duration:.5s;}
 .swap .plate__cap{max-width:none;}
 .swap .plate__cap .t{transition:opacity .3s ease;}

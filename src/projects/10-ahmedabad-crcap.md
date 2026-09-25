@@ -28,7 +28,7 @@ covers:
 lead: "Ahmedabad's Climate Resilient City Action Plan is a 200-page book built for one municipality: a ward-level audit of how the city works and where it breaks, a greenhouse-gas inventory that puts a number on it, and a pathway from that number to net zero by 2070, sector by sector, action by action. Published by the Ahmedabad Municipal Corporation with the Government of Gujarat under CapaCities (SDC), with ICLEI South Asia, South Pole, econcept and NIUA. I co-authored the sector strategies and designed the book."
 # routing deferred, see TODOS.md "Reading order"; placeholder label until decided
 next: State of Cities · fifteen cities, one instrument
-open: { src: /assets/projects/ahmedabad-crcap/01.jpg, w: 890, h: 1357, fig: fig.01, cap: "The net-zero pathway. Annual emissions to 2070, business-as-usual on the left, every mitigation action peeled away by sector until the remaining line meets the target trajectory. 91% below BAU by 2070." }
+open: { src: /assets/projects/ahmedabad-crcap/01.jpg, w: 890, h: 1357, tall: true, fig: fig.01, cap: "The net-zero pathway. Annual emissions to 2070, business-as-usual on the left, every mitigation action peeled away by sector until the remaining line meets the target trajectory. 91% below BAU by 2070." }
 chapters:
   - n: "00"
     name: the city

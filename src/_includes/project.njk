@@ -151,7 +151,7 @@ layout: base.njk
       Body markdown is split at `## NN name` headings; each piece joins the chapter with that
       number. Text before the first numbered heading opens the first chapter. -#}
   {% set ch = content | chapters %}
-  {% if open %}<div class="detail__open reveal">{{ plate(open, true) }}</div>{% endif %}
+  {% if open %}<div class="detail__open{% if open.tall %} detail__open--tall{% endif %} reveal">{{ plate(open, true) }}</div>{% endif %}
 
   {% for c in chapters %}
   {% set body = ch.byNum[c.n] or '' %}
