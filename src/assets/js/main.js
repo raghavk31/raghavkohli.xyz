@@ -1189,7 +1189,7 @@
         var L = layout[idOf(art)];
         if (!L) { art.classList.remove("is-pinned"); art.style.zIndex = ""; if (art !== (drag && drag.art)) size(art, NOTE_W); return; }
         var w = Math.min(L.w, W); size(art, w);
-        var x = Math.max(40 - w, Math.min(L.x, W - 40)), y = Math.max(0, L.y);
+        var x = Math.max(0, Math.min(L.x, W - w)), y = Math.max(0, L.y);
         art.style.left = x + "px"; art.style.top = y + "px"; art.style.zIndex = L.z || 1;
         art.classList.add("is-pinned");
         var h = art.offsetHeight; placed.push({ x: x, y: y, w: w, h: h }); bottom = Math.max(bottom, y + h);
@@ -1247,10 +1247,10 @@
       }
       var W = wall.clientWidth;
       if (drag.mode === "move") {
-        // anywhere on the board, which is the whole window: only enough of the note is held on
-        // screen to grab it again, and downward is open — the board grows to whatever it is given
-        var w = drag.art.offsetWidth, EDGE = 40;
-        drag.art.style.left = Math.max(EDGE - w, Math.min(drag.ox + dx, W - EDGE)) + "px";
+        // anywhere on the board, and the board is the page inside its gutter: a note stays whole
+        // and inside it, and downward is open — the board grows to whatever it is given
+        var w = drag.art.offsetWidth;
+        drag.art.style.left = Math.max(0, Math.min(drag.ox + dx, W - w)) + "px";
         drag.art.style.top = Math.max(0, drag.oy + dy) + "px";
       } else {
         size(drag.art, Math.max(MIN_W, Math.min(drag.ow + dx, MAX_W, W - drag.ox)));

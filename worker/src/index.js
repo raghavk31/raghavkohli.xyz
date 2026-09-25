@@ -125,9 +125,8 @@ export default {
       let data;
       try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
       const n = (v, lo, hi) => Math.min(Math.max(Number(v) || 0, lo), hi);
-      // x may be negative: a note is allowed to hang off the left of the board, as long as the
-      // board keeps a grabbable edge of it on screen (main.js clamps the drag to that)
-      const pos = { x: n(data.x, -4000, 20000), y: n(data.y, 0, 200000), w: n(data.w, 120, 2000), z: Math.round(n(data.z, 0, 1e9)) };
+      // the board keeps every note whole and inside itself (main.js clamps the drag), so x starts at 0
+      const pos = { x: n(data.x, 0, 20000), y: n(data.y, 0, 200000), w: n(data.w, 120, 2000), z: Math.round(n(data.z, 0, 1e9)) };
       await env.DB.prepare(
         "INSERT INTO layout (id, x, y, w, z, updated) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET x = excluded.x, y = excluded.y, w = excluded.w, z = excluded.z, updated = excluded.updated"
       ).bind(id, pos.x, pos.y, pos.w, pos.z, Date.now()).run();
