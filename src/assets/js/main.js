@@ -401,6 +401,7 @@
       initCarousel(clone);
       initStack(clone);
       initSwap(clone);
+      initCompare(clone);
       initLightbox(clone);
       pageBody.hidden = false;
       if (jsonBody) jsonBody.hidden = true;
@@ -876,10 +877,105 @@
       show(n - 1);
     });
   }
+  /* ---------- compare — one question asked of several places at once ----------
+     Every window holds the same ordered frames; the key steps all of them together, so the row of
+     places is the constant and the question is what moves. One sweep through the questions when the
+     row first comes into view, then the reader has it. A window opens its own place's set in the
+     lightbox, at the question currently up. */
+  function initCompare(root) {
+    if (!root) return;
+    root.querySelectorAll("[data-compare]").forEach(function (cp) {
+      var keys = Array.prototype.slice.call(cp.querySelectorAll(".compare__key a"));
+      var stages = Array.prototype.slice.call(cp.querySelectorAll(".compare__stage"));
+      var capN = cp.querySelector(".plate__cap .n"), capT = cp.querySelector(".plate__cap .t");
+      var n = keys.length;
+      if (n < 2 || !stages.length) return;
+      cp.style.setProperty("--cmp-n", stages.length);
+      var idx = 0, taken = false, auto = null, capTimer = null;
+      var STEP_MS = 1100;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      // the shared caption belongs to the step; the per-frame captions live in the lightbox
+      var caps = keys.map(function (a, k) {
+        var f = stages[0].children[k];
+        return { n: a.dataset.fig || (f ? f.dataset.fig : ""), t: a.dataset.cap || (f ? f.dataset.cap : "") };
+      });
+      cp.classList.add("compare--js");
+
+      function show(i) {
+        idx = Math.max(0, Math.min(n - 1, i));
+        stages.forEach(function (st) {
+          Array.prototype.forEach.call(st.children, function (im, k) { im.classList.toggle("on", k === idx); });
+        });
+        keys.forEach(function (a, k) {
+          a.classList.toggle("on", k === idx);
+          if (k === idx) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+        });
+        cp.classList.add("is-swapping");
+        if (capTimer) clearTimeout(capTimer);
+        capTimer = setTimeout(function () {
+          capN.textContent = caps[idx].n;
+          capT.textContent = caps[idx].t;
+          cp.classList.remove("is-swapping");
+        }, reduce ? 0 : 150);
+      }
+      function take() { taken = true; if (auto !== null) { clearTimeout(auto); auto = null; } }
+      function load() {
+        stages.forEach(function (st) { Array.prototype.forEach.call(st.children, function (im) { im.loading = "eager"; }); });
+      }
+      function sweep() {
+        if (taken || reduce) return;
+        var k = 1;
+        (function tick() {
+          auto = null;
+          if (taken || k >= n) return;
+          if (document.hidden) { auto = setTimeout(tick, STEP_MS); return; }   // wait for the tab
+          show(k++);
+          auto = setTimeout(tick, STEP_MS);
+        })();
+      }
+      if ("IntersectionObserver" in window) {
+        var near = new IntersectionObserver(function (en) {
+          if (en.some(function (e) { return e.isIntersecting; })) { load(); near.disconnect(); }
+        }, { rootMargin: "400px" });
+        near.observe(cp);
+        var seen = new IntersectionObserver(function (en) {
+          if (en.some(function (e) { return e.isIntersecting; })) { setTimeout(sweep, 700); seen.disconnect(); }
+        }, { threshold: 0.3 });
+        seen.observe(cp);
+      } else { load(); }
+
+      keys.forEach(function (a, k) { a.addEventListener("click", function (e) { e.preventDefault(); take(); show(k); }); });
+      cp.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { e.preventDefault(); take(); show(idx + 1); }
+        else if (e.key === "ArrowLeft") { e.preventDefault(); take(); show(idx - 1); }
+      });
+      // each window opens its own place, at the question currently up
+      stages.forEach(function (st) {
+        var items = Array.prototype.map.call(st.children, function (im) {
+          return { src: im.dataset.full, alt: im.alt, w: im.dataset.w, h: im.dataset.h, n: im.dataset.fig, t: im.dataset.cap || "" };
+        });
+        var px = null;
+        st.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") px = e.clientX; }, { passive: true });
+        st.addEventListener("pointerup", function (e) {
+          if (px === null) return;
+          var dx = e.clientX - px; px = null;
+          if (Math.abs(dx) > 40) { e.preventDefault(); take(); show(dx < 0 ? idx + 1 : idx - 1); st.dataset.swiped = "1"; }
+        });
+        st.classList.add("lb-src");
+        st.setAttribute("tabindex", "0");
+        st.setAttribute("role", "button");
+        st.setAttribute("aria-label", "open every question for this place");
+        function openSet() { if (st.dataset.swiped) { delete st.dataset.swiped; return; } take(); openLightbox(items, idx, st); }
+        st.addEventListener("click", openSet);
+        st.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSet(); } });
+      });
+      show(0);
+    });
+  }
   function initLightbox(root) {
     if (!root) return;
     var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .tiles img, .g__frame img"))
-      .filter(function (img) { return !img.closest("[data-carousel], [data-stack], [data-swap]"); }); // the carousel, the layer stack and the map swap register their own sets
+      .filter(function (img) { return !img.closest("[data-carousel], [data-stack], [data-swap], [data-compare]"); }); // the carousel, the layer stack and the map swap register their own sets
     if (!imgs.length) return;
     var items = imgs.map(function (img) {
       var c = captionFor(img);
@@ -1219,5 +1315,6 @@
   initCarousel(document.querySelector("article.detail"));
   initStack(document.querySelector("article.detail"));
   initSwap(document.querySelector("article.detail"));
+  initCompare(document.querySelector("article.detail"));
   initLightbox(document.querySelector("article.detail"));
 })();

@@ -617,6 +617,8 @@ body.lb-open{overflow:hidden;}
 
 /* ---------- stat row: (label)/value vocabulary at display size, first row of a chapter ---------- */
 .chap__eyebrow--row{grid-column:1 / -1;}
+/* a compare chapter leads with the set piece, so its title sits above it, not in the text column */
+.chap__title--lead{grid-column:1 / span 8;margin-top:12px;}
 .stats{grid-column:1 / -1;display:grid;grid-template-columns:repeat(4,1fr);gap:24px clamp(20px,3vw,40px);
   padding-top:28px;border-top:1px solid rgba(28,27,24,.09);}
 .stats .n{font-family:var(--serif);font-weight:400;font-size:clamp(1.9rem,3.6vw,2.8rem);line-height:1;color:var(--ink);letter-spacing:-.01em;}
@@ -699,6 +701,47 @@ body.lb-open{overflow:hidden;}
   .swap__key a{padding:8px 0 8px 10px;}
 }
 @media(hover:none){.swap__key a{min-height:40px;align-content:center;}}
+
+/* ---------- compare: one question, several places, side by side ----------
+   A window per place; the key above steps every window at once. The places stay put and the
+   question moves, which is the whole argument of a set of plans written on one method. The frames
+   are the small tiles — a window is ~220px wide — and the lightbox opens the full sheet. */
+/* The project column is 1120px, which leaves four windows about 220px wide — too small to compare
+   anything. This is the page's widest artefact, so it breaks out to the site's full measure. */
+.compare{--cmp-gap:clamp(10px,1.4vw,20px);
+  /* stay a stretched grid item and widen it symmetrically: 100% is the grid area, so this is
+     (the site's full measure - this column) / -2 on each side, and it collapses to 0 when the two
+     already agree. position/left would be placed differently by grid. */
+  margin-inline:calc((min(100vw - 2 * var(--gutter), var(--maxw) - 2 * var(--gutter)) - 100%) / -2);}
+.compare__key{list-style:none;margin:0 0 20px;padding:0;display:flex;gap:0 clamp(12px,2vw,28px);flex-wrap:wrap;
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;}
+.compare__key a{display:block;position:relative;padding:6px 0 10px;color:var(--mute);text-decoration:none;white-space:nowrap;}
+.compare__key a .k{color:var(--faint-2);margin-right:7px;}
+.compare__key a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--line);opacity:.55;}
+.compare__key a:hover,.compare__key a:focus-visible{color:var(--ink);}
+.compare__key a:hover::after{opacity:1;}
+.compare__key a.on{color:var(--ink);}
+.compare__key a.on::after{background:var(--accent);opacity:1;}
+.compare__key a:focus-visible{outline:none;} .compare__key a:focus-visible::after{height:4px;}
+.compare__row{display:grid;grid-template-columns:repeat(var(--cmp-n,4),1fr);gap:var(--cmp-gap);align-items:start;}
+.compare__city{min-width:0;display:flex;flex-direction:column;gap:8px;}
+.compare__name{order:-1;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--faint-2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.compare__city.on .compare__name{color:var(--ink);}
+.compare__stage{overflow:hidden;background:rgba(244,243,238,.6);}
+.compare__stage > img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  opacity:0;transition:opacity .5s cubic-bezier(.16,1,.3,1);}
+.compare:not(.compare--js) .compare__stage > img:first-child{opacity:1;}   /* no JS: the first question stands */
+.compare__stage > img.on{opacity:1;}
+.compare .plate__cap{max-width:none;margin-top:16px;}
+.compare .plate__cap .t{transition:opacity .3s ease;}
+.compare.is-swapping .plate__cap .t{opacity:0;}
+@media(max-width:820px){
+  /* four windows across a phone would be 80px each; two by two keeps them readable */
+  .compare{margin-inline:0;}
+  .compare__row{grid-template-columns:repeat(2,1fr);gap:16px;}
+  .compare__key{font-size:11px;gap:0 14px;}
+}
 
 /* ---------- city carousel: one spread at full width, a mono pager, a fifteen-segment rule ----------
    The ledger beside the text is its index: clicking a row turns to that city. */

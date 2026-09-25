@@ -75,6 +75,28 @@ layout: base.njk
   </div>
 </div>
 {% endmacro %}
+{#- Compare: one question asked of several places at once. A window per place, side by side and
+    each labelled; every window holds the same ordered set of frames, and the key above steps all of
+    them together, so what moves between steps is the question and what stays is the row of places.
+    This is the third form for a same-method set, after `stack:` (one ground, layers accumulating)
+    and `swap:` (one ground, the overlay changing) — here the ground itself is what differs.
+    `steps` name the questions and carry the shared caption; `cities` hold the frames in step order,
+    so cities[n].items[k] is city n answering question k. A frame shows `src` (a small tile) and
+    opens `full` in the lightbox. Without JS the first step stands and every window is a real link. -#}
+{% macro compare(c) %}
+<div class="chap__full compare" data-compare>
+  <ol class="compare__key">{% for st in c.steps %}<li><a href="{{ c.cities[0].items[loop.index0].full }}" data-i="{{ loop.index0 }}" data-fig="{{ st.fig }}" data-cap="{{ st.cap }}"><span class="k">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>{{ st.name }}</a></li>{% endfor %}</ol>
+  <div class="compare__row">
+    {%- for city in c.cities %}
+    <figure class="compare__city">
+      <figcaption class="compare__name">{{ city.name }}</figcaption>
+      <div class="plate__img compare__stage" style="aspect-ratio:{{ c.ar }}">{% for it in city.items %}<img src="{{ it.src }}" alt="{{ it.alt or it.cap }}" width="{{ it.tw }}" height="{{ it.th }}" loading="lazy" decoding="async" data-full="{{ it.full }}" data-w="{{ it.w }}" data-h="{{ it.h }}" data-fig="{{ it.fig }}" data-cap="{{ it.cap }}" />{% endfor %}</div>
+    </figure>
+    {%- endfor %}
+  </div>
+  <figcaption class="plate__cap" aria-live="polite"><span class="n">{{ c.steps[0].fig }}</span><span class="t">{{ c.steps[0].cap }}</span></figcaption>
+</div>
+{% endmacro %}
 {#- City carousel: one spread at full width, a mono pager and a fifteen-segment rule; the ledger
     beside the text is its index (main.js initCarousel). Without JS: the first city, and every rule
     segment / ledger row is a real link to that spread. -#}
@@ -131,7 +153,7 @@ layout: base.njk
   {#- a stack chapter's plates all sit in the stack row, so its text takes the wide (noplates) measure -#}
   {% set hasPlates = (c.plates or c.pair or c.strip or c.carousel) and not c.stack %}
   {% set hasText = body or c.title %}
-  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or c.stack or c.swap or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or c.stack or c.swap or c.compare or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
     {% if c.carousel %}
     {#- carousel chapters: eyebrow, stat row, any full-width plates, the carousel, then text | ledger -#}
     <span class="chap__eyebrow chap__eyebrow--row"><b>({{ c.n }})</b> {{ c.name }}</span>
@@ -145,10 +167,15 @@ layout: base.njk
     {% set rows = c.carousel.rows or (c.carousel.data | dataset) %}
     {{ carousel(c.carousel, rows) }}
     {% endif %}
+    {% if c.compare %}
+    <span class="chap__eyebrow chap__eyebrow--row"><b>({{ c.n }})</b> {{ c.name }}</span>
+    {% if c.title %}<h2 class="chap__title chap__title--lead">{{ c.title }}</h2>{% endif %}
+    {{ compare(c.compare) }}
+    {% endif %}
     {% if hasText %}
     <div class="chap__txt">
-      {% if not c.carousel %}<span class="chap__eyebrow"><b>({{ c.n }})</b> {{ c.name }}</span>{% endif %}
-      {% if c.title %}<h2 class="chap__title">{{ c.title }}</h2>{% endif %}
+      {% if not c.carousel and not c.compare %}<span class="chap__eyebrow"><b>({{ c.n }})</b> {{ c.name }}</span>{% endif %}
+      {% if c.title and not c.compare %}<h2 class="chap__title">{{ c.title }}</h2>{% endif %}
       {% if body %}<div class="chap__body">{{ body | safe }}</div>{% endif %}
     </div>
     {% endif %}

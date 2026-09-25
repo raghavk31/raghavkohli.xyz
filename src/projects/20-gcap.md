@@ -40,85 +40,76 @@ chapters:
         - { src: /assets/projects/gcap/04.jpg, w: 1273, h: 1800, cap: "Kuching (Padawan Municipal Council) Green City Action Plan. Sarawak; 266,895 people." }
         - { src: /assets/projects/gcap/05.jpg, w: 1273, h: 1800, cap: "Penang Island Green City Action Plan. 307 km², 811,081 people, George Town at its heart." }
   - n: "01"
-    name: profile
-    title: Four cities, drawn from their own data
-    side: left
-    tiles:
-      ar: 0.695
-      min: 200
-      fig: fig.06–09
-      cap: "Where each city is. The first map of every plan, prepared in GIS from council, PLANMalaysia and OpenStreetMap data: boundaries, planning blocks, the network that reaches them."
-      items:
-        - { src: /assets/projects/gcap/06.jpg, w: 1249, h: 1798, cap: "Kota Bharu. Administrative boundary and planning blocks; the Kelantan river to the west, the South China Sea to the north." }
-        - { src: /assets/projects/gcap/07.jpg, w: 1251, h: 1798, cap: "Langkawi. The main island and its islets; the planning blocks, the ferry routes to Kuala Perlis and Kuala Kedah." }
-        - { src: /assets/projects/gcap/08.jpg, w: 1252, h: 1798, cap: "Kuching (Padawan). The municipal council's wards, 884 km² south of Kuching city on the Sarawak Kiri." }
-        - { src: /assets/projects/gcap/09.jpg, w: 1252, h: 1800, cap: "Penang Island. Local and regional connectivity: the two bridges, the expressways, the port and the airport at Bayan Lepas." }
+    name: four layers
+    title: Each layer, four cities across
+    compare:
+      ar: 445 / 640
+      steps:
+        - { name: the ground, fig: fig.06–09, cap: "Where each city is. The first map of every plan, prepared in GIS from council, PLANMalaysia and OpenStreetMap data: boundaries, planning blocks, the network that reaches them." }
+        - { name: land use, fig: fig.10–13, cap: "What the ground is for. The same legend, four very different grounds: a river town trading fields for commerce, an island of forest and beach, a council of villages under forest, a city dense on the plain below its hill." }
+        - { name: heat, fig: fig.30–33, cap: "Land surface temperature, from Landsat, on one scale. The pattern repeats in all four: the built plain heats, the forest and the water hold." }
+        - { name: flood, fig: fig.34–37, cap: "Where the water comes in. Hazard against the roads, substations, schools and clinics standing in it — the exposure maps are where each investment list starts." }
+      cities:
+        - name: Kota Bharu
+          items:
+            - { src: /assets/projects/gcap/06-t.jpg, tw: 445, th: 640, full: /assets/projects/gcap/06.jpg, w: 1249, h: 1798, fig: fig.06, cap: "Kota Bharu. Administrative boundary and planning blocks; the Kelantan river to the west, the South China Sea to the north." }
+            - { src: /assets/projects/gcap/10-t.jpg, tw: 452, th: 640, full: /assets/projects/gcap/10.jpg, w: 1248, h: 1770, fig: fig.10, cap: "Kota Bharu. Existing and proposed land use, 2022 against 2035: housing and agriculture giving way to commerce along the river." }
+            - { src: /assets/projects/gcap/30-t.jpg, tw: 431, th: 640, full: /assets/projects/gcap/30.jpg, w: 1223, h: 1796, fig: fig.30, cap: "Kota Bharu. Land surface temperature 2022: the whole plain runs hot; the river corridor and the coast a degree or two cooler." }
+            - { src: /assets/projects/gcap/34-t.jpg, tw: 444, th: 640, full: /assets/projects/gcap/34.jpg, w: 1248, h: 1798, fig: fig.34, cap: "Kota Bharu. Flood hazard: the Kelantan river's floodplain, the low north-east wards, the December monsoon." }
+        - name: Langkawi
+          items:
+            - { src: /assets/projects/gcap/07-t.jpg, tw: 445, th: 640, full: /assets/projects/gcap/07.jpg, w: 1251, h: 1798, fig: fig.07, cap: "Langkawi. The main island and its islets; the planning blocks, the ferry routes to Kuala Perlis and Kuala Kedah." }
+            - { src: /assets/projects/gcap/11-t.jpg, tw: 444, th: 640, full: /assets/projects/gcap/11.jpg, w: 1248, h: 1798, fig: fig.11, cap: "Langkawi. Existing land use 2022: forest on the massif, agriculture on the plain, tourism along the southern shore." }
+            - { src: /assets/projects/gcap/31-t.jpg, tw: 443, th: 640, full: /assets/projects/gcap/31.jpg, w: 1223, h: 1749, fig: fig.31, cap: "Langkawi. LST 2022: the town of Kuah and the airport plain hottest; the forested massif holds the cool." }
+            - { src: /assets/projects/gcap/35-t.jpg, tw: 432, th: 640, full: /assets/projects/gcap/35.jpg, w: 1225, h: 1798, fig: fig.35, cap: "Langkawi. Flood exposure on the built environment: Padang Matsirat and Ulu Melaka the hotspots; 18.15 km² of the island in the flood zone." }
+        - name: Padawan
+          items:
+            - { src: /assets/projects/gcap/08-t.jpg, tw: 445, th: 640, full: /assets/projects/gcap/08.jpg, w: 1252, h: 1798, fig: fig.08, cap: "Kuching (Padawan). The municipal council's wards, 884 km² south of Kuching city on the Sarawak Kiri." }
+            - { src: /assets/projects/gcap/12-t.jpg, tw: 444, th: 640, full: /assets/projects/gcap/12.jpg, w: 1248, h: 1798, fig: fig.12, cap: "Kuching (Padawan). Land cover 2017 and 2022: forest still dominant, built-up creeping along the Kuching–Serian road." }
+            - { src: /assets/projects/gcap/32-t.jpg, tw: 432, th: 640, full: /assets/projects/gcap/32.jpg, w: 1225, h: 1796, fig: fig.32, cap: "Kuching (Padawan). Heat hazard by ward: the Kuching-side wards and the corridor hottest, the hill wards coolest." }
+            - { src: /assets/projects/gcap/36-t.jpg, tw: 445, th: 640, full: /assets/projects/gcap/36.jpg, w: 1250, h: 1796, fig: fig.36, cap: "Kuching (Padawan). Flood impacts on urban systems: the wards along the Sarawak Kiri and the Kuching–Serian road." }
+        - name: Penang Island
+          items:
+            - { src: /assets/projects/gcap/09-t.jpg, tw: 444, th: 640, full: /assets/projects/gcap/09.jpg, w: 1252, h: 1800, fig: fig.09, cap: "Penang Island. Local and regional connectivity: the two bridges, the expressways, the port and the airport at Bayan Lepas." }
+            - { src: /assets/projects/gcap/13-t.jpg, tw: 444, th: 640, full: /assets/projects/gcap/13.jpg, w: 1252, h: 1800, fig: fig.13, cap: "Penang Island. Land use and key settlement areas, 2022: 45 per cent forest, 14 agriculture, 13 housing, 8 transport." }
+            - { src: /assets/projects/gcap/33-t.jpg, tw: 431, th: 640, full: /assets/projects/gcap/33.jpg, w: 1226, h: 1800, fig: fig.33, cap: "Penang Island. LST 2017 and 2022: George Town and Bayan Lepas hottest, the central hill coolest; 20–34 °C at the surface." }
+            - { src: /assets/projects/gcap/37-t.jpg, tw: 353, th: 640, full: /assets/projects/gcap/37.jpg, w: 995, h: 1800, fig: fig.37, cap: "Penang Island. Flood impacts on urban infrastructure: 64 waterlogging locations, the north-east district's low ground and the river mouths." }
   - n: "02"
-    name: land
-    title: What the ground is used for
-    tiles:
-      ar: 0.695
-      min: 200
-      fig: fig.10–13
-      cap: "Land use in each city. The same legend, four very different grounds: a river town, an island of forest and beach, a municipal council of villages, a city on a hill."
-      items:
-        - { src: /assets/projects/gcap/10.jpg, w: 1248, h: 1770, cap: "Kota Bharu. Existing and proposed land use, 2022 against 2035: housing and agriculture giving way to commerce along the river." }
-        - { src: /assets/projects/gcap/11.jpg, w: 1248, h: 1798, cap: "Langkawi. Existing land use 2022: forest on the massif, agriculture on the plain, tourism along the southern shore." }
-        - { src: /assets/projects/gcap/12.jpg, w: 1248, h: 1798, cap: "Kuching (Padawan). Land cover 2017 and 2022: forest still dominant, built-up creeping along the Kuching–Serian road." }
-        - { src: /assets/projects/gcap/13.jpg, w: 1252, h: 1800, cap: "Penang Island. Land use and key settlement areas, 2022: 45 per cent forest, 14 agriculture, 13 housing, 8 transport." }
-  - n: "03"
     name: services
     title: Energy, waste, water, wastewater, sixteen times
-    tiles:
+    compare:
       ar: 1
-      min: 200
-      fig: fig.14–29
-      cap: "The service overview diagrams. One drawing system, four cities by four sectors. Rows: Kota Bharu, Langkawi, Padawan, Penang Island. Columns: energy, waste, water, wastewater. Each names the agency, the supply, the demand, and the number that matters. Click any to read it."
-      items:
-        - { src: /assets/projects/gcap/14.jpg, w: 1541, h: 1800, tile: /assets/projects/gcap/14-t.jpg, tw: 548, th: 640, cap: "Kota Bharu · energy. 70 % coal-based supply; 1,398 kWh per person; residential 42.5 %, commercial 44 %, industry 12.6 %." }
-        - { src: /assets/projects/gcap/15.jpg, w: 1800, h: 1736, tile: /assets/projects/gcap/15-t.jpg, tw: 640, th: 617, cap: "Kota Bharu · waste. 481 tonnes a day, 74 % collected; a black soldier fly plant for organics; 10.39 % to the MRF." }
-        - { src: /assets/projects/gcap/16.jpg, w: 1800, h: 1785, tile: /assets/projects/gcap/16-t.jpg, tw: 640, th: 635, cap: "Kota Bharu · water. Demand 184.8 MLD, supply 163.8; 94 % coverage; 100 % groundwater." }
-        - { src: /assets/projects/gcap/17.jpg, w: 1800, h: 1630, tile: /assets/projects/gcap/17-t.jpg, tw: 640, th: 580, cap: "Kota Bharu · wastewater. 131 MLD generated, 33 % treatment capacity, 2.11 % of households sewered." }
-        - { src: /assets/projects/gcap/18.jpg, w: 1518, h: 1800, tile: /assets/projects/gcap/18-t.jpg, tw: 540, th: 640, cap: "Langkawi · energy. Gas-fired supply; 1,109 kWh per person; residential 96.5 %." }
-        - { src: /assets/projects/gcap/19.jpg, w: 1800, h: 1737, tile: /assets/projects/gcap/19-t.jpg, tw: 640, th: 618, cap: "Langkawi · waste. 113 tonnes a day, 56 % collected; a 100-tonne incinerator processing 10.7." }
-        - { src: /assets/projects/gcap/20.jpg, w: 1800, h: 1697, tile: /assets/projects/gcap/20-t.jpg, tw: 640, th: 603, cap: "Langkawi · water. 290.92 MLD, 98 % coverage; 44 % from island treatment works, 56 % piped from the mainland." }
-        - { src: /assets/projects/gcap/21.jpg, w: 1800, h: 1468, tile: /assets/projects/gcap/21-t.jpg, tw: 640, th: 522, cap: "Langkawi · wastewater. 232.73 MLD, 70 % treatment capacity, 38 % of households sewered." }
-        - { src: /assets/projects/gcap/22.jpg, w: 1686, h: 1800, tile: /assets/projects/gcap/22-t.jpg, tw: 599, th: 640, cap: "Padawan · energy. Sarawak's hydropower grid; 5,178 kWh per person; industry 45 %." }
-        - { src: /assets/projects/gcap/23.jpg, w: 1800, h: 1702, tile: /assets/projects/gcap/23-t.jpg, tw: 640, th: 605, cap: "Padawan · waste. 98 % collected, 0.40 % segregated; organics 62 % of the stream." }
-        - { src: /assets/projects/gcap/24.jpg, w: 1798, h: 1800, tile: /assets/projects/gcap/24-t.jpg, tw: 639, th: 640, cap: "Padawan · water. 319 MLD, 100 % coverage, all of it from the Sungai Sarawak Kiri." }
-        - { src: /assets/projects/gcap/25.jpg, w: 1800, h: 1638, tile: /assets/projects/gcap/25-t.jpg, tw: 640, th: 582, cap: "Padawan · wastewater. 255 MLD, 14 MLD of treatment capacity, 8 % sewered, 76 % on septic tanks." }
-        - { src: /assets/projects/gcap/26.jpg, w: 1555, h: 1800, tile: /assets/projects/gcap/26-t.jpg, tw: 553, th: 640, cap: "Penang Island · energy. Coal-fired supply from Gelugor; 6,130 kWh per person; industry 48 %." }
-        - { src: /assets/projects/gcap/27.jpg, w: 1800, h: 1744, tile: /assets/projects/gcap/27-t.jpg, tw: 640, th: 620, cap: "Penang Island · waste. 800 tonnes a day, 100 % collected, through Batu Maung to the Pulau Burung landfill." }
-        - { src: /assets/projects/gcap/28.jpg, w: 1800, h: 1697, tile: /assets/projects/gcap/28-t.jpg, tw: 640, th: 603, cap: "Penang Island · water. Penang Water Supply Corporation; the island's dams and the mainland's river." }
-        - { src: /assets/projects/gcap/29.jpg, w: 1800, h: 1556, tile: /assets/projects/gcap/29-t.jpg, tw: 640, th: 553, cap: "Penang Island · wastewater. 60.77 % sewered; 154 public and 3 regional treatment plants." }
-  - n: "04"
-    name: heat
-    title: Where the ground is hottest
-    side: left
-    tiles:
-      ar: 0.685
-      min: 200
-      fig: fig.30–33
-      cap: "Land surface temperature, city by city. From Landsat, on the same scale. The pattern repeats: the built plain heats; the forest and the water hold."
-      items:
-        - { src: /assets/projects/gcap/30.jpg, w: 1223, h: 1796, cap: "Kota Bharu. Land surface temperature 2022: the whole plain runs hot; the river corridor and the coast a degree or two cooler." }
-        - { src: /assets/projects/gcap/31.jpg, w: 1223, h: 1749, cap: "Langkawi. LST 2022: the town of Kuah and the airport plain hottest; the forested massif holds the cool." }
-        - { src: /assets/projects/gcap/32.jpg, w: 1225, h: 1796, cap: "Kuching (Padawan). Heat hazard by ward: the Kuching-side wards and the corridor hottest, the hill wards coolest." }
-        - { src: /assets/projects/gcap/33.jpg, w: 1226, h: 1800, cap: "Penang Island. LST 2017 and 2022: George Town and Bayan Lepas hottest, the central hill coolest; 20–34 °C at the surface." }
-  - n: "05"
-    name: flood
-    title: Where the water comes in
-    tiles:
-      ar: 0.69
-      min: 200
-      fig: fig.34–37
-      cap: "Flood, city by city. Hazard against the roads, substations, schools and clinics that sit in it. The exposure maps are where the investment list starts."
-      items:
-        - { src: /assets/projects/gcap/34.jpg, w: 1248, h: 1798, cap: "Kota Bharu. Flood hazard: the Kelantan river's floodplain, the low north-east wards, the December monsoon." }
-        - { src: /assets/projects/gcap/35.jpg, w: 1225, h: 1798, cap: "Langkawi. Flood exposure on the built environment: Padang Matsirat and Ulu Melaka the hotspots; 18.15 km² of the island in the flood zone." }
-        - { src: /assets/projects/gcap/36.jpg, w: 1250, h: 1796, cap: "Kuching (Padawan). Flood impacts on urban systems: the wards along the Sarawak Kiri and the Kuching–Serian road." }
-        - { src: /assets/projects/gcap/37.jpg, w: 995, h: 1800, cap: "Penang Island. Flood impacts on urban infrastructure: 64 waterlogging locations, the north-east district's low ground and the river mouths." }
-  - n: "06"
+      steps:
+        - { name: energy, fig: fig.14 · 18 · 22 · 26, cap: "Energy. The agency, the source, the supply and the demand. Coal at Kota Bharu and Penang, gas at Langkawi, Sarawak's hydropower at Padawan — and a spread from 1,109 to 6,130 kWh a person." }
+        - { name: waste, fig: fig.15 · 19 · 23 · 27, cap: "Waste. Tonnes a day, share collected, where it ends. Penang collects all 800 tonnes and sends them over the bridge; Langkawi collects 56 per cent and burns a tenth of what it gathers." }
+        - { name: water, fig: fig.16 · 20 · 24 · 28, cap: "Water. Demand against supply, and the source. Kota Bharu is entirely groundwater, Padawan entirely one river, Langkawi pipes more than half of its water from the mainland." }
+        - { name: wastewater, fig: fig.17 · 21 · 25 · 29, cap: "Wastewater. Generated, treated, sewered. The widest gap on the page: 2.11 per cent of Kota Bharu's households are sewered against 60.77 per cent of Penang Island's." }
+      cities:
+        - name: Kota Bharu
+          items:
+            - { src: /assets/projects/gcap/14-t.jpg, tw: 548, th: 640, full: /assets/projects/gcap/14.jpg, w: 1541, h: 1800, fig: fig.14, cap: "Kota Bharu · energy. 70 % coal-based supply; 1,398 kWh per person; residential 42.5 %, commercial 44 %, industry 12.6 %." }
+            - { src: /assets/projects/gcap/15-t.jpg, tw: 640, th: 617, full: /assets/projects/gcap/15.jpg, w: 1800, h: 1736, fig: fig.15, cap: "Kota Bharu · waste. 481 tonnes a day, 74 % collected; a black soldier fly plant for organics; 10.39 % to the MRF." }
+            - { src: /assets/projects/gcap/16-t.jpg, tw: 640, th: 635, full: /assets/projects/gcap/16.jpg, w: 1800, h: 1785, fig: fig.16, cap: "Kota Bharu · water. Demand 184.8 MLD, supply 163.8; 94 % coverage; 100 % groundwater." }
+            - { src: /assets/projects/gcap/17-t.jpg, tw: 640, th: 580, full: /assets/projects/gcap/17.jpg, w: 1800, h: 1630, fig: fig.17, cap: "Kota Bharu · wastewater. 131 MLD generated, 33 % treatment capacity, 2.11 % of households sewered." }
+        - name: Langkawi
+          items:
+            - { src: /assets/projects/gcap/18-t.jpg, tw: 540, th: 640, full: /assets/projects/gcap/18.jpg, w: 1518, h: 1800, fig: fig.18, cap: "Langkawi · energy. Gas-fired supply; 1,109 kWh per person; residential 96.5 %." }
+            - { src: /assets/projects/gcap/19-t.jpg, tw: 640, th: 618, full: /assets/projects/gcap/19.jpg, w: 1800, h: 1737, fig: fig.19, cap: "Langkawi · waste. 113 tonnes a day, 56 % collected; a 100-tonne incinerator processing 10.7." }
+            - { src: /assets/projects/gcap/20-t.jpg, tw: 640, th: 603, full: /assets/projects/gcap/20.jpg, w: 1800, h: 1697, fig: fig.20, cap: "Langkawi · water. 290.92 MLD, 98 % coverage; 44 % from island treatment works, 56 % piped from the mainland." }
+            - { src: /assets/projects/gcap/21-t.jpg, tw: 640, th: 522, full: /assets/projects/gcap/21.jpg, w: 1800, h: 1468, fig: fig.21, cap: "Langkawi · wastewater. 232.73 MLD, 70 % treatment capacity, 38 % of households sewered." }
+        - name: Padawan
+          items:
+            - { src: /assets/projects/gcap/22-t.jpg, tw: 599, th: 640, full: /assets/projects/gcap/22.jpg, w: 1686, h: 1800, fig: fig.22, cap: "Padawan · energy. Sarawak's hydropower grid; 5,178 kWh per person; industry 45 %." }
+            - { src: /assets/projects/gcap/23-t.jpg, tw: 640, th: 605, full: /assets/projects/gcap/23.jpg, w: 1800, h: 1702, fig: fig.23, cap: "Padawan · waste. 98 % collected, 0.40 % segregated; organics 62 % of the stream." }
+            - { src: /assets/projects/gcap/24-t.jpg, tw: 639, th: 640, full: /assets/projects/gcap/24.jpg, w: 1798, h: 1800, fig: fig.24, cap: "Padawan · water. 319 MLD, 100 % coverage, all of it from the Sungai Sarawak Kiri." }
+            - { src: /assets/projects/gcap/25-t.jpg, tw: 640, th: 582, full: /assets/projects/gcap/25.jpg, w: 1800, h: 1638, fig: fig.25, cap: "Padawan · wastewater. 255 MLD, 14 MLD of treatment capacity, 8 % sewered, 76 % on septic tanks." }
+        - name: Penang Island
+          items:
+            - { src: /assets/projects/gcap/26-t.jpg, tw: 553, th: 640, full: /assets/projects/gcap/26.jpg, w: 1555, h: 1800, fig: fig.26, cap: "Penang Island · energy. Coal-fired supply from Gelugor; 6,130 kWh per person; industry 48 %." }
+            - { src: /assets/projects/gcap/27-t.jpg, tw: 640, th: 620, full: /assets/projects/gcap/27.jpg, w: 1800, h: 1744, fig: fig.27, cap: "Penang Island · waste. 800 tonnes a day, 100 % collected, through Batu Maung to the Pulau Burung landfill." }
+            - { src: /assets/projects/gcap/28-t.jpg, tw: 640, th: 603, full: /assets/projects/gcap/28.jpg, w: 1800, h: 1697, fig: fig.28, cap: "Penang Island · water. Penang Water Supply Corporation; the island's dams and the mainland's river." }
+            - { src: /assets/projects/gcap/29-t.jpg, tw: 640, th: 553, full: /assets/projects/gcap/29.jpg, w: 1800, h: 1556, fig: fig.29, cap: "Penang Island · wastewater. 60.77 % sewered; 154 public and 3 regional treatment plants." }
+  - n: "03"
     name: inventory
     title: Four ledgers on one protocol
     side: left
@@ -139,7 +130,7 @@ chapters:
         - { src: /assets/projects/gcap/39.jpg, w: 1249, h: 1798, cap: "Langkawi, 2022. 3.12 million GJ; 0.45 million tCO₂e; 4.70 tonnes a person. Transport 38 per cent; emissions up 44 per cent in five years." }
         - { src: /assets/projects/gcap/40.jpg, w: 1247, h: 1798, cap: "Kuching (Padawan), 2022. 11.76 million GJ; 1.11 million tCO₂e; 4.18 tonnes a person. Transport 46 per cent, waste a fifth; a hydropower grid keeps electricity light." }
         - { src: /assets/projects/gcap/41.jpg, w: 1249, h: 1800, cap: "Penang Island, 2022. 25.58 million GJ; 4.72 million tCO₂e; 5.82 tonnes a person against Malaysia's 10.16. Industry first, then buildings." }
-  - n: "07"
+  - n: "04"
     name: next
     title: Priority sectors and what to fund
     narrow: true
@@ -162,7 +153,7 @@ BASIC level for 2017 to 2022, and a list of priority sectors and quality-infrast
 a bank can pick up. The method is the real deliverable; the four books are it, run four times.
 This page reads them the way the secretariat would: each layer, four cities across.
 
-## 01 profile
+## 01 four layers
 
 Every plan opens with a map made from the city's own data, boundaries and roads from the
 council and PLANMalaysia, population from the census, so the first thing a reader sees is a
@@ -171,15 +162,26 @@ Kota Bharu, a river town of 411,000 on the east coast; Langkawi, an island of 97
 on tourism; Padawan, a municipal council of 267,000 spread over 884 square kilometres of Sarawak
 villages; Penang Island, 811,000 people on 307 square kilometres with George Town at its heart.
 
-## 02 land
-
 The land-use maps share a legend and say four different things. Kota Bharu is trading fields
 for commerce along the Kelantan. Langkawi is forest on its massif and hotels on its southern
 shore. Padawan is still mostly forest, with the built-up strip creeping along the Kuching–Serian
 road between 2017 and 2022. Penang is 45 per cent forest on the hill and dense on the plain
 around it. What a city can do about carbon and heat starts with what its ground is for.
 
-## 03 services
+Then the heat. Land surface temperature from Landsat, on the same scale for each city, and the
+pattern repeats: the built plain heats; the forest and the water hold. Kota Bharu's whole plain
+runs hot; Langkawi's Kuah and airport plain against its massif; Padawan's Kuching-side wards
+against its hills; Penang's George Town and Bayan Lepas at 34 °C against the hill at its centre.
+At 76 per cent humidity Penang's 37 °C feels like 55, and the mean maximum has risen 0.9 °C
+since 1981.
+
+Then the water. Kota Bharu floods from the Kelantan every December monsoon. Langkawi's flood
+zone is 18 square kilometres, with Padang Matsirat and Ulu Melaka the hotspots. Padawan floods
+along the Sarawak Kiri. Penang counts 64 waterlogging locations in the north-east district's low
+ground. Each map puts the roads, substations, schools and clinics on the hazard, and the exposure
+maps are where the investment list starts.
+
+## 02 services
 
 Before the risk and the carbon, the services. For each city, four diagrams (energy, waste,
 water, wastewater) on one drawing system: the agency responsible, the source, the supply and
@@ -189,26 +191,11 @@ Padawan runs on Sarawak's hydropower, uses five times the electricity per person
 does, and has 76 per cent of its households on septic tanks. Penang collects all of its 800
 tonnes of waste a day and sends it across the bridge to a landfill.
 
-Sixteen drawings, one legend. Put side by side, they are the comparison the secretariat asked
-for, before a single table.
+Sixteen drawings, one legend. Read a sector at a time, four cities across, they are the
+comparison the secretariat asked for, before a single table.
 
-## 04 heat
+## 03 inventory
 
-Land surface temperature from Landsat, on the same scale for each city. The pattern repeats:
-the built plain heats; the forest and the water hold. Kota Bharu's whole plain runs hot;
-Langkawi's Kuah and airport plain against its massif; Padawan's Kuching-side wards against its
-hills; Penang's George Town and Bayan Lepas at 34 °C against the hill at its centre. At 76 per
-cent humidity Penang's 37 °C feels like 55, and the mean maximum has risen 0.9 °C since 1981.
-
-## 05 flood
-
-Then the water. Kota Bharu floods from the Kelantan every December monsoon. Langkawi's flood
-zone is 18 square kilometres, with Padang Matsirat and Ulu Melaka the hotspots. Padawan floods
-along the Sarawak Kiri. Penang counts 64 waterlogging locations in the north-east district's low
-ground. Each map puts the roads, substations, schools and clinics on the hazard, and the exposure
-maps are where the investment list starts.
-
-## 06 inventory
 
 The inventory is the ledger, and the same table appears in each book: energy use by sector,
 emissions by sector, the per-capita line, Malaysia's 10.16 tonnes beside it. Penang Island used
@@ -219,7 +206,7 @@ and 4.70 a person, transport first, and its emissions grew 44 per cent in five y
 Kota Bharu, with half Penang's people and no heavy industry, is 0.76 million tonnes and 1.86 a
 person. Four cities, 7.04 million tonnes, one protocol, and the differences between them are the plan.
 
-## 07 next
+## 04 next
 
 Each plan closes with the priority sectors that fall out of its profile, its risks and its
 inventory, and a shortlist of quality infrastructure investment projects a development bank can
