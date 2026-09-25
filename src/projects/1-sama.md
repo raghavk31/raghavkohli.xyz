@@ -7,7 +7,7 @@ topics: [energy, data]
 size: lg
 offset: off-70
 qsize: 26px
-fig: fig.05 · one feeder, two views
+fig: one feeder, and the two prices on it
 role: research · systems design · python
 period: 2026, ongoing
 context: rooftop solar · urban indian prosumers · india energy stack
@@ -15,6 +15,17 @@ status: live research · module built, not yet piloted
 live: true
 date: 2026-06-01
 card: L
+thumb: /assets/projects/sama/00.jpg
+thumbw: 1200
+thumbh: 800
+# Made images, not photographs: scripts/make-sama-cover.py draws them from the page's own
+# numbers, in the language of the reference Raghav picked (images/sama/Recording ....gif).
+# Nothing in them is data. They stand in until the nine figures below are drawn.
+covers:
+  - { t: /assets/projects/sama/c1.jpg, f: /assets/projects/sama/c1-f.jpg, w: 1200, h: 800 }
+  - { t: /assets/projects/sama/c2.jpg, f: /assets/projects/sama/c2-f.jpg, w: 1200, h: 800 }
+  - { t: /assets/projects/sama/c3.jpg, f: /assets/projects/sama/c3-f.jpg, w: 1200, h: 800 }
+  - { t: /assets/projects/sama/c4.jpg, f: /assets/projects/sama/c4-f.jpg, w: 1200, h: 800 }
 lead: "A rooftop owner in an Indian city generates a unit of electricity she does not use. It goes to the grid. She is paid about ₹2.50 for it. The same unit clears the market at ₹6.40 to ₹6.80. She does not know this, because nothing in her house tells her. The meter reads a net number once a month. It does not say what she produced, when she produced it, where it went, or what it was worth to whoever received it. She has made something and sold it, and she has been told neither the quantity nor the price."
 next: Climate Code India · thirty tools in thirty days
 # The nine figure slots, each with the caption it has to earn. Uncomment a block once the drawing
