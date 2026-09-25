@@ -129,16 +129,22 @@ layout: base.njk
 
   <span class="detail__qlabel">(research question)</span>
   <h1 class="detail__q reveal">{{ question }}</h1>
-  {% if subtitle %}<p class="detail__sub reveal">{{ subtitle }}</p>{% endif %}
-
-  <div class="detail__meta reveal">
-    <div><div class="lbl">(role)</div><div class="val">{{ role }}</div></div>
-    <div><div class="lbl">(period)</div><div class="val">{{ period }}</div></div>
-    <div><div class="lbl">(context)</div><div class="val">{{ context }}</div></div>
-    <div><div class="lbl">(status)</div><div class="val" style="color:{% if live %}var(--accent){% else %}var(--faint){% endif %}">{{ status }}</div></div>
+  {#- The head runs in two columns under the question: the deck and the lead on the left, the
+      project's own facts on the right, right-aligned against the content edge — the same ledger
+      register the homepage masthead uses for its group counts (`.work__index`). It used to be a
+      flex row under the deck, where four items wrapped to two lines and orphaned (status). -#}
+  <div class="detail__head reveal">
+    <div class="detail__headtext">
+      {% if subtitle %}<p class="detail__sub">{{ subtitle }}</p>{% endif %}
+      {% if lead %}<p class="detail__lead">{{ lead }}</p>{% endif %}
+    </div>
+    <dl class="detail__index">
+      <div><dt>(role)</dt><dd>{{ role }}</dd></div>
+      <div><dt>(period)</dt><dd>{{ period }}</dd></div>
+      <div><dt>(context)</dt><dd>{{ context }}</dd></div>
+      <div><dt>(status)</dt><dd class="status{% if live %} live{% endif %}">{{ status }}</dd></div>
+    </dl>
   </div>
-
-  {% if lead %}<p class="detail__lead reveal">{{ lead }}</p>{% endif %}
 
   {% if chapters %}
   {#- ===== chapter layout: the argument beside its evidence =====
