@@ -400,6 +400,7 @@
       pageBody.appendChild(clone);
       initCarousel(clone);
       initStack(clone);
+      initSwap(clone);
       initLightbox(clone);
       pageBody.hidden = false;
       if (jsonBody) jsonBody.hidden = true;
@@ -762,10 +763,123 @@
       show(n - 1);
     });
   }
+  /* ---------- map swap — one ground, asked many questions ----------
+     Every frame is the same registered base under a different overlay, so the stage cross-fades
+     and the index beside it says which question is up. The reader steps; the only motion the page
+     makes on its own is an opening sweep through the band openers, ending on the composite, which
+     is where the set rests. Frames load as they are reached (a set is twenty-odd maps), and a step
+     waits for its frame to decode so the stage never goes blank. */
+  function initSwap(root) {
+    if (!root) return;
+    root.querySelectorAll("[data-swap]").forEach(function (sw) {
+      var frames = Array.prototype.slice.call(sw.querySelectorAll(".swap__stage > img"));
+      var keys = Array.prototype.slice.call(sw.querySelectorAll(".swap__key a"));
+      var stage = sw.querySelector(".swap__stage");
+      var capN = sw.querySelector(".plate__cap .n"), capT = sw.querySelector(".plate__cap .t");
+      var pos = sw.querySelector(".swap__pos");
+      var prev = sw.querySelector("[data-step='-1']"), next = sw.querySelector("[data-step='1']");
+      var n = frames.length;
+      if (n < 2 || !stage) return;
+      var idx = n - 1, taken = false, auto = null, token = 0, capTimer = null;
+      var STEP_MS = 760;
+      var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      var two = function (k) { return (k < 10 ? "0" : "") + k; };
+      sw.classList.add("swap--js");
+
+      // the sweep samples the set: the first map of every band, then the composite
+      var opens = keys.map(function (a, k) {
+        return a.closest(".swap__grp").querySelector(".swap__key a") === a ? k : -1;
+      }).filter(function (k) { return k >= 0; });
+      if (opens[opens.length - 1] !== n - 1) opens.push(n - 1);
+
+      function want(i) {   // pull a frame in, and the ones on either side of it
+        for (var k = Math.max(0, i - 1); k <= Math.min(n - 1, i + 1); k++) frames[k].loading = "eager";
+      }
+      function show(i) {
+        i = Math.max(0, Math.min(n - 1, i));
+        var im = frames[i], my = ++token;
+        want(i);
+        keys.forEach(function (a, k) {
+          a.classList.toggle("on", k === i);
+          if (k === i) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+        });
+        sw.classList.add("is-swapping");
+        (im.decode ? im.decode().catch(function () {}) : Promise.resolve()).then(function () {
+          if (my !== token) return;   // the reader moved on while this frame loaded
+          idx = i;
+          frames.forEach(function (f, k) { f.classList.toggle("on", k === i); });
+          var p = frames[(i - 1 + n) % n], q = frames[(i + 1) % n];
+          prev.href = p.dataset.full; next.href = q.dataset.full;
+          prev.innerHTML = "(&larr;<span class=\"long\"> " + p.dataset.name + "</span>)";
+          next.innerHTML = "(<span class=\"long\">" + q.dataset.name + " </span>&rarr;)";
+          pos.textContent = two(i + 1) + " / " + two(n);
+          if (capTimer) clearTimeout(capTimer);
+          capTimer = setTimeout(function () {
+            capN.textContent = im.dataset.fig || "";
+            capT.textContent = im.dataset.cap || "";
+            sw.classList.remove("is-swapping");
+          }, reduce ? 0 : 150);
+        });
+      }
+      function step(d) { show((idx + d + n) % n); }
+      function take() { taken = true; if (auto !== null) { clearTimeout(auto); auto = null; } sw.classList.remove("is-auto"); }
+      function sweep() {
+        if (taken || reduce) return;
+        var k = 0;
+        opens.forEach(function (i) { want(i); });
+        sw.classList.add("is-auto");
+        (function tick() {
+          auto = null;
+          if (taken || k >= opens.length) { sw.classList.remove("is-auto"); return; }
+          if (document.hidden) { auto = setTimeout(tick, STEP_MS); return; }   // wait for the tab
+          show(opens[k++]);
+          auto = setTimeout(tick, STEP_MS);
+        })();
+      }
+      if ("IntersectionObserver" in window) {
+        var near = new IntersectionObserver(function (en) {
+          if (en.some(function (e) { return e.isIntersecting; })) { want(n - 1); opens.forEach(function (i) { want(i); }); near.disconnect(); }
+        }, { rootMargin: "400px" });
+        near.observe(sw);
+        var seen = new IntersectionObserver(function (en) {
+          if (en.some(function (e) { return e.isIntersecting; })) { sweep(); seen.disconnect(); }
+        }, { threshold: 0.35 });
+        seen.observe(stage);
+      } else { want(n - 1); }
+
+      keys.forEach(function (a, k) { a.addEventListener("click", function (e) { e.preventDefault(); take(); show(k); }); });
+      [prev, next].forEach(function (a) {
+        a.addEventListener("click", function (e) { e.preventDefault(); take(); step(+a.dataset.step); });
+      });
+      sw.addEventListener("keydown", function (e) {
+        if (e.key === "ArrowRight") { e.preventDefault(); take(); step(1); }
+        else if (e.key === "ArrowLeft") { e.preventDefault(); take(); step(-1); }
+      });
+      var px = null;
+      stage.addEventListener("pointerdown", function (e) { if (e.pointerType !== "mouse") px = e.clientX; }, { passive: true });
+      stage.addEventListener("pointerup", function (e) {
+        if (px === null) return;
+        var dx = e.clientX - px; px = null;
+        if (Math.abs(dx) > 40) { e.preventDefault(); take(); step(dx < 0 ? 1 : -1); stage.dataset.swiped = "1"; }
+      });
+      // the stage opens the spreads themselves, at the map the reader is on: the legend is readable there
+      var items = frames.map(function (f) {
+        return { src: f.dataset.full, alt: f.alt, w: f.dataset.w, h: f.dataset.h, n: f.dataset.fig, t: f.dataset.cap || "" };
+      });
+      stage.classList.add("lb-src");
+      stage.setAttribute("tabindex", "0");
+      stage.setAttribute("role", "button");
+      stage.setAttribute("aria-label", "open the spread this map came from");
+      function openSet() { if (stage.dataset.swiped) { delete stage.dataset.swiped; return; } take(); openLightbox(items, idx, stage); }
+      stage.addEventListener("click", openSet);
+      stage.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSet(); } });
+      show(n - 1);
+    });
+  }
   function initLightbox(root) {
     if (!root) return;
     var imgs = Array.prototype.slice.call(root.querySelectorAll(".plate__img img, .strip img, .tiles img, .g__frame img"))
-      .filter(function (img) { return !img.closest("[data-carousel], [data-stack]"); }); // the city carousel and the layer stack register their own sets
+      .filter(function (img) { return !img.closest("[data-carousel], [data-stack], [data-swap]"); }); // the carousel, the layer stack and the map swap register their own sets
     if (!imgs.length) return;
     var items = imgs.map(function (img) {
       var c = captionFor(img);
@@ -1104,5 +1218,6 @@
 
   initCarousel(document.querySelector("article.detail"));
   initStack(document.querySelector("article.detail"));
+  initSwap(document.querySelector("article.detail"));
   initLightbox(document.querySelector("article.detail"));
 })();

@@ -20,6 +20,10 @@ Add "tile" (12-natural-tile-name.jpg) -> also writes NN-t.jpg, a small tile (lon
 `tiles:` grid: the page shows the tile, the lightbox opens the full NN.jpg. "tile" alone crops a
 two-page spread to its more colourful half (the map or the drawing, not the text page); "tilel" /
 "tiler" force a half; "tilew" keeps the whole spread. Emitted as tile: / tw: / th:.
+Add "swap" after the tile hint (07-natural-tiler-swap-name.jpg) -> also writes NN-s.jpg, the same
+page the tile took but at long edge <= 1000px, for a `swap:` block: registered maps of one ground
+that cross-fade. The page loads them as the reader reaches them, so the budget is per frame.
+Emitted as swap: / sw: / sh:. Needs a tile hint — the swap frame is the tile at reading size.
 Without a hint, size is suggested from the aspect ratio.
 
 --grid  composites every non-thumb pick into one contact-grid image (for tile sets like
@@ -30,7 +34,6 @@ Never touches images/. Re-running overwrites src/assets/projects/<slug>/.
 import argparse
 import math
 import re
-import shutil
 import sys
 from pathlib import Path
 
@@ -51,9 +54,12 @@ RESOLVE_QUALITY = 72  # fifteen of these are prefetched at once; keep the set ne
 QUALITY = 82
 SIZES = ("lg", "md", "sm", "xs", "tall")
 EXTS = {".jpg", ".jpeg", ".png", ".tif", ".tiff", ".webp"}
-NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-(trim3?))?(?:-(tile[lrw]?))?(?:-.*)?$", re.I)
+OWNED_RE = re.compile(r"^\d{2}(?:-[trs])?\.jpg$")   # what prep-images writes, and so may delete
+NAME_RE = re.compile(r"^(\d{2})(?:-(lg|md|sm|xs|tall))?(?:-(natural))?(?:-(resolve))?(?:-(trim3?))?(?:-(tile[lrw]?))?(?:-(swap))?(?:-.*)?$", re.I)
 TILE_EDGE = 640       # a tiles: grid cell is never wider than ~200px; 640 covers 3x
 TILE_QUALITY = 70
+SWAP_EDGE = 1000      # the swap stage is never wider than ~620px; 1000 covers the portrait maps
+SWAP_QUALITY = 72     # a set of twenty-odd, loaded as the reader reaches them; ~100K each
 TRIM_WHITE = 243      # a border row/column is "white" when >= 99% of its pixels are at least this bright
 TRIM_KEEP = 0.70      # refuse a trim that keeps less than this share of the long edge
 
@@ -111,9 +117,9 @@ def trim(im, margin=0.0, strict=True):
     return im.crop((l, t, rt, bt))
 
 
-def tile_of(im, mode):
-    """The small grid image for a spread: one page of it (the more colourful one, or the one asked
-    for), white margins trimmed gently, long edge <= TILE_EDGE. "w" keeps the whole spread."""
+def tile_of_page(im, mode):
+    """The page a tile (and its swap frame) is taken from: one page of a two-page spread — the more
+    colourful one, or the one asked for. "w" keeps the whole spread."""
     w, h = im.size
     if mode != "w" and w / h > 1.2:                      # a two-page spread
         left, right = im.crop((0, 0, w // 2, h)), im.crop((w // 2, 0, w, h))
@@ -125,7 +131,7 @@ def tile_of(im, mode):
             def colour(p):
                 return sum(p.convert("HSV").resize((64, 64)).split()[1].tobytes())
             im = left if colour(left) >= colour(right) else right
-    return shrink(trim(im, 0.02, strict=False), TILE_EDGE)
+    return im
 
 
 def shrink(im, max_edge):
@@ -173,19 +179,23 @@ def main():
         if not m:
             print(f"  skip (no NN- prefix): {p.name}")
             continue
-        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), (m.group(5) or "").lower(), (m.group(6) or "").lower(), p))
+        picks.append((m.group(1), (m.group(2) or "").lower(), bool(m.group(3)), bool(m.group(4)), (m.group(5) or "").lower(), (m.group(6) or "").lower(), bool(m.group(7)), p))
     if not picks:
         sys.exit("nothing to do — files need a two-digit prefix, e.g. 01-map.jpg")
 
     dest = OUT / args.slug
+    # Clear only what this script owns. The homepage covers (cN.jpg / cN-f.jpg) are prep-covers.py's,
+    # and wiping the whole folder deletes them without saying so.
     if dest.exists():
-        shutil.rmtree(dest)
-    dest.mkdir(parents=True)
+        for f in dest.iterdir():
+            if f.is_file() and OWNED_RE.match(f.name):
+                f.unlink()
+    dest.mkdir(parents=True, exist_ok=True)
 
     thumb = None
     items = []
     grid_src = []
-    for n, hint, natural, resolve, tr, tile, p in picks:
+    for n, hint, natural, resolve, tr, tile, swap, p in picks:
         im = load(p)
         if tr:
             before = im.size
@@ -203,13 +213,21 @@ def main():
         full = shrink(im, MAX_EDGE)
         kb = save(full, dest / f"{n}.jpg") // 1024
         size = hint or suggest_size(*full.size)
-        tdims = None
+        tdims = sdims = None
         if tile:
-            t = tile_of(im, tile[4:])
+            page = trim(tile_of_page(im, tile[4:]), 0.02, strict=False)
+            t = shrink(page, TILE_EDGE)
             tkb = save(t, dest / f"{n}-t.jpg", TILE_QUALITY) // 1024
             tdims = t.size
             print(f"  {n}-t.jpg  {t.size[0]}x{t.size[1]}  {tkb}K  tile")
-        items.append((n, size, natural, resolve, full.size[0], full.size[1], tdims))
+            if swap:
+                sw = shrink(page, SWAP_EDGE)
+                skb = save(sw, dest / f"{n}-s.jpg", SWAP_QUALITY) // 1024
+                sdims = sw.size
+                print(f"  {n}-s.jpg  {sw.size[0]}x{sw.size[1]}  {skb}K  swap")
+        elif swap:
+            print(f"  {n}: swap needs a tile hint too — skipped")
+        items.append((n, size, natural, resolve, full.size[0], full.size[1], tdims, sdims))
         print(f"  {n}.jpg  {full.size[0]}x{full.size[1]}  {kb}K  {size:4}{' natural' if natural else ''}  <- {p.name}")
         if resolve:
             r = shrink(im, RESOLVE_EDGE)
@@ -219,7 +237,7 @@ def main():
     if args.grid and grid_src:
         im = shrink(make_grid(grid_src, args.cols), MAX_EDGE)
         kb = save(im, dest / "01.jpg") // 1024
-        items.append(("01", "lg", True, False, im.size[0], im.size[1], None))
+        items.append(("01", "lg", True, False, im.size[0], im.size[1], None, None))
         print(f"  01.jpg  {im.size[0]}x{im.size[1]}  {kb}K  lg    <- grid of {len(grid_src)}")
 
     print("\n# --- paste into frontmatter ---")
@@ -228,11 +246,12 @@ def main():
         print(f"thumbw: {thumb[1]}")
         print(f"thumbh: {thumb[2]}")
     print("gallery:")
-    for n, size, natural, resolve, w, h, tdims in items:
+    for n, size, natural, resolve, w, h, tdims, sdims in items:
         fit = ", fit: natural" if natural else ""
         res = f", resolve: /assets/projects/{args.slug}/{n}-r.jpg" if resolve else ""
         tl = f", tile: /assets/projects/{args.slug}/{n}-t.jpg, tw: {tdims[0]}, th: {tdims[1]}" if tdims else ""
-        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}{res}{tl}, fig: fig.{n}, cap: "" }}')
+        sp = f", swap: /assets/projects/{args.slug}/{n}-s.jpg, sw: {sdims[0]}, sh: {sdims[1]}" if sdims else ""
+        print(f'  - {{ src: /assets/projects/{args.slug}/{n}.jpg, w: {w}, h: {h}, size: {size}{fit}{res}{tl}{sp}, fig: fig.{n}, cap: "" }}')
     print("# w/h let the browser reserve space before the image loads (no layout jump) and size strips.")
     print("# Chapter pages: move items into `open:` / `chapters[].plates` / `chapters[].strip.items` / `chapters[].tiles.items` — see docs/plans/2026-09-13-project-page.md")
 

@@ -45,6 +45,36 @@ layout: base.njk
   <ol class="stack__key">{% for it in s.items %}<li><a href="{{ it.src }}" data-i="{{ loop.index0 }}"><span class="k">{% if loop.index < 10 %}0{% endif %}{{ loop.index }}</span>{{ it.name }}</a></li>{% endfor %}</ol>
 </div>
 {% endmacro %}
+{#- Map swap: one registered ground, asked many questions. Every frame is the same base map under a
+    different overlay, so the fade from one to the next reads as the question changing, not the city
+    (main.js initSwap). Beside the stage is the atlas's own table of contents: an item's `band` opens
+    a new group, its `name` is its row, its `cap` the line under the map while it is up, and its
+    `fig` the spread it came from — the swap skips the atlas's text pages, so the numbers have gaps.
+    `src`/`sw`/`sh` are the reading-size frame the stage shows; `full`/`w`/`h` the spread the
+    lightbox opens. The first item must carry a band. Without JS the last frame — the composite, the
+    atlas's conclusion — stands, and every row is a real link to its spread. -#}
+{% macro swap(s) %}
+{%- set f = s.items[0] -%}
+{%- set l = s.items[s.items.length - 1] -%}
+<div class="chap__full swap" data-swap>
+  <figure class="plate swap__fig">
+    <div class="plate__img swap__stage" style="aspect-ratio:{{ f.sw }} / {{ f.sh }}">{% for it in s.items %}<img src="{{ it.src }}" alt="{{ it.alt or it.cap }}" width="{{ it.sw }}" height="{{ it.sh }}" loading="lazy" decoding="async" data-full="{{ it.full }}" data-w="{{ it.w }}" data-h="{{ it.h }}" data-fig="{{ it.fig }}" data-name="{{ it.name }}" data-cap="{{ it.cap }}" />{% endfor %}</div>
+    <figcaption class="plate__cap" aria-live="polite"><span class="n">{{ l.fig }}</span><span class="t">{{ l.cap }}</span></figcaption>
+  </figure>
+  <div class="swap__index">
+    <div class="swap__nav">
+      <a class="swap__step" href="{{ s.items[s.items.length - 2].full }}" data-step="-1">(&larr;<span class="long"> {{ s.items[s.items.length - 2].name }}</span>)</a>
+      <span class="swap__pos">{{ s.items.length }} / {{ s.items.length }}</span>
+      <a class="swap__step" href="{{ f.full }}" data-step="1">(<span class="long">{{ f.name }} </span>&rarr;)</a>
+    </div>
+    {%- for it in s.items %}
+    {%- if it.band %}{% if not loop.first %}</ul></div>{% endif %}<div class="swap__grp"><h3 class="swap__gh">({{ it.band }})</h3><ul class="swap__key">{% endif %}
+      <li><a href="{{ it.full }}" data-i="{{ loop.index0 }}"><span class="k">{{ it.fig | replace("fig.", "") }}</span><span class="nm">{{ it.name }}</span></a></li>
+    {%- if loop.last %}</ul></div>{% endif %}
+    {%- endfor %}
+  </div>
+</div>
+{% endmacro %}
 {#- City carousel: one spread at full width, a mono pager and a fifteen-segment rule; the ledger
     beside the text is its index (main.js initCarousel). Without JS: the first city, and every rule
     segment / ledger row is a real link to that spread. -#}
@@ -101,7 +131,7 @@ layout: base.njk
   {#- a stack chapter's plates all sit in the stack row, so its text takes the wide (noplates) measure -#}
   {% set hasPlates = (c.plates or c.pair or c.strip or c.carousel) and not c.stack %}
   {% set hasText = body or c.title %}
-  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or c.stack or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
+  <section class="chap{% if c.side == 'left' %} chap--left{% endif %}{% if not hasPlates %} chap--noplates{% endif %}{% if c.narrow %} chap--narrow{% endif %}{% if c.plw %} chap--plw{% endif %}{% if not hasText %} chap--notext{% endif %}{% if c.narrow and hasText %} chap--coda{% endif %}{% if c.carousel %} chap--carousel{% endif %}{% if c.tiles or c.stack or c.swap or (c.strip and not c.strip.col) %} chap--wide{% endif %}{% if body.length > 1400 %} chap--long{% endif %} reveal" id="ch-{{ c.n }}">
     {% if c.carousel %}
     {#- carousel chapters: eyebrow, stat row, any full-width plates, the carousel, then text | ledger -#}
     <span class="chap__eyebrow chap__eyebrow--row"><b>({{ c.n }})</b> {{ c.name }}</span>
@@ -130,6 +160,7 @@ layout: base.njk
       {% if c.strip and c.strip.col %}{{ strip(c.strip) }}{% endif %}
     </div>
     {% endif %}
+    {% if c.swap %}{{ swap(c.swap) }}{% endif %}
     {% if c.stack %}{% if c.stack.beside %}<div class="chap__full stackrow">{{ plate(c.stack.beside) }}{{ stack(c.stack) }}</div>{% else %}{{ stack(c.stack) }}{% endif %}{% endif %}
     {% if c.strip and not c.strip.col %}<div class="chap__full">{{ strip(c.strip) }}</div>{% endif %}
     {% if c.tiles %}<div class="chap__full">{{ tiles(c.tiles) }}</div>{% endif %}

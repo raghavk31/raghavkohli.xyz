@@ -40,36 +40,38 @@ chapters:
     name: the atlas
     title: The city, drawn one layer at a time
     tiles:
-      fig: fig.04–30
-      cap: "Twenty-seven ward-level maps. Infrastructure, access, hazard, then hazard crossed with infrastructure. Every map is the same city; only the question changes. Click any to read it."
+      fig: fig.05 · 06 · 08 · 15 · 16
+      cap: "The pages between the maps. Service levels where a map would not carry them, and the method the heat risk is scored by."
       items:
-        - { src: /assets/projects/ahmedabad-crcap/04.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/04-t.jpg, tw: 453, th: 640, cap: "Water supply infrastructure, 2022. Sources, treatment, the distribution network." }
         - { src: /assets/projects/ahmedabad-crcap/05.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/05-t.jpg, tw: 413, th: 640, cap: "Water supply. Service levels by ward, and the projects already sanctioned." }
         - { src: /assets/projects/ahmedabad-crcap/06.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/06-t.jpg, tw: 391, th: 640, cap: "Water supply. The issues, drawn: where the system loses water and where it fails to reach." }
-        - { src: /assets/projects/ahmedabad-crcap/07.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/07-t.jpg, tw: 453, th: 640, cap: "Wastewater infrastructure. Sewage treatment plants and pumping stations across the city." }
         - { src: /assets/projects/ahmedabad-crcap/08.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/08-t.jpg, tw: 453, th: 640, cap: "Wastewater. Service-level information and the treatment chain." }
-        - { src: /assets/projects/ahmedabad-crcap/09.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/09-t.jpg, tw: 453, th: 640, cap: "Flood area assessment. Stormwater drains against the ground that floods." }
-        - { src: /assets/projects/ahmedabad-crcap/10.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/10-t.jpg, tw: 453, th: 640, cap: "Solid waste management facilities. Transfer stations, processing, the landfill." }
-        - { src: /assets/projects/ahmedabad-crcap/11.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/11-t.jpg, tw: 453, th: 640, cap: "Accessibility to public transport. BRTS, AMTS and metro stops, and the wards beyond their reach." }
-        - { src: /assets/projects/ahmedabad-crcap/12.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/12-t.jpg, tw: 453, th: 640, cap: "Accessibility to public parks and gardens." }
-        - { src: /assets/projects/ahmedabad-crcap/13.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/13-t.jpg, tw: 453, th: 640, cap: "Accessibility for fire stations. Response reach across the city." }
-        - { src: /assets/projects/ahmedabad-crcap/14.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/14-t.jpg, tw: 453, th: 640, cap: "Spatial analysis of air pollution sources, 2021. Industry, traffic and the monitoring stations." }
         - { src: /assets/projects/ahmedabad-crcap/15.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/15-t.jpg, tw: 408, th: 640, cap: "Climate trends. Temperature and rainfall, the record the risk assessment is built on." }
         - { src: /assets/projects/ahmedabad-crcap/16.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/16-t.jpg, tw: 392, th: 640, cap: "Indicators and methodology for the extreme heat risk assessment. How hazard, exposure and vulnerability are scored." }
-        - { src: /assets/projects/ahmedabad-crcap/17.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/17-t.jpg, tw: 453, th: 640, cap: "Feel-like temperature, May 2021. The heat map, ward by ward." }
-        - { src: /assets/projects/ahmedabad-crcap/18.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/18-t.jpg, tw: 453, th: 640, cap: "Slums and vendors vulnerable to extreme heat. Who is outdoors when the city is hottest." }
-        - { src: /assets/projects/ahmedabad-crcap/19.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/19-t.jpg, tw: 453, th: 640, cap: "Urban flood-prone area assessment." }
-        - { src: /assets/projects/ahmedabad-crcap/20.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/20-t.jpg, tw: 453, th: 640, cap: "Population vulnerable to urban flood risk. People within 250 m of the flood zone." }
-        - { src: /assets/projects/ahmedabad-crcap/21.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/21-t.jpg, tw: 453, th: 640, cap: "Slums and vendors impacted by urban flood risk." }
-        - { src: /assets/projects/ahmedabad-crcap/22.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/22-t.jpg, tw: 453, th: 640, cap: "Areas with high air pollution and airborne disease incidence." }
-        - { src: /assets/projects/ahmedabad-crcap/23.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/23-t.jpg, tw: 453, th: 640, cap: "Slums and vendors impacted by air pollution." }
-        - { src: /assets/projects/ahmedabad-crcap/24.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/24-t.jpg, tw: 453, th: 640, cap: "Wards exposed to extreme heat risk and water supply issues. The first cross: hazard against infrastructure." }
-        - { src: /assets/projects/ahmedabad-crcap/25.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/25-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flood risk and water supply issues." }
-        - { src: /assets/projects/ahmedabad-crcap/26.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/26-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flood risk and solid waste management issues." }
-        - { src: /assets/projects/ahmedabad-crcap/27.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/27-t.jpg, tw: 453, th: 640, cap: "Public transport stations and traffic junctions impacted by extreme heat." }
-        - { src: /assets/projects/ahmedabad-crcap/28.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/28-t.jpg, tw: 453, th: 640, cap: "Wards with compromised road infrastructure, vulnerable to urban floods or stagnation." }
-        - { src: /assets/projects/ahmedabad-crcap/29.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/29-t.jpg, tw: 453, th: 640, cap: "Emergency services vulnerable to urban floods or stagnation. Hospitals and fire stations inside the flood zone." }
-        - { src: /assets/projects/ahmedabad-crcap/30.jpg, w: 1800, h: 1272, tile: /assets/projects/ahmedabad-crcap/30-t.jpg, tw: 453, th: 640, cap: "Accessibility to health care facilities, including private hospitals." }
+    swap:
+      items:
+        - { band: the systems, src: /assets/projects/ahmedabad-crcap/04-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/04.jpg, w: 1800, h: 1272, fig: fig.04, name: water supply, cap: "Water supply infrastructure, 2022. Sources, treatment, the distribution network." }
+        - { src: /assets/projects/ahmedabad-crcap/07-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/07.jpg, w: 1800, h: 1272, fig: fig.07, name: wastewater, cap: "Wastewater infrastructure. Sewage treatment plants and pumping stations across the city." }
+        - { src: /assets/projects/ahmedabad-crcap/09-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/09.jpg, w: 1800, h: 1272, fig: fig.09, name: stormwater, cap: "Flood area assessment. Stormwater drains against the ground that floods." }
+        - { src: /assets/projects/ahmedabad-crcap/10-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/10.jpg, w: 1800, h: 1272, fig: fig.10, name: solid waste, cap: "Solid waste management facilities. Transfer stations, processing, the landfill." }
+        - { band: what it can reach, src: /assets/projects/ahmedabad-crcap/11-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/11.jpg, w: 1800, h: 1272, fig: fig.11, name: public transport, cap: "Accessibility to public transport. BRTS, AMTS and metro stops, and the wards beyond their reach." }
+        - { src: /assets/projects/ahmedabad-crcap/12-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/12.jpg, w: 1800, h: 1272, fig: fig.12, name: parks, cap: "Accessibility to public parks and gardens." }
+        - { src: /assets/projects/ahmedabad-crcap/13-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/13.jpg, w: 1800, h: 1272, fig: fig.13, name: fire response, cap: "Accessibility for fire stations. Response reach across the city." }
+        - { src: /assets/projects/ahmedabad-crcap/30-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/30.jpg, w: 1800, h: 1272, fig: fig.30, name: health care, cap: "Accessibility to health care facilities, including private hospitals. Drawn late in the book; it belongs here, with the other measures of what a ward can reach." }
+        - { band: the hazards, src: /assets/projects/ahmedabad-crcap/14-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/14.jpg, w: 1800, h: 1272, fig: fig.14, name: air pollution, cap: "Spatial analysis of air pollution sources, 2021. Industry, traffic and the monitoring stations." }
+        - { src: /assets/projects/ahmedabad-crcap/17-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/17.jpg, w: 1800, h: 1272, fig: fig.17, name: feel-like heat, cap: "Feel-like temperature, May 2021. The heat map, ward by ward." }
+        - { src: /assets/projects/ahmedabad-crcap/18-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/18.jpg, w: 1800, h: 1272, fig: fig.18, name: heat & the street, cap: "Slums and vendors vulnerable to extreme heat. Who is outdoors when the city is hottest." }
+        - { src: /assets/projects/ahmedabad-crcap/19-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/19.jpg, w: 1800, h: 1272, fig: fig.19, name: flood ground, cap: "Urban flood-prone area assessment." }
+        - { src: /assets/projects/ahmedabad-crcap/20-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/20.jpg, w: 1800, h: 1272, fig: fig.20, name: flood exposure, cap: "Population vulnerable to urban flood risk. People within 250 m of the flood zone." }
+        - { src: /assets/projects/ahmedabad-crcap/21-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/21.jpg, w: 1800, h: 1272, fig: fig.21, name: slums & flood, cap: "Slums and vendors impacted by urban flood risk." }
+        - { src: /assets/projects/ahmedabad-crcap/22-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/22.jpg, w: 1800, h: 1272, fig: fig.22, name: air & disease, cap: "Areas with high air pollution and airborne disease incidence." }
+        - { src: /assets/projects/ahmedabad-crcap/23-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/23.jpg, w: 1800, h: 1272, fig: fig.23, name: slums & air, cap: "Slums and vendors impacted by air pollution." }
+        - { band: where the two meet, src: /assets/projects/ahmedabad-crcap/24-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/24.jpg, w: 1800, h: 1272, fig: fig.24, name: heat × water, cap: "Wards exposed to extreme heat risk and water supply issues. The first cross: hazard against infrastructure." }
+        - { src: /assets/projects/ahmedabad-crcap/25-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/25.jpg, w: 1800, h: 1272, fig: fig.25, name: flood × water, cap: "Wards exposed to urban flood risk and water supply issues." }
+        - { src: /assets/projects/ahmedabad-crcap/26-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/26.jpg, w: 1800, h: 1272, fig: fig.26, name: flood × solid waste, cap: "Wards exposed to urban flood risk and solid waste management issues." }
+        - { src: /assets/projects/ahmedabad-crcap/27-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/27.jpg, w: 1800, h: 1272, fig: fig.27, name: transit × heat, cap: "Public transport stations and traffic junctions impacted by extreme heat." }
+        - { src: /assets/projects/ahmedabad-crcap/28-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/28.jpg, w: 1800, h: 1272, fig: fig.28, name: roads × flood, cap: "Wards with compromised road infrastructure, vulnerable to urban floods or stagnation." }
+        - { src: /assets/projects/ahmedabad-crcap/29-s.jpg, sw: 707, sh: 1000, full: /assets/projects/ahmedabad-crcap/29.jpg, w: 1800, h: 1272, fig: fig.29, name: emergency × flood, cap: "Emergency services vulnerable to urban floods or stagnation. Hospitals and fire stations inside the flood zone — the city's own rescue, in the water." }
   - n: "02"
     name: the inventory
     title: A number the city can be held to
@@ -154,13 +156,18 @@ method, applied here to a city of seven million.
 
 ## 01 the atlas
 
-Before the plan proposes anything, it draws. Twenty-seven maps at ward level, in three
-passes. First the infrastructure as it stands: water, wastewater, stormwater, waste,
-transport, parks, fire cover, air. Then the hazards: the heat map for May, the flood
-zone, the pollution hotspots, and the slums and vendors sitting inside each. Then the
-cross: hazard laid over infrastructure, ward by ward, to find where a heatwave meets a
-water shortage, where a flood meets a broken road, where an emergency service is itself
-inside the flood zone.
+Before the plan proposes anything, it draws. Twenty-two maps at ward level, in three
+passes. First the infrastructure as it stands: water, wastewater, stormwater, waste.
+Then what a ward can reach: transport, parks, fire cover, health. Then the hazards: air,
+the heat map for May, the flood zone, the pollution hotspots, and the slums and vendors
+sitting inside each. Then the cross: hazard laid over infrastructure, ward by ward, to
+find where a heatwave meets a water shortage, where a flood meets a broken road, where
+an emergency service is itself inside the flood zone.
+
+They are one drawing, not twenty-two. The ward boundaries, the Sabarmati, the ring road
+and the river's green edge sit in the same place on every sheet, so the atlas belongs on
+one stage rather than in a grid: step through it and what moves is the question, not the
+city.
 
 The atlas is the analytical core of the plan. Everything that follows, the targets, the
 actions, the costs, points back to a ward on one of these maps.

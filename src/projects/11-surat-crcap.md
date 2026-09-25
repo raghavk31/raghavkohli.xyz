@@ -39,32 +39,30 @@ chapters:
   - n: "01"
     name: the atlas
     title: The city, drawn one layer at a time
-    tiles:
-      fig: fig.05–26
-      cap: "Twenty-two ward-level maps. Infrastructure, access, hazard, then hazard crossed with infrastructure. Every map is the same city; only the question changes. Click any to read it."
+    swap:
       items:
-        - { src: /assets/projects/surat-crcap/05.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/05-t.jpg, tw: 453, th: 640, cap: "Wastewater network and infrastructure. Sewage treatment plants, pumping stations and the sewer network." }
-        - { src: /assets/projects/surat-crcap/06.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/06-t.jpg, tw: 453, th: 640, cap: "Flood area assessment. Waterlogging points against the drainage network." }
-        - { src: /assets/projects/surat-crcap/07.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/07-t.jpg, tw: 453, th: 640, cap: "Solid waste management facilities. Transfer stations, processing plants, the Khajod landfill." }
-        - { src: /assets/projects/surat-crcap/08.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/08-t.jpg, tw: 453, th: 640, cap: "Accessibility to public transport. BRTS and city-bus stops, and the wards beyond a 400 m walk." }
-        - { src: /assets/projects/surat-crcap/09.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/09-t.jpg, tw: 453, th: 640, cap: "Green cover map of Surat, 2024." }
-        - { src: /assets/projects/surat-crcap/10.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/10-t.jpg, tw: 453, th: 640, cap: "Accessibility to public parks and gardens." }
-        - { src: /assets/projects/surat-crcap/11.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/11-t.jpg, tw: 453, th: 640, cap: "Accessibility for fire stations. Response reach across the zones." }
-        - { src: /assets/projects/surat-crcap/12.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/12-t.jpg, tw: 453, th: 640, cap: "Distance from slum dwellings to government healthcare facilities." }
-        - { src: /assets/projects/surat-crcap/13.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/13-t.jpg, tw: 453, th: 640, cap: "Air pollution sources, 2024. Industry, traffic and the monitoring stations." }
-        - { src: /assets/projects/surat-crcap/14.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/14-t.jpg, tw: 453, th: 640, cap: "Population of slums impacted by urban heat." }
-        - { src: /assets/projects/surat-crcap/15.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/15-t.jpg, tw: 453, th: 640, cap: "Municipal schools and anganwadis impacted by urban heat." }
-        - { src: /assets/projects/surat-crcap/16.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/16-t.jpg, tw: 453, th: 640, cap: "Flood-prone areas with a high incidence of water- and vector-borne disease complaints." }
-        - { src: /assets/projects/surat-crcap/17.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/17-t.jpg, tw: 453, th: 640, cap: "Population vulnerable to urban flooding." }
-        - { src: /assets/projects/surat-crcap/18.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/18-t.jpg, tw: 453, th: 640, cap: "Municipal schools and anganwadis vulnerable to urban flooding." }
-        - { src: /assets/projects/surat-crcap/19.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/19-t.jpg, tw: 453, th: 640, cap: "Wards impacted by issues related to urban heat and water supply. Hazard crossed with infrastructure." }
-        - { src: /assets/projects/surat-crcap/20.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/20-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and water-quality issues." }
-        - { src: /assets/projects/surat-crcap/21.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/21-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and wastewater management issues." }
-        - { src: /assets/projects/surat-crcap/22.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/22-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and solid waste management issues." }
-        - { src: /assets/projects/surat-crcap/23.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/23-t.jpg, tw: 453, th: 640, cap: "Public transport stations and traffic junctions impacted by urban heat." }
-        - { src: /assets/projects/surat-crcap/24.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/24-t.jpg, tw: 453, th: 640, cap: "Wards with compromised road infrastructure, vulnerable to urban flooding." }
-        - { src: /assets/projects/surat-crcap/25.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/25-t.jpg, tw: 453, th: 640, cap: "Emergency services vulnerable to urban flooding or waterlogging." }
-        - { src: /assets/projects/surat-crcap/26.jpg, w: 1800, h: 1272, tile: /assets/projects/surat-crcap/26-t.jpg, tw: 453, th: 640, cap: "Wards impacted by climate hazards and fragile urban systems. The composite." }
+        - { band: the systems, src: /assets/projects/surat-crcap/05-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/05.jpg, w: 1800, h: 1272, fig: fig.05, name: wastewater, cap: "Wastewater network and infrastructure. Sewage treatment plants, pumping stations and the sewer network." }
+        - { src: /assets/projects/surat-crcap/06-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/06.jpg, w: 1800, h: 1272, fig: fig.06, name: drainage, cap: "Flood area assessment. Waterlogging points against the drainage network." }
+        - { src: /assets/projects/surat-crcap/07-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/07.jpg, w: 1800, h: 1272, fig: fig.07, name: solid waste, cap: "Solid waste management facilities. Transfer stations, processing plants, the Khajod landfill." }
+        - { src: /assets/projects/surat-crcap/08-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/08.jpg, w: 1800, h: 1272, fig: fig.08, name: public transport, cap: "Accessibility to public transport. BRTS and city-bus stops, and the wards beyond a 400 m walk." }
+        - { src: /assets/projects/surat-crcap/09-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/09.jpg, w: 1800, h: 1272, fig: fig.09, name: green cover, cap: "Green cover map of Surat, 2024." }
+        - { band: what it can reach, src: /assets/projects/surat-crcap/10-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/10.jpg, w: 1800, h: 1272, fig: fig.10, name: parks, cap: "Accessibility to public parks and gardens." }
+        - { src: /assets/projects/surat-crcap/11-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/11.jpg, w: 1800, h: 1272, fig: fig.11, name: fire response, cap: "Accessibility for fire stations. Response reach across the zones." }
+        - { src: /assets/projects/surat-crcap/12-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/12.jpg, w: 1800, h: 1272, fig: fig.12, name: health care, cap: "Distance from slum dwellings to government healthcare facilities." }
+        - { band: the hazards, src: /assets/projects/surat-crcap/13-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/13.jpg, w: 1800, h: 1272, fig: fig.13, name: air pollution, cap: "Air pollution sources, 2024. Industry, traffic and the monitoring stations." }
+        - { src: /assets/projects/surat-crcap/14-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/14.jpg, w: 1800, h: 1272, fig: fig.14, name: heat & slums, cap: "Population of slums impacted by urban heat." }
+        - { src: /assets/projects/surat-crcap/15-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/15.jpg, w: 1800, h: 1272, fig: fig.15, name: heat & schools, cap: "Municipal schools and anganwadis impacted by urban heat." }
+        - { src: /assets/projects/surat-crcap/16-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/16.jpg, w: 1800, h: 1272, fig: fig.16, name: flood & disease, cap: "Flood-prone areas with a high incidence of water- and vector-borne disease complaints." }
+        - { src: /assets/projects/surat-crcap/17-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/17.jpg, w: 1800, h: 1272, fig: fig.17, name: flood exposure, cap: "Population vulnerable to urban flooding." }
+        - { src: /assets/projects/surat-crcap/18-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/18.jpg, w: 1800, h: 1272, fig: fig.18, name: schools & flood, cap: "Municipal schools and anganwadis vulnerable to urban flooding." }
+        - { band: where the two meet, src: /assets/projects/surat-crcap/19-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/19.jpg, w: 1800, h: 1272, fig: fig.19, name: heat × water, cap: "Wards impacted by issues related to urban heat and water supply. The first cross: hazard against infrastructure." }
+        - { src: /assets/projects/surat-crcap/20-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/20.jpg, w: 1800, h: 1272, fig: fig.20, name: flood × water, cap: "Wards exposed to urban flooding and water-quality issues." }
+        - { src: /assets/projects/surat-crcap/21-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/21.jpg, w: 1800, h: 1272, fig: fig.21, name: flood × wastewater, cap: "Wards exposed to urban flooding and wastewater management issues." }
+        - { src: /assets/projects/surat-crcap/22-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/22.jpg, w: 1800, h: 1272, fig: fig.22, name: flood × solid waste, cap: "Wards exposed to urban flooding and solid waste management issues." }
+        - { src: /assets/projects/surat-crcap/23-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/23.jpg, w: 1800, h: 1272, fig: fig.23, name: transit × heat, cap: "Public transport stations and traffic junctions impacted by urban heat." }
+        - { src: /assets/projects/surat-crcap/24-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/24.jpg, w: 1800, h: 1272, fig: fig.24, name: roads × flood, cap: "Wards with compromised road infrastructure, vulnerable to urban flooding." }
+        - { src: /assets/projects/surat-crcap/25-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/25.jpg, w: 1800, h: 1272, fig: fig.25, name: emergency × flood, cap: "Emergency services vulnerable to urban flooding or waterlogging." }
+        - { band: the composite, src: /assets/projects/surat-crcap/26-s.jpg, sw: 707, sh: 1000, full: /assets/projects/surat-crcap/26.jpg, w: 1800, h: 1272, fig: fig.26, name: every hazard at once, cap: "Wards impacted by climate hazards and fragile urban systems. Every hazard laid over every fragile system: the wards the plan has to answer for first." }
   - n: "02"
     name: the inventory
     title: A number the city can be held to
@@ -147,11 +145,16 @@ Surat, 2023–24, by zone and by ward, in the units the corporation uses.
 
 Before the plan proposes anything, it draws. Twenty-two maps at ward level, in three
 passes. First the infrastructure as it stands: wastewater, drainage, waste,
-transport, green cover, parks, fire cover, health, air. Then the hazards: the
+transport, green cover, parks, fire cover, health. Then the hazards: air, the
 slums and schools inside the heat, the flood-prone areas and the disease complaints
 that follow them. Then the cross: heat laid over water supply, flood over wastewater,
 flood over waste, flood over the roads and the emergency services that depend on them,
 and, last, one composite of every hazard against every fragile system.
+
+They are one drawing, not twenty-two. The zone and ward boundaries, the Tapi, the
+railway and the ring of highways sit in the same place on every sheet, so the atlas
+belongs on one stage rather than in a grid: step through it and what moves is the
+question, not the city.
 
 ## 02 the inventory
 

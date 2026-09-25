@@ -592,10 +592,11 @@ body.lb-open{overflow:hidden;}
 .stack{grid-column:1 / span 9;}   /* nine of the twelve columns: a drawing to read, not a spread */
 .stackrow{display:grid;grid-template-columns:5fr 7fr;gap:clamp(16px,2.5vw,32px);align-items:start;}   /* a plate beside the stack */
 .stackrow .stack{grid-column:auto;}
-.stack .plate__img{overflow:hidden;}
-.stack__stage > img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .7s cubic-bezier(.16,1,.3,1);}
-.stack:not(.stack--js) .stack__stage > img:last-child{opacity:1;}   /* no JS: the whole stands */
-.stack__stage > img.on{opacity:1;}
+.stack .plate__img,.swap .plate__img{overflow:hidden;}
+.stack__stage > img,.swap__stage > img{position:absolute;inset:0;width:100%;height:100%;opacity:0;transition:opacity .7s cubic-bezier(.16,1,.3,1);}
+/* no JS: the last frame stands — the whole drawing, or the atlas's composite */
+.stack:not(.stack--js) .stack__stage > img:last-child,.swap:not(.swap--js) .swap__stage > img:last-child{opacity:1;}
+.stack__stage > img.on,.swap__stage > img.on{opacity:1;}
 .stack .plate__cap{max-width:none;}
 .stack .plate__cap .t{transition:opacity .35s ease;}
 .stack.is-swapping .plate__cap .t{opacity:0;}
@@ -618,6 +619,47 @@ body.lb-open{overflow:hidden;}
   .stack__key{gap:0 10px;font-size:11px;}
   .stack__key a .k{margin-right:5px;}
 }
+
+/* ---------- map swap: one ground, asked many questions ----------
+   The atlas pages hold twenty-odd ward maps drawn on one registered base, so they belong on one
+   stage rather than in a grid: the base never moves and only the overlay changes, which is the
+   claim the set is making. Beside it, the atlas's table of contents — grouped the way the plan
+   argues (systems, reach, hazard, the cross), each row the spread number and its subject. The
+   frames cross-fade a little faster than the layer stack's, because here nothing accumulates. */
+.swap{display:grid;grid-template-columns:6fr 5fr;gap:clamp(20px,3vw,40px);align-items:start;}
+.swap__stage > img{transition-duration:.5s;}
+.swap .plate__cap{max-width:none;}
+.swap .plate__cap .t{transition:opacity .3s ease;}
+.swap.is-swapping .plate__cap .t{opacity:0;}
+.swap__nav{display:flex;align-items:baseline;justify-content:space-between;gap:16px;
+  padding-bottom:12px;border-bottom:1px solid var(--line);
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--faint-2);}
+.swap__nav a{flex:1;min-width:0;color:var(--mute);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.swap__nav a:last-child{text-align:right;}
+.swap__nav a:hover,.swap__nav a:focus-visible{color:var(--ink);}
+.swap__pos{color:var(--ink);white-space:nowrap;}
+.swap__grp{margin-top:18px;}
+.swap__gh{font-family:var(--mono);font-weight:400;font-size:var(--t-mono);letter-spacing:.06em;
+  color:var(--faint-2);margin:0 0 4px;}
+.swap__key{list-style:none;margin:0;padding:0;}
+/* a hairline under every row so the index reads as the book's contents page, not a short list */
+.swap__key a{display:grid;grid-template-columns:2.6em 1fr;align-items:baseline;gap:0 4px;
+  padding:6px 0 6px 10px;border-left:2px solid transparent;border-bottom:1px solid rgba(28,27,24,.06);
+  font-size:12.5px;line-height:1.35;color:var(--ink-2);text-decoration:none;
+  transition:color .2s,border-color .2s;}
+.swap__key li:last-child a{border-bottom:none;}
+.swap__key a .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;color:var(--faint-2);}
+.swap__key a:hover,.swap__key a:focus-visible{color:var(--ink);border-left-color:var(--line);}
+.swap__key a.on{color:var(--ink);border-left-color:var(--accent);}
+.swap__key a.on .k{color:var(--accent);}
+.swap__key a:focus-visible{outline:none;border-left-color:var(--accent);}
+/* the opening sweep: four bands and the composite, so the reader sees the ground hold still */
+.swap.is-auto .swap__key a.on{border-left-color:var(--accent);}
+@media(max-width:820px){
+  .swap{grid-template-columns:1fr;row-gap:24px;}
+  .swap__key a{padding:8px 0 8px 10px;}
+}
+@media(hover:none){.swap__key a{min-height:40px;align-content:center;}}
 
 /* ---------- city carousel: one spread at full width, a mono pager, a fifteen-segment rule ----------
    The ledger beside the text is its index: clicking a row turns to that city. */

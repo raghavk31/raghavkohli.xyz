@@ -39,30 +39,29 @@ chapters:
   - n: "01"
     name: the atlas
     title: The city, drawn one layer at a time
-    tiles:
-      fig: fig.04–23
-      cap: "Twenty ward-level maps. Infrastructure, access, hazard, then hazard crossed with infrastructure. Every map is the same city; only the question changes. Click any to read it."
+    plates:
+      - { src: /assets/projects/vadodara-crcap/13.jpg, w: 1800, h: 1272, fig: fig.13, cap: "Climate trends. Temperature and rainfall, the record every hazard map in the atlas is scored against." }
+    swap:
       items:
-        - { src: /assets/projects/vadodara-crcap/04.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/04-t.jpg, tw: 453, th: 640, cap: "Wastewater network and infrastructure. Sewage treatment plants and the sewer network." }
-        - { src: /assets/projects/vadodara-crcap/05.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/05-t.jpg, tw: 453, th: 640, cap: "Flood area assessment. Waterlogging points against the drainage network." }
-        - { src: /assets/projects/vadodara-crcap/06.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/06-t.jpg, tw: 453, th: 640, cap: "Solid waste management facilities. Transfer stations, processing, the landfill." }
-        - { src: /assets/projects/vadodara-crcap/07.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/07-t.jpg, tw: 453, th: 640, cap: "Accessibility to public transport. Bus stops and the wards beyond their reach." }
-        - { src: /assets/projects/vadodara-crcap/08.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/08-t.jpg, tw: 453, th: 640, cap: "Tree cover map of Vadodara, 2023." }
-        - { src: /assets/projects/vadodara-crcap/09.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/09-t.jpg, tw: 453, th: 640, cap: "Accessibility to public parks and gardens." }
-        - { src: /assets/projects/vadodara-crcap/10.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/10-t.jpg, tw: 453, th: 640, cap: "Accessibility for fire stations. Response reach across the city." }
-        - { src: /assets/projects/vadodara-crcap/11.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/11-t.jpg, tw: 453, th: 640, cap: "Distance from slum dwellings to government health care facilities." }
-        - { src: /assets/projects/vadodara-crcap/12.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/12-t.jpg, tw: 453, th: 640, cap: "Air pollution sources, 2021. Industry, traffic and the monitoring stations." }
-        - { src: /assets/projects/vadodara-crcap/13.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/13-t.jpg, tw: 425, th: 640, cap: "Climate trends. Temperature and rainfall, the record the risk assessment is built on." }
-        - { src: /assets/projects/vadodara-crcap/14.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/14-t.jpg, tw: 453, th: 640, cap: "Population of slums vulnerable to urban heat." }
-        - { src: /assets/projects/vadodara-crcap/15.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/15-t.jpg, tw: 453, th: 640, cap: "Flood-prone areas with a high incidence of water- and vector-borne diseases." }
-        - { src: /assets/projects/vadodara-crcap/16.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/16-t.jpg, tw: 453, th: 640, cap: "Population vulnerable to urban flooding." }
-        - { src: /assets/projects/vadodara-crcap/17.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/17-t.jpg, tw: 453, th: 640, cap: "Slums impacted by urban flooding." }
-        - { src: /assets/projects/vadodara-crcap/18.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/18-t.jpg, tw: 453, th: 640, cap: "Wards impacted by urban heat and water supply issues. Hazard crossed with infrastructure." }
-        - { src: /assets/projects/vadodara-crcap/19.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/19-t.jpg, tw: 453, th: 640, cap: "Wards exposed to urban flooding and water supply issues." }
-        - { src: /assets/projects/vadodara-crcap/20.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/20-t.jpg, tw: 453, th: 640, cap: "Public transport stations and traffic junctions impacted by urban heat." }
-        - { src: /assets/projects/vadodara-crcap/21.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/21-t.jpg, tw: 453, th: 640, cap: "Wards with compromised road infrastructure, vulnerable to urban flooding and waterlogging." }
-        - { src: /assets/projects/vadodara-crcap/22.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/22-t.jpg, tw: 453, th: 640, cap: "Emergency services vulnerable to urban flooding or waterlogging." }
-        - { src: /assets/projects/vadodara-crcap/23.jpg, w: 1800, h: 1272, tile: /assets/projects/vadodara-crcap/23-t.jpg, tw: 453, th: 640, cap: "Wards impacted by climate hazards and fragile urban systems. The composite." }
+        - { band: the systems, src: /assets/projects/vadodara-crcap/04-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/04.jpg, w: 1800, h: 1272, fig: fig.04, name: wastewater, cap: "Wastewater network and infrastructure. Sewage treatment plants and the sewer network." }
+        - { src: /assets/projects/vadodara-crcap/05-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/05.jpg, w: 1800, h: 1272, fig: fig.05, name: drainage, cap: "Flood area assessment. Waterlogging points against the drainage network." }
+        - { src: /assets/projects/vadodara-crcap/06-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/06.jpg, w: 1800, h: 1272, fig: fig.06, name: solid waste, cap: "Solid waste management facilities. Transfer stations, processing, the landfill." }
+        - { src: /assets/projects/vadodara-crcap/07-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/07.jpg, w: 1800, h: 1272, fig: fig.07, name: public transport, cap: "Accessibility to public transport. Bus stops and the wards beyond their reach." }
+        - { src: /assets/projects/vadodara-crcap/08-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/08.jpg, w: 1800, h: 1272, fig: fig.08, name: tree cover, cap: "Tree cover map of Vadodara, 2023." }
+        - { band: what it can reach, src: /assets/projects/vadodara-crcap/09-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/09.jpg, w: 1800, h: 1272, fig: fig.09, name: parks, cap: "Accessibility to public parks and gardens." }
+        - { src: /assets/projects/vadodara-crcap/10-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/10.jpg, w: 1800, h: 1272, fig: fig.10, name: fire response, cap: "Accessibility for fire stations. Response reach across the city." }
+        - { src: /assets/projects/vadodara-crcap/11-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/11.jpg, w: 1800, h: 1272, fig: fig.11, name: health care, cap: "Distance from slum dwellings to government health care facilities." }
+        - { band: the hazards, src: /assets/projects/vadodara-crcap/12-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/12.jpg, w: 1800, h: 1272, fig: fig.12, name: air pollution, cap: "Air pollution sources, 2021. Industry, traffic and the monitoring stations." }
+        - { src: /assets/projects/vadodara-crcap/14-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/14.jpg, w: 1800, h: 1272, fig: fig.14, name: heat & slums, cap: "Population of slums vulnerable to urban heat." }
+        - { src: /assets/projects/vadodara-crcap/15-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/15.jpg, w: 1800, h: 1272, fig: fig.15, name: flood & disease, cap: "Flood-prone areas with a high incidence of water- and vector-borne diseases." }
+        - { src: /assets/projects/vadodara-crcap/16-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/16.jpg, w: 1800, h: 1272, fig: fig.16, name: flood exposure, cap: "Population vulnerable to urban flooding." }
+        - { src: /assets/projects/vadodara-crcap/17-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/17.jpg, w: 1800, h: 1272, fig: fig.17, name: slums & flood, cap: "Slums impacted by urban flooding." }
+        - { band: where the two meet, src: /assets/projects/vadodara-crcap/18-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/18.jpg, w: 1800, h: 1272, fig: fig.18, name: heat × water, cap: "Wards impacted by urban heat and water supply issues. The first cross: hazard against infrastructure." }
+        - { src: /assets/projects/vadodara-crcap/19-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/19.jpg, w: 1800, h: 1272, fig: fig.19, name: flood × water, cap: "Wards exposed to urban flooding and water supply issues." }
+        - { src: /assets/projects/vadodara-crcap/20-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/20.jpg, w: 1800, h: 1272, fig: fig.20, name: transit × heat, cap: "Public transport stations and traffic junctions impacted by urban heat." }
+        - { src: /assets/projects/vadodara-crcap/21-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/21.jpg, w: 1800, h: 1272, fig: fig.21, name: roads × flood, cap: "Wards with compromised road infrastructure, vulnerable to urban flooding and waterlogging." }
+        - { src: /assets/projects/vadodara-crcap/22-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/22.jpg, w: 1800, h: 1272, fig: fig.22, name: emergency × flood, cap: "Emergency services vulnerable to urban flooding or waterlogging." }
+        - { band: the composite, src: /assets/projects/vadodara-crcap/23-s.jpg, sw: 707, sh: 1000, full: /assets/projects/vadodara-crcap/23.jpg, w: 1800, h: 1272, fig: fig.23, name: every hazard at once, cap: "Wards impacted by climate hazards and fragile urban systems. Every hazard laid over every fragile system: the wards the plan has to answer for first." }
   - n: "02"
     name: the inventory
     title: A number the city can be held to
@@ -139,13 +138,18 @@ in the units they use.
 
 ## 01 the atlas
 
-Before the plan proposes anything, it draws. Twenty maps at ward level, in three passes.
-First the infrastructure as it stands: wastewater, drainage, waste, transport, tree
-cover, parks, fire cover, health, air. Then the hazards: the slums inside the heat,
+Before the plan proposes anything, it draws. Nineteen maps at ward level, in three
+passes. First the infrastructure as it stands: wastewater, drainage, waste, transport,
+tree cover, parks, fire cover, health. Then the hazards: air, the slums inside the heat,
 the flood-prone areas and the diseases that follow them. Then the cross: heat laid over
 water supply, flood over water supply, heat over the transport network, flood over the
 roads and the emergency services that depend on them, and one composite of every
 hazard against every fragile system.
+
+They are one drawing, not nineteen. The ward boundaries, the water bodies, the railway
+and the ring of highways sit in the same place on every sheet, so the atlas belongs on
+one stage rather than in a grid: step through it and what moves is the question, not the
+city.
 
 ## 02 the inventory
 
