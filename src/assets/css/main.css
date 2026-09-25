@@ -280,8 +280,11 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .thought__empty{margin-top:clamp(56px,8vw,96px);font-family:var(--mono);font-size:var(--t-mono);letter-spacing:.06em;color:var(--faint-2);}
 .journal .detail__next{max-width:62ch;}
 .journal__note{max-width:62ch;margin:clamp(20px,3vw,28px) 0 0;font-size:var(--t-small);color:var(--faint);}
-/* the board: notes flow down columns, newest first, top-left */
-.board{margin-top:clamp(56px,8vw,96px);columns:15.5rem;column-gap:clamp(28px,3.5vw,48px);padding:12px 0 24px;}
+/* The board: notes flow down columns, newest first, top-left. It is a pinboard, not prose, so it
+   breaks out of the journal's reading column to the site's full measure — the room a note can be
+   moved into. (Drop the --maxw term to let it run to the window edges instead.) */
+.board{margin-top:clamp(56px,8vw,96px);columns:15.5rem;column-gap:clamp(28px,3.5vw,48px);padding:12px 0 24px;
+  margin-inline:calc((min(100vw - 2 * var(--gutter), var(--maxw) - 2 * var(--gutter)) - 100%) / -2);}
 .board .thought{--tilt:0deg;--drift:7s;--wait:0s;
   display:inline-block;width:100%;max-width:none;margin:0 0 clamp(28px,3.5vw,48px);padding:24px 22px 18px;break-inside:avoid;
   background:#fff;color:var(--ink);rotate:var(--tilt);position:relative;cursor:default;
@@ -305,21 +308,49 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 .board .thought__body img{margin:1em 0;}
 .board .thought__body blockquote{margin:.9em 0;}
 .board .thought__date{margin-top:18px;}
-/* a long note shows its first lines and opens on a click */
-.board .thought:not(.is-open) .thought__body{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:10;overflow:hidden;}
-.board .thought.is-clipped{cursor:pointer;}
-.board .thought.is-clipped:not(.is-open) .thought__body{-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);}
-.board .thought.is-clipped:not(.is-open) .thought__date::after,.board .thought.is-open .thought__date::after{content:" · (more)";color:var(--line);}
-.board .thought.is-open .thought__date::after{content:" · (less)";}
+/* a long note shows its first lines; any note opens on a click */
+.board .thought:not(.is-zoomed) .thought__body{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:10;overflow:hidden;}
+.board .thought{cursor:pointer;}
+.board .thought.is-clipped:not(.is-zoomed) .thought__body{-webkit-mask-image:linear-gradient(#000 70%,transparent);mask-image:linear-gradient(#000 70%,transparent);}
+.board .thought.is-clipped:not(.is-zoomed) .thought__date::after{content:" · (open)";color:var(--line);}
+
+/* Opened: the note itself becomes a big square of itself, centred over a scrim. It is the same
+   element, moved to fixed and scaled from where it sat (main.js zoom), so it reads as the note
+   growing rather than a dialog arriving. */
+.board__scrim{position:fixed;inset:0;z-index:9500;background:rgba(28,27,24,.38);
+  opacity:0;transition:opacity .45s cubic-bezier(.16,1,.3,1);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}
+.board__scrim.on{opacity:1;}
+.board .thought.is-zoomed{position:fixed;inset:0;margin:auto;z-index:9600;
+  width:min(86vw, 74vh, 620px);height:min(86vw, 74vh, 620px);
+  --zoom:1.35;padding:38px 34px 30px;overflow:auto;overscroll-behavior:contain;
+  rotate:0deg;animation:none;cursor:zoom-out;left:0;top:0;
+  transition:transform .5s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 2px 2px rgba(28,27,24,.06),0 28px 44px -12px rgba(28,27,24,.26),0 70px 90px -40px rgba(28,27,24,.34);}
+.board .thought.is-zoomed .thought__title{font-size:calc(1.45rem * var(--zoom,1));}
+.board .thought.is-zoomed .thought__body{font-size:calc(var(--t-small) * var(--zoom,1));}
+.board .thought.is-zoomed .thought__tools,.board .thought.is-zoomed .thought__grip{display:none;}
+/* a picture shares the square with the words instead of filling it */
+.board .thought.is-zoomed .thought__imgs{max-height:42%;overflow:hidden;display:flex;gap:4px;}
+.board .thought.is-zoomed .thought__imgs img{object-fit:cover;min-width:0;flex:1;}
+/* the card is opened by a click and closed by Escape or the scrim; a ring around the whole of it
+   tells a keyboard user nothing they cannot already see */
+.board .thought.is-zoomed:focus,.board .thought.is-zoomed:focus-visible{outline:none;}
+.board .thought.is-zoomed .thought__date::after{content:"";}
+body.note-open{overflow:hidden;}
+@media(prefers-reduced-motion:reduce){
+  .board .thought.is-zoomed{transition:none;}
+  .board__scrim{transition:none;}
+}
 /* the free board (main.js relayout, desktop only): every note sits at its own left/top; a placed note keeps
    its width and its type scales with it (--zoom = sqrt(width / 248)). Moves ease once the first layout is down. */
 .board--free{position:relative;columns:auto;padding:0;}
-.board--free .thought{position:absolute;display:block;margin:0;box-sizing:border-box;
+.board--free .thought:not(.is-zoomed){position:absolute;display:block;margin:0;box-sizing:border-box;}
+.board--free .thought{display:block;box-sizing:border-box;
   padding:calc(24px * var(--zoom,1)) calc(22px * var(--zoom,1)) calc(18px * var(--zoom,1));}
-.board--free.is-laid .thought{transition:box-shadow .5s cubic-bezier(.16,1,.3,1),rotate .5s cubic-bezier(.16,1,.3,1),opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1),
+.board--free.is-laid .thought:not(.is-zoomed){transition:box-shadow .5s cubic-bezier(.16,1,.3,1),rotate .5s cubic-bezier(.16,1,.3,1),opacity 1s cubic-bezier(.16,1,.3,1),transform 1s cubic-bezier(.16,1,.3,1),
   left .6s cubic-bezier(.16,1,.3,1),top .6s cubic-bezier(.16,1,.3,1);}
 .board--free .thought.is-arriving,.board--free .thought.is-dragging{transition:none !important;}
-.board--free .thought:hover{z-index:9000 !important;}
+.board--free .thought:hover:not(.is-zoomed){z-index:9000 !important;}
 .board--free .thought.is-dragging{z-index:9001 !important;rotate:0deg;animation:none;cursor:grabbing;
   box-shadow:0 1px 1px rgba(28,27,24,.06),0 16px 28px -8px rgba(28,27,24,.22),0 48px 64px -26px rgba(28,27,24,.32);}
 .board--free .thought__title{font-size:calc(1.2rem * var(--zoom,1));margin-bottom:calc(12px * var(--zoom,1));}

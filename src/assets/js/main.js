@@ -1066,9 +1066,70 @@
         openLightbox(all.map(function (im, i) { return { src: im.src, alt: title || "image " + (i + 1), n: "", t: title }; }), all.indexOf(img), img);
         return;
       }
-      var art = e.target.closest(".thought.is-clipped, .thought.is-open"); if (!art) return;
-      art.classList.toggle("is-open");
-      schedule();
+      var art = e.target.closest(".thought"); if (!art || art.classList.contains("is-editing")) return;
+      zoom(art);
+    });
+
+    /* Opening a note: the same element goes fixed and square, scaled from where it sat, so it reads
+       as the note growing rather than a panel arriving. The scrim, Escape and a second click close
+       it, and the note goes back to the board exactly where it was. */
+    var zoomed = null, scrim = null, zoomFocus = null, zoomStyle = "";
+    function closeZoom() {
+      if (!zoomed) return;
+      var art = zoomed; zoomed = null;
+      var from = art.getBoundingClientRect();
+      art.classList.remove("is-zoomed");
+      art.setAttribute("style", zoomStyle);             // back to the width and spot it had
+      var to = art.getBoundingClientRect();
+      art.style.transition = "none";
+      art.style.transform = flip(from, to);
+      art.offsetWidth;                                  // let the browser take that as the start
+      art.style.transition = "";
+      requestAnimationFrame(function () { art.style.transform = ""; });
+      setTimeout(function () { if (!zoomed) { art.style.transform = ""; art.style.transition = ""; } }, 600);
+      if (scrim) scrim.classList.remove("on");
+      document.body.classList.remove("note-open");
+      clip(art);
+      if (zoomFocus && zoomFocus.focus) zoomFocus.focus();
+      zoomFocus = null;
+    }
+    function flip(from, to) {
+      var sx = from.width / to.width, sy = from.height / to.height;
+      var dx = from.left + from.width / 2 - (to.left + to.width / 2);
+      var dy = from.top + from.height / 2 - (to.top + to.height / 2);
+      return "translate(" + dx + "px," + dy + "px) scale(" + sx + "," + sy + ")";
+    }
+    function zoom(art) {
+      if (zoomed === art) return closeZoom();
+      if (zoomed) closeZoom();
+      if (!scrim) {
+        scrim = document.createElement("div");
+        scrim.className = "board__scrim";
+        scrim.addEventListener("click", closeZoom);
+        document.body.appendChild(scrim);
+      }
+      zoomFocus = document.activeElement;
+      var from = art.getBoundingClientRect();
+      // a placed note carries its width, spot and --zoom inline, and inline beats the zoomed rule
+      zoomStyle = art.getAttribute("style") || "";
+      art.style.width = ""; art.style.height = ""; art.style.left = ""; art.style.top = "";
+      art.style.removeProperty("--zoom");
+      art.classList.add("is-zoomed");
+      art.classList.remove("is-clipped");
+      var to = art.getBoundingClientRect();
+      art.style.transition = "none";
+      art.style.transform = flip(from, to);
+      art.offsetWidth;
+      art.style.transition = "";
+      requestAnimationFrame(function () { art.style.transform = "none"; });
+      scrim.offsetWidth; scrim.classList.add("on");
+      document.body.classList.add("note-open");
+      zoomed = art;
+      art.setAttribute("tabindex", "-1");
+      art.focus({ preventScroll: true });
+    }
+    window.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && zoomed && !document.body.classList.contains("lb-open")) closeZoom();
     });
     wall.querySelectorAll(".thought").forEach(clip);
     function place(art) {
@@ -1120,6 +1181,7 @@
       wall.classList.add("board--free");
       var W = wall.clientWidth, placed = [], bottom = 0;
       notes.forEach(function (art) {
+        if (art.classList.contains("is-zoomed")) return;
         var L = layout[idOf(art)];
         if (!L) { art.classList.remove("is-pinned"); art.style.zIndex = ""; if (art !== (drag && drag.art)) size(art, NOTE_W); return; }
         var w = Math.min(L.w, W); size(art, w);
@@ -1131,7 +1193,7 @@
       var cols = Math.max(1, Math.floor((W + GAP) / (NOTE_W + GAP))), colX = [];
       for (var i = 0; i < cols; i++) colX.push(i * (NOTE_W + GAP));
       notes.forEach(function (art) {
-        if (layout[idOf(art)]) return;
+        if (layout[idOf(art)] || art.classList.contains("is-zoomed")) return;
         var h = art.offsetHeight, best = null;
         colX.forEach(function (x) { var y = freeY(x, NOTE_W, h, placed); if (!best || y < best.y - 0.5) best = { x: x, y: y }; });
         art.style.left = best.x + "px"; art.style.top = best.y + "px";
@@ -1161,7 +1223,8 @@
     }
     wall.addEventListener("pointerdown", function (e) {
       if (!key || !free.matches || e.button !== 0) return;
-      var art = e.target.closest(".thought"); if (!art || e.target.closest("a")) return;
+      var art = e.target.closest(".thought");
+      if (!art || e.target.closest("a") || art.classList.contains("is-zoomed") || art.classList.contains("is-editing")) return;
       e.preventDefault(); // no text selection or image drag while a note is in hand
       drag = { art: art, id: idOf(art), mode: e.target.closest("[data-grip]") ? "scale" : "move", sx: e.clientX, sy: e.clientY,
                ox: parseFloat(art.style.left) || 0, oy: parseFloat(art.style.top) || 0, ow: art.offsetWidth, moved: false, ptr: e.pointerId };
