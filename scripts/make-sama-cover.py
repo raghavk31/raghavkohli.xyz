@@ -13,6 +13,7 @@ Four of them, one per thing the project is about:
   02  one day         generation over consumption; the exported surplus is the gap between them
   03  observability   the same feeder, dissolving as it drops below the substation
   04  the spread      ₹6.40 cleared against ₹2.50 paid, and the charges in between
+  05  the rails       the grid itself — the one cover taken from a drawing rather than made here
 
 Nothing here is data. Every number and every line of card text is quoted from the page
 (src/projects/1-sama.md) — no telemetry, no readings, nothing the project has not claimed.
@@ -33,11 +34,12 @@ import math
 import random
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont, ImageOps
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "src" / "assets" / "projects" / "sama"
 FONTS = Path(__file__).resolve().parent / "_fonts"
+PICKS = ROOT / "images" / "sama"   # the working folder: the GIF reference and the landscape
 
 W, H = 1500, 1000          # 3:2 — a landscape card keeps its own ratio, so nothing is cropped
 STEP = 15                  # halftone pitch; the card shows this image at ~0.42×, so coarse reads right
@@ -99,7 +101,8 @@ def field(seed, band):
     fine = lattice(w, h, 7, 48, rnd).load()
     warm = lattice(w, h, 40, 120, rnd).load()
 
-    axis, centre, width = band
+    axis, centre, width = band[:3]
+    gain = band[3] if len(band) > 3 else 0.62
     im = Image.new("RGB", (w, h))
     px = im.load()
     for y in range(h):
@@ -117,7 +120,7 @@ def field(seed, band):
             q = ((y / h) if axis == "v" else (x / w))
             c = centre + math.sin(q * 3.1 + seed % 7) * 0.035
             k = max(0.0, 1.0 - (abs(p - c) / width) ** 1.7)
-            t += k * 0.62
+            t += k * gain
             t += math.sin(t * 30.0) * 0.016           # the striations in the reference
             r, g, b = ramp_at(t)
             kw = (warm[x, y] / 255.0 - 0.55)
@@ -261,38 +264,88 @@ def m_spread(rnd):
     return m
 
 
-def texture(m, rnd):
+def m_landscape(rnd):
+    """The one cover not invented here: the drawing Raghav put in images/sama/ — transmission
+    towers, turbines, a solar-roofed shed, the city behind — read as structure and nothing else.
+
+    A tone threshold alone fills the tower lattice in and turns the grass into a slab, so the
+    mask is led by edges: a difference of gaussians keeps every line (the lattice members, the
+    cables, the turbine blades) and drops the flat fields between them. Tone comes back underneath
+    at half strength to give the buildings and the ground some body. The sky is thrown away, and
+    our own gradient stands in for it — which is what the reference does: atmosphere behind,
+    structure in dots."""
+    srcs = sorted(PICKS.glob("*.jpg"))
+    if len(srcs) != 1:
+        raise SystemExit(f"expected exactly one landscape in {PICKS}, found {len(srcs)}")
+    src = Image.open(srcs[0]).convert("L")
+    src = src.resize((2000, round(src.height * 2000 / src.width)), Image.LANCZOS)
+    w, h = src.size
+
+    inv = ImageOps.invert(src)                   # measured off the drawing: its sky sits at 210-238
+    tone = inv.point(lambda v: 0 if v < 62 else min(255, int((v - 62) * 2.6)))
+
+    # the foreground grass is tone with no structure in it — a solid floor if left alone
+    fade = Image.new("L", (1, h))
+    fp = fade.load()
+    for y in range(h):
+        u = y / h
+        fp[0, y] = 255 if u < 0.72 else int(255 * max(0.0, 1.0 - (u - 0.72) / 0.13))
+    tone = ImageChops.multiply(tone, fade.resize((w, h)))
+
+    near = src.filter(ImageFilter.GaussianBlur(0.8))
+    far = src.filter(ImageFilter.GaussianBlur(3.0))
+    edge = ImageChops.difference(far, near).point(lambda v: min(255, int(v * 11)))
+
+    m = ImageChops.lighter(edge, tone.point(lambda v: int(v * 0.42)))
+
+    # the grass blades are edges too, so the tone fade above does not touch them: take the whole
+    # mask down below the ground line, which is the last thing worth keeping
+    floor = Image.new("L", (1, h))
+    fl = floor.load()
+    for y in range(h):
+        u = y / h
+        fl[0, y] = 255 if u < 0.80 else int(255 * max(0.0, 1.0 - (u - 0.80) / 0.06))
+    m = ImageChops.multiply(m, floor.resize((w, h)))
+    band = round(m.height * W / m.width)
+    m = m.resize((W, band), Image.LANCZOS)
+
+    out = Image.new("L", (W, H), 0)
+    out.paste(m, (0, H - band - 60))             # lifted: the grass runs off the bottom edge
+    return out
+
+
+def texture(m, rnd, aura_gain=0.34):
     """The reference's mass is mottled, not solid, and it scatters loose dots past its own edge.
     A mid-frequency field takes bites out of the body; a wide blur of the figure seeds the
     sparkles around it."""
     mott = lattice(W, H, 34, 34, rnd).point(lambda v: 168 + int(v * 0.34))
     m = ImageChops.multiply(m, mott)
-    aura = m.filter(ImageFilter.GaussianBlur(13)).point(lambda v: int(v * 0.34))
+    aura = m.filter(ImageFilter.GaussianBlur(13)).point(lambda v: int(v * aura_gain))
     aura = ImageChops.multiply(aura, lattice(W, H, 17, 17, rnd).point(lambda v: 0 if v < 190 else 255))
     return ImageChops.lighter(m, aura)
 
 
 # ---------------------------------------------------------------- halftone
 
-def halftone(bg, mask):
+def halftone(bg, mask, step=STEP, soften=2.2):
     """The reference's move: sample the figure on a grid and draw each cell as a diamond sized by
     its value. White, always — the dark band in the gradient is what it is read against."""
-    soft = mask.filter(ImageFilter.GaussianBlur(2.2))
+    soft = mask.filter(ImageFilter.GaussianBlur(soften))
     shade = mask.filter(ImageFilter.GaussianBlur(60)).point(lambda v: min(255, int(v * 1.9)))
     bg = Image.composite(Image.blend(bg, Image.new("RGB", (W, H), (28, 32, 46)), 0.42), bg, shade)
 
-    cols, rows = W // STEP, H // STEP
+    cols, rows = W // step, H // step
     cells = soft.resize((cols, rows), Image.BOX).load()
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     d = ImageDraw.Draw(layer)
-    rmax = STEP * 0.60
+    rmax = step * 0.60
     for j in range(rows):
         for i in range(cols):
             v = cells[i, j] / 255.0
             if v < 0.02:
                 continue
             r = (v ** 0.58) * rmax
-            x, y = i * STEP + STEP / 2, j * STEP + STEP / 2
+            x, y = i * step + step / 2, j * step + step / 2
             a = 255 if v > 0.20 else int(140 + 115 * v / 0.20)
             if r < 1.2:
                 d.ellipse([x - 1, y - 1, x + 1, y + 1], fill=(255, 255, 255, a))
@@ -379,6 +432,11 @@ COVERS = [
          card=(950, 70, 1440, 370), pill="(the spread)",
          title=["Gross, before", "the charges."],
          body=["Wheeling, banking, cross-subsidy,", "platform fee. What survives them", "is the first piece of work."]),
+    dict(mask=m_landscape, seed=SEED + 5, band=("h", 0.60, 0.46, 0.80), step=7, soften=0.9, aura=0.05,
+         card=(80, 56, 664, 372), pill="(the rails)",
+         title=["The rails exist.", "The product does not."],
+         body=["India's Energy Stack went live in 2025.", "What is missing is the thing an",
+               "ordinary prosumer opens on a phone."]),
 ]
 
 
@@ -389,7 +447,9 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for k, c in enumerate(COVERS, 1):
         rnd = random.Random(c["seed"])
-        im = halftone(field(c["seed"], c["band"]), texture(c["mask"](rnd), rnd))
+        im = halftone(field(c["seed"], c["band"]),
+                      texture(c["mask"](rnd), rnd, c.get("aura", 0.34)),
+                      c.get("step", STEP), c.get("soften", 2.2))
         im = glass(im, c["card"], c["pill"], c["title"], c["body"])
         frame = im.resize((FRAME, FRAME * H // W), Image.LANCZOS)
         frame.save(OUT / f"c{k}-f.jpg", quality=QUALITY, optimize=True)

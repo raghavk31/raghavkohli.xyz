@@ -26,6 +26,7 @@ covers:
   - { t: /assets/projects/sama/c2.jpg, f: /assets/projects/sama/c2-f.jpg, w: 1200, h: 800 }
   - { t: /assets/projects/sama/c3.jpg, f: /assets/projects/sama/c3-f.jpg, w: 1200, h: 800 }
   - { t: /assets/projects/sama/c4.jpg, f: /assets/projects/sama/c4-f.jpg, w: 1200, h: 800 }
+  - { t: /assets/projects/sama/c5.jpg, f: /assets/projects/sama/c5-f.jpg, w: 1200, h: 800 }
 lead: "A rooftop owner in an Indian city generates a unit of electricity she does not use. It goes to the grid. She is paid about ₹2.50 for it. The same unit clears the market at ₹6.40 to ₹6.80. She does not know this, because nothing in her house tells her. The meter reads a net number once a month. It does not say what she produced, when she produced it, where it went, or what it was worth to whoever received it. She has made something and sold it, and she has been told neither the quantity nor the price."
 next: Climate Code India · thirty tools in thirty days
 # The nine figure slots, each with the caption it has to earn. Uncomment a block once the drawing
