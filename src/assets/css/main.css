@@ -936,3 +936,7 @@ body.lb-open{overflow:hidden;}
   .gallery{row-gap:clamp(36px,8vw,56px);}
 }
 }
+
+/* ---------- sama instruments ----------
+   /work/sama/feeder/: the essay is the sama-lab embed (its own scoped css), set under the project head. */
+.sama-feeder{margin-top:clamp(56px,8vw,96px);}

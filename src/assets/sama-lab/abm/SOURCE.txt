@@ -1,0 +1,2 @@
+raghavk31/sama-lab 4be92e4 2026-09-29 docs: fix the embedding section (shell ate its backticks)
+Built files. Do not edit here: change sama-lab, rebuild, and rerun scripts/sync-sama-lab.py.

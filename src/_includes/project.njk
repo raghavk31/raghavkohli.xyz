@@ -212,7 +212,7 @@ layout: base.njk
     {% if outcome.built %}<div><div class="lbl">(outcome)</div><div class="val">{{ outcome.built }}</div></div>{% endif %}
     {% if outcome.recognised %}<div><div class="lbl">(recognition)</div><div class="val">{{ outcome.recognised }}</div></div>{% endif %}
     {% if outcome.next %}<div><div class="lbl">(what I'd do next)</div><div class="val">{{ outcome.next }}</div></div>{% endif %}
-    {% if outcome.link %}<div><div class="lbl">({{ outcome.link.lbl or 'published' }})</div><div class="val"><a href="{{ outcome.link.href }}" target="_blank" rel="noopener">{{ outcome.link.label }} &rarr;</a></div></div>{% endif %}
+    {% if outcome.link %}<div><div class="lbl">({{ outcome.link.lbl or 'published' }})</div><div class="val"><a href="{{ outcome.link.href }}"{% if outcome.link.href.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ outcome.link.label }} &rarr;</a></div></div>{% endif %}
   </section>
   {% endif %}
 

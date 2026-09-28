@@ -1,0 +1,35 @@
+---
+layout: base.njk
+permalink: /work/sama/feeder/
+title: One feeder, two regimes — Sama
+description: "A synthetic agent-based model of rooftop solar prosumers on one urban Indian distribution feeder: what changes when a household can see where its exported electricity goes, and sell to a neighbour instead of the DISCOM."
+---
+{#- Sama's instrument 01. The essay below the head (figures, sliders, findings) is not written here:
+    it is the embeddable build of raghavk31/sama-lab, copied into /assets/sama-lab/abm/ by
+    scripts/sync-sama-lab.py. To change a figure or a sentence of it, change sama-lab and resync.
+    Not a file in src/projects/, so it has no card and no archive row: it hangs off Sama's page. -#}
+<link rel="stylesheet" href="/assets/sama-lab/abm/sama-abm.css" />
+<article class="detail">
+  <a class="detail__back" href="/work/sama/">(&larr; sama)</a>
+
+  <span class="detail__qlabel">(sama · instrument 01)</span>
+  <h1 class="detail__q reveal">What changes when a rooftop can see where its electricity goes?</h1>
+  <div class="detail__head reveal">
+    <div class="detail__headtext">
+      <p class="detail__sub">One feeder, two regimes. A synthetic model of a few hundred households on one distribution feeder in an Indian city.</p>
+      <p class="detail__lead">It runs the same week twice. Once as things are, where every exported unit goes to the DISCOM at a fixed ₹2.50. Once where a household can see the feeder, and sell to a neighbour.</p>
+    </div>
+    <dl class="detail__index">
+      <div><dt>(method)</dt><dd>agent-based model · python</dd></div>
+      <div><dt>(data)</dt><dd>synthetic profiles, placeholder behaviour</dd></div>
+      <div><dt>(status)</dt><dd class="status">built · not validated against any feeder</dd></div>
+      <div><dt>(source)</dt><dd><a href="https://github.com/raghavk31/sama-lab/tree/main/abm#readme" target="_blank" rel="noopener">sama-lab &rarr;</a></dd></div>
+    </dl>
+  </div>
+
+  <div class="sama-feeder" data-sama-abm data-results="/assets/sama-lab/abm/results.json"
+       data-sticky-under=".head" data-sama="/work/sama/">
+    <noscript><p>The figures on this page are drawn in the browser from the model's precomputed results, and need JavaScript.</p></noscript>
+  </div>
+</article>
+<script type="module" src="/assets/sama-lab/abm/sama-abm.js"></script>
