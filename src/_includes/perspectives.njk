@@ -1,0 +1,296 @@
+---
+layout: base.njk
+---
+{#- Perspectives: a case study with a methods box and three figures drawn from data, which the
+    chapter template has no slot for. Same head, same .chap grid, same .stats row and .plate
+    captions as every project page; the rest is scoped .psp-* in perspectives.css.
+
+    The figures are computed at build time (src/_data/perspectivesViz.js, from perspectives.json)
+    and ship as plain SVG, so they need no script and survive the homepage overlay, which lifts
+    this <article> and runs none of its scripts. The stylesheet sits inside the article for the
+    same reason. With no rows, each figure prints that it has nothing to draw. -#}
+{%- set ch = content | chapters -%}
+{%- set V = perspectivesViz -%}
+{%- macro eyebrow(n, name) %}<span class="chap__eyebrow"><b>({{ n }})</b> {{ name }}</span>{% endmacro -%}
+{%- macro sample() %}{% if V.sample %}<p class="psp-sample">(sample data) drawn from {{ V.sampleRows }} placeholder rows in perspectives.json, not from records. Replace them before this page is shown to anyone.</p>{% endif %}{% endmacro -%}
+{%- macro empty(what) %}<div class="psp-empty" role="note"><span>(no data)</span> perspectives.json has no rows, so {{ what }} has nothing to draw. It is built from the attendance records and nothing else.</div>{% endmacro -%}
+<article class="detail psp">
+  <link rel="stylesheet" href="/assets/css/perspectives.css" />
+  <a class="detail__back" href="/#work">(&larr; selected work)</a>
+
+  <span class="detail__qlabel">(research question)</span>
+  <h1 class="detail__q reveal">{{ question }}</h1>
+  <div class="detail__head reveal">
+    <div class="detail__headtext">
+      <p class="detail__sub">{{ subtitle }}</p>
+    </div>
+    <dl class="detail__index">
+      <div><dt>(role)</dt><dd>{{ role }}</dd></div>
+      <div><dt>(period)</dt><dd>{{ period }}</dd></div>
+      <div><dt>(context)</dt><dd>{{ context }}</dd></div>
+      <div><dt>(status)</dt><dd class="status">{{ status }}</dd></div>
+    </dl>
+  </div>
+  <div class="stats psp-stats reveal">
+    {% for st in stats %}<div><div class="n">{{ st.n }}</div><div class="l">({{ st.l }})</div></div>{% endfor %}
+  </div>
+
+  {#- (01) the answer, first, at a size between the question and the body -#}
+  <section class="chap chap--noplates psp-verdict reveal" id="ch-01">
+    <div class="chap__txt">
+      {{ eyebrow("01", "the verdict") }}
+      <div class="psp-verdict__txt">{{ ch.byNum["01"] | safe }}</div>
+    </div>
+  </section>
+
+  {#- (02) the chain: prior, intervention, measure, result, and the revised prior pointing back at
+      the first link, which is struck. Drawn by hand, not from data. -#}
+  <section class="chap reveal" id="ch-02">
+    <div class="chap__txt">
+      {{ eyebrow("02", "the hypothesis") }}
+      <h2 class="chap__title">A chain, and the link that broke</h2>
+      <div class="chap__body">{{ ch.byNum["02"] | safe }}</div>
+    </div>
+    <div class="chap__pl">
+      <figure class="plate psp-chain">
+        <svg viewBox="0 0 560 860" role="img" aria-labelledby="psp-chain-t psp-chain-d">
+          <title id="psp-chain-t">The hypothesis, as a chain</title>
+          <desc id="psp-chain-d">Five boxes in a column. The prior: a good enough format does the work. The intervention: one fixed three-part protocol, run by many initiators, 250 plus times. What was measured: to be supplied. What came back: same protocol, different rooms; depth followed the initiator. The revised prior: the format carries the structure; whoever opens the room decides whether anyone uses it. A dashed arrow runs from the revised prior back to the first box, which is struck through.</desc>
+          <defs>
+            <marker id="psp-ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="psp-chain__head" /></marker>
+            <marker id="psp-ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="psp-chain__head2" /></marker>
+          </defs>
+          <g class="psp-chain__old">
+            <rect x="20" y="20" width="470" height="150" />
+            <text class="k" x="40" y="48">(01) the prior</text>
+            <text x="40" y="82">A good enough format does the work.</text>
+            <text x="40" y="108">Hand it to anyone and the room</text>
+            <text x="40" y="134">goes deep.</text>
+            <path class="strike" d="M38 75H418M38 101H362M38 127H146" />
+            <text class="tk" x="40" y="158">TKTK · confirm this was the starting bet</text>
+          </g>
+          <path class="psp-chain__step" d="M255 170V214" marker-end="url(#psp-ah)" />
+          <g>
+            <rect x="20" y="220" width="470" height="120" />
+            <text class="k" x="40" y="248">(02) the intervention</text>
+            <text x="40" y="282">One fixed three-part protocol,</text>
+            <text x="40" y="308">run by many initiators, 250+ times.</text>
+          </g>
+          <path class="psp-chain__step" d="M255 340V384" marker-end="url(#psp-ah)" />
+          <g>
+            <rect x="20" y="390" width="470" height="120" />
+            <text class="k" x="40" y="418">(03) what was measured</text>
+            <text class="tk" x="40" y="452">TKTK · what you recorded per circle</text>
+            <text class="tk" x="40" y="474">that let you compare depth across rooms</text>
+          </g>
+          <path class="psp-chain__step" d="M255 510V554" marker-end="url(#psp-ah)" />
+          <g>
+            <rect x="20" y="560" width="470" height="110" />
+            <text class="k" x="40" y="588">(04) what came back</text>
+            <text x="40" y="622">Same protocol, different rooms.</text>
+            <text x="40" y="648">Depth followed the initiator.</text>
+          </g>
+          <path class="psp-chain__step" d="M255 670V714" marker-end="url(#psp-ah)" />
+          <g class="psp-chain__new">
+            <rect x="20" y="720" width="470" height="130" />
+            <text class="k" x="40" y="748">(05) the revised prior</text>
+            <text x="40" y="782">The format carries the structure.</text>
+            <text x="40" y="808">Whoever opens the room decides</text>
+            <text x="40" y="834">whether anyone uses it.</text>
+          </g>
+          <path class="psp-chain__back" d="M490 785H534V95H498" marker-end="url(#psp-ah2)" />
+          <text class="psp-chain__lbl" transform="translate(551 440) rotate(-90)" text-anchor="middle">replaces (01)</text>
+        </svg>
+        <figcaption class="plate__cap"><span class="n">fig.01</span><span>The hypothesis as a chain. The first link is struck because the last one replaced it.</span></figcaption>
+      </figure>
+    </div>
+  </section>
+
+  {#- (03) the protocol as a methods box: everything someone else would need to run a circle -#}
+  <section class="chap chap--wide reveal" id="ch-03">
+    <div class="chap__full">
+      {{ eyebrow("03", "the protocol") }}
+      <div class="psp-methods">
+        <div class="psp-methods__hd"><span>(methods)</span><span>the circle, as an instrument</span></div>
+        <dl class="psp-methods__dl">
+          {% for p in protocol %}<div><dt>{{ p.k }}</dt><dd>{{ p.v | safe }}</dd></div>{% endfor %}
+        </dl>
+        <div class="psp-methods__slot">
+          <span class="psp-methods__k">(verbatim · one circle, in order)</span>
+          {% if prompts and prompts.length %}
+          <ol>{% for q in prompts %}<li>{{ q }}</li>{% endfor %}</ol>
+          {% if promptsSource %}<p class="psp-methods__src">{{ promptsSource }}</p>{% endif %}
+          {% else %}
+          <p><span class="tk">TKTK · the prompt sequence from one real circle, verbatim, phase by phase. Set it as `prompts:` (a list) in the frontmatter, with `promptsSource:` naming the circle and date.</span></p>
+          {% endif %}
+        </div>
+        {% if ch.byNum["03"] %}<div class="chap__body psp-methods__note">{{ ch.byNum["03"] | safe }}</div>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  {#- (04) findings: a claim, the evidence under it -#}
+  <section class="chap chap--wide reveal" id="ch-04">
+    <div class="chap__full">
+      {{ eyebrow("04", "findings") }}
+      {% if ch.byNum["04"] %}<div class="chap__body">{{ ch.byNum["04"] | safe }}</div>{% endif %}
+      <ol class="psp-findings">
+        {% for f in findings %}
+        <li>
+          <span class="psp-findings__n">{{ "0" + loop.index }}</span>
+          <h3 class="psp-findings__claim">{{ f.claim }}</h3>
+          <p class="psp-findings__ev">{{ f.evidence | safe }}</p>
+        </li>
+        {% endfor %}
+      </ol>
+    </div>
+  </section>
+
+  {#- (05) the network: people as nodes, co-attendance as ties, one panel per city -#}
+  <section class="chap chap--wide reveal" id="ch-05">
+    <div class="chap__txt">
+      {{ eyebrow("05", "the network") }}
+      <h2 class="chap__title">Ties between people with no path to each other</h2>
+      <div class="chap__body">{{ ch.byNum["05"] | safe }}</div>
+    </div>
+    <div class="chap__full psp-net">
+      {% if V.empty %}{{ empty("the network") }}{% else %}
+      {{ sample() }}
+      <div class="psp-net__panels">
+        {% for P in V.network.panels %}
+        {%- set ci = loop.index0 -%}
+        <figure class="psp-net__panel">
+          <svg viewBox="0 0 {{ P.w }} {{ P.h }}" role="img" aria-label="{{ P.city }}: {{ P.people }} people across {{ P.circles }} circles">
+            <path class="psp-tie psp-tie--prior" d="{{ P.priorPath }}" />
+            <path class="psp-tie psp-tie--fresh" d="{{ P.freshPath }}" />
+            {% for n in P.nodes %}{% if n.anchor %}<circle class="psp-ring" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ n.r + 4 }}" />{% endif %}<circle class="psp-node psp-c{{ ci % 3 }}" cx="{{ n.x }}" cy="{{ n.y }}" r="{{ n.r }}"><title>{{ n.count }} circle{% if n.count != 1 %}s{% endif %}{% if n.anchor %} · anchor{% endif %}</title></circle>{% endfor %}
+          </svg>
+          <figcaption class="psp-net__name"><i class="psp-dot psp-c{{ ci % 3 }}"></i>{{ P.city }} <span>· {{ P.people }} people · {{ P.circles }} circles</span></figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+      <ul class="psp-key">
+        <li><i class="psp-key__fresh"></i>tie with no earlier path between the two</li>
+        <li><i class="psp-key__prior"></i>tie between people already connected</li>
+        <li><i class="psp-key__size"></i>size: circles attended</li>
+        <li><i class="psp-key__ring"></i>anchor: {{ V.network.anchorMin }} or more circles</li>
+      </ul>
+      <p class="plate__cap"><span class="n">fig.02</span><span>{{ V.network.people }} people and {{ V.network.ties }} ties. {{ V.network.freshShare }}% of ties formed between two people with no earlier path between them. {{ V.network.anchors }} anchors hold {{ V.network.repeatShare }}% of all repeat attendances ({{ V.network.repeatAnchors }} of {{ V.network.repeatTotal }}).{% if V.network.crossCity %} {{ V.network.crossCity }} ties crossed cities and are not drawn; each person sits in the city where they attended most.{% endif %}</span></p>
+      {% endif %}
+    </div>
+  </section>
+
+  {#- (06) one number, set large: the system made its own operators -#}
+  <section class="chap chap--noplates reveal" id="ch-06">
+    <div class="chap__txt psp-repro">
+      {{ eyebrow("06", "reproduction") }}
+      {% if V.empty or not V.reproduction.initiators %}{{ empty("the reproduction metric") }}{% else %}
+      {{ sample() }}
+      <p class="psp-repro__n">{{ V.reproduction.share }}%</p>
+      <p class="psp-repro__s">of the people who initiated a circle had first sat in someone else&rsquo;s.</p>
+      <p class="psp-repro__f">{{ V.reproduction.fromParticipants }} of {{ V.reproduction.initiators }} initiators, read from the attendance records: an initiator counts if they attended a circle they did not run before the first one they did.</p>
+      {% if V.reproduction.disagree %}<p class="psp-repro__f psp-warn">{{ V.reproduction.disagree }} {% if V.reproduction.disagree == 1 %}person is{% else %}people are{% endif %} flagged later_initiated but never initiated a circle. Check the records.</p>{% endif %}
+      {% endif %}
+      {% if ch.byNum["06"] %}<div class="chap__body">{{ ch.byNum["06"] | safe }}</div>{% endif %}
+    </div>
+  </section>
+
+  {#- (07) the conversations: topics linked by shared people, clustered by theme -#}
+  <section class="chap chap--wide reveal" id="ch-07">
+    <div class="chap__txt">
+      {{ eyebrow("07", "what people talked about") }}
+      <h2 class="chap__title">The conversations, as a graph</h2>
+      <div class="chap__body">{{ ch.byNum["07"] | safe }}</div>
+    </div>
+    <div class="chap__full psp-kg">
+      {% if V.empty %}{{ empty("the topic graph") }}{% else %}
+      {{ sample() }}
+      {%- set G = V.graph -%}
+      <figure class="plate">
+        <svg viewBox="0 0 {{ G.w }} {{ G.h }}" role="img" aria-label="{{ G.topics }} topics and {{ G.links }} links by shared participants. The table below lists every topic.">
+          {% for e in G.edges %}<line class="psp-kg__edge" x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" stroke-width="{{ e.sw }}"><title>{{ e.w }} shared {% if e.w == 1 %}person{% else %}people{% endif %}</title></line>{% endfor %}
+          {% for c in G.cats %}<text class="psp-kg__cat" x="{{ c.x }}" y="{{ c.y }}" text-anchor="middle">{{ c.cat }}</text>{% endfor %}
+          {% for n in G.nodes %}<g class="psp-kg__node{% if n.major %} is-major{% endif %}"><circle cx="{{ n.x }}" cy="{{ n.y }}" r="{{ n.r }}"><title>{{ n.name }} · {{ n.cat }} · {{ n.circles }} circle{% if n.circles != 1 %}s{% endif %} · {{ n.people }} people · {{ n.cities }}</title></circle>{% if n.label %}<text x="{{ n.x }}" y="{{ n.y + n.r + 22 }}" text-anchor="middle">{{ n.name }}</text>{% endif %}</g>{% endfor %}
+        </svg>
+        <figcaption class="plate__cap"><span class="n">fig.03</span><span>{{ G.topics }} topics across {{ V.circles }} circles. A line joins two topics that shared at least one participant; its weight is how many. Size is the number of circles on that topic.</span></figcaption>
+      </figure>
+      <details class="psp-table">
+        <summary>(every topic, as a table)</summary>
+        <table>
+          <thead><tr><th>topic</th><th>theme</th><th>circles</th><th>people</th></tr></thead>
+          <tbody>{% for t in G.table %}<tr><td>{{ t.name }}</td><td>{{ t.cat }}</td><td>{{ t.circles }}</td><td>{{ t.people }}</td></tr>{% endfor %}</tbody>
+        </table>
+      </details>
+      {% endif %}
+    </div>
+  </section>
+
+  {#- (08) photographs: a restrained grid. A slot with no `src` stays a striped frame. -#}
+  <section class="chap chap--wide reveal" id="ch-08">
+    <div class="chap__full">
+      {{ eyebrow("08", "photographs") }}
+      <div class="chap__body psp-consent">{{ ch.byNum["08"] | safe }}</div>
+      <div class="psp-photos">
+        {% for p in photos %}
+        <figure class="plate">
+          <div class="plate__img{% if not p.src %} psp-slot{% endif %}">{% if p.src %}<img src="{{ p.src }}" alt="{{ p.alt or '' }}"{% if p.w and p.h %} width="{{ p.w }}" height="{{ p.h }}"{% endif %} loading="lazy" />{% endif %}</div>
+          <figcaption class="plate__cap"><span class="n">fig.{{ "0" + (loop.index + 3) }}</span><span>{{ p.cap | safe }}</span></figcaption>
+        </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {#- The product screens: small and late, one line, not a section of their own -#}
+  <aside class="psp-software reveal" aria-label="the software">
+    <p>The instrument got software so it could run without us. <span class="tk">TKTK · one sentence on what the software did (sign-up, matching, reminders?), and its name if it had one</span></p>
+    <div class="psp-software__screens">
+      {% for s in (screens or [{}, {}]) %}
+      <figure class="plate"><div class="plate__img{% if not s.src %} psp-slot{% endif %}">{% if s.src %}<img src="{{ s.src }}" alt="{{ s.alt or '' }}"{% if s.w and s.h %} width="{{ s.w }}" height="{{ s.h }}"{% endif %} loading="lazy" />{% endif %}</div>{% if not s.src %}<figcaption class="plate__cap"><span class="tk">TKTK · screen {{ loop.index }}</span></figcaption>{% endif %}</figure>
+      {% endfor %}
+    </div>
+  </aside>
+
+  <section class="chap chap--noplates reveal" id="ch-09">
+    <div class="chap__txt">
+      {{ eyebrow("09", "what failed") }}
+      <div class="chap__body">{{ ch.byNum["09"] | safe }}</div>
+    </div>
+  </section>
+
+  <section class="chap chap--noplates reveal" id="ch-10">
+    <div class="chap__txt">
+      {{ eyebrow("10", "ethics") }}
+      <div class="chap__body">{{ ch.byNum["10"] | safe }}</div>
+    </div>
+  </section>
+
+  <section class="chap chap--noplates reveal" id="ch-11">
+    <div class="chap__txt">
+      {{ eyebrow("11", "open questions") }}
+      <div class="chap__body psp-questions">{{ ch.byNum["11"] | safe }}</div>
+    </div>
+  </section>
+
+  <section class="chap chap--noplates reveal" id="ch-12">
+    <div class="chap__txt">
+      {{ eyebrow("12", "lineage") }}
+      <div class="chap__body">{{ ch.byNum["12"] | safe }}</div>
+    </div>
+  </section>
+
+  <section class="chap chap--noplates reveal" id="ch-13">
+    <div class="chap__txt">
+      {{ eyebrow("13", "credits") }}
+      <div class="chap__body">{{ ch.byNum["13"] | safe }}</div>
+    </div>
+  </section>
+
+  {% if next %}
+  <a class="detail__next reveal" href="/#work">
+    <span class="lbl">(next)</span>
+    <span class="nm">{{ next }}</span>
+    <span style="color:var(--accent)">&rarr;</span>
+  </a>
+  {% endif %}
+</article>
