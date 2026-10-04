@@ -16,6 +16,49 @@ live: false
 date: 2022-05-16
 card: M
 snippet: "[write] one or two lines from the story"
+meta: "(koliwadas) · cept thesis · 5 months · 12 villages"
+story_title: "Five months in Mumbai's fishing villages, and what the toolkit got wrong"
+interaction: koliwadas-map
+story:
+  - fig: fig.01
+    src: /assets/projects/koliwadas/19.jpg
+    w: 1391
+    h: 1800
+    cap: "The Worli tip. The open ground between the village and the sea, and the jetty the boats leave from."
+    text: "[write] Where you arrived, and what the place looked like before you knew anyone."
+    notes:
+      - { t: "[note] first impression, six words max", x: 58, y: 8, r: 3 }
+  - fig: fig.02
+    src: /assets/projects/koliwadas/14.jpg
+    w: 1800
+    h: 1078
+    cap: "The commons of Worli Koliwada, 10 sq m to 30,000 sq m. The figure-ground of what is shared."
+    text: "[write] The first thing you got wrong in month one."
+    notes:
+      - { t: "[note] the mistake, one line", x: 64, y: 8, r: 3 }
+      - { t: "[note] who corrected you", x: 66, y: 52, r: -3, alt: true }
+  - fig: fig.03
+    src: /assets/projects/koliwadas/24.jpg
+    w: 1800
+    h: 1129
+    cap: "Resilience strategies against sea-level rise. Accommodate, advance, retreat, protect, and the strategic toolkit."
+    text: "[write] What the mitra mandals said when you handed them the toolkit."
+    notes:
+      - { t: "[note] the quote, in their words", x: 62, y: 10, r: -2 }
+  - fig: fig.04
+    interaction: true
+    cap: "Twelve koliwadas, one method. Tap one."
+    text: "[write] The rule inside the settlement that surprised you most."
+    notes:
+      - { t: "tap a village →", x: 2, y: 80, r: -3, alt: true }
+  - fig: fig.05
+    src: /assets/projects/koliwadas/25.jpg
+    w: 1357
+    h: 1800
+    cap: "Contribution. The shore redrawn as a landscape of knowledge links, the village at its centre."
+    text: "[write] What you'd do differently now, and what carried into Living Heritage and Sama."
+    notes:
+      - { t: "[note] still not sure about...", x: 56, y: 6, r: 2 }
 thumb: /assets/projects/koliwadas/00.jpg
 thumbw: 848
 thumbh: 1200
