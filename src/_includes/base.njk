@@ -5,8 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- flag JS so scroll-reveal only hides content when it can be revealed again -->
     <script>document.documentElement.classList.add('js')</script>
-    <title>{{ title or "Raghav Kohli" }}</title>
-    <meta name="description" content="{{ description or 'Raghav Kohli: making invisible urban systems visible, legible, and participatory.' }}" />
+    {#- a project page names itself "<title> · Raghav Kohli", describes itself by its research question,
+        and previews with its card thumbnail: these are the links that go out in emails -#}
+    {%- set isProject = ((page.url or "") | string).startsWith("/work/") and question -%}
+    {%- set pageTitle = (title + " · Raghav Kohli") if isProject else (title or "Raghav Kohli") -%}
+    {%- set pageDesc = description or (question if isProject) or "Raghav Kohli: making invisible urban systems visible, legible, and participatory." -%}
+    <title>{{ pageTitle }}</title>
+    <meta name="description" content="{{ pageDesc }}" />
+    <meta property="og:title" content="{{ (story_title or title) if isProject else pageTitle }}" />
+    <meta property="og:description" content="{{ pageDesc }}" />
+    <meta property="og:url" content="{{ site.url }}{{ page.url }}" />
+    <meta property="og:type" content="{{ 'article' if isProject else 'website' }}" />
+    {%- if isProject and thumb %}
+    <meta property="og:image" content="{{ site.url }}{{ thumb }}" />
+    <meta name="twitter:card" content="summary_large_image" />
+    {%- endif %}
     <link rel="icon" href="/assets/favicon.ico" sizes="any" />
     <link rel="icon" type="image/png" href="/assets/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png" />
@@ -34,6 +47,7 @@
       {{ content | safe }}
     </main>
 
+    <script src="/assets/js/story.js" defer></script>
     <script src="/assets/js/main.js" defer></script>
   </body>
 </html>

@@ -15,6 +15,12 @@ module.exports = function (eleventyConfig) {
       if ((p.data.card || p.data.weight) && !(p.data.covers && p.data.covers.length)) {
         console.warn(`[covers] card "${p.data.title}" has no covers — run scripts/prep-covers.py ${p.fileSlug.replace(/^\d+-/, "")}`);
       }
+      // a story beat carries at most two post-its; project.njk renders the first two and drops the rest
+      (p.data.story || []).forEach((b, i) => {
+        if (b && b.notes && b.notes.length > 2) {
+          console.warn(`[story] "${p.data.title}" beat ${i + 1} has ${b.notes.length} notes — only the first 2 are shown`);
+        }
+      });
     }
     return items;
   });
@@ -46,6 +52,14 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addFilter("find", (arr, key, val) =>
     (arr || []).find((i) => i && i.data && i.data[key] === val)
   );
+
+  // The title after `title` in the homepage grid's order (src/_data/groups.js), wrapping at the end.
+  // A project that is not on the grid gets the first card.
+  eleventyConfig.addFilter("nextInGrid", (groups, title) => {
+    const flat = (groups || []).flatMap((g) => g[1]);
+    const i = flat.indexOf(title);
+    return flat[(i + 1) % flat.length];
+  });
 
   // Split a project's rendered body at `## NN name` headings so the chapter template can
   // place each piece beside its plates. Returns { intro, byNum: { "00": html, ... } };
