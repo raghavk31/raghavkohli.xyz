@@ -15,6 +15,7 @@ status: thesis
 live: false
 date: 2022-05-16
 card: M
+snippet: "[write] one or two lines from the story"
 thumb: /assets/projects/koliwadas/00.jpg
 thumbw: 848
 thumbh: 1200

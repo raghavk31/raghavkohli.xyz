@@ -18,13 +18,13 @@
     }
   }
 
-  /* ---------- card: flip the floating meta panel to whichever side has room ---------- */
+  /* ---------- card: put the hover post-it on whichever side has room ---------- */
   document.querySelectorAll(".card__click").forEach(function (card) {
     card.addEventListener("mouseenter", function () {
-      var meta = card.querySelector(".card__meta");
+      var meta = card.querySelector(".card__note");
       if (!meta) return;
       var r = card.getBoundingClientRect();
-      var need = 200, vw = window.innerWidth;
+      var need = 190 - 28 + 16, vw = window.innerWidth;   // note width, less the overlap, plus a margin
       var rs = vw - r.right, ls = r.left;
       var side = rs >= need ? "right" : (ls >= need ? "left" : (rs >= ls ? "right" : "left"));
       meta.classList.remove("left", "right");

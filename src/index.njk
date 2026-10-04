@@ -3,8 +3,8 @@ layout: base.njk
 title: "Raghav Kohli · invisible systems, made visible"
 ---
 
-{#- The card: frame (thumb + rotating covers), glass overlay with the research question, floating meta
-    panel, caption, and the strip of covers. Width comes from `card:`. L → span 6, two per row;
+{#- The card: frame (thumb + rotating covers), glass overlay with the research question, the hover
+    post-it, caption, and the strip of covers. Width comes from `card:`. L → span 6, two per row;
     M → span 4, three per row; S → span 3, four per row (internal only, never displayed): the grid's auto-placement packs rows to
     twelve columns and wraps a card that would not fit, so packing is free. The frame ratio follows
     the cover: landscape keeps its own ratio, near-square becomes 1:1, portrait becomes 4:5 with the
@@ -22,12 +22,15 @@ title: "Raghav Kohli · invisible systems, made visible"
         data-topics="{{ (p.data.topics or []) | join(' ') }}" data-weight="{{ w }}"
         style="--span:{{ span }};--car:{{ car }};--cpad:{{ 36 if w == 1 else (30 if w == 2 else 22) }}px;--cq:{{ p.data.qsize or '24px' }};">
   <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}" aria-label="{{ p.data.title }}">
-    <div class="card__meta right">
-      <div><span class="lbl">(role)</span><span class="val">{{ p.data.role }}</span></div>
-      <div><span class="lbl">(period)</span><span class="val">{{ p.data.period }}</span></div>
-      <div><span class="lbl">(context)</span><span class="val">{{ p.data.context }}</span></div>
-      <div><span class="lbl">(status)</span><span class="val{% if p.data.live %} live{% endif %}">{{ p.data.status }}</span></div>
+    {#- the post-it: one or two lines of story, stuck to the card's edge on hover (main.js flips it to
+        the side with room). `snippet_rot` tilts it (default 3°), `snippet_alt` takes the second paper.
+        On the phone a corner of it peeks from the card's top right all the time. -#}
+    {%- if p.data.snippet %}
+    <div class="card__note right{% if p.data.snippet_alt %} alt{% endif %}" style="--r:{{ p.data.snippet_rot if p.data.snippet_rot is number else 3 }}deg">
+      <p>{{ p.data.snippet }}</p>
+      <span class="note__lbl">(click to read)</span>
     </div>
+    {%- endif %}
     <div class="card__frame">
       {% if p.data.thumb %}<img src="{{ p.data.thumb }}" alt="{{ p.data.title }}"{% if contain %} class="contain"{% endif %} loading="lazy" onerror="this.remove()" />{% endif %}
       {#- rotating covers (scripts/prep-covers.py): pre-cropped to the frame ratio; main.js initCovers crossfades them -#}

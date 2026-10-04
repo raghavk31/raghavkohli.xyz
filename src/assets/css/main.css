@@ -136,7 +136,7 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 .card.flip{transition:transform .6s cubic-bezier(.16,1,.3,1),opacity .5s ease;will-change:transform;}
 
 /* hover scrim: while one card is hovered or holds focus, every other card fades to the paper and
-   the breaks recede, so the floating meta panel lands on nothing that matters (D16). Pointer-only;
+   the breaks recede, so the post-it lands on nothing that matters (D16). Pointer-only;
    touch never gets a stuck scrim. */
 @media (hover:hover){
   .work__grid:has(.card__click:hover, .card__click:focus-within) .card:not(:has(.card__click:hover, .card__click:focus-within)){opacity:.14;filter:saturate(.4);}
@@ -195,18 +195,27 @@ figcaption .name{font:inherit;font-weight:500;color:var(--ink);}   /* an h3: the
 figcaption .desc{color:var(--faint);}
 figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
 
-/* floating metadata panel (desktop hover) */
-.card__meta{position:absolute;top:6px;width:172px;opacity:0;pointer-events:none;z-index:3;
-  display:flex;flex-direction:column;gap:9px;transition:opacity .45s ease, transform .55s cubic-bezier(.16,1,.3,1);}
-/* details hug the card edge: panel on the right reads left-aligned, panel on the left reads right-aligned */
-.card__meta.right{left:100%;margin-left:22px;transform:translateX(-10px);text-align:left;align-items:flex-start;}
-.card__meta.left{right:100%;margin-right:22px;transform:translateX(10px);text-align:right;align-items:flex-end;}
-.card__meta > div{display:flex;flex-direction:column;gap:3px;align-items:inherit;}
-.card__meta .lbl{font-weight:500;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--faint-2);font-variant-numeric:tabular-nums;}
-.card__meta .val{font-size:12px;color:var(--ink-2);}
-.card__meta > div{background:var(--paper);}
-.card__meta > div:nth-child(4) .val{color:var(--faint);}
-.card__meta > div:nth-child(4) .val.live{color:var(--accent);}
+/* ---------- post-its ----------
+   One paper for every note on the site: the hover note on a card, and the notes pinned on a story's
+   frames. Paper colour, ink, the --hand face, a faint adhesive band across the top, a two-layer
+   shadow. --r is the note's own tilt. Light only: the site has no dark theme. */
+.note,.card__note{position:absolute;z-index:4;background:var(--note);color:var(--note-ink);
+  font-family:var(--hand);font-weight:500;font-size:22px;line-height:1.08;
+  box-shadow:0 1px 2px var(--note-shadow),0 12px 24px -8px var(--note-shadow);}
+.note.alt,.card__note.alt{background:var(--note-2);}
+.note::before,.card__note::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:rgba(43,38,21,.07);}
+.note p,.card__note p{margin:0;position:relative;}
+.note__lbl{display:block;margin-top:10px;font-family:var(--nh);font-weight:500;font-size:10px;letter-spacing:.04em;
+  opacity:.55;font-variant-numeric:tabular-nums;}
+
+/* the hover note: beside the card, overlapping its edge by 28px so it reads as stuck on. main.js puts
+   it on whichever side has room. It lands from a little above and a little larger, with a short
+   overshoot, and never takes the pointer, so the card underneath stays clickable. */
+.card__note{top:22px;width:190px;padding:22px 16px 12px;pointer-events:none;opacity:0;
+  transform:translateY(-12px) scale(1.06) rotate(var(--r,3deg));
+  transition:opacity .18s ease,transform .3s cubic-bezier(.2,1.4,.4,1);}
+.card__note.right{left:calc(100% - 28px);}
+.card__note.left{right:calc(100% - 28px);}
 
 /* expanding thumbnail strip (desktop hover) */
 .card__thumbs{display:flex;gap:8px;margin-top:14px;overflow:hidden;max-height:0;opacity:0;
@@ -224,7 +233,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
   .card__click:hover .card__frame,.card__click:focus-within .card__frame{transform:translateY(-8px);}
   .card__click:hover .card__frame > img,.card__click:focus-within .card__frame > img{transform:scale(1.04);}
   .card__click:hover .card__overlay,.card__click:focus-within .card__overlay{opacity:1;}
-  .card__click:hover .card__meta,.card__click:focus-within .card__meta{opacity:1;transform:translateX(0);}
+  .card__click:hover .card__note,.card__click:focus-within .card__note{opacity:1;transform:translateY(0) scale(1) rotate(var(--r,3deg));}
   .card__click:hover .card__thumbs,.card__click:focus-within .card__thumbs{max-height:82px;opacity:1;}
   /* over the strip the glass lifts, so the cover the pointer picks is seen clean */
   .card__click:has(.card__thumbs:hover) .card__overlay,.card__click:has(.card__thumb:focus) .card__overlay{opacity:0;}
@@ -600,7 +609,14 @@ body.lb-open{overflow:hidden;}
   .work__break{margin-top:24px;margin-bottom:-8px;}
   .work__lead{align-items:flex-start;}
   .card.w3 .card__q{font-size:1.15rem;}
-  .card__meta,.card__thumbs{display:none;}
+  .card__thumbs{display:none;}
+  /* no hover on the phone: a corner of the post-it peeks over the card's top right all the time,
+     one line of it, cut off. Tapping the card opens the story as usual. */
+  .card__click .card__note,.card__click:hover .card__note,.card__click:focus-within .card__note{
+    left:auto;right:12px;top:-16px;width:136px;max-height:42px;overflow:hidden;padding:13px 12px 0;
+    font-size:17px;opacity:1;transform:rotate(var(--r,3deg));}
+  .card__note p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .card__note .note__lbl{display:none;}
   /* on the phone the frame takes the thumb's own height and the question flows below the image
      instead of over it: the thumb goes static, the rotating alternates stay absolute inside it */
   .card__frame{aspect-ratio:auto;overflow:visible;background:none;}
