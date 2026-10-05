@@ -536,7 +536,12 @@
       var clone = art.cloneNode(true);
       // in-page links back to the grid close the overlay instead of navigating
       clone.querySelectorAll('a[href^="/#"], a[href^="#"]').forEach(function (a) {
-        a.addEventListener("click", function (ev) { ev.preventDefault(); requestClose(); });
+        var to = a.getAttribute("href").charAt(0) === "#" && clone.querySelector(a.getAttribute("href"));
+        a.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          // a jump inside the page (a story's "(the whole project)") scrolls the panel; the rest close
+          if (to) to.scrollIntoView({ behavior: "smooth", block: "start" }); else requestClose();
+        });
       });
       // a link to another project (a story's (next)) opens that project's overlay in place
       clone.querySelectorAll('a[href^="/work/"]').forEach(function (a) {

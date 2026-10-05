@@ -187,11 +187,44 @@ layout: base.njk
   {% endif %}
 </article>
 {% else %}
-<article class="detail">
+{#- Every chaptered project opens as a story: beats built from its own chapters (storyFrom in
+    .eleventy.js), on the same stage as an authored `story:`. The whole project follows under it,
+    unchanged. A project with fewer than two beats skips the story and opens as before. -#}
+{%- set beats = (chapters | storyFrom(content | chapters, open, subtitle, lead)) if chapters else [] -%}
+{%- set told = beats.length > 1 -%}
+<article class="detail{% if told %} story story--auto{% endif %}"{% if told %} data-story data-meta="{{ period }} · {{ context }}"{% endif %}>
+  {% if told %}
+  <div class="story__top">
+    <span class="story__meta">{{ period }} · {{ context }}</span>
+    <a class="story__close" href="/#work">(close)</a>
+  </div>
+  <header class="story__head">
+    <span class="detail__qlabel">{{ question }}</span>
+    <h1 class="story__title">{{ title }}</h1>
+  </header>
+  <div class="story__body">
+    <div class="story__beats">
+      {%- for b in beats %}
+      <section class="beat" data-i="{{ loop.index0 }}">
+        {{ frame(b, loop.index0, null) }}
+        <div class="beat__txt">
+          <span class="beat__fig">{{ b.lbl }}</span>
+          <p class="beat__text">{{ b.text }}</p>
+          {% if b.aside %}<p class="beat__aside">{{ b.aside }}</p>{% endif %}
+        </div>
+      </section>
+      {%- endfor %}
+    </div>
+    <div class="story__stage" aria-live="polite"></div>
+  </div>
+  <a class="story__more" href="#the-whole">(the whole project &darr;)</a>
+  <div id="the-whole" class="story__whole"></div>
+  {% else %}
   <a class="detail__back" href="/#work">(&larr; selected work)</a>
+  {% endif %}
 
   <span class="detail__qlabel">(research question)</span>
-  <h1 class="detail__q reveal">{{ question }}</h1>
+  {% if told %}<h2 class="detail__q reveal">{{ question }}</h2>{% else %}<h1 class="detail__q reveal">{{ question }}</h1>{% endif %}
   {#- The head runs in two columns under the question: the deck and the lead on the left, the
       project's own facts on the right, right-aligned against the content edge — the same ledger
       register the homepage masthead uses for its group counts (`.work__index`). It used to be a

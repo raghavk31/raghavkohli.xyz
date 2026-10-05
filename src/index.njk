@@ -25,9 +25,10 @@ title: "Raghav Kohli · invisible systems, made visible"
     {#- the post-it: one or two lines of story, stuck to the card's edge on hover (main.js flips it to
         the side with room). `snippet_rot` tilts it (default 3°), `snippet_alt` takes the second paper.
         On the phone a corner of it peeks from the card's top right all the time. -#}
-    {%- if p.data.snippet %}
-    <div class="card__note right{% if p.data.snippet_alt %} alt{% endif %}" style="--r:{{ p.data.snippet_rot if p.data.snippet_rot is number else 3 }}deg">
-      <p>{{ p.data.snippet }}</p>
+    {%- set snip = p.data | snippetOf -%}
+    {%- if snip %}
+    <div class="card__note right{% if p.data.snippet_alt or num % 3 == 2 %} alt{% endif %}" style="--r:{{ p.data.snippet_rot if p.data.snippet_rot is number else (3 if num % 2 else -2.5) }}deg">
+      <p>{{ snip }}</p>
       <span class="note__lbl">(click to read)</span>
     </div>
     {%- endif %}
