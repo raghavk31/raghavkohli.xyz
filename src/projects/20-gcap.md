@@ -3,7 +3,7 @@ title: Malaysia GCAP
 subtitle: Green City Action Plans for Kota Bharu, Langkawi, Kuching–Padawan and Penang Island, four cities read on one instrument, from base map to inventory to investment.
 question: can four cities on two coasts be measured the same way, and what does the measurement change?
 desc: iclei · imt-gt · four green city action plans
-topics: [carbon, data, analytics]
+topics: [energy, mobility, buildings, waste, air]
 size: md
 offset: ""
 qsize: 22px

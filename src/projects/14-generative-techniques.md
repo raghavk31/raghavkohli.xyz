@@ -3,7 +3,7 @@ title: Generative Techniques
 subtitle: A neighbourhood for 1,55,676 people in north Ahmedabad, designed as rules and searched by an evolutionary algorithm.
 question: can a neighbourhood be designed as rules rather than a plan?
 desc: ahmedabad · evolutionary computation
-topics: [data]
+topics: [buildings]
 size: md
 offset: ""
 qsize: 24px

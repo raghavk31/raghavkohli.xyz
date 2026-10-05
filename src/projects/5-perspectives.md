@@ -7,7 +7,7 @@ layout: perspectives.njk
 question: can you engineer serendipity?
 subtitle: Perspectives. Offline conversation circles in Delhi and Bangalore, co-founded and run from March 2025 to April 2026. The participatory leg of the thesis.
 desc: conversation circles · delhi, bangalore
-topics: [community]
+topics: [education]
 card: M
 qsize: 24px
 fig: 250+ circles · 1,000+ people

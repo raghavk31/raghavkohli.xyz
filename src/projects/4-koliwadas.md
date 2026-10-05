@@ -3,7 +3,7 @@ title: Koliwadas
 subtitle: Reverse Effect, open source urbanism, learnt from the everyday practices of Worli Koliwada, Mumbai's oldest fishing village.
 question: what can a city learn from the community it keeps trying to remove?
 desc: worli · open source urbanism
-topics: [community, water]
+topics: [water, food, economy]
 size: md
 offset: ""
 qsize: 22px

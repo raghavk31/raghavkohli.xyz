@@ -3,7 +3,7 @@ title: Sama
 subtitle: A peer-to-peer trading layer for urban rooftop solar, built on the India Energy Stack. Research, regulatory analysis, and a working seller-side module.
 question: what would it take for a household to see, price and trade the energy it makes?
 desc: p2p rooftop solar · india energy stack
-topics: [energy, data]
+topics: [energy, economy]
 size: lg
 offset: off-70
 qsize: 26px

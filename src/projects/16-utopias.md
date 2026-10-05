@@ -3,7 +3,7 @@ title: Utopias to Heterotopias
 subtitle: Migrant housing at Maan Darwaza, Surat, two hundred units linked and stacked into clusters that leave room for what comes after the plan.
 question: can mass housing be planned so that its residents finish it?
 desc: surat · migrant housing · linking and stacking
-topics: [community]
+topics: [buildings]
 size: md
 offset: ""
 qsize: 24px

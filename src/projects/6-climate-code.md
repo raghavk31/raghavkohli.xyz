@@ -2,7 +2,7 @@
 title: Climate Code India
 question: can 30 tools in 30 days make climate data legible?
 desc: rapid prototyping · streamlit
-topics: [carbon, data]
+topics: [energy, air]
 size: sm
 offset: off-70
 qsize: 19px

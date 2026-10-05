@@ -3,7 +3,7 @@ title: One is to One
 subtitle: Five materials, drawn as layers and built as joints.
 question: what does a drawing not know until it has to stand up?
 desc: cept · construction technology
-topics: [studio]
+topics: [buildings]
 size: md
 offset: ""
 qsize: 22px

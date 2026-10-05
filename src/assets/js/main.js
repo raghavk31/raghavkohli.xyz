@@ -84,10 +84,10 @@
     });
   })();
 
-  /* ---------- (work) keyword filter — reorders + resizes the grid, FLIP-animated ---------- */
+  /* ---------- (work) filter — the ecology diagram's nodes reorder + resize the grid, FLIP-animated ---------- */
   var grid = document.querySelector("[data-grid]");
-  var filterBar = document.querySelector("[data-filters]");
-  if (grid && filterBar) {
+  var eco = document.querySelector("[data-eco]");
+  if (grid && eco) {
     var cards = Array.prototype.slice.call(grid.querySelectorAll(".card"));
     // the authored structure: each group break followed by its cards, in resting order
     var resting = [];
@@ -97,14 +97,6 @@
         if (!resting.length) resting.push({ brk: null, cards: [] });
         Array.prototype.push.apply(resting[resting.length - 1].cards, Array.prototype.slice.call(el.children));
       }
-    });
-
-    // union of every card's topics, in first-seen order
-    var topics = [];
-    cards.forEach(function (c) {
-      (c.getAttribute("data-topics") || "").split(/\s+/).forEach(function (t) {
-        if (t && topics.indexOf(t) === -1) topics.push(t);
-      });
     });
 
     var active = null;
@@ -172,40 +164,60 @@
       });
     }
 
-    // "× reset" control — only visible while a filter is active
-    var resetBtn = document.createElement("button");
-    resetBtn.type = "button";
-    resetBtn.className = "work__reset";
-    resetBtn.textContent = "× reset";
-    resetBtn.setAttribute("aria-label", "reset arrangement");
-    resetBtn.hidden = true;
+    // the diagram's nodes (both drawings carry the same data-topic set), the bar over the grid, and
+    // the caption that shows a node's note on hover
+    var nodes = Array.prototype.slice.call(eco.querySelectorAll("[data-topic]"));
+    var resetBtn = document.querySelector("[data-eco-reset]");
+    var showing = document.querySelector("[data-eco-showing]");
+    var noteEl = eco.querySelector("[data-eco-note]");
+    var bar = document.querySelector(".work__filterbar");
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function noteOf(t) {
+      var n = t && eco.querySelector('[data-topic="' + t + '"]');
+      return n ? (n.getAttribute("data-note") || "") : "";
+    }
+    function setNote(t) { if (noteEl) noteEl.textContent = noteOf(t || active); }
 
     function setActive(topic) {
       active = topic || null;
-      filterBar.querySelectorAll(".work__chip").forEach(function (b) {
+      eco.classList.toggle("has-active", !!active);
+      nodes.forEach(function (b) {
         var on = !!active && b.getAttribute("data-topic") === active;
         b.classList.toggle("on", on);
         b.setAttribute("aria-pressed", on ? "true" : "false");
       });
-      resetBtn.hidden = !active;
+      if (resetBtn) resetBtn.hidden = !active;
+      if (showing) { showing.hidden = !active; showing.textContent = active ? "· " + active : ""; }
+      peek(null);
+      setNote(null);
       applyFilter(active);
+      // the grid starts below the diagram: bring it up so the change is seen
+      if (active && bar && bar.getBoundingClientRect().top > window.innerHeight * 0.6) {
+        bar.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      }
     }
 
-    topics.forEach(function (t) {
-      var chip = document.createElement("button");
-      chip.type = "button";
-      chip.className = "work__chip";
-      chip.textContent = "#" + t;
-      chip.setAttribute("data-topic", t);
-      chip.setAttribute("aria-pressed", "false");
-      chip.addEventListener("click", function () {
-        setActive(active === t ? null : t);
+    // hover / focus a node: a light preview of which cards it holds, without repacking
+    function peek(topic) {
+      var on = !!topic && !active;
+      grid.classList.toggle("peek", on);
+      cards.forEach(function (c) { c.classList.toggle("hint", on && topicsOf(c).indexOf(topic) !== -1); });
+    }
+
+    nodes.forEach(function (b) {
+      var t = b.getAttribute("data-topic");
+      b.addEventListener("click", function () { setActive(active === t ? null : t); });
+      b.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActive(active === t ? null : t); }
       });
-      filterBar.appendChild(chip);
+      b.addEventListener("mouseenter", function () { peek(t); setNote(t); });
+      b.addEventListener("mouseleave", function () { peek(null); setNote(null); });
+      b.addEventListener("focus", function () { peek(t); setNote(t); });
+      b.addEventListener("blur", function () { peek(null); setNote(null); });
     });
 
-    resetBtn.addEventListener("click", function () { setActive(null); });
-    filterBar.appendChild(resetBtn);
+    if (resetBtn) resetBtn.addEventListener("click", function () { setActive(null); });
 
     // Escape also resets, unless the project overlay is open (it owns Escape then)
     window.addEventListener("keydown", function (e) {
