@@ -656,16 +656,16 @@ html{scrollbar-gutter:stable;}
 
 /* wide + JS: two columns, beats spaced ~38vh apart, the stage sticky beside them */
 .story--staged .story__body{display:grid;grid-template-columns:5fr 7fr;gap:clamp(40px,5vw,80px);align-items:start;}
-.story--staged .story__beats{gap:38vh;padding:calc(var(--stage-h) / 2 - 80px) 0 calc(var(--stage-h) / 2);}
+.story--staged .story__beats{gap:38vh;padding:0 0 calc(var(--stage-h) * .7);}   /* the first beat starts level with its picture: no gap under the title */
 .story--staged .beat{opacity:.3;transition:opacity .4s ease;}
 .story--staged .beat.on{opacity:1;}
 .story--staged .beat__txt{margin-top:0;}
 .story--staged .story__stage{display:block;position:sticky;top:var(--story-top);height:var(--stage-h);}
-.story__stage .frame{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;
+.story__stage .frame{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-start;
   opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s linear .35s;}
 .story__stage .frame.on{opacity:1;visibility:visible;transition:opacity .35s ease;}
 /* the box keeps its ratio inside the stage: as wide as the column allows, as tall as the stage allows */
-.story__stage .frame__box{width:min(100%, calc((var(--stage-h) - 64px) * var(--ar,1.333)));}
+.story__stage .frame__box{width:min(86%, calc((var(--stage-h) - 140px) * var(--ar,1.333)));}   /* smaller, like the cards */
 .story--staged .story__next{margin-top:0;}
 /* the opening every chaptered project gets (storyFrom): on the project page's own width, ending in
    a way down into the whole project, which follows unchanged */
@@ -674,7 +674,7 @@ html{scrollbar-gutter:stable;}
   letter-spacing:.04em;color:var(--mute);font-variant-numeric:tabular-nums;}
 .story__more:hover{color:var(--ink);}
 .story__whole{scroll-margin-top:84px;border-top:1px solid var(--line);margin:22px 0 clamp(48px,7vw,88px);}
-.story--staged .story__beats{padding-bottom:calc(var(--stage-h) / 2 - 40px);}
+
 
 /* post-its pinned on a frame: authored at x/y percent and tilt r, dragged by --dx/--dy (story.js) */
 .postit{--nw:172px;width:var(--nw);padding:22px 14px 11px;font-size:13px;z-index:2;

@@ -3,6 +3,7 @@ title: Surat Climate Action Plan
 subtitle: A city audited ward by ward, then given a pathway to net zero by 2047.
 question: what does a city have to see about itself before it can promise net zero?
 desc: c40 · iclei · net-zero crcap
+snippet: Surat chose the harder target
 topics: [water, energy, buildings, mobility, waste, air]
 size: md
 offset: ""
