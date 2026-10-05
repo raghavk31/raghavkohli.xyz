@@ -199,7 +199,9 @@
     }
 
     // hover / focus a node: a light preview of which cards it holds, without repacking
+    var hot = null;   // the node under the pointer / focus: its dots run faster
     function peek(topic) {
+      hot = topic || null;
       var on = !!topic && !active;
       grid.classList.toggle("peek", on);
       cards.forEach(function (c) { c.classList.toggle("hint", on && topicsOf(c).indexOf(topic) !== -1); });
@@ -218,6 +220,91 @@
     });
 
     if (resetBtn) resetBtn.addEventListener("click", function () { setActive(null); });
+
+    // the ecology tile is the way back to everything
+    eco.querySelectorAll("[data-eco-home]").forEach(function (h) {
+      h.addEventListener("click", function () { setActive(null); });
+      h.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActive(null); }
+      });
+    });
+
+    // pills are sized at build time by an estimate; fit them to the real text once the font is in
+    function fitPills() {
+      eco.querySelectorAll(".eco__pill").forEach(function (r) {
+        var t = r.nextElementSibling;
+        if (!t || !t.getComputedTextLength || !t.getComputedTextLength()) return;
+        var w = Math.ceil(t.getBBox().width + 30);
+        var x = r.getAttribute("data-anchor") === "end" ? +r.getAttribute("data-x") - w : +r.getAttribute("x");
+        r.setAttribute("width", w); r.setAttribute("x", x); t.setAttribute("x", x + 15);
+      });
+    }
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitPills); else fitPills();
+
+    // the loop, moving: dots run along every wire in its direction (resource → ecology → education
+    // → economy → back out). The node under the pointer, or the chosen one, runs faster. Paused
+    // offscreen; under reduced motion the dots are placed once and stay still.
+    var flows = [];
+    eco.querySelectorAll(".eco__svg").forEach(function (svg) {
+      svg.querySelectorAll(".eco__wire").forEach(function (w) {
+        // each wire's dots sit just above it, so whatever is drawn after the wire (a pill, a band's
+        // words) stays on top and the dots pass underneath
+        var layer = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        layer.setAttribute("class", "eco__dots");
+        w.parentNode.insertBefore(layer, w.nextSibling);
+        var len = 0;
+        try { len = w.getTotalLength(); } catch (e) { len = 0; }   // 0 while its drawing is hidden: measured on first show
+        var owner = w.closest("[data-topic]");
+        var topic = owner ? owner.getAttribute("data-topic") : (w.getAttribute("data-of") || "");
+        var cls = topic === "education" ? "ed" : (topic === "economy" ? "ec" : "");
+        var n = Math.max(1, Math.round((len || 400) / 110)), dots = [];
+        for (var i = 0; i < n; i++) {
+          var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          c.setAttribute("r", "2.2");
+          if (cls) c.setAttribute("class", cls);
+          layer.appendChild(c);
+          dots.push(c);
+        }
+        flows.push({ svg: svg, w: w, len: len, topic: topic, dots: dots, p: Math.random() * (len || 400) });
+      });
+    });
+
+    function place(f, fast) {
+      if (!f.len) { try { f.len = f.w.getTotalLength(); } catch (e) {} if (!f.len) return; }
+      var gap = f.len / f.dots.length;
+      var dim = (hot || active) && !fast ? 0.35 : 1;
+      f.dots.forEach(function (c, i) {
+        var d = (f.p + i * gap) % f.len, t = d / f.len;
+        var pt = f.w.getPointAtLength(d);
+        c.setAttribute("cx", pt.x.toFixed(1));
+        c.setAttribute("cy", pt.y.toFixed(1));
+        c.setAttribute("r", fast ? "2.9" : "2.2");
+        c.style.opacity = (dim * Math.min(1, t * 8, (1 - t) * 8)).toFixed(2);
+      });
+    }
+
+    var running = false, last = 0;
+    function frame(now) {
+      if (!running) return;
+      var dt = Math.min(0.05, (now - last) / 1000 || 0);
+      last = now;
+      flows.forEach(function (f) {
+        if (!f.svg.getClientRects().length) return;      // the drawing not shown at this width
+        var fast = (hot && f.topic === hot) || (active && f.topic === active);
+        f.p = (f.p + dt * (fast ? 110 : 34)) % (f.len || 1);
+        place(f, fast);
+      });
+      requestAnimationFrame(frame);
+    }
+    if (reduce || !("IntersectionObserver" in window)) {
+      flows.forEach(function (f) { place(f, false); });
+    } else {
+      new IntersectionObserver(function (entries) {
+        var vis = entries[0].isIntersecting;
+        if (vis && !running) { running = true; last = performance.now(); requestAnimationFrame(frame); }
+        else if (!vis) running = false;
+      }).observe(eco);
+    }
 
     // Escape also resets, unless the project overlay is open (it owns Escape then)
     window.addEventListener("keydown", function (e) {
