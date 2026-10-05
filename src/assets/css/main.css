@@ -24,10 +24,12 @@
   /* the notes' voice: typed, not handwritten (2026-10-05, he did not like the script face). A
      typewriter mono on rough paper: the order is in the type, the roughness in the note. Swap it here. */
   --hand:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-  --note:#F2E4A2;
-  --note-2:#EED8C4;
-  --note-ink:#2B2615;
-  --note-shadow:rgba(43,38,21,.18);
+  /* sticky notes are black with white text (2026-10-05); --note-2 a shade lighter so two notes side
+     by side still read as two sheets. The (thoughts) board keeps its own white notes. */
+  --note:#1C1B18;
+  --note-2:#34322D;
+  --note-ink:#FAFAF8;
+  --note-shadow:rgba(28,27,24,.3);
   --stripe:repeating-linear-gradient(135deg,#EEEDE7 0px,#EEEDE7 1px,#F4F3EE 1px,#F4F3EE 11px);
   --gutter:clamp(24px,6vw,96px);
   --maxw:1320px;
@@ -270,7 +272,7 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
   font-family:var(--hand);font-weight:400;font-size:14px;line-height:1.38;letter-spacing:-.01em;
   box-shadow:0 1px 2px var(--note-shadow),0 12px 24px -8px var(--note-shadow);}
 .postit.alt,.card__note.alt,.eco__callout.alt{background:var(--note-2);}
-.postit::before,.card__note::before,.eco__callout::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:rgba(43,38,21,.07);}
+.postit::before,.card__note::before,.eco__callout::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:rgba(250,250,248,.08);}
 .postit p,.card__note p,.eco__callout p{margin:0;position:relative;}
 .note__lbl{display:block;margin-top:10px;font-family:var(--nh);font-weight:500;font-size:10px;letter-spacing:.04em;
   opacity:.55;font-variant-numeric:tabular-nums;}
