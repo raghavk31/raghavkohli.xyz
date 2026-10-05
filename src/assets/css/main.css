@@ -153,8 +153,19 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 .eco__dots{pointer-events:none;}
 .eco__dots circle{fill:var(--ink);}
 .eco__dots .ed{fill:var(--ed-ink);} .eco__dots .ec{fill:var(--ec-ink);}
-/* the caption: a node's note, in his words and his hand */
-.eco__cap{min-height:1.6em;margin-top:10px;font-family:var(--hand);font-style:italic;font-size:14px;line-height:1.5;color:var(--ink-soft);}
+/* every node's callout box: its note on post-it paper (the paper rule is under "post-its"), stuck
+   onto the node by main.js placeCallout. Up on hover / focus, and kept up for the chosen node. It
+   lands like the card notes do and never takes the pointer. "[note]" marks one still to be written. */
+.eco{position:relative;}
+.eco__callouts{position:absolute;inset:0;pointer-events:none;}
+.eco__callout{width:210px;padding:20px 14px 12px;z-index:3;opacity:0;
+  transform:translateY(-10px) scale(1.05) rotate(var(--r,2deg));
+  transition:opacity .18s ease,transform .3s cubic-bezier(.2,1.4,.4,1);}
+.eco__callout.on{opacity:1;transform:translateY(0) scale(1) rotate(var(--r,2deg));}
+.eco__callout-lbl{display:block;margin-bottom:6px;font-family:var(--nh);font-weight:500;font-size:10px;letter-spacing:.04em;opacity:.55;}
+.eco__callout.is-draft p{opacity:.45;}
+@media(prefers-reduced-motion:reduce){ .eco__callout{transition:opacity .18s ease;} }
+@media(max-width:720px){ .eco__callout{width:180px;padding:16px 12px 10px;font-size:12.5px;} }
 /* hover preview on the grid: the cards a node holds stay, the rest step back a little */
 .work__grid.peek .card:not(.hint){opacity:.5;transition:opacity .35s ease;}
 /* reset control — shown by main.js only while a filter is active */
@@ -255,12 +266,12 @@ figcaption .status{margin-left:auto;color:var(--accent);font-size:12.5px;}
    One paper for every note on the site: the hover note on a card, and the notes pinned on a story's
    frames. Paper colour, ink, the --hand face, a faint adhesive band across the top, a two-layer
    shadow. --r is the note's own tilt. Light only: the site has no dark theme. */
-.postit,.card__note{position:absolute;z-index:4;background:var(--note);color:var(--note-ink);
+.postit,.card__note,.eco__callout{position:absolute;z-index:4;background:var(--note);color:var(--note-ink);
   font-family:var(--hand);font-weight:400;font-size:14px;line-height:1.38;letter-spacing:-.01em;
   box-shadow:0 1px 2px var(--note-shadow),0 12px 24px -8px var(--note-shadow);}
-.postit.alt,.card__note.alt{background:var(--note-2);}
-.postit::before,.card__note::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:rgba(43,38,21,.07);}
-.postit p,.card__note p{margin:0;position:relative;}
+.postit.alt,.card__note.alt,.eco__callout.alt{background:var(--note-2);}
+.postit::before,.card__note::before,.eco__callout::before{content:"";position:absolute;left:0;right:0;top:0;height:16px;background:rgba(43,38,21,.07);}
+.postit p,.card__note p,.eco__callout p{margin:0;position:relative;}
 .note__lbl{display:block;margin-top:10px;font-family:var(--nh);font-weight:500;font-size:10px;letter-spacing:.04em;
   opacity:.55;font-variant-numeric:tabular-nums;}
 

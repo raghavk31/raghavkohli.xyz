@@ -87,11 +87,20 @@ title: "Raghav Kohli · invisible systems, made visible"
     </div>
 
     {#- The diagram (src/_data/ecologyViz.js) is the filter: each resource and thread is a node with
-        data-topic; main.js re-weights the grid to it. The caption shows a node's note on hover. -#}
+        data-topic; main.js re-weights the grid to it. Every node has a callout box: its note from
+        src/_data/ecology.js on post-it paper, stuck onto the node on hover / focus and kept up while
+        that node is chosen (main.js places it). A node without a note says "[note]" until written. -#}
     <figure class="eco" data-eco>
       {{ ecologyViz.wide | safe }}
       {{ ecologyViz.tall | safe }}
-      <figcaption class="eco__cap"><span class="eco__note" data-eco-note aria-live="polite"></span></figcaption>
+      <div class="eco__callouts" aria-live="polite">
+        {%- for n in ecology.resources.concat(ecology.threads) %}
+        <div class="eco__callout{% if not n.note %} is-draft{% endif %}{% if loop.index % 3 == 0 %} alt{% endif %}" data-for="{{ n.id }}" style="--r:{{ 2.5 if loop.index % 2 else -2 }}deg">
+          <span class="eco__callout-lbl">({{ n.label }})</span>
+          <p>{{ n.note or "[note]" }}</p>
+        </div>
+        {%- endfor %}
+      </div>
     </figure>
   </div>
 

@@ -169,15 +169,38 @@
     var nodes = Array.prototype.slice.call(eco.querySelectorAll("[data-topic]"));
     var resetBtn = document.querySelector("[data-eco-reset]");
     var showing = document.querySelector("[data-eco-showing]");
-    var noteEl = eco.querySelector("[data-eco-note]");
+    var callouts = Array.prototype.slice.call(eco.querySelectorAll("[data-for]"));
     var bar = document.querySelector(".work__filterbar");
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    function noteOf(t) {
-      var n = t && eco.querySelector('[data-topic="' + t + '"]');
-      return n ? (n.getAttribute("data-note") || "") : "";
+    // a node's callout box: stuck onto the node in whichever drawing is showing. A resource's sits
+    // above its pill, overlapping the pill's inner end (so it never runs off the page edge); a
+    // band's sits above the band past the hub's stem, where only wires run, clear of the pills.
+    function placeCallout(c, t) {
+      var node = null;
+      eco.querySelectorAll('[data-topic="' + t + '"]').forEach(function (n) { if (!node && n.getBoundingClientRect().width) node = n; });
+      if (!node) return false;
+      var shape = node.querySelector(".eco__pill, .eco__band"), box = eco.getBoundingClientRect();
+      var r = (shape || node).getBoundingClientRect(), cw = c.offsetWidth, ch = c.offsetHeight, x;
+      if (shape && shape.classList.contains("eco__band")) x = r.left - box.left + r.width * .56;
+      else if (shape && shape.getAttribute("data-anchor") === "end") x = r.left - box.left - cw + 28;
+      else x = r.right - box.left - 28;
+      var y = r.top - box.top - ch + 4;   // touching the pill's top edge, never over its label
+      // the phone's column stacks the pills tight: there the box sits beside its pill, over the wires
+      if (node.closest(".eco__svg--tall") && !shape.classList.contains("eco__band")) { x = r.right - box.left + 10; y = r.top - box.top + r.height / 2 - ch / 2; }
+      x = Math.max(0, Math.min(box.width - cw, x));
+      c.style.left = x + "px";
+      c.style.top = y + "px";
+      return true;
     }
-    function setNote(t) { if (noteEl) noteEl.textContent = noteOf(t || active); }
+    function setNote(t) {
+      var show = t || active;
+      callouts.forEach(function (c) {
+        var on = c.getAttribute("data-for") === show && placeCallout(c, show);
+        c.classList.toggle("on", !!on);
+      });
+    }
+    window.addEventListener("resize", function () { setNote(null); });
 
     function setActive(topic) {
       active = topic || null;
