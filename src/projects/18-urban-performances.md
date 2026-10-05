@@ -3,7 +3,7 @@ title: Urban Performances
 subtitle: Formgiving, one evening that turned Amritvarshini Vav, a stepwell in Khadia, into a cinema.
 question: what does a heritage monument become if you use it for an evening?
 desc: khadia · stepwell theatre · performance
-topics: [community]
+topics: [education]
 size: md
 offset: ""
 qsize: 22px

@@ -3,7 +3,7 @@ title: Ahmedabad Climate Action Plan
 subtitle: A city audited ward by ward, then given a pathway to net zero it could adopt.
 question: what does a city have to see about itself before it can promise net zero?
 desc: capacities · iclei · crcap
-topics: [carbon, data, analytics]
+topics: [energy, buildings, mobility, waste, water, air]
 size: md
 offset: ""
 qsize: 22px

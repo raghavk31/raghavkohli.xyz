@@ -3,7 +3,7 @@ title: Eco-Machine
 subtitle: Thirty hectares of Mumbai's eastern waterfront redesigned as a machine that lets the sea in and cleans what the city sends out.
 question: can a post-industrial waterfront treat the city's waste and its floods with the same landscape?
 desc: mumbai · eastern waterfront · living infrastructure
-topics: [water, community]
+topics: [water, waste]
 size: md
 offset: ""
 qsize: 24px

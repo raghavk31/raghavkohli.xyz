@@ -3,7 +3,7 @@ title: Urban Greening Policy
 subtitle: Ahmedabad's Urban Green Policy 2030, a 90-page policy for AMC, designed so that a ward committee, a gardener and a commissioner can all read it.
 question: how do you make a city policy that people will actually pick up?
 desc: amc · iclei · policy book
-topics: [carbon, community]
+topics: [air, water]
 size: md
 offset: ""
 qsize: 22px

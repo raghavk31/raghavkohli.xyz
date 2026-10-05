@@ -3,7 +3,7 @@ title: State of Cities
 subtitle: Fifteen Indian cities, read side by side on one climate instrument for the first time.
 question: can fifteen cities be read on one instrument, and what does the instrument miss?
 desc: niua · fifteen cities · one template
-topics: [carbon, data]
+topics: [air, water, energy, waste]
 size: wide
 offset: ""
 qsize: 17px

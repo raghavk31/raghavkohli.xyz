@@ -3,7 +3,7 @@ title: Rebel Bodies Rebel Cities
 subtitle: A narrative cartography, a performance, and six urban inserts in Bhadra Fort precinct.
 question: who does a redesigned plaza belong to, once the designers leave?
 desc: bhadra · narrative cartography
-topics: [community]
+topics: [education]
 size: md
 offset: ""
 qsize: 24px

@@ -3,7 +3,7 @@ title: Pune Metro
 subtitle: Line 3, Hinjewadi to Shivajinagar, station design and the land around it, six months inside CCBA Designs.
 question: what does a metro station owe the street it lands on?
 desc: ccba · line 3 stations
-topics: [transit]
+topics: [mobility]
 size: md
 offset: ""
 qsize: 22px

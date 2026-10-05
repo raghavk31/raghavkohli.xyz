@@ -3,7 +3,7 @@ title: Living Heritage
 subtitle: Co-design to revive and strengthen collective spatial associations.
 question: what are the invisible boundaries inside a village, and where do they overlap?
 desc: ambli · participatory systems mapping
-topics: [community]
+topics: [buildings, education]
 size: md
 offset: ""
 qsize: 25px

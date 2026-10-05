@@ -3,7 +3,7 @@ title: Exploring Majuli
 subtitle: A homestead on stilts, measured and drawn by hand, a winter school documenting culture and settlement on the world's largest river island.
 question: what does a house know about its river?
 desc: majuli · assam · measured drawing
-topics: [community, water]
+topics: [water, food]
 size: md
 offset: ""
 qsize: 22px

@@ -92,21 +92,70 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
   .work__index > div{grid-template-columns:auto auto;gap:0 12px;}
   .work__index dt{text-align:left;}
 }
-/* the filter, beside the grid it filters */
-.work__filterbar{display:flex;align-items:center;gap:16px 20px;flex-wrap:wrap;
+/* the bar over the grid: (selected work), and while a branch is chosen, which one + the way back */
+.work__filterbar{display:flex;align-items:center;gap:12px 14px;flex-wrap:wrap;scroll-margin-top:84px;
   margin:clamp(40px,5vw,64px) 0 clamp(28px,3.5vw,40px);padding-top:18px;border-top:1px solid var(--line);}
 .work__filterbar .eyebrow{flex:none;}
-/* the chips are injected by main.js; with no JS there is nothing to filter with */
-.work__filterbar:not(:has(.work__chip)){display:none;}
-.work__tag{font-family:var(--serif);font-weight:300;font-size:clamp(20px,2.1vw,28px);line-height:1.28;letter-spacing:-0.01em;
-  color:var(--ink);max-width:18em;margin:0;}
-.work__tag em{font-style:italic;color:var(--accent);}
-.work__filters{display:flex;flex-wrap:wrap;gap:7px 8px;align-items:center;}
-.work__chip{font-weight:500;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--faint);
-  background:none;border:1px solid transparent;padding:5px 11px;border-radius:999px;cursor:pointer;line-height:1;
-  transition:color .3s ease,border-color .3s ease,background .3s ease;font-variant-numeric:tabular-nums;}
-.work__chip:hover{color:var(--ink);}
-.work__chip.on{color:var(--accent);border-color:var(--line);background:rgba(46,58,87,.05);}
+.work__showing{font-family:var(--hand);font-size:22px;line-height:1;color:var(--ink);}
+.work__showing[hidden]{display:none;}
+
+/* the name, then his statement: who, then why */
+.work__name{font-size:clamp(30px,3.6vw,48px);font-weight:500;letter-spacing:-0.025em;line-height:1;color:var(--ink);}
+.work__why{max-width:34em;display:grid;gap:14px;}
+.work__why p{font-size:clamp(17px,1.5vw,20px);font-weight:400;line-height:1.45;color:var(--ink-soft);letter-spacing:-0.005em;}
+.work__why p + p{color:var(--ink);}
+
+/* ---------- the ecology diagram (src/_data/ecologyViz.js) ----------
+   A hub: ecology in the middle, the resources on wires into it, education and economy as two bands
+   below. main.js runs dots along the wires (.eco__dots). Every resource and band is a filter; the
+   tile is the reset. Two drawings: the hub above 720px, the column below. */
+.eco{margin:clamp(32px,4.5vw,60px) 0 0;
+  --ed:#E6E3F4; --ed-ink:#6F67B0; --ec:#DDEDE3; --ec-ink:#3F7D5A;}
+.eco__svg{display:block;width:100%;height:auto;overflow:visible;}
+.eco__svg--tall{display:none;max-width:440px;}
+@media(max-width:720px){ .eco__svg--wide{display:none;} .eco__svg--tall{display:block;} }
+.eco text{font-family:var(--sans);fill:var(--ink);}
+.eco__wire{fill:none;stroke:var(--line);stroke-width:1;transition:stroke .35s ease,stroke-width .35s ease;}
+.eco__wire[data-flow="band"]{stroke:none;}   /* education's dots run inside its band; the band is the line */
+.eco__end{fill:var(--ink);}
+.eco__pill{fill:var(--paper);stroke:var(--line);stroke-width:1;transition:stroke .3s ease,fill .3s ease;}
+.eco__label{font-size:13px;font-weight:500;letter-spacing:.01em;pointer-events:none;}
+.eco .eco__count{font-size:10.5px;font-weight:500;letter-spacing:.06em;fill:var(--faint-2);font-variant-numeric:tabular-nums;}
+.eco__band{transition:fill .35s ease;}
+.eco__band--ed{fill:var(--ed);} .eco__band--ec{fill:var(--ec);}
+.eco__blabel{font-size:13px;font-weight:500;}
+.eco__bnote{font-size:12px;fill:var(--ink-soft);}
+.eco__band--ed ~ .eco__blabel{fill:var(--ed-ink);} .eco__band--ec ~ .eco__blabel{fill:var(--ec-ink);}
+/* the band's words sit over its dots, with a halo of the band's own colour so the dots pass behind */
+.eco__blabel, .eco__bnote{paint-order:stroke;stroke-width:10px;stroke-linejoin:round;transition:stroke .35s ease;}
+.eco__band--ed ~ text{stroke:var(--ed);} .eco__band--ec ~ text{stroke:var(--ec);}
+.eco__node--band:hover .eco__band--ed ~ text, .eco__node--band.on .eco__band--ed ~ text{stroke:#D7D2EE;}
+.eco__node--band:hover .eco__band--ec ~ text, .eco__node--band.on .eco__band--ec ~ text{stroke:#C9E3D3;}
+.eco__wire[data-flow="loop"]{stroke:#B7D2C2;}
+.eco__tile{cursor:pointer;outline:none;}
+.eco__tile-out{fill:#EDECE6;}
+.eco__tile-in{fill:#fff;stroke:var(--line);stroke-width:.75;transition:stroke .3s ease;}
+.eco__root{font-size:22px;font-weight:500;letter-spacing:-0.02em;}
+.eco__tile:hover .eco__tile-in, .eco__tile:focus-visible .eco__tile-in{stroke:var(--ink);}
+.eco__hit{fill:transparent;}
+.eco__node{cursor:pointer;outline:none;transition:opacity .35s ease;}
+/* hover or a chosen node: its wire and pill come forward, the rest step back */
+.eco:has(.eco__node:hover) .eco__node:not(:hover):not(.on),
+.eco.has-active .eco__node:not(.on):not(:hover){opacity:.4;}
+.eco__node:hover .eco__wire, .eco__node.on .eco__wire, .eco__node:focus-visible .eco__wire{stroke:var(--ink);stroke-width:1.4;}
+.eco__node:hover .eco__pill, .eco__node.on .eco__pill, .eco__node:focus-visible .eco__pill{stroke:var(--ink);}
+.eco__node.on .eco__pill{fill:var(--ink);} .eco__node.on .eco__label{fill:var(--paper);} .eco__node.on .eco__count{fill:var(--line);}
+.eco__node--band:hover .eco__band--ed, .eco__node--band.on .eco__band--ed{fill:#D7D2EE;}
+.eco__node--band:hover .eco__band--ec, .eco__node--band.on .eco__band--ec{fill:#C9E3D3;}
+.eco__node:focus-visible .eco__pill, .eco__node:focus-visible .eco__band{stroke:var(--accent);stroke-width:1.5;}
+/* the moving dots */
+.eco__dots{pointer-events:none;}
+.eco__dots circle{fill:var(--ink);}
+.eco__dots .ed{fill:var(--ed-ink);} .eco__dots .ec{fill:var(--ec-ink);}
+/* the caption: a node's note, in his words and his hand */
+.eco__cap{min-height:1.6em;margin-top:10px;font-family:var(--hand);font-size:23px;line-height:1.2;color:var(--ink-soft);}
+/* hover preview on the grid: the cards a node holds stay, the rest step back a little */
+.work__grid.peek .card:not(.hint){opacity:.5;transition:opacity .35s ease;}
 /* reset control — shown by main.js only while a filter is active */
 .work__reset{font-weight:500;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--accent);
   background:none;border:1px solid var(--line);padding:5px 11px;border-radius:999px;cursor:pointer;line-height:1;
@@ -742,7 +791,7 @@ body.lb-open{overflow:hidden;}
   /* larger touch targets on mobile (>=~44px hit area) */
   .head{padding-block:8px;}
   .head nav a{padding-block:12px;}
-  .work__chip,.work__reset{padding-block:16px;}
+  .work__reset{padding-block:16px;}
   .about__expand{padding-block:14px;margin-top:22px;}
   .contact__links a{padding-block:11px;}
 }

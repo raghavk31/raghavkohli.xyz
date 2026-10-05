@@ -67,30 +67,38 @@ title: "Raghav Kohli · invisible systems, made visible"
 {#- Groups by method (plan 2026-09-19, D4): src/_data/groups.js, shared with project.njk. -#}
 
 
-<h1 class="vh">Raghav Kohli: making invisible urban systems visible, legible, and participatory</h1>
-
 <section class="work" id="work">
   <div class="work__head reveal" data-reveal>
-    <h2 class="eyebrow">(selected work)</h2>
-    {#- The masthead: the argument on the left, and on the right the page's own contents — what is
-        below, in the ledger register the rest of the site uses. The right column used to hold only
-        the filter chips, which could not carry the weight and left the corner looking unfinished
-        (design review 2026-09-25, D2). -#}
+    {#- The masthead: his name, then what the work is for in his own words (src/_data/ecology.js),
+        with the page's contents as a ledger on the right (design review 2026-09-25, D2). -#}
+    <h1 class="work__name">Raghav Kohli</h1>
     <div class="work__lead">
-      <p class="work__tag">making invisible urban systems <em>visible</em>, <em>legible</em>, and <em>participatory</em>.</p>
+      <div class="work__why">
+        {%- for para in ecology.statement %}
+        <p>{{ para }}</p>
+        {%- endfor %}
+      </div>
       <dl class="work__index">
         {%- for g in groups %}
         <div><dt>{{ g[0] }}</dt><dd>{{ "0" + (g[1].length | string) if g[1].length < 10 else g[1].length }}</dd></div>
         {%- endfor %}
       </dl>
     </div>
+
+    {#- The diagram (src/_data/ecologyViz.js) is the filter: each resource and thread is a node with
+        data-topic; main.js re-weights the grid to it. The caption shows a node's note on hover. -#}
+    <figure class="eco" data-eco>
+      {{ ecologyViz.wide | safe }}
+      {{ ecologyViz.tall | safe }}
+      <figcaption class="eco__cap"><span class="eco__note" data-eco-note aria-live="polite"></span></figcaption>
+    </figure>
   </div>
 
-  {#- The filter sits with the thing it filters, not with the thesis. -#}
-  <div class="work__filterbar reveal" data-reveal>
-    <span class="eyebrow">(filter)</span>
-    <!-- keyword chips injected by main.js from each card's data-topics -->
-    <div class="work__filters" data-filters aria-label="filter by keyword"></div>
+  {#- The bar over the grid: what it is, and while a branch is chosen, which one, and the way back. -#}
+  <div class="work__filterbar">
+    <h2 class="eyebrow">(selected work)</h2>
+    <span class="work__showing" data-eco-showing hidden></span>
+    <button type="button" class="work__reset" data-eco-reset hidden aria-label="show all work">× all work</button>
   </div>
 
   <!-- 12-column grid. Card width = weight (span 6 / 4 / 3); rows pack themselves. A chip filter
