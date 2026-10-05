@@ -124,6 +124,69 @@ layout: base.njk
 </ol>
 {% if v.unit %}<div class="ledger__u"><span class="long">{{ v.unit }}</span><span class="short">{{ v.unit_short or v.unit }}</span></div>{% endif %}
 {% endmacro %}
+{#- A story frame: the beat's image (or its interaction) at its own ratio, fig label bottom-left,
+    up to two post-its pinned at x/y percent, caption under. Inline above its beat's text on the phone
+    and without JS; on a desktop story.js lifts every frame into the sticky stage. -#}
+{% macro frame(b, i, interaction) %}
+{%- set ar = (b.w / b.h) if (b.w and b.h) else (0.8 if b.interaction else 1.333) -%}
+<figure class="frame{% if b.blend %} frame--blend{% endif %}" data-i="{{ i }}">
+  <div class="frame__box{% if not b.src and not b.interaction %} is-missing{% endif %}" style="--ar:{{ ar | round(3) }}">
+    {%- if b.interaction and interaction %}
+    <div class="frame__int" data-mount="{{ interaction }}">
+      <script type="application/json">{{ (interactions[interaction] or null) | dump | safe }}</script>
+      <span class="frame__nojs">(interactive · needs javascript)</span>
+    </div>
+    {%- elif b.src %}
+    <img src="{{ b.src }}" alt="{{ b.alt or b.cap or '' }}"{% if b.w and b.h %} width="{{ b.w }}" height="{{ b.h }}"{% endif %} loading="lazy" decoding="async" onerror="this.parentNode.classList.add('is-missing');this.remove()" />
+    {%- endif %}
+    {% if b.fig %}<span class="frame__fig">{{ b.fig }}</span>{% endif %}
+    {%- for n in (b.notes or []).slice(0, 2) %}
+    <div class="postit{% if n.alt %} alt{% endif %}" style="--x:{{ n.x or 50 }};--y:{{ n.y or 10 }};--r:{{ n.r if n.r is number else 3 }}deg"><p>{{ n.t }}</p><span class="note__lbl">(drag me)</span></div>
+    {%- endfor %}
+  </div>
+  {% if b.cap %}<figcaption class="plate__cap"><span>{{ b.cap }}</span></figcaption>{% endif %}
+</figure>
+{% endmacro %}
+
+{% if story %}
+{#- ===== story layout: callouts on the left, a sticky stage on the right =====
+    `story:` is a list of beats (fig, src/w/h or interaction: true, cap, text, aside, notes). The page
+    stands on its own at /work/<slug>/ and is what the homepage overlay lifts in (main.js showPage).
+    (next) follows the homepage grid's order. -#}
+{%- set nextp = collections.projects | find("title", groups | nextInGrid(title)) -%}
+<article class="detail story" data-story data-meta="{{ meta }}">
+  <div class="story__top">
+    <span class="story__meta">{{ meta }}</span>
+    <a class="story__close" href="/#work">(close)</a>
+  </div>
+  <header class="story__head">
+    <span class="detail__qlabel">{{ question }}</span>
+    <h1 class="story__title" id="story-title">{{ story_title or title }}</h1>
+  </header>
+  <div class="story__body">
+    <div class="story__beats">
+      {%- for b in story %}
+      <section class="beat" data-i="{{ loop.index0 }}">
+        {{ frame(b, loop.index0, interaction) }}
+        <div class="beat__txt">
+          {% if b.fig %}<span class="beat__fig">{{ b.fig }}</span>{% endif %}
+          {% if b.text %}<p class="beat__text">{{ b.text }}</p>{% endif %}
+          {% if b.aside %}<p class="beat__aside">{{ b.aside }}</p>{% endif %}
+        </div>
+      </section>
+      {%- endfor %}
+    </div>
+    <div class="story__stage" aria-live="polite"></div>
+  </div>
+  {% if nextp %}
+  <a class="detail__next story__next" href="{{ nextp.url }}">
+    <span class="lbl">(next)</span>
+    <span class="nm">{{ nextp.data.title }}{% if nextp.data.desc %} · {{ nextp.data.desc }}{% endif %}</span>
+    <span style="color:var(--accent)">&rarr;</span>
+  </a>
+  {% endif %}
+</article>
+{% else %}
 <article class="detail">
   <a class="detail__back" href="/#work">(&larr; selected work)</a>
 
@@ -282,3 +345,4 @@ layout: base.njk
   </a>
   {% endif %}
 </article>
+{% endif %}

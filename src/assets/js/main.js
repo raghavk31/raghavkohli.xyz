@@ -18,17 +18,21 @@
     }
   }
 
-  /* ---------- card: flip the floating meta panel to whichever side has room ---------- */
+  /* ---------- card: put the hover post-it on whichever side has room ---------- */
   document.querySelectorAll(".card__click").forEach(function (card) {
     card.addEventListener("mouseenter", function () {
-      var meta = card.querySelector(".card__meta");
+      var meta = card.querySelector(".card__note");
       if (!meta) return;
       var r = card.getBoundingClientRect();
-      var need = 200, vw = window.innerWidth;
+      var need = 190 - 28 + 16, vw = window.innerWidth;   // note width, less the overlap, plus a margin
       var rs = vw - r.right, ls = r.left;
       var side = rs >= need ? "right" : (ls >= need ? "left" : (rs >= ls ? "right" : "left"));
       meta.classList.remove("left", "right");
       meta.classList.add(side);
+      // keep the note's foot above the frame's foot, so its overlap never reaches the strip below a
+      // short landscape card; on a short card it rides up over the top edge instead
+      var frame = card.querySelector(".card__frame");
+      if (frame && window.matchMedia("(min-width: 901px)").matches) meta.style.top = Math.max(-24, Math.min(22, frame.offsetHeight - meta.offsetHeight - 12)) + "px";
     });
   });
 
@@ -360,8 +364,44 @@
       pv.classList.remove("open");
       document.body.classList.remove("pv-open");
       pv.setAttribute("aria-hidden", "true");
-      if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
+      document.title = homeTitle;
+      if (storyCtl) { storyCtl.destroy(); storyCtl = null; }
+      if (lastFocus && lastFocus.focus) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
     }
+
+    /* URLs. Opening pushes the project's own /work/<slug>/ (the links Raghav sends out); the state
+       carries how many overlay entries deep we are, so (close), Esc and the margin all walk history
+       back to the page the first one was opened from, and Back / Forward close and reopen it. */
+    var homeTitle = document.title, storyCtl = null;
+    function go(url, originEl, push) {
+      var d = DATA[url] || {};
+      var card = originEl || document.querySelector('.card__click[data-project="' + url + '"]');
+      if (!pv.classList.contains("open")) lastFocus = card || document.activeElement;
+      if (push) {
+        var depth = history.state && history.state.pv ? history.state.d : 0;
+        history.pushState({ pv: url, d: depth + 1 }, "", url);
+      }
+      fetchPage(url).then(function (art) {
+        showPage(art, d.name, card);
+      }).catch(function () {
+        // fallback: JSON reconstruction, or plain navigation if even that is missing
+        pageBody.hidden = true;
+        if (jsonBody) jsonBody.hidden = false;
+        pv.classList.remove("pv--story");
+        if (!openProject(url, card)) window.location.href = url;
+      });
+    }
+    function requestClose() {
+      if (!pv.classList.contains("open")) return;
+      var st = history.state;
+      if (st && st.pv && st.d > 0) history.go(-st.d);
+      else closeProject();
+    }
+    window.addEventListener("popstate", function (e) {
+      var st = e.state;
+      if (st && st.pv && DATA[st.pv]) go(st.pv, null, false);
+      else closeProject();
+    });
 
     // The overlay shows the REAL project page: fetch /work/<slug>/, lift its <article class="detail">
     // into the panel, and reveal it with the same zoom. One template, one source of truth — chapter
@@ -391,13 +431,34 @@
     }
 
     function showPage(art, name, originEl) {
+      if (storyCtl) { storyCtl.destroy(); storyCtl = null; }
+      var wasOpen = pv.classList.contains("open");
       pageBody.innerHTML = "";
       var clone = art.cloneNode(true);
       // in-page links back to the grid close the overlay instead of navigating
       clone.querySelectorAll('a[href^="/#"], a[href^="#"]').forEach(function (a) {
-        a.addEventListener("click", function (ev) { ev.preventDefault(); closeProject(); });
+        a.addEventListener("click", function (ev) { ev.preventDefault(); requestClose(); });
       });
+      // a link to another project (a story's (next)) opens that project's overlay in place
+      clone.querySelectorAll('a[href^="/work/"]').forEach(function (a) {
+        var u = a.getAttribute("href");
+        if (!DATA[u]) return;
+        a.addEventListener("click", function (ev) {
+          if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;
+          ev.preventDefault();
+          go(u, null, true);
+        });
+      });
+      // a story gets its own bar (meta line left, (close) esc right) and its own layout
+      var isStory = clone.hasAttribute("data-story");
+      pv.classList.toggle("pv--story", isStory);
+      setField("meta", isStory ? clone.getAttribute("data-meta") : "");
+      // the dialog is named by the page's own heading
+      var h = clone.querySelector("h1");
+      if (h) { h.id = "pv-title"; panel.setAttribute("aria-labelledby", "pv-title"); panel.removeAttribute("aria-label"); }
       pageBody.appendChild(clone);
+      if (isStory && window.Story) storyCtl = window.Story.init(clone, { root: panel });
+      document.title = (name ? name + " · " : "") + "Raghav Kohli";
       initCarousel(clone);
       initStack(clone);
       initSwap(clone);
@@ -423,7 +484,12 @@
       if (panel) panel.scrollTop = 0;
       document.body.classList.add("pv-open");
       pv.setAttribute("aria-hidden", "false");
-      requestAnimationFrame(function () { requestAnimationFrame(function () { pv.classList.add("open"); }); });
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        pv.classList.add("open");
+        // focus moves into the dialog once it is visible (a hidden element cannot take focus)
+        var closeBtn = pv.querySelector(".pv__close");
+        if (!wasOpen && closeBtn) { try { closeBtn.focus({ preventScroll: true }); } catch (e) {} }
+      }); });
     }
 
     document.querySelectorAll(".card__click[data-project]").forEach(function (card) {
@@ -435,24 +501,32 @@
         // let modifier / middle clicks open the real page in a new tab
         if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;
         ev.preventDefault();
-        lastFocus = card;
-        var d = DATA[url] || {};
-        fetchPage(url).then(function (art) {
-          showPage(art, d.name, card);
-        }).catch(function () {
-          // fallback: JSON reconstruction, or plain navigation if even that is missing
-          pageBody.hidden = true;
-          if (jsonBody) jsonBody.hidden = false;
-          if (!openProject(url, card)) window.location.href = url;
-        });
+        go(url, card, true);
       });
     });
 
     pv.querySelectorAll("[data-pv-close]").forEach(function (el) {
-      el.addEventListener("click", function (ev) { ev.preventDefault(); closeProject(); });
+      el.addEventListener("click", function (ev) { ev.preventDefault(); requestClose(); });
+    });
+    // a click on the overlay's empty margin (outside the page's content column) closes it
+    panel.addEventListener("click", function (e) {
+      var t = e.target;
+      if (t === panel || t === pageBody || t === jsonBody || (t.parentNode === pageBody && t.matches("article.detail"))) requestClose();
     });
     window.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && !document.body.classList.contains("lb-open")) closeProject();
+      if (e.key === "Escape" && !document.body.classList.contains("lb-open")) requestClose();
+    });
+    // keep Tab inside the dialog while it is open
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Tab" || !pv.classList.contains("open") || document.body.classList.contains("lb-open")) return;
+      var f = Array.prototype.filter.call(
+        panel.querySelectorAll('a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])'),
+        function (el) { return el.getClientRects().length && getComputedStyle(el).visibility !== "hidden"; });
+      if (!f.length) return;
+      var first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (!panel.contains(a)) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+      else if (e.shiftKey && a === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
     });
   }
 
