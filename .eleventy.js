@@ -76,24 +76,58 @@ module.exports = function (eleventyConfig) {
     return out;
   });
 
-  // Everything a chapter shows, in page order, for the split story: one entry per picture (plates,
-  // a pair, a strip's items) and one `block` for a figure with its own layout (swap, stack, compare,
-  // carousel, a tile grid), which project.njk renders with its own macro. Each entry becomes a beat on the stage.
-  eleventyConfig.addFilter("chapterMedia", (c) => {
-    const out = [];
-    const img = (x, fig, cap) => {
-      if (x && x.src) out.push({ src: x.src, w: x.w, h: x.h, fig: x.fig || fig, cap: x.cap || cap, blend: x.blend });
-    };
-    (c.plates || []).forEach((p) => img(p));
-    (c.pair || []).forEach((p) => img(p));
-    if (c.strip && c.strip.col) (c.strip.items || []).forEach((x) => img(x, c.strip.fig, c.strip.cap));
-    if (c.stack && c.stack.beside) img(c.stack.beside);   // on the stage the plate beside a stack gets its own beat
-    const block = c.carousel ? "carousel" : c.compare ? "compare" : c.swap ? "swap" : c.stack ? "stack" : "";
-    if (block) out.push({ block });
-    if (c.strip && !c.strip.col) (c.strip.items || []).forEach((x) => img(x, c.strip.fig, c.strip.cap));
-    if (c.tiles) out.push({ block: "tiles" });   // an atlas stays one grid; a tile opens the lightbox
-    return out;
+  // The split story built from a project's own chapters: one beat per figure, in page order (plates,
+  // a pair, a strip's items, a stack's plate beside it), and one `block` beat for a figure with its own
+  // layout (swap, stack, compare, carousel, a tile grid), which project.njk renders with its macro.
+  // The words stay short, so the work carries the page: a chapter's first beat gets its title and its
+  // opening sentence or two; every later figure speaks with the first sentence of its caption, and the
+  // rest of the caption sits under the picture. Cut from his words, never written.
+  const strip = (x) => String(x || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
+  const sentences = (x) => strip(x).split(/(?<=[.!?])\s+(?=[A-Z0-9“"‘(])/).filter(Boolean);
+  const firstSentences = (x, max) => {
+    let out = "";
+    for (const t of sentences(x)) {
+      if (out && (out + " " + t).length > max) break;
+      out = out ? out + " " + t : t;
+      if (out.length > max * 0.6) break;
+    }
+    return out.length > max * 1.5 ? out.slice(0, max).replace(/\s+\S*$/, "") + "…" : out;
+  };
+  eleventyConfig.addFilter("splitBeats", (chapters, ch) => {
+    const beats = [];
+    (chapters || []).forEach((c, ci) => {
+      const media = [];
+      const img = (x, fig, cap) => {
+        if (x && x.src) media.push({ src: x.src, w: x.w, h: x.h, fig: x.fig || fig, cap: x.cap || cap, blend: x.blend });
+      };
+      (c.plates || []).forEach((p) => img(p));
+      (c.pair || []).forEach((p) => img(p));
+      if (c.strip && c.strip.col) (c.strip.items || []).forEach((x) => img(x, c.strip.fig, c.strip.cap));
+      if (c.stack && c.stack.beside) img(c.stack.beside);
+      const block = c.carousel ? "carousel" : c.compare ? "compare" : c.swap ? "swap" : c.stack ? "stack" : "";
+      if (block) media.push({ block });
+      if (c.strip && !c.strip.col) (c.strip.items || []).forEach((x) => img(x, c.strip.fig, c.strip.cap));
+      if (c.tiles) media.push({ block: "tiles" });
+      if (!media.length) media.push({});
+      let body = (ch && ch.byNum && ch.byNum[c.n]) || "";
+      if (ci === 0 && ch && ch.intro) body = ch.intro + body;
+      media.forEach((m, i) => {
+        const b = { ...m, ci, lbl: `(${c.n}) ${c.name}`, first: i === 0 };
+        if (i === 0) {
+          b.text = c.title || firstSentences(body, 110);
+          b.aside = c.title ? firstSentences(body, 220) : "";
+        } else {
+          const cs = sentences(m.cap);
+          b.text = cs[0] || "";
+          b.cap = cs.slice(1).join(" ");
+        }
+        beats.push(b);
+      });
+    });
+    return beats;
   });
+  // the opening beat: the subtitle, and the lead cut to a sentence or two
+  eleventyConfig.addFilter("brief", (x, max) => firstSentences(x, max || 220));
 
   // whether any chapter has something to put on the stage (Sama, still text-only, does not)
   eleventyConfig.addFilter("anyMedia", (chapters) =>

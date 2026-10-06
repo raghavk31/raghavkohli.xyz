@@ -141,7 +141,7 @@ layout: base.njk
     {%- endif %}
     {% if b.fig %}<span class="frame__fig">{{ b.fig }}</span>{% endif %}
     {%- for n in (b.notes or []).slice(0, 2) %}
-    <div class="postit{% if n.alt %} alt{% endif %}" style="--x:{{ n.x or 50 }};--y:{{ n.y or 10 }};--r:{{ n.r if n.r is number else 3 }}deg"><p>{{ n.t }}</p><span class="note__lbl">(drag me)</span></div>
+    <div class="postit{% if n.alt %} alt{% endif %} postit--{{ 'b' if (n.y or 10) >= 50 else 't' }}{{ 'r' if (n.x or 50) >= 50 else 'l' }}" style="--x:{{ n.x or 50 }};--y:{{ n.y or 10 }};--r:{{ n.r if n.r is number else 3 }}deg"><p>{{ n.t }}</p><span class="note__lbl">(drag me)</span></div>
     {%- endfor %}
   </div>
   {% if b.cap %}<figcaption class="plate__cap"><span>{{ b.cap }}</span></figcaption>{% endif %}
@@ -152,8 +152,8 @@ layout: base.njk
 {% if split %}
 {#- ===== the split: the story text runs down the left quarter, the media holds the right three
     quarters of the screen. One version of every project: an authored `story:` when there is one,
-    otherwise the project's own chapters, a beat per figure (chapterMedia in .eleventy.js), the
-    chapter's whole text on its first beat. The page stands on its own at /work/<slug>/ and is what
+    otherwise the project's own chapters, a beat per figure (splitBeats in .eleventy.js), a few
+    words beside each, every figure fitted to one screen. The page stands on its own at /work/<slug>/ and is what
     the homepage overlay lifts in (main.js showPage). (next) follows the homepage grid's order. -#}
 {%- set nextp = collections.projects | find("title", groups | nextInGrid(title)) -%}
 {%- set m = meta or ("(" + (title | lower) + ") · " + period + " · " + context) -%}
@@ -175,7 +175,7 @@ layout: base.njk
         </dl>
         {% if not story and not open %}
         {% if subtitle %}<p class="story__sub">{{ subtitle }}</p>{% endif %}
-        {% if lead %}<p class="beat__aside">{{ lead }}</p>{% endif %}
+        {% if lead %}<p class="beat__aside">{{ lead | brief }}</p>{% endif %}
         {% endif %}
       </header>
       {% if story %}
@@ -190,48 +190,35 @@ layout: base.njk
       </section>
       {%- endfor %}
       {% else %}
-      {% set ch = content | chapters %}
       {% if open %}
       <section class="beat">
         {{ frame(open, 0, null) }}
         <div class="beat__txt">
           <span class="beat__fig">(opening)</span>
           {% if subtitle %}<p class="beat__text">{{ subtitle }}</p>{% endif %}
-          {% if lead %}<p class="beat__aside">{{ lead }}</p>{% endif %}
+          {% if lead %}<p class="beat__aside">{{ lead | brief }}</p>{% endif %}
         </div>
       </section>
       {% endif %}
-      {% for c in chapters %}
-      {% set body = ch.byNum[c.n] or '' %}
-      {% if loop.first and ch.intro %}{% set body = ch.intro + body %}{% endif %}
-      {% set media = c | chapterMedia %}
-      {% for md in (media if media.length else [{ empty: true }]) %}
-      <section class="beat{% if loop.first %} beat--chap{% endif %}"{% if loop.first %} id="ch-{{ c.n }}"{% endif %}{% if md.block %} data-block="{{ md.block }}"{% endif %}>
-        {% if md.block %}
-        <figure class="frame frame--block">
-          {% if md.block == "carousel" %}{% set rows = c.carousel.rows or (c.carousel.data | dataset) %}{{ carousel(c.carousel, rows) }}{{ ledger(c.carousel, rows) }}
-          {% elif md.block == "compare" %}{{ compare(c.compare) }}
-          {% elif md.block == "swap" %}{{ swap(c.swap) }}
-          {% elif md.block == "stack" %}{{ stack(c.stack) }}
-          {% elif md.block == "tiles" %}{{ tiles(c.tiles) }}{% endif %}
-        </figure>
-        {% elif md.src %}{{ frame(md, 0, null) }}{% endif %}
+      {%- for b in chapters | splitBeats(content | chapters) %}
+      {%- set c = chapters[b.ci] %}
+      <section class="beat"{% if b.first %} id="ch-{{ c.n }}"{% endif %}{% if b.block %} data-block="{{ b.block }}"{% endif %}>
+        {% if b.block %}
+        <figure class="frame frame--block"><div class="frame__fit">
+          {% if b.block == "carousel" %}{% set rows = c.carousel.rows or (c.carousel.data | dataset) %}{{ carousel(c.carousel, rows) }}{{ ledger(c.carousel, rows) }}
+          {% elif b.block == "compare" %}{{ compare(c.compare) }}
+          {% elif b.block == "swap" %}{{ swap(c.swap) }}
+          {% elif b.block == "stack" %}{{ stack(c.stack) }}
+          {% elif b.block == "tiles" %}{{ tiles(c.tiles) }}{% endif %}
+        </div></figure>
+        {% elif b.src %}{{ frame(b, 0, null) }}{% endif %}
         <div class="beat__txt">
-          <span class="beat__fig">({{ c.n }}) {{ c.name }}</span>
-          {% if loop.first %}
-          {% if c.title %}<p class="beat__text">{{ c.title }}</p>{% endif %}
-          {% if body %}<div class="beat__body">{{ body | safe }}</div>{% endif %}
-          {% if c.stats %}
-          <div class="stats">
-            {% for st in c.stats.items %}<div><div class="n">{{ st.n }}</div><div class="l">({{ st.l }})</div></div>{% endfor %}
-            {% if c.stats.src %}<div class="src">{{ c.stats.src }}</div>{% endif %}
-          </div>
-          {% endif %}
-          {% endif %}
+          <span class="beat__fig">{{ b.lbl }}</span>
+          {% if b.text %}<p class="beat__text">{{ b.text }}</p>{% endif %}
+          {% if b.aside %}<p class="beat__aside">{{ b.aside }}</p>{% endif %}
         </div>
       </section>
-      {% endfor %}
-      {% endfor %}
+      {%- endfor %}
       {% endif %}
       {% if outcome %}
       <section class="story__outcome" aria-label="outcome">
