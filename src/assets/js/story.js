@@ -94,6 +94,17 @@
     });
   }
 
+  /* ---------- a figure with its own layout, fitted to the stage ----------
+     A swap, a stack, a comparison or a tile grid lays itself out at the stage's width; if that comes
+     out taller than the screen it is scaled down, from the top centre, until all of it fits. */
+  function fit(frame, stage) {
+    var inner = frame && frame.querySelector(".frame__fit");
+    if (!inner || !stage.offsetHeight) return;
+    inner.style.transform = "";
+    var k = Math.min(1, stage.clientHeight / Math.max(1, inner.scrollHeight));
+    if (k < 1) inner.style.transform = "scale(" + k.toFixed(4) + ")";
+  }
+
   /* ---------- the stage ---------- */
   function init(article, opts) {
     opts = opts || {};
@@ -101,7 +112,7 @@
     var frames = beats.map(function (b) { return b.querySelector(".frame"); });
     var stage = article.querySelector(".story__stage");
     var mq = window.matchMedia(WIDE);
-    var active = -1, io = null;
+    var active = -1, shown = -1, io = null;
 
     mountAll(article);
     dragNotes(article);
@@ -121,8 +132,12 @@
       if (i < 0 || i === active) return;
       active = i;
       beats.forEach(function (b, k) { b.classList.toggle("on", k === i); });
-      frames.forEach(function (f, k) { if (f) f.classList.toggle("on", k === i); });
-      if (frames[i]) stick(frames[i]);
+      // a beat with no figure of its own (a text-only chapter) keeps the last one on stage
+      var show = i;
+      while (show > 0 && !frames[show]) show--;
+      shown = show;
+      frames.forEach(function (f, k) { if (f) f.classList.toggle("on", k === show); });
+      if (frames[show]) { stick(frames[show]); if (stage) fit(frames[show], stage); }
     }
 
     place();
@@ -135,12 +150,19 @@
       }, { root: opts.root || null, rootMargin: "-28% 0px -62% 0px" });
       beats.forEach(function (b) { io.observe(b); });
     }
+    // a late image (lazy, inside a hidden frame) can change a block's height: fit it again
+    frames.forEach(function (f) {
+      if (f && f.querySelector(".frame__fit")) f.addEventListener("load", function () { if (f.classList.contains("on")) fit(f, stage); }, true);
+    });
+    var onResize = function () { if (frames[shown]) fit(frames[shown], stage); };
+    window.addEventListener("resize", onResize);
     var onChange = function () { place(); };
     if (mq.addEventListener) mq.addEventListener("change", onChange); else mq.addListener(onChange);
 
     return {
       destroy: function () {
         if (io) io.disconnect();
+        window.removeEventListener("resize", onResize);
         if (mq.removeEventListener) mq.removeEventListener("change", onChange); else mq.removeListener(onChange);
       }
     };

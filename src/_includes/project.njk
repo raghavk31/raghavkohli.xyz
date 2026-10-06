@@ -129,8 +129,8 @@ layout: base.njk
     and without JS; on a desktop story.js lifts every frame into the sticky stage. -#}
 {% macro frame(b, i, interaction) %}
 {%- set ar = (b.w / b.h) if (b.w and b.h) else (0.8 if b.interaction else 1.333) -%}
-<figure class="frame{% if b.blend %} frame--blend{% endif %}" data-i="{{ i }}">
-  <div class="frame__box{% if not b.src and not b.interaction %} is-missing{% endif %}" style="--ar:{{ ar | round(3) }}">
+<figure class="frame{% if b.blend %} frame--blend{% endif %}" data-i="{{ i }}" style="--ar:{{ ar | round(3) }}">
+  <div class="frame__box{% if not b.src and not b.interaction %} is-missing{% endif %}">
     {%- if b.interaction and interaction %}
     <div class="frame__int" data-mount="{{ interaction }}">
       <script type="application/json">{{ (interactions[interaction] or null) | dump | safe }}</script>
@@ -141,25 +141,25 @@ layout: base.njk
     {%- endif %}
     {% if b.fig %}<span class="frame__fig">{{ b.fig }}</span>{% endif %}
     {%- for n in (b.notes or []).slice(0, 2) %}
-    <div class="postit{% if n.alt %} alt{% endif %}" style="--x:{{ n.x or 50 }};--y:{{ n.y or 10 }};--r:{{ n.r if n.r is number else 3 }}deg"><p>{{ n.t }}</p><span class="note__lbl">(drag me)</span></div>
+    <div class="postit{% if n.alt %} alt{% endif %} postit--{{ 'b' if (n.y or 10) >= 50 else 't' }}{{ 'r' if (n.x or 50) >= 50 else 'l' }}" style="--x:{{ n.x or 50 }};--y:{{ n.y or 10 }};--r:{{ n.r if n.r is number else 3 }}deg"><p>{{ n.t }}</p><span class="note__lbl">(drag me)</span></div>
     {%- endfor %}
   </div>
   {% if b.cap %}<figcaption class="plate__cap"><span>{{ b.cap }}</span></figcaption>{% endif %}
 </figure>
 {% endmacro %}
 
-{% if story %}
-{#- ===== story layout: callouts on the left, a sticky stage on the right =====
-    `story:` is a list of beats (fig, src/w/h or interaction: true, cap, text, aside, notes). The page
-    stands on its own at /work/<slug>/ and is what the homepage overlay lifts in (main.js showPage).
-    (next) follows the homepage grid's order. -#}
+{%- set split = story or (chapters and (open or (chapters | anyMedia))) -%}
+{% if split %}
+{#- ===== the split: the story text runs down the left quarter, the media holds the right three
+    quarters of the screen. One version of every project: an authored `story:` when there is one,
+    otherwise the project's own chapters, a beat per figure (splitBeats in .eleventy.js), a few
+    words beside each, every figure fitted to one screen. The page stands on its own at /work/<slug>/ and is what
+    the homepage overlay lifts in (main.js showPage). (next) follows the homepage grid's order. -#}
 {%- set nextp = collections.projects | find("title", groups | nextInGrid(title)) -%}
-{#- The split: the story text runs down the left quarter, the media holds the right three quarters
-    of the screen. The title and the project's facts open the left column, level with the first
-    picture, so there is one version of the project and it starts with its media. -#}
-<article class="detail story story--split" data-story data-meta="{{ meta }}">
+{%- set m = meta or ("(" + (title | lower) + ") · " + period + " · " + context) -%}
+<article class="detail story story--split" data-story data-meta="{{ m }}">
   <div class="story__top">
-    <span class="story__meta">{{ meta }}</span>
+    <span class="story__meta">{{ m }}</span>
     <a class="story__close" href="/#work">(close)</a>
   </div>
   <div class="story__body">
@@ -171,10 +171,16 @@ layout: base.njk
           {% if role %}<div><dt>(role)</dt><dd>{{ role }}</dd></div>{% endif %}
           {% if period %}<div><dt>(period)</dt><dd>{{ period }}</dd></div>{% endif %}
           {% if context %}<div><dt>(context)</dt><dd>{{ context }}</dd></div>{% endif %}
+          {% if status %}<div><dt>(status)</dt><dd class="status{% if live %} live{% endif %}">{{ status }}</dd></div>{% endif %}
         </dl>
+        {% if not story and not open %}
+        {% if subtitle %}<p class="story__sub">{{ subtitle }}</p>{% endif %}
+        {% if lead %}<p class="beat__aside">{{ lead | brief }}</p>{% endif %}
+        {% endif %}
       </header>
+      {% if story %}
       {%- for b in story %}
-      <section class="beat" data-i="{{ loop.index0 }}">
+      <section class="beat">
         {{ frame(b, loop.index0, interaction) }}
         <div class="beat__txt">
           {% if b.lbl or b.fig %}<span class="beat__fig">{{ b.lbl or b.fig }}</span>{% endif %}
@@ -183,6 +189,45 @@ layout: base.njk
         </div>
       </section>
       {%- endfor %}
+      {% else %}
+      {% if open %}
+      <section class="beat">
+        {{ frame(open, 0, null) }}
+        <div class="beat__txt">
+          <span class="beat__fig">(opening)</span>
+          {% if subtitle %}<p class="beat__text">{{ subtitle }}</p>{% endif %}
+          {% if lead %}<p class="beat__aside">{{ lead | brief }}</p>{% endif %}
+        </div>
+      </section>
+      {% endif %}
+      {%- for b in chapters | splitBeats(content | chapters) %}
+      {%- set c = chapters[b.ci] %}
+      <section class="beat"{% if b.first %} id="ch-{{ c.n }}"{% endif %}{% if b.block %} data-block="{{ b.block }}"{% endif %}>
+        {% if b.block %}
+        <figure class="frame frame--block"><div class="frame__fit">
+          {% if b.block == "carousel" %}{% set rows = c.carousel.rows or (c.carousel.data | dataset) %}{{ carousel(c.carousel, rows) }}{{ ledger(c.carousel, rows) }}
+          {% elif b.block == "compare" %}{{ compare(c.compare) }}
+          {% elif b.block == "swap" %}{{ swap(c.swap) }}
+          {% elif b.block == "stack" %}{{ stack(c.stack) }}
+          {% elif b.block == "tiles" %}{{ tiles(c.tiles) }}{% endif %}
+        </div></figure>
+        {% elif b.src %}{{ frame(b, 0, null) }}{% endif %}
+        <div class="beat__txt">
+          <span class="beat__fig">{{ b.lbl }}</span>
+          {% if b.text %}<p class="beat__text">{{ b.text }}</p>{% endif %}
+          {% if b.aside %}<p class="beat__aside">{{ b.aside }}</p>{% endif %}
+        </div>
+      </section>
+      {%- endfor %}
+      {% endif %}
+      {% if outcome %}
+      <section class="story__outcome" aria-label="outcome">
+        {% if outcome.built %}<div><div class="lbl">(outcome)</div><div class="val">{{ outcome.built }}</div></div>{% endif %}
+        {% if outcome.recognised %}<div><div class="lbl">(recognition)</div><div class="val">{{ outcome.recognised }}</div></div>{% endif %}
+        {% if outcome.next %}<div><div class="lbl">(what I'd do next)</div><div class="val">{{ outcome.next }}</div></div>{% endif %}
+        {% if outcome.link %}<div><div class="lbl">({{ outcome.link.lbl or 'published' }})</div><div class="val"><a href="{{ outcome.link.href }}"{% if outcome.link.href.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ outcome.link.label }} &rarr;</a></div></div>{% endif %}
+      </section>
+      {% endif %}
     </div>
     <div class="story__stage" aria-live="polite"></div>
   </div>
@@ -195,44 +240,12 @@ layout: base.njk
   {% endif %}
 </article>
 {% else %}
-{#- Every chaptered project opens as a story: beats built from its own chapters (storyFrom in
-    .eleventy.js), on the same stage as an authored `story:`. The whole project follows under it,
-    unchanged. A project with fewer than two beats skips the story and opens as before. -#}
-{%- set beats = (chapters | storyFrom(content | chapters, open, subtitle, lead)) if chapters else [] -%}
-{%- set told = beats.length > 1 -%}
-<article class="detail{% if told %} story story--auto{% endif %}"{% if told %} data-story data-meta="{{ period }} · {{ context }}"{% endif %}>
-  {% if told %}
-  <div class="story__top">
-    <span class="story__meta">{{ period }} · {{ context }}</span>
-    <a class="story__close" href="/#work">(close)</a>
-  </div>
-  <header class="story__head">
-    <span class="detail__qlabel">{{ question }}</span>
-    <h1 class="story__title">{{ title }}</h1>
-  </header>
-  <div class="story__body">
-    <div class="story__beats">
-      {%- for b in beats %}
-      <section class="beat" data-i="{{ loop.index0 }}">
-        {{ frame(b, loop.index0, null) }}
-        <div class="beat__txt">
-          <span class="beat__fig">{{ b.lbl }}</span>
-          <p class="beat__text">{{ b.text }}</p>
-          {% if b.aside %}<p class="beat__aside">{{ b.aside }}</p>{% endif %}
-        </div>
-      </section>
-      {%- endfor %}
-    </div>
-    <div class="story__stage" aria-live="polite"></div>
-  </div>
-  <a class="story__more" href="#the-whole">(the whole project &darr;)</a>
-  <div id="the-whole" class="story__whole"></div>
-  {% else %}
+{#- a project with nothing to show yet (Sama, the text-only pages) keeps the chapter page -#}
+<article class="detail">
   <a class="detail__back" href="/#work">(&larr; selected work)</a>
-  {% endif %}
 
   <span class="detail__qlabel">(research question)</span>
-  {% if told %}<h2 class="detail__q reveal">{{ question }}</h2>{% else %}<h1 class="detail__q reveal">{{ question }}</h1>{% endif %}
+  <h1 class="detail__q reveal">{{ question }}</h1>
   {#- The head runs in two columns under the question: the deck and the lead on the left, the
       project's own facts on the right, right-aligned against the content edge — the same ledger
       register the homepage masthead uses for its group counts (`.work__index`). It used to be a
