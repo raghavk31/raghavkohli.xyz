@@ -16,6 +16,7 @@ live: false
 date: 2022-05-16
 card: M
 meta: "(koliwadas) · cept thesis · worli, mumbai · 2022"
+story_title: "Reverse Effekt"
 story:
   - lbl: "(opening) a day at the tip"
     fig: fig.01
