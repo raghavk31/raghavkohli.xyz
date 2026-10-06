@@ -154,22 +154,30 @@ layout: base.njk
     stands on its own at /work/<slug>/ and is what the homepage overlay lifts in (main.js showPage).
     (next) follows the homepage grid's order. -#}
 {%- set nextp = collections.projects | find("title", groups | nextInGrid(title)) -%}
-<article class="detail story" data-story data-meta="{{ meta }}">
+{#- The split: the story text runs down the left quarter, the media holds the right three quarters
+    of the screen. The title and the project's facts open the left column, level with the first
+    picture, so there is one version of the project and it starts with its media. -#}
+<article class="detail story story--split" data-story data-meta="{{ meta }}">
   <div class="story__top">
     <span class="story__meta">{{ meta }}</span>
     <a class="story__close" href="/#work">(close)</a>
   </div>
-  <header class="story__head">
-    <span class="detail__qlabel">{{ question }}</span>
-    <h1 class="story__title" id="story-title">{{ story_title or title }}</h1>
-  </header>
   <div class="story__body">
     <div class="story__beats">
+      <header class="story__head">
+        <span class="detail__qlabel">{{ question }}</span>
+        <h1 class="story__title" id="story-title">{{ story_title or title }}</h1>
+        <dl class="story__facts">
+          {% if role %}<div><dt>(role)</dt><dd>{{ role }}</dd></div>{% endif %}
+          {% if period %}<div><dt>(period)</dt><dd>{{ period }}</dd></div>{% endif %}
+          {% if context %}<div><dt>(context)</dt><dd>{{ context }}</dd></div>{% endif %}
+        </dl>
+      </header>
       {%- for b in story %}
       <section class="beat" data-i="{{ loop.index0 }}">
         {{ frame(b, loop.index0, interaction) }}
         <div class="beat__txt">
-          {% if b.fig %}<span class="beat__fig">{{ b.fig }}</span>{% endif %}
+          {% if b.lbl or b.fig %}<span class="beat__fig">{{ b.lbl or b.fig }}</span>{% endif %}
           {% if b.text %}<p class="beat__text">{{ b.text }}</p>{% endif %}
           {% if b.aside %}<p class="beat__aside">{{ b.aside }}</p>{% endif %}
         </div>

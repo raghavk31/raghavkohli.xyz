@@ -15,6 +15,128 @@ status: thesis
 live: false
 date: 2022-05-16
 card: M
+meta: "(koliwadas) · cept thesis · worli, mumbai · 2022"
+story:
+  - lbl: "(opening) a day at the tip"
+    fig: fig.01
+    src: /assets/projects/koliwadas/01.jpg
+    w: 1800
+    h: 1179
+    cap: "A day at the Worli tip. 4 am the boats go out; sorting, cleaning, drying and selling through the morning; net repair, the market, play, and the boats back by evening."
+    text: "One open space, twenty hours of use."
+    aside: "At four in the morning the boats leave the Worli tip. Through the day the same ground is for sorting, cleaning, drying and selling fish; then net repair, the market, play, and the boats back by evening. No one designed any of it. The thesis asks what a city could learn from that."
+    notes:
+      - { t: "4 am, the boats go out", x: 62, y: 6, r: 3 }
+  - lbl: "(00) the city"
+    fig: fig.02
+    src: /assets/projects/koliwadas/02.jpg
+    w: 1800
+    h: 1126
+    cap: "Evolution through reclamation. 1800 to the present: the seven islands joined, the fishing villages of 1930 pinned to the map, the filling and the sea walls that followed."
+    text: "Seven islands, made one by filling."
+    aside: "Mumbai became one city by filling the sea between its islands, hills quarried and levelled to do it. The fishing villages were there before the filling started and are still there after it. The intertidal ground the Kolis worked was recategorised as wasteland, so that it could be reclaimed."
+    notes:
+      - { t: "on the 1930 map, still on the 2022 one", x: 64, y: 8, r: -2 }
+  - lbl: "(01) the kolis"
+    fig: fig.04
+    src: /assets/projects/koliwadas/04.jpg
+    w: 1391
+    h: 1800
+    blend: true
+    cap: "The koliwadas of Mumbai. The urban villages and informal settlements along both coasts, the fishing villages in pink."
+    text: "The people who were here first."
+    aside: "The Kolis are artisanal fishers and the city's first inhabitants, five hundred years on this shore. A koliwada is a dense gaothan of houses and the commons around it: drying grounds, the creek, mangroves, intertidal flats. A highly productive landscape that the city's maps read as empty."
+  - lbl: "(02) exclusion"
+    fig: fig.07
+    src: /assets/projects/koliwadas/07.jpg
+    w: 1800
+    h: 1133
+    cap: "The Coastal Road. A 10.5 km reclamation along the western shore, through the intertidal zone the villages fish."
+    text: "A road, a plan, a rulebook."
+    aside: "The Coastal Road reclaims 10.5 km of the western shore through the waters the villages fish. The coastal-zone rules treat the shore as a hazard, not a workplace. The development plan reads the koliwadas as slum. The first job was to lay these documents out plainly, and draw what they do to a village's access to the sea."
+    notes:
+      - { t: "consulted after the fact", x: 66, y: 10, r: 3, alt: true }
+  - lbl: "(03) trajectory"
+    fig: fig.09
+    src: /assets/projects/koliwadas/09.jpg
+    w: 1800
+    h: 1137
+    cap: "Future trajectory of the city. Sea-level rise to 2050 on the reclaimed ground; land lost and people affected at one, two and three metres."
+    text: "If the usual continues, it ends underwater."
+    aside: "The projection to 2050 puts a metre or more of sea on the reclaimed ground, and the first people it displaces are the ones on the shore. The collage is blunt because the numbers are."
+  - lbl: "(04) worli"
+    fig: fig.11
+    src: /assets/projects/koliwadas/11.jpg
+    w: 1285
+    h: 1800
+    cap: "Locating Worli Koliwada. The Arabian Sea to the west, Mahim Bay to the east, the Bandra–Worli sea link landing at its northern tip."
+    text: "Eight hundred years at the foot of a bridge."
+    aside: "Worli Koliwada sits on one of the seven original islands, with the sea link landing at its tip. It is at the fringe of extreme development pressure and well on its way to giving in to it. Read closely, it is an open repository of exchange: of fish, of nets, of festivals, of knowledge."
+  - lbl: "(05) commons"
+    fig: fig.14
+    src: /assets/projects/koliwadas/14.jpg
+    w: 1800
+    h: 1078
+    cap: "The commons of Worli Koliwada, 10 sq m to 30,000 sq m. The figure-ground of what is shared."
+    text: "From ten square metres to thirty thousand."
+    aside: "Before proposing anything, find what a place already has. Every common space in the village was drawn to scale, from a shrine court to the tip, and four were studied in the round: the Worli tip, the east jetty, the maidan, and the linkage to the city."
+  - lbl: "(06) worli tip"
+    fig: fig.15
+    src: /assets/projects/koliwadas/15.jpg
+    w: 1306
+    h: 1800
+    blend: true
+    cap: "Worli tip. The jetty, the sorting and drying grounds, the fort, the temple and church, mangroves as living breakwaters; each photograph pinned where it was taken."
+    text: "The shore as a working floor."
+    aside: "Through the day the open ground is fish sorting, drying, and selling to the fisher women who carry it to the city. On Narali Poornima, Holi and Ganesh Chaturthi it is the stage. All of it happens without anyone having designed it, and that is what the drawing is for."
+    notes:
+      - { t: "no one designed this", x: 60, y: 8, r: -3 }
+  - lbl: "(07) east jetty"
+    fig: fig.17
+    src: /assets/projects/koliwadas/16.jpg
+    w: 1290
+    h: 1800
+    blend: true
+    cap: "East jetty. The new jetty and its temple, community bins and toilets, the playground, the old piers, and waste bags stacked as a tide barrier."
+    text: "Waste as a breakwater."
+    aside: "On the bay side, the edge where the village's waste enters the sea is also where the village stacks that waste in compact bags against the high tide. Ragpickers work the edge, children play at the water, bamboo structures come and go."
+    notes:
+      - { t: "waste bags against the tide", x: 62, y: 12, r: 2, alt: true }
+  - lbl: "(08) maidan"
+    fig: fig.19
+    src: /assets/projects/koliwadas/17.jpg
+    w: 1304
+    h: 1800
+    blend: true
+    cap: "Maidan. A chain of open spaces of every scale: the ground over the coast, the mitra mandals, temple courtyards, the playground, the rocky shore."
+    text: "Play as a knowledge-sharing link."
+    aside: "Inside the village, a chain of open spaces of every scale: the maidan over the coast, the mitra mandals of each sub-community, temple courtyards, small education and sport centres. Play is how different people negotiate the same ground. These are the spaces through which the village teaches itself."
+  - lbl: "(09) linkage"
+    fig: fig.21
+    src: /assets/projects/koliwadas/18.jpg
+    w: 1303
+    h: 1800
+    blend: true
+    cap: "Linkage. The village street meeting the city: mechanics, silk work, carpenters, the market edge, the canal now an open drain, and the high-rises."
+    text: "Where the village becomes the city."
+    aside: "Where the village street meets the city, the livelihoods change. The canal that was once the way to the island is an open drain. As fishing declines, the village works in the high-rises as guards and drivers. The thesis wants the flow to run the other way too: the village's capacities into the city, not only its labour."
+  - lbl: "(10) what if"
+    fig: fig.23
+    src: /assets/projects/koliwadas/24.jpg
+    w: 1800
+    h: 1129
+    blend: true
+    cap: "Resilience strategies against sea-level rise: accommodate, advance, retreat, protect, and the toolkit drawn from what the village already has."
+    text: "Eco-punctures, and a toolkit."
+    aside: "Initiations, not answers. At the village scale, a toolkit drawn from what is already there (boats, nets, mangroves, bamboo, waste, water, fish, the levels of the shore), set against accommodate, advance, retreat, protect. At the city scale, the urban villages as eco-punctures, linked into a knowledge landscape rather than cleared for one."
+  - lbl: "(after) what I'd do next"
+    fig: fig.25
+    src: /assets/projects/koliwadas/25.jpg
+    w: 1357
+    h: 1800
+    cap: "Contribution. The shore redrawn as a landscape of knowledge links, the village at its centre."
+    text: "The city as a ground of open opportunities."
+    aside: "The manual was written about the village. The next step is to hand it over: the cartographies and the toolkit as things the mitra mandals hold and edit themselves."
 thumb: /assets/projects/koliwadas/00.jpg
 thumbw: 848
 thumbh: 1200

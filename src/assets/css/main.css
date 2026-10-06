@@ -680,6 +680,24 @@ html{scrollbar-gutter:stable;}
 /* the box keeps its ratio inside the stage: as wide as the column allows, as tall as the stage allows */
 .story__stage .frame__box{width:min(86%, calc((var(--stage-h) - 140px) * var(--ar,1.333)));}   /* smaller, like the cards */
 .story--staged .story__next{margin-top:0;}
+/* the split (an authored `story:`): full width, the text in the left quarter, the media in the right
+   three quarters of the screen, each picture as large as the stage allows */
+.story--split{max-width:none;}
+.story--split .story__head{margin-bottom:clamp(40px,6vw,64px);}
+.story--split .story__title{font-size:clamp(34px,4vw,56px);}
+.story__facts{margin:28px 0 0;display:flex;flex-direction:column;gap:10px;}
+.story__facts div{display:flex;flex-direction:column;gap:2px;}
+.story__facts dt{font-weight:500;font-size:11px;letter-spacing:.04em;color:var(--faint-2);}
+.story__facts dd{margin:0;font-size:13px;line-height:1.45;color:var(--ink-2);}
+.story--split .beat__aside{font-size:14px;line-height:1.6;color:var(--ink-2);}
+.story--split.story--staged{padding-left:clamp(20px,3vw,48px);padding-right:20px;}
+.story--split.story--staged .story__body{grid-template-columns:minmax(0,1fr) calc(75vw - 20px);gap:clamp(24px,2.5vw,40px);margin-top:0;}
+.story--split.story--staged .story__beats{max-width:none;gap:42vh;}
+.story--split.story--staged .beat__text{font-size:clamp(19px,1.5vw,22px);}
+.story--split .story__stage .frame{align-items:center;}
+.story--split .story__stage .frame__box,.story--split .story__stage .plate__cap{width:min(100%, calc((var(--stage-h) - 64px) * var(--ar,1.333)));}
+.pv:has(.story--split) .pv__body{max-width:none;padding:0;}
+.pv:has(.story--split) .pv__bar{padding-inline:clamp(20px,3vw,48px) 20px;}
 /* the opening every chaptered project gets (storyFrom): on the project page's own width, ending in
    a way down into the whole project, which follows unchanged */
 .detail.story--auto{max-width:1120px;}
