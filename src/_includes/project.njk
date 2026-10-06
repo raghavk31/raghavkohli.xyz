@@ -165,8 +165,8 @@ layout: base.njk
   <div class="story__body">
     <div class="story__beats">
       <header class="story__head">
-        <span class="detail__qlabel">{{ question }}</span>
         <h1 class="story__title" id="story-title">{{ story_title or title }}</h1>
+        {% if question %}<p class="story__q">{{ question }}</p>{% endif %}
         <dl class="story__facts">
           {% if role %}<div><dt>(role)</dt><dd>{{ role }}</dd></div>{% endif %}
           {% if period %}<div><dt>(period)</dt><dd>{{ period }}</dd></div>{% endif %}
