@@ -25,9 +25,10 @@ title: "Raghav Kohli · invisible systems, made visible"
     {#- the post-it: one or two lines of story, stuck to the card's edge on hover (main.js flips it to
         the side with room). `snippet_rot` tilts it (default 3°), `snippet_alt` takes the second paper.
         On the phone a corner of it peeks from the card's top right all the time. -#}
-    {%- if p.data.snippet %}
-    <div class="card__note right{% if p.data.snippet_alt %} alt{% endif %}" style="--r:{{ p.data.snippet_rot if p.data.snippet_rot is number else 3 }}deg">
-      <p>{{ p.data.snippet }}</p>
+    {%- set snip = p.data | snippetOf -%}
+    {%- if snip %}
+    <div class="card__note right{% if p.data.snippet_alt or num % 3 == 2 %} alt{% endif %}" style="--r:{{ p.data.snippet_rot if p.data.snippet_rot is number else (3 if num % 2 else -2.5) }}deg">
+      <p>{{ snip }}</p>
       <span class="note__lbl">(click to read)</span>
     </div>
     {%- endif %}
@@ -86,11 +87,20 @@ title: "Raghav Kohli · invisible systems, made visible"
     </div>
 
     {#- The diagram (src/_data/ecologyViz.js) is the filter: each resource and thread is a node with
-        data-topic; main.js re-weights the grid to it. The caption shows a node's note on hover. -#}
+        data-topic; main.js re-weights the grid to it. Every node has a callout box: its note from
+        src/_data/ecology.js on post-it paper, stuck onto the node on hover / focus and kept up while
+        that node is chosen (main.js places it). A node without a note says "[note]" until written. -#}
     <figure class="eco" data-eco>
       {{ ecologyViz.wide | safe }}
       {{ ecologyViz.tall | safe }}
-      <figcaption class="eco__cap"><span class="eco__note" data-eco-note aria-live="polite"></span></figcaption>
+      <div class="eco__callouts" aria-live="polite">
+        {%- for n in ecology.resources.concat(ecology.threads) %}
+        <div class="eco__callout{% if not n.note %} is-draft{% endif %}{% if loop.index % 3 == 0 %} alt{% endif %}" data-for="{{ n.id }}" style="--r:{{ 2.5 if loop.index % 2 else -2 }}deg">
+          <span class="eco__callout-lbl">({{ n.label }})</span>
+          <p>{{ n.note or "[note]" }}</p>
+        </div>
+        {%- endfor %}
+      </div>
     </figure>
   </div>
 

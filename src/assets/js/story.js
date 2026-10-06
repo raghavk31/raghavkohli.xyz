@@ -128,10 +128,11 @@
     place();
     setActive(0);
     if ("IntersectionObserver" in window) {
-      // the beat crossing the middle tenth of the scroll container is the one on stage
+      // the beat crossing a band a third of the way down is the one on stage: the pictures sit at the
+      // top of the stage now, so the text that names one is read level with it, not at mid-screen
       io = new IntersectionObserver(function (entries) {
         entries.forEach(function (e) { if (e.isIntersecting) setActive(beats.indexOf(e.target)); });
-      }, { root: opts.root || null, rootMargin: "-45% 0px -45% 0px" });
+      }, { root: opts.root || null, rootMargin: "-28% 0px -62% 0px" });
       beats.forEach(function (b) { io.observe(b); });
     }
     var onChange = function () { place(); };

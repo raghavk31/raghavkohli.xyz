@@ -2,6 +2,8 @@
 // running across every one of them. The homepage draws it (ecologyViz.js) and its nodes filter the
 // grid, so each `id` is also a `topics:` value in src/projects/*.md.
 // Every sentence here is Raghav's own, from his note of 2026-10-05. Trim, don't rewrite.
+// Every node has a callout box on the diagram (index.njk); a node without a `note` shows "[note]"
+// until he writes one.
 module.exports = {
   root: "ecology",
   resources: [
