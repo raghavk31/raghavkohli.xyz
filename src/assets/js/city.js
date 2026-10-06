@@ -128,6 +128,7 @@
   }
   var DX = [0, 0, 1, -1], DY = [-1, 1, 0, 0];
   function step() {
+    if (document.body.classList.contains("pv-open") || document.hidden) return;   // still under an open project
     t++;
     walkers.forEach(function (w) {
       if (w.waste && t % 2) return;

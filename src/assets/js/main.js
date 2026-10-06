@@ -309,6 +309,8 @@
     var running = false, last = 0;
     function frame(now) {
       if (!running) return;
+      // nothing moves under an open project: the overlay re-blurs whatever changes behind it
+      if (document.body.classList.contains("pv-open") || document.hidden) { last = now; requestAnimationFrame(frame); return; }
       var dt = Math.min(0.05, (now - last) / 1000 || 0);
       last = now;
       flows.forEach(function (f) {
