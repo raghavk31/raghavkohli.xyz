@@ -121,8 +121,11 @@
       if (i < 0 || i === active) return;
       active = i;
       beats.forEach(function (b, k) { b.classList.toggle("on", k === i); });
-      frames.forEach(function (f, k) { if (f) f.classList.toggle("on", k === i); });
-      if (frames[i]) stick(frames[i]);
+      // a beat with no figure of its own (a text-only chapter) keeps the last one on stage
+      var show = i;
+      while (show > 0 && !frames[show]) show--;
+      frames.forEach(function (f, k) { if (f) f.classList.toggle("on", k === show); });
+      if (frames[show]) stick(frames[show]);
     }
 
     place();

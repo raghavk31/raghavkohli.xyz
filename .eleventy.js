@@ -76,72 +76,30 @@ module.exports = function (eleventyConfig) {
     return out;
   });
 
-  // The story every chaptered project opens with, built from what the page already says, so no
-  // project waits on a hand-written `story:`. One beat per chapter that has a picture: the chapter's
-  // lead image on the stage, its title as the callout, its first sentence as the aside, and — when
-  // a caption opens with a short sentence ("The aahars first.") — that sentence as the post-it.
-  // `open` (or the first chapter) opens it with the subtitle. Words are cut from his, never written.
-  const strip = (s) => String(s || "").replace(/<[^>]+>/g, " ").replace(/&nbsp;/g, " ").replace(/\s+/g, " ").trim();
-  const sentences = (s) => strip(s).split(/(?<=[.!?])\s+(?=[A-Z0-9“"‘(])/);
-  const firstSentences = (s, max) => {
-    let out = "";
-    for (const x of sentences(s)) {
-      if (!x) continue;
-      if (out && (out + " " + x).length > max) break;
-      out = out ? out + " " + x : x;
-      if (out.length > max * 0.6) break;
-    }
-    return out.length > max * 1.6 ? out.slice(0, max).replace(/\s+\S*$/, "") + "…" : out;
-  };
-  const noteFrom = (cap) => {
-    // a voice, not a label: three words or more ("The first drawing, by hand."), never "Demography."
-    const s = sentences(cap)[0] || "";
-    return s.length <= 54 && s.split(/\s+/).length >= 3 ? s : "";
-  };
-  const pic = (c) => {
-    const one = (x) => x && x.src && x.w && x.h ? { src: x.src, w: x.w, h: x.h, fig: x.fig, cap: x.cap, blend: x.blend } : null;
-    if (c.plates && c.plates.length) return one(c.plates[0]);
-    if (c.pair && c.pair.length) return one(c.pair[0]);
-    if (c.stack) { const l = c.stack.items[c.stack.items.length - 1]; return one({ ...l, fig: c.stack.fig }) || one(c.stack.beside); }
-    if (c.swap) { const l = c.swap.items[c.swap.items.length - 1]; return one({ src: l.src, w: l.sw, h: l.sh, fig: l.fig, cap: l.cap }); }
-    if (c.strip && c.strip.items) return one({ ...c.strip.items[0], fig: c.strip.fig, cap: c.strip.items[0].cap || c.strip.cap });
-    if (c.tiles && c.tiles.items) { const t = c.tiles.items[0]; return one({ src: t.src, w: t.w, h: t.h, fig: c.tiles.fig, cap: t.cap || c.tiles.cap }); }
-    if (c.compare) { const t = c.compare.cities[0].items[0]; return one({ src: t.full, w: t.w, h: t.h, fig: c.compare.steps[0].fig, cap: c.compare.steps[0].cap }); }
-    return null;
-  };
-  // where a beat's note sits on its frame: alternating corners, alternating tilt — set, not random
-  const SPOTS = [{ x: 66, y: 5, r: 3 }, { x: -4, y: 60, r: -2.5 }, { x: 70, y: 64, r: -1.5 }, { x: -2, y: 4, r: 2 }];
-  eleventyConfig.addFilter("storyFrom", (chapters, ch, open, subtitle, lead) => {
-    const beats = [];
-    const push = (p, text, aside, lbl) => {
-      // the aside often opens by restating the title ("Three lines to 2070. Business as usual…")
-      if (aside && text && aside.toLowerCase().startsWith(text.toLowerCase().replace(/[.]$/, ""))) {
-        aside = aside.slice(text.length).replace(/^[.:,\s]+/, "");
-      }
-      let note = noteFrom(p.cap);
-      if (note && beats.some((b) => b.text === note || (b.notes[0] && b.notes[0].t === note))) note = "";
-      const spot = SPOTS[beats.length % SPOTS.length];
-      beats.push({
-        src: p.src, w: p.w, h: p.h, fig: p.fig, blend: p.blend, lbl,
-        text, aside: aside && aside !== text ? aside : "",
-        notes: note && note !== text ? [{ t: note, x: spot.x, y: spot.y, r: spot.r, alt: beats.length % 3 === 2 }] : [],
-      });
+  // Everything a chapter shows, in page order, for the split story: one entry per picture (plates,
+  // a pair, a strip's items) and one `block` for a figure with its own layout (swap, stack, compare,
+  // carousel, a tile grid), which project.njk renders with its own macro. Each entry becomes a beat on the stage.
+  eleventyConfig.addFilter("chapterMedia", (c) => {
+    const out = [];
+    const img = (x, fig, cap) => {
+      if (x && x.src) out.push({ src: x.src, w: x.w, h: x.h, fig: x.fig || fig, cap: x.cap || cap, blend: x.blend });
     };
-    const o = open && open.src ? pic({ plates: [open] }) : null;
-    if (o) push(o, subtitle || firstSentences(lead, 160), "", "(opening)");
-    (chapters || []).forEach((c, i) => {
-      const p = pic(c);
-      if (!p) return;
-      let body = (ch && ch.byNum && ch.byNum[c.n]) || "";
-      if (i === 0 && ch && ch.intro) body = ch.intro + body;
-      // an untitled chapter (a photo run, a coda) speaks with its first sentence instead
-      const said = firstSentences(body, 200);
-      if (c.title) push(p, c.title, said, `(${c.n}) ${c.name}`);
-      else if (said) push(p, firstSentences(body, 110), "", `(${c.n}) ${c.name}`);
-      else push(p, noteFrom(p.cap) || sentences(p.cap)[0] || c.name, "", `(${c.n}) ${c.name}`);
-    });
-    return beats.slice(0, 9);
+    (c.plates || []).forEach((p) => img(p));
+    (c.pair || []).forEach((p) => img(p));
+    if (c.strip && c.strip.col) (c.strip.items || []).forEach((x) => img(x, c.strip.fig, c.strip.cap));
+    if (c.stack && c.stack.beside) img(c.stack.beside);   // on the stage the plate beside a stack gets its own beat
+    const block = c.carousel ? "carousel" : c.compare ? "compare" : c.swap ? "swap" : c.stack ? "stack" : "";
+    if (block) out.push({ block });
+    if (c.strip && !c.strip.col) (c.strip.items || []).forEach((x) => img(x, c.strip.fig, c.strip.cap));
+    if (c.tiles) out.push({ block: "tiles" });   // an atlas stays one grid; a tile opens the lightbox
+    return out;
   });
+
+  // whether any chapter has something to put on the stage (Sama, still text-only, does not)
+  eleventyConfig.addFilter("anyMedia", (chapters) =>
+    (chapters || []).some((c) => c.plates || c.pair || c.strip || c.tiles || c.swap || c.stack || c.compare || c.carousel)
+  );
+
   // The card's hover post-it: `snippet:` when he has written one, else the first chapter's title —
   // the line the story itself opens on after the subtitle.
   eleventyConfig.addFilter("snippetOf", (d) => {
