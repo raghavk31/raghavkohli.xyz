@@ -1150,3 +1150,7 @@ body.lb-open{overflow:hidden;}
 /* ---------- sama instruments ----------
    /work/sama/feeder/: the essay is the sama-lab embed (its own scoped css), set under the project head. */
 .sama-feeder{margin-top:clamp(56px,8vw,96px);}
+
+/* ── the city behind the homepage (city.js) ── */
+.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+body:has(> .city) > *:not(.city):not(.head):not(.pv):not(.lb):not(script) { position: relative; z-index: 1; }
