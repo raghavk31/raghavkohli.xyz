@@ -7,7 +7,7 @@
 module.exports = {
   root: "ecology",
   resources: [
-    { id: "energy",    label: "energy" },
+    { id: "energy",    label: "energy", lead: true },   // drawn at the top of the loop, a size up
     { id: "food",      label: "food",      note: "no one has to be hungry" },
     { id: "water",     label: "water",     note: "no one in dearth of water, no one dying due to flooding" },
     { id: "waste",     label: "waste" },
