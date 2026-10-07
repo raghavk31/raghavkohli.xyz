@@ -3,11 +3,15 @@
    angles, turn, meet at T-junctions or dead-end. Buildings line the frontages, shaded by how dense
    that part of the city is; courtyards, parks, fields and a little waste fill what is left. A river
    meanders down the page. Slow flows: people, waste, the river, pulses on power lines, air. The
-   ecology diagram's nodes bring one system forward. */
+   ecology diagram's nodes bring one system forward.
+   Mockup switch (branch ascii-city): ?city=a clears the city from under the content; ?city=b also draws
+   it as figure-ground (blocks of one glyph, streets left empty); ?city=c swaps the generated city for
+   Ahmedabad along the Sabarmati (city-ahmedabad.txt, built by scripts/make-city-map.py). */
 (function () {
   "use strict";
   var FONT = 13, LH = 16, TICK = 150, SEED = 20261005;
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var MODE = (location.search.match(/[?&]city=([abc])/) || [])[1] || "", MAPTXT = null, X0 = 0;
 
   var cv = document.createElement("canvas");
   cv.className = "city";
@@ -26,6 +30,7 @@
   // layers: 1 mobility, 2 water, 3 buildings, 4 food, 5 waste, 6 energy, 7 park (air)
   var cw = 8, cols = 0, rows = 0, ch = [], ly, dir, roads = [], lines = [];
   function build() {
+    if (MODE === "c" && MAPTXT) return buildMap();
     ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
     cw = ctx.measureText("M").width;
     cols = Math.ceil(innerWidth / cw) + 1;
@@ -115,6 +120,35 @@
       }
       if (line.length) lines.push(line);
     }
+    if (MODE === "b") figureGround();
+    seedFlows();
+  }
+
+  // figure-ground: every block one glyph, streets and bridges left as paper, the river a solid band
+  function figureGround() {
+    for (var k = 0; k < ch.length; k++) {
+      var l = ly[k];
+      if (l === 1 || (l === 2 && dir[k] & 16)) ch[k] = " ";
+      else if (l === 2) ch[k] = "~";
+      else if (l === 7 || l === 4) { ch[k] = hash(k, 3) < .35 ? "\"" : " "; ly[k] = 7; }
+      else { ch[k] = ":"; ly[k] = 3; }
+    }
+    lines = [];
+  }
+
+  // Ahmedabad: s street, l lane, w water, p park, r rail, h mapped building, b the rest of a block
+  function buildMap() {
+    ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
+    cw = ctx.measureText("M").width;
+    var L = MAPTXT.split(/\r?\n/); rows = L.length; cols = L[0].length;
+    var n = cols * rows; ch = new Array(n); ly = new Uint8Array(n); dir = new Uint8Array(n); roads = []; lines = [];
+    var G = { b: [":", 3], l: [":", 3], h: ["#", 3], s: [" ", 1], r: ["=", 1], w: ["~", 2], p: ["\"", 7] };
+    for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
+      var k = y * cols + x, g = G[L[y][x]] || G.b; ch[k] = g[0]; ly[k] = g[1];
+      if (g[0] === "\"" && hash(x, y) < .55) ch[k] = " ";
+      if (L[y][x] === "s") roads.push(k);
+    }
+    X0 = Math.max(0, Math.round((cols - innerWidth / cw) / 2));
     seedFlows();
   }
 
@@ -122,9 +156,9 @@
   var walkers = [], pulses = [], air = [], t = 0;
   function seedFlows() {
     var R = rng(SEED + 7);
-    walkers = []; for (var i = 0; i < Math.min(1200, roads.length / 8); i++) walkers.push({ k: roads[Math.floor(R() * roads.length)], d: -1, waste: R() < .16 });
+    walkers = []; for (var i = 0; i < Math.min(1200, roads.length / (MODE === "c" ? 16 : 8)); i++) walkers.push({ k: roads[Math.floor(R() * roads.length)], d: -1, waste: R() < .16 });
     pulses = lines.map(function (l) { return { l: l, i: Math.floor(R() * l.length) }; });
-    air = []; for (var j = 0; j < Math.floor(cols * rows / 900); j++) air.push({ x: R() * cols, y: R() * rows });
+    air = []; if (MODE !== "b" && MODE !== "c") for (var j = 0; j < Math.floor(cols * rows / 900); j++) air.push({ x: R() * cols, y: R() * rows });
   }
   var DX = [0, 0, 1, -1], DY = [-1, 1, 0, 0];
   function step() {
@@ -153,7 +187,7 @@
 
   // ---------- drawing ----------
   var INK = "28,27,24", ACC = "46,58,87";
-  var ALPHA = [.1, .16, .17, .11, .13, .14, .13, .13];
+  var ALPHA = MODE === "b" || MODE === "c" ? [.1, .2, .24, .26, .13, .13, .14, .2] : [.1, .16, .17, .11, .13, .14, .13, .13];
   function rgba(c, a) { return "rgba(" + c + "," + a.toFixed(3) + ")"; }
   function draw() {
     var dpr = window.devicePixelRatio || 1, iw = innerWidth, ih = innerHeight;
@@ -162,29 +196,46 @@
     ctx.clearRect(0, 0, iw, ih);
     ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
     ctx.textBaseline = "top";
-    var f = focus(), sy = window.scrollY, r0 = Math.floor(sy / LH), off = -(sy % LH), vis = Math.ceil(ih / LH) + 1, last = null;
+    var f = focus(), sy = window.scrollY, vis = Math.ceil(ih / LH) + 1, last = null;
+    var top = MODE === "c" ? Math.min(1, sy / Math.max(1, document.documentElement.scrollHeight - ih)) * Math.max(0, rows - ih / LH) : sy / LH;
+    var r0 = Math.floor(top), off = -(top - r0) * LH, x1 = Math.min(cols, X0 + Math.ceil(iw / cw) + 1);
     function style(l) { var a = ALPHA[l]; if (!f) return rgba(INK, a); if (l === f) return rgba(ACC, .5); return rgba(INK, a * .45); }
     for (var r = 0; r < vis; r++) { var y = r0 + r; if (y >= rows) break;
       var py = r * LH + off, base = y * cols;
-      for (var x = 0; x < cols; x++) { var k = base + x, c = ch[k]; if (c === " ") continue;
+      for (var x = X0; x < x1; x++) { var k = base + x, c = ch[k]; if (c === " ") continue;
         var l = ly[k];
-        if (l === 2 && c === "~") { var hv = hash(x, y - (t >> 1)); if (hv > .55) continue; c = hv < .4 ? "~" : "≈"; }   // the river runs
+        if (l === 2 && c === "~") { var hv = hash(x, y - (t >> 1)); if (hv > (MODE === "b" || MODE === "c" ? .9 : .55)) continue; c = hv < .4 ? "~" : "≈"; }   // the river runs
         var s = style(l); if (s !== last) { ctx.fillStyle = s; last = s; }
-        ctx.fillText(c, x * cw, py); } }
+        ctx.fillText(c, (x - X0) * cw, py); } }
     function put(k, c, l, a) { var y = (k / cols) | 0; if (y < r0 || y >= r0 + vis) return;
       ctx.fillStyle = f && l === f ? rgba(ACC, .9) : rgba(INK, f ? a * .4 : a);
-      ctx.fillText(c, (k % cols) * cw, (y - r0) * LH + off); }
+      ctx.fillText(c, (k % cols - X0) * cw, (y - r0) * LH + off); }
     walkers.forEach(function (w) { put(w.k, w.waste ? "∘" : "•", w.waste ? 5 : 1, .38); });
     pulses.forEach(function (p) { for (var j = 0; j < 3; j++) { var k = p.l[(p.i + p.l.length - j * 2) % p.l.length]; if (k !== undefined) put(k, "∙", 6, .45 - j * .12); } });
     air.forEach(function (a) { put(Math.floor(a.y) * cols + Math.floor(a.x), "˚", 7, .22); });
+    if (MODE) clear(ih);
+  }
+
+  // the city stays out from under the words and the work: it shows in the margins and the gaps between
+  var CLEAR = [[".work__head .eyebrow, .work__name, .work__why, .work__index, .work__filterbar, .work__break, .card__frame, .card figcaption, .about .reveal > *, .contact__row, .contact__fine", 1], [".eco", .7]];
+  function clear(ih) {
+    ctx.save(); ctx.globalCompositeOperation = "destination-out";
+    if ("filter" in ctx) ctx.filter = "blur(12px)";
+    CLEAR.forEach(function (c) { ctx.globalAlpha = c[1];
+      document.querySelectorAll(c[0]).forEach(function (el) { var r = el.getBoundingClientRect();
+        if (!r.width || r.bottom < -40 || r.top > ih + 40) return;
+        ctx.fillRect(r.left - 18, r.top - 14, r.width + 36, r.height + 28); }); });
+    ctx.restore();
   }
 
   var raf = 0;
   window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); }, { passive: true });
   var rt; window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(function () { build(); draw(); }, 200); });
-  (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+  var ready = document.fonts ? document.fonts.ready : Promise.resolve();
+  if (MODE === "c") ready = ready.then(function () { return fetch("/assets/js/city-ahmedabad.txt").then(function (r) { return r.text(); }).then(function (t) { MAPTXT = t.trim(); }); });
+  ready.then(function () {
     build(); draw();
     if (!reduce) setInterval(step, TICK);
-    setTimeout(function () { if (document.documentElement.scrollHeight * 1.05 / LH > rows) { build(); draw(); } }, 2500);
+    setTimeout(function () { if (MODE !== "c" && document.documentElement.scrollHeight * 1.05 / LH > rows) { build(); draw(); } }, 2500);
   });
 })();
