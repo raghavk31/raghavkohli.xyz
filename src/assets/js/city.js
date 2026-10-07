@@ -136,20 +136,50 @@
     lines = [];
   }
 
-  // Ahmedabad: s street, l lane, w water, p park, r rail, h mapped building, b the rest of a block
+  // Ahmedabad (letters from scripts/make-city-map.py): s street, l lane, w river, k still water, f wood,
+  // g green, t a mapped tree, a sand, o open ground, r rail, h mapped building, b the rest of a block
+  var riv = null, RCX = null, RHW = null;
   function buildMap() {
     ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
     cw = ctx.measureText("M").width;
     var L = MAPTXT.split(/\r?\n/); rows = L.length; cols = L[0].length;
     var n = cols * rows; ch = new Array(n); ly = new Uint8Array(n); dir = new Uint8Array(n); roads = []; lines = [];
-    var G = { b: [":", 3], l: [":", 3], h: ["#", 3], s: [" ", 1], r: ["=", 1], w: ["~", 2], p: ["\"", 7] };
-    for (var y = 0; y < rows; y++) for (var x = 0; x < cols; x++) {
-      var k = y * cols + x, g = G[L[y][x]] || G.b; ch[k] = g[0]; ly[k] = g[1];
-      if (g[0] === "\"" && hash(x, y) < .55) ch[k] = " ";
-      if (L[y][x] === "s") roads.push(k);
+    riv = new Uint8Array(n); RCX = new Float32Array(rows); RHW = new Float32Array(rows);
+    for (var y = 0; y < rows; y++) {
+      var sx = 0, nw = 0, lo = cols, hi = -1;
+      for (var x = 0; x < cols; x++) {
+        var k = y * cols + x, c = L[y][x], h = hash(x, y), g = " ", l = 0;
+        if (c === "b" || c === "l") { g = ":"; l = 3; }
+        else if (c === "h") { g = "#"; l = 3; }
+        else if (c === "s") { l = 1; roads.push(k); }
+        else if (c === "r") { g = "="; l = 1; }
+        else if (c === "w") { g = "~"; l = 2; riv[k] = 1; sx += x; nw++; if (x < lo) lo = x; if (x > hi) hi = x; }
+        else if (c === "k") { g = "~"; l = 2; riv[k] = 2; }
+        else if (c === "a") { l = 2; g = h < .3 ? "." : h < .38 ? "∴" : " "; }
+        else if (c === "f") { l = 7; g = h < .62 ? "♣" : h < .78 ? "\"" : " "; }   // a wood: trees close together
+        else if (c === "g") { l = 7; g = h < .16 ? "♣" : h < .4 ? "\"" : h < .52 ? "," : " "; }   // a park: grass, a few trees
+        else if (c === "t") { l = 7; g = "♣"; }
+        else if (c === "o") { g = h < .07 ? "." : " "; }   // open ground: almost nothing
+        ch[k] = g; ly[k] = l;
+      }
+      if (nw) { RCX[y] = sx / nw; RHW[y] = Math.max(1, (hi - lo) / 2); }
     }
     X0 = Math.max(0, Math.round((cols - innerWidth / cw) / 2));
     seedFlows();
+  }
+  // the river's current runs downstream along the meander: lanes keep their place relative to the
+  // channel's centre, streaks move fastest mid-stream and barely at the banks; still water just breathes
+  // Every water cell is drawn, faintly, so the river reads as one body; the current is the brighter part.
+  var WA = 1;
+  function water(x, y, kind) {
+    WA = .35;
+    if (kind === 2) { if (hash(x, y + (t / 24 | 0)) < .15) WA = 1; return "~"; }
+    var rel = Math.min(1, Math.abs(x - RCX[y]) / RHW[y]), lane = Math.round(x - RCX[y]);
+    if (rel > .9) return hash(x, y) < .4 ? "." : null;   // the edge, slack water
+    var sp = 1 - rel * rel, q = hash(lane, Math.floor((y - t * .3 * sp) / 4));
+    if (q < .1 * (1 - rel) + .04) { WA = 1; return "≈"; }
+    if (q < .4 * (1 - rel * .5)) WA = 1;
+    return "~";
   }
 
   // ---------- flows ----------
@@ -186,8 +216,8 @@
   function focus() { var on = hover || ((document.querySelector(".eco__node.on") || {}).dataset || {}).topic; return MAP[on] || 0; }
 
   // ---------- drawing ----------
-  var INK = "28,27,24", ACC = "46,58,87";
-  var ALPHA = MODE === "b" || MODE === "c" ? [.1, .2, .24, .26, .13, .13, .14, .2] : [.1, .16, .17, .11, .13, .14, .13, .13];
+  var INK = "28,27,24", ACC = "46,58,87", TINT = MODE === "c" ? { 2: "60,88,150", 7: "58,110,66" } : {};
+  var ALPHA = MODE === "b" || MODE === "c" ? [.1, .2, .3, .26, .13, .13, .14, .34] : [.1, .16, .17, .11, .13, .14, .13, .13];
   function rgba(c, a) { return "rgba(" + c + "," + a.toFixed(3) + ")"; }
   function draw() {
     var dpr = window.devicePixelRatio || 1, iw = innerWidth, ih = innerHeight;
@@ -199,13 +229,15 @@
     var f = focus(), sy = window.scrollY, vis = Math.ceil(ih / LH) + 1, last = null;
     var top = MODE === "c" ? Math.min(1, sy / Math.max(1, document.documentElement.scrollHeight - ih)) * Math.max(0, rows - ih / LH) : sy / LH;
     var r0 = Math.floor(top), off = -(top - r0) * LH, x1 = Math.min(cols, X0 + Math.ceil(iw / cw) + 1);
-    function style(l) { var a = ALPHA[l]; if (!f) return rgba(INK, a); if (l === f) return rgba(ACC, .5); return rgba(INK, a * .45); }
+    function style(l, m) { var a = ALPHA[l] * m, c = TINT[l] || INK; if (!f) return rgba(c, a); if (l === f) return rgba(ACC, .5 * m); return rgba(c, a * .45); }
     for (var r = 0; r < vis; r++) { var y = r0 + r; if (y >= rows) break;
       var py = r * LH + off, base = y * cols;
       for (var x = X0; x < x1; x++) { var k = base + x, c = ch[k]; if (c === " ") continue;
         var l = ly[k];
-        if (l === 2 && c === "~") { var hv = hash(x, y - (t >> 1)); if (hv > (MODE === "b" || MODE === "c" ? .9 : .55)) continue; c = hv < .4 ? "~" : "≈"; }   // the river runs
-        var s = style(l); if (s !== last) { ctx.fillStyle = s; last = s; }
+        var m = 1;
+        if (riv && riv[k]) { c = water(x, y, riv[k]); if (!c) continue; m = WA; }
+        else if (l === 2 && c === "~") { var hv = hash(x, y - (t >> 1)); if (hv > (MODE === "b" || MODE === "c" ? .9 : .55)) continue; c = hv < .4 ? "~" : "≈"; }   // the river runs
+        var s = style(l, m); if (s !== last) { ctx.fillStyle = s; last = s; }
         ctx.fillText(c, (x - X0) * cw, py); } }
     function put(k, c, l, a) { var y = (k / cols) | 0; if (y < r0 || y >= r0 + vis) return;
       ctx.fillStyle = f && l === f ? rgba(ACC, .9) : rgba(INK, f ? a * .4 : a);
