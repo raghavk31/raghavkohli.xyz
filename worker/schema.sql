@@ -28,3 +28,17 @@ CREATE TABLE IF NOT EXISTS images (
   created     INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS images_thought ON images (thought_id);
+-- notes pinned on the homepage's empty spaces (pins.js): text and/or images, placed by the owner.
+-- anchor names the page section the note hangs from; x is from the page's centre line, y from the anchor's top
+CREATE TABLE IF NOT EXISTS pins (
+  id       TEXT PRIMARY KEY,
+  body     TEXT,
+  images   TEXT,
+  anchor   TEXT NOT NULL,
+  x        REAL NOT NULL,
+  y        REAL NOT NULL,
+  w        REAL NOT NULL,
+  z        INTEGER NOT NULL DEFAULT 0,
+  created  INTEGER NOT NULL,
+  updated  INTEGER NOT NULL
+);

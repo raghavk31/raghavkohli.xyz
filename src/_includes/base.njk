@@ -28,7 +28,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
     {#- the र. mark keeps the face it has always had: Fraunces, subset to just its two glyphs -#}
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&text=%E0%A4%B0.&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="/assets/css/main.css" />
+    <link rel="stylesheet" href="/assets/css/main.css?v={{ v }}" />
   </head>
   <body>
     <header class="head">
@@ -47,10 +47,11 @@
       {{ content | safe }}
     </main>
 
-    <script src="/assets/js/story.js" defer></script>
-    <script src="/assets/js/main.js" defer></script>
+    <script src="/assets/js/story.js?v={{ v }}" defer></script>
+    <script src="/assets/js/main.js?v={{ v }}" defer></script>
     {%- if page.url == "/" %}
-    <script src="/assets/js/city.js" defer></script>
+    <script src="/assets/js/city.js?v={{ v }}" defer></script>
+    <script src="/assets/js/pins.js?v={{ v }}" data-api="{{ site.thoughtsApi }}" defer></script>
     {%- endif %}
   </body>
 </html>

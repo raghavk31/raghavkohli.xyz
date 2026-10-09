@@ -1183,5 +1183,45 @@ body.lb-open{overflow:hidden;}
 .sama-feeder{margin-top:clamp(56px,8vw,96px);}
 
 /* ── the city behind the homepage (city.js) ── */
-.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-body:has(> .city) > *:not(.city):not(.head):not(.pv):not(.lb):not(script) { position: relative; z-index: 1; }
+.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5; transition: opacity .28s ease; }
+.city.is-out { opacity: 0; }
+body:has(> .city) > *:not(.city):not(.city-pick):not(.head):not(.pv):not(.lb):not(.pins):not(.pin-add):not(script) { position: relative; z-index: 1; }
+/* the map's name, top right under the bar, on the page's right edge; a click moves to the next city */
+.city-pick { position: fixed; z-index: 40; top: 66px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  padding: 4px 0; border: 0; background: none; cursor: pointer;
+  font: 400 12px/1.4 var(--mono); letter-spacing: .02em; color: var(--mute); transition: color .3s ease; }
+.city-pick:hover, .city-pick:focus-visible { color: var(--ink); }
+.city-pick__r { display: inline-block; transition: transform .5s ease; }
+.city-pick:hover .city-pick__r { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .city, .city-pick__r { transition: none; } }
+
+/* ── notes pinned on the homepage's empty spaces (pins.js): the site's black post-it, placed by hand ── */
+.pins { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+.pin { position: absolute; padding: 20px 14px 12px; transform: rotate(var(--r, 1deg)); transform-origin: 50% 0; }
+.pin p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.pin__img { display: block; width: calc(100% + 28px); margin: -20px -14px 12px; height: auto; position: relative; }
+.pin__img + .pin__img { margin-top: 0; }
+.pin__tools { position: absolute; right: 10px; top: 2px; font-family: var(--nh); font-size: 10px; letter-spacing: .04em; opacity: 0; transition: opacity .2s ease; z-index: 1; }
+.pin__tools a, .pin__bar a, .pin__pick { color: var(--note-ink); opacity: .7; text-decoration: none; cursor: pointer; }
+.pin__tools a:hover, .pin__bar a:hover, .pin__pick:hover { opacity: 1; }
+.pin:hover .pin__tools { opacity: 1; }
+body:has(.pin-add) .pin:not(.is-editing) { cursor: grab; }
+.pin.is-dragging { cursor: grabbing; transform: rotate(0deg) scale(1.02); }
+.pin.is-editing { transform: none; z-index: 60 !important; }
+.pin textarea { display: block; width: 100%; min-height: 84px; resize: vertical; border: 0; outline: none; padding: 0; background: transparent;
+  color: var(--note-ink); font: inherit; position: relative; }
+.pin textarea::placeholder { color: var(--note-ink); opacity: .45; }
+.pin__thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pin__thumbs span { position: relative; }
+.pin__thumbs img { display: block; width: 52px; height: 52px; object-fit: cover; }
+.pin__thumbs a { position: absolute; right: 2px; top: 0; color: #fff; font-size: 11px; text-decoration: none; text-shadow: 0 0 3px #000; }
+.pin__bar { display: flex; gap: 12px; margin-top: 10px; font-family: var(--nh); font-size: 11px; letter-spacing: .04em; position: relative; }
+.pin__bar [data-save] { margin-left: auto; }
+.pin__msg { display: block; margin-top: 6px; font-size: 11px; opacity: .7; position: relative; }
+/* the owner's (+ note), under the city's name; while placing, the page takes a crosshair */
+.pin-add { position: fixed; z-index: 40; top: 88px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  padding: 4px 0; border: 0; background: none; cursor: pointer;
+  font: 400 12px/1.4 var(--mono); letter-spacing: .02em; color: var(--mute); transition: color .3s ease; }
+.pin-add:hover, body.is-pinning .pin-add { color: var(--ink); }
+body.is-pinning, body.is-pinning * { cursor: crosshair !important; }
+@media (max-width: 900px) { .pins, .pin-add { display: none; } }

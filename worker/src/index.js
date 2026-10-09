@@ -8,6 +8,10 @@
    DELETE /layout/<id>                      the note flows again
    POST   /images      <image bytes>        an image for a note; Content-Type is the mime; returns {id}
    GET    /images/<id>                      the image, cached for a year
+   GET    /pins                             the notes pinned on the homepage (id, body, images, anchor, x, y, w, z)
+   POST   /pins  {body?, images?, anchor, x, y, w}   a new note                  - X-Owner-Key
+   PUT    /pins/<id>  {any of those, z?}    move or edit one                          - X-Owner-Key
+   DELETE /pins/<id>                        its images go with it                     - X-Owner-Key
    Every write takes the X-Owner-Key header and nothing else; there is no login and no public path.
    Until 2026-09-25 anyone could post, guarded by a Turnstile token and a per-IP hourly limit; both
    went with the public path, so reopening the wall means bringing them back, not relaxing a check.
@@ -35,7 +39,7 @@ export default {
     const ownerHeader = () => isOwner(req.headers.get("X-Owner-Key"));
 
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
-    const m = url.pathname.match(/^\/(thoughts|layout|images)(?:\/([A-Za-z0-9_-]+))?\/?$/);
+    const m = url.pathname.match(/^\/(thoughts|layout|images|pins)(?:\/([A-Za-z0-9_-]+))?\/?$/);
     if (!m) return json({ error: "not found" }, 404);
     const route = m[1], id = m[2];
 
@@ -131,6 +135,51 @@ export default {
         "INSERT INTO layout (id, x, y, w, z, updated) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET x = excluded.x, y = excluded.y, w = excluded.w, z = excluded.z, updated = excluded.updated"
       ).bind(id, pos.x, pos.y, pos.w, pos.z, Date.now()).run();
       return json({ layout: pos });
+    }
+
+    /* ---------- pins: notes on the homepage's empty spaces ---------- */
+    if (route === "pins" && req.method === "GET" && !id) {
+      const { results } = await env.DB.prepare("SELECT id, body, images, anchor, x, y, w, z, created FROM pins ORDER BY z, created").all();
+      return json({ pins: results.map(withImages) });
+    }
+    if (route === "pins" && (req.method === "POST" && !id || (req.method === "PUT" || req.method === "DELETE") && id)) {
+      if (!ownerHeader()) return json({ error: "no" }, 403);
+      if (req.method === "DELETE") {
+        const [r] = await env.DB.batch([
+          env.DB.prepare("DELETE FROM pins WHERE id = ?").bind(id),
+          env.DB.prepare("DELETE FROM images WHERE thought_id = ?").bind(id),
+        ]);
+        return json({ deleted: r.meta.changes > 0 });
+      }
+      let data;
+      try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
+      const cur = id ? await env.DB.prepare("SELECT * FROM pins WHERE id = ?").bind(id).first() : null;
+      if (id && !cur) return json({ error: "not found" }, 404);
+      const row = cur ? withImages(cur) : { id: newId(), body: null, images: [], anchor: "top", x: 0, y: 0, w: 200, z: 0, created: Date.now() };
+      const n = (v, lo, hi) => Math.min(Math.max(Number(v) || 0, lo), hi);
+      if ("body" in data) row.body = String(data.body || "").replace(/\r\n?/g, "\n").trim().slice(0, 4000) || null;
+      if ("anchor" in data) row.anchor = String(data.anchor || "top").replace(/[^a-z0-9:&\- ]/gi, "").slice(0, 60) || "top";
+      if ("x" in data) row.x = n(data.x, -5000, 5000);
+      if ("y" in data) row.y = n(data.y, -5000, 200000);
+      if ("w" in data) row.w = n(data.w, 120, 600);
+      if ("z" in data) row.z = Math.round(n(data.z, 0, 1e9));
+      let dropped = [];
+      if ("images" in data) {
+        const next = await keepImages(env, fields(data, env).images, row.id);
+        dropped = row.images.filter((i) => !next.includes(i));
+        row.images = next;
+      }
+      if (!row.body && !row.images.length) return json({ error: "write something first" }, 400);
+      const imgs = row.images.length ? JSON.stringify(row.images) : null, now = Date.now();
+      const stmts = [cur
+        ? env.DB.prepare("UPDATE pins SET body = ?, images = ?, anchor = ?, x = ?, y = ?, w = ?, z = ?, updated = ? WHERE id = ?")
+            .bind(row.body, imgs, row.anchor, row.x, row.y, row.w, row.z, now, row.id)
+        : env.DB.prepare("INSERT INTO pins (id, body, images, anchor, x, y, w, z, created, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+            .bind(row.id, row.body, imgs, row.anchor, row.x, row.y, row.w, row.z, row.created, now)];
+      if (row.images.length) stmts.push(env.DB.prepare(`UPDATE images SET thought_id = ? WHERE id IN (${row.images.map(() => "?").join(",")})`).bind(row.id, ...row.images));
+      if (dropped.length) stmts.push(env.DB.prepare(`DELETE FROM images WHERE id IN (${dropped.map(() => "?").join(",")})`).bind(...dropped));
+      await env.DB.batch(stmts);
+      return json({ pin: row }, cur ? 200 : 201);
     }
 
     /* ---------- images ---------- */

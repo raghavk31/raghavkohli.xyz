@@ -1,0 +1,65 @@
+[
+ {
+  "slug": "ahmedabad",
+  "name": "ahmedabad",
+  "lat": 23.125,
+  "lon": 72.655,
+  "fx": 0.452
+ },
+ {
+  "slug": "agra",
+  "name": "agra",
+  "lat": 27.182,
+  "lon": 78.033,
+  "fx": 0.532
+ },
+ {
+  "slug": "delhi",
+  "name": "delhi",
+  "lat": 28.603,
+  "lon": 77.254,
+  "fx": 0.617
+ },
+ {
+  "slug": "bangalore",
+  "name": "bangalore",
+  "lat": 12.968,
+  "lon": 77.596,
+  "fx": 0.5
+ },
+ {
+  "slug": "mumbai",
+  "name": "mumbai",
+  "lat": 19.034,
+  "lon": 72.832,
+  "fx": 0.239
+ },
+ {
+  "slug": "amsterdam",
+  "name": "amsterdam",
+  "lat": 52.37,
+  "lon": 4.893,
+  "fx": 0.5
+ },
+ {
+  "slug": "san-francisco",
+  "name": "san francisco",
+  "lat": 37.787,
+  "lon": -122.422,
+  "fx": 0.543
+ },
+ {
+  "slug": "boston",
+  "name": "boston",
+  "lat": 42.356,
+  "lon": -71.08,
+  "fx": 0.585
+ },
+ {
+  "slug": "new-york",
+  "name": "new york",
+  "lat": 40.776,
+  "lon": -73.966,
+  "fx": 0.319
+ }
+]
