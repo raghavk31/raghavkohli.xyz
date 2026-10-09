@@ -109,52 +109,66 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 .work__why p + p{color:var(--ink);}
 
 /* ---------- the ecology diagram (src/_data/ecologyViz.js) ----------
-   A hub: ecology in the middle, the resources on wires into it, education and economy as two bands
-   below. main.js runs dots along the wires (.eco__dots). Every resource and band is a filter; the
-   tile is the reset. Two drawings: the hub above 720px, the column below. */
+   One loop: ecology a word in a ring, the resources on wires into it, a wire down through education
+   to economy, and economy back up both edges to energy at the top. main.js runs dots along the wires
+   (.eco__dots), tinted as they go. Every resource and thread is a filter; the ring is the reset.
+   Two drawings: the loop above 720px, the column below. */
 .eco{margin:clamp(32px,4.5vw,60px) 0 0;
-  --ed:#E6E3F4; --ed-ink:#6F67B0; --ec:#DDEDE3; --ec-ink:#3F7D5A;}
+  --ed:#E6E3F4; --ed-ink:#6F67B0; --ec:#DDEDE3; --ec-ink:#3F7D5A; --wire:rgba(28,27,24,.36);}
+/* a quiet zone: the city fades out behind the drawing, so its streets never read as its wires */
+.eco::before{content:"";position:absolute;z-index:-1;pointer-events:none;
+  inset:-36px calc(-1 * var(--gutter));background:var(--paper);opacity:.94;
+  -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(transparent,#000 16%,#000 84%,transparent);
+  -webkit-mask-composite:source-in;
+  mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(transparent,#000 16%,#000 84%,transparent);
+  mask-composite:intersect;}
 .eco__svg{display:block;width:100%;height:auto;overflow:visible;}
 .eco__svg--tall{display:none;max-width:440px;}
 @media(max-width:720px){ .eco__svg--wide{display:none;} .eco__svg--tall{display:block;} }
 .eco text{font-family:var(--sans);fill:var(--ink);}
-.eco__wire{fill:none;stroke:var(--line);stroke-width:1;transition:stroke .35s ease,stroke-width .35s ease;}
-.eco__wire[data-flow="band"]{stroke:none;}   /* education's dots run inside its band; the band is the line */
+.eco__wire{fill:none;stroke:var(--wire);stroke-width:1.1;stroke-linecap:round;transition:stroke .35s ease,stroke-width .35s ease;}
+.eco__wire[data-grad]{stroke:var(--g);}
+.eco__wire--rail{stroke-width:1.4;}
+.eco__wire[data-flow="band"]{stroke:var(--ed-ink);stroke-opacity:.45;}
 .eco__end{fill:var(--ink);}
-.eco__pill{fill:var(--paper);stroke:var(--line);stroke-width:1;transition:stroke .3s ease,fill .3s ease;}
-.eco__label{font-size:13px;font-weight:500;letter-spacing:.01em;pointer-events:none;}
+/* labels sit on their wires: a paper chip under the words hides the wire, no outline */
+.eco__pill{fill:var(--paper);transition:fill .3s ease;}
+.eco__label{font-size:13.5px;font-weight:500;letter-spacing:.005em;pointer-events:none;}
+.eco__label--lead{font-size:19px;letter-spacing:-0.015em;}
 .eco .eco__count{font-size:10.5px;font-weight:500;letter-spacing:.06em;fill:var(--faint-2);font-variant-numeric:tabular-nums;}
-.eco__band{transition:fill .35s ease;}
-.eco__band--ed{fill:var(--ed);} .eco__band--ec{fill:var(--ec);}
-.eco__blabel{font-size:13px;font-weight:500;}
+.eco .eco__label--lead .eco__count{font-size:12px;}
+.eco__svg--tall .eco__label--lead{font-size:17px;}
+/* the threads: lanes the loop runs inside; only their words at rest, the lane fills on hover */
+.eco__band{fill:transparent;transition:fill .35s ease;}
+.eco__blabel{font-size:13.5px;font-weight:500;}
 .eco__bnote{font-size:12px;fill:var(--ink-soft);}
 .eco__band--ed ~ .eco__blabel{fill:var(--ed-ink);} .eco__band--ec ~ .eco__blabel{fill:var(--ec-ink);}
-/* the band's words sit over its dots, with a halo of the band's own colour so the dots pass behind */
-.eco__blabel, .eco__bnote{paint-order:stroke;stroke-width:10px;stroke-linejoin:round;transition:stroke .35s ease;}
-.eco__band--ed ~ text{stroke:var(--ed);} .eco__band--ec ~ text{stroke:var(--ec);}
-.eco__node--band:hover .eco__band--ed ~ text, .eco__node--band.on .eco__band--ed ~ text{stroke:#D7D2EE;}
-.eco__node--band:hover .eco__band--ec ~ text, .eco__node--band.on .eco__band--ec ~ text{stroke:#C9E3D3;}
-.eco__wire[data-flow="loop"]{stroke:#B7D2C2;}
+/* the threads' words sit over their wires, with a paper halo (the lane's colour once it fills) */
+.eco__blabel, .eco__bnote{paint-order:stroke;stroke:var(--paper);stroke-width:10px;stroke-linejoin:round;transition:stroke .35s ease;}
+.eco__node--band:hover .eco__band--ed ~ text, .eco__node--band.on .eco__band--ed ~ text{stroke:var(--ed);}
+.eco__node--band:hover .eco__band--ec ~ text, .eco__node--band.on .eco__band--ec ~ text{stroke:var(--ec);}
+.eco__node--band:hover .eco__band--ed, .eco__node--band.on .eco__band--ed{fill:var(--ed);}
+.eco__node--band:hover .eco__band--ec, .eco__node--band.on .eco__band--ec{fill:var(--ec);}
+/* ecology: a word in one thin ring */
 .eco__tile{cursor:pointer;outline:none;}
-.eco__tile-out{fill:#EDECE6;}
-.eco__tile-in{fill:#fff;stroke:var(--line);stroke-width:.75;transition:stroke .3s ease;}
-.eco__root{font-size:22px;font-weight:500;letter-spacing:-0.02em;}
-.eco__tile:hover .eco__tile-in, .eco__tile:focus-visible .eco__tile-in{stroke:var(--ink);}
+.eco__ring{fill:var(--paper);stroke:var(--ink);stroke-width:1;transition:stroke-width .3s ease;}
+.eco__root{font-weight:500;letter-spacing:-0.03em;}
+.eco__tile:hover .eco__ring, .eco__tile:focus-visible .eco__ring{stroke-width:2;}
 .eco__hit{fill:transparent;}
 .eco__node{cursor:pointer;outline:none;transition:opacity .35s ease;}
-/* hover or a chosen node: its wire and pill come forward, the rest step back */
+/* hover or a chosen node: its wire and label come forward, the rest step back */
 .eco:has(.eco__node:hover) .eco__node:not(:hover):not(.on),
 .eco.has-active .eco__node:not(.on):not(:hover){opacity:.4;}
-.eco__node:hover .eco__wire, .eco__node.on .eco__wire, .eco__node:focus-visible .eco__wire{stroke:var(--ink);stroke-width:1.4;}
-.eco__node:hover .eco__pill, .eco__node.on .eco__pill, .eco__node:focus-visible .eco__pill{stroke:var(--ink);}
+.eco__node:hover .eco__wire, .eco__node.on .eco__wire, .eco__node:focus-visible .eco__wire{stroke:var(--ink);stroke-width:1.5;}
+.eco__node--band:hover .eco__wire, .eco__node--band.on .eco__wire{stroke-opacity:1;}
+.eco__node--band:hover .eco__wire[data-flow="band"], .eco__node--band.on .eco__wire[data-flow="band"]{stroke:var(--ed-ink);}
+.eco__node--band:hover .eco__wire--rail, .eco__node--band.on .eco__wire--rail{stroke:var(--ec-ink);}
+.eco__node:hover .eco__pill{fill:var(--paper-2);}
 .eco__node.on .eco__pill{fill:var(--ink);} .eco__node.on .eco__label{fill:var(--paper);} .eco__node.on .eco__count{fill:var(--line);}
-.eco__node--band:hover .eco__band--ed, .eco__node--band.on .eco__band--ed{fill:#D7D2EE;}
-.eco__node--band:hover .eco__band--ec, .eco__node--band.on .eco__band--ec{fill:#C9E3D3;}
 .eco__node:focus-visible .eco__pill, .eco__node:focus-visible .eco__band{stroke:var(--accent);stroke-width:1.5;}
-/* the moving dots */
+/* the moving dots: ink by default, tinted along the loop by main.js */
 .eco__dots{pointer-events:none;}
 .eco__dots circle{fill:var(--ink);}
-.eco__dots .ed{fill:var(--ed-ink);} .eco__dots .ec{fill:var(--ec-ink);}
 /* every node's callout box: its note on post-it paper (the paper rule is under "post-its"), stuck
    onto the node by main.js placeCallout. Up on hover / focus, and kept up for the chosen node. It
    lands like the card notes do and never takes the pointer. "[note]" marks one still to be written. */
@@ -1183,5 +1197,100 @@ body.lb-open{overflow:hidden;}
 .sama-feeder{margin-top:clamp(56px,8vw,96px);}
 
 /* ── the city behind the homepage (city.js) ── */
-.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
-body:has(> .city) > *:not(.city):not(.head):not(.pv):not(.lb):not(script) { position: relative; z-index: 1; }
+.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .43; transition: opacity .28s ease; }
+.city.is-out { opacity: 0; }
+body:has(> .city) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pins):not(script) { position: relative; z-index: 1; }
+/* the dock: the homepage's controls in one line at the foot of the screen, on the page's right edge:
+   the city's name (a click moves to the next city), the owner's tools, the colour modes */
+.dock { position: fixed; z-index: 40; bottom: 14px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  display: flex; align-items: center; gap: 22px; padding: 2px 10px; margin-right: -10px;
+  background: color-mix(in srgb, var(--paper) 86%, transparent); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.dock__tools, .dock__modes { display: flex; gap: 14px; }
+.dock__tools:empty { display: none; }
+.dock button { padding: 4px 0; border: 0; background: none; cursor: pointer;
+  font: 400 12px/1.4 var(--mono); letter-spacing: .02em; color: var(--mute); transition: color .3s ease; }
+.dock button:hover, .dock button:focus-visible, .dock button[aria-pressed="true"] { color: var(--ink); }
+.city-pick__r { display: inline-block; transition: transform .5s ease; }
+.city-pick:hover .city-pick__r { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .city, .city-pick__r { transition: none; } }
+
+/* ── notes pinned on the homepage's empty spaces (pins.js): the site's black post-it, placed by hand ── */
+.pins { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+/* a note is laid out at 220px and scaled to its width (--s = w / 220), so its text and images grow with it */
+.pin { position: absolute; width: 220px; padding: 20px 14px 12px; transform-origin: 0 0; }
+.pins .pin, .pins .pin:hover { transform: rotate(var(--r, 1deg)) scale(var(--s, 1)); }
+.pin p { white-space: pre-wrap; overflow-wrap: anywhere; }
+.pin__img { display: block; width: calc(100% + 28px); margin: -20px -14px 12px; height: auto; position: relative; }
+.pin__img + .pin__img { margin-top: 0; }
+.pin__tools { position: absolute; right: 10px; top: 2px; font-family: var(--nh); font-size: 10px; letter-spacing: .04em; opacity: 0; transition: opacity .2s ease; z-index: 1; }
+.pin__tools a, .pin__bar a, .pin__pick { color: var(--note-ink); opacity: .7; text-decoration: none; cursor: pointer; }
+.pin__tools a:hover, .pin__bar a:hover, .pin__pick:hover { opacity: 1; }
+.pin:hover .pin__tools { opacity: 1; }
+body:has(.pin-add) .pin:not(.is-editing) { cursor: grab; }
+.pins .pin.is-dragging { cursor: grabbing; transform: rotate(0deg) scale(var(--s, 1)); }
+.pins .pin.is-editing { transform: none; z-index: 60 !important; }
+.pin textarea { display: block; width: 100%; min-height: 84px; resize: vertical; border: 0; outline: none; padding: 0; background: transparent;
+  color: var(--note-ink); font: inherit; position: relative; }
+.pin textarea::placeholder { color: var(--note-ink); opacity: .45; }
+.pin__thumbs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.pin__thumbs span { position: relative; }
+.pin__thumbs img { display: block; width: 52px; height: 52px; object-fit: cover; }
+.pin__thumbs a { position: absolute; right: 2px; top: 0; color: #fff; font-size: 11px; text-decoration: none; text-shadow: 0 0 3px #000; }
+.pin__bar { display: flex; gap: 12px; margin-top: 10px; font-family: var(--nh); font-size: 11px; letter-spacing: .04em; position: relative; }
+.pin__bar [data-save] { margin-left: auto; }
+.pin__msg { display: block; margin-top: 6px; font-size: 11px; opacity: .7; position: relative; }
+/* the owner's tools sit in the dock; while placing a note, the page takes a crosshair */
+body.is-pinning .pin-add:first-child, body.is-arranging .pin-add { color: var(--ink); }
+body.is-pinning, body.is-pinning * { cursor: crosshair !important; }
+
+/* the corner that scales a note or a box (owner only) */
+.grip { position: absolute; right: -6px; bottom: -6px; width: 14px; height: 14px; cursor: nwse-resize; z-index: 3; touch-action: none;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; opacity: 0; transition: opacity .2s ease; }
+.pin .grip { color: var(--note-ink); right: 4px; bottom: 4px; }
+.pin:hover .grip, body.is-arranging .card .grip { opacity: .7; }
+.pin.is-editing .grip { display: none; }
+
+/* the project boxes placed by hand (pins.js): no rows, no breaks; each box sits at its own spot and
+   width, inline. Visitors see the same arrangement; under 900px the boxes stack as before. */
+.work__grid.is-free { display: block; position: relative; }
+.work__grid.is-free .work__row, .work__grid.is-free .work__rest { display: contents; }
+.work__grid.is-free .work__break { display: none; }
+.work__grid.is-free .card { position: absolute; margin: 0; max-width: none; }
+.work__grid.is-free .card:has(.card__click:hover, .card__click:focus-within) { z-index: 9999 !important; }
+.work__grid.is-free .card.flip { transition: opacity .45s ease, filter .45s ease; }
+.work__grid.board-wait { opacity: 0; }
+.work__grid { transition: opacity .3s ease; }
+body.is-arranging .work__grid .card { cursor: grab; outline: 1px dashed var(--line); outline-offset: 6px; touch-action: none; user-select: none; -webkit-user-select: none; }
+body.is-arranging .work__grid .card * { pointer-events: none; }
+body.is-arranging .work__grid .card .grip { pointer-events: auto; color: var(--ink); }
+body.is-arranging .work__grid .card.is-dragging { cursor: grabbing; outline-color: var(--ink); }
+body.is-arranging .work__grid .card { opacity: 1 !important; filter: none !important; }
+body.is-arranging .card__note { display: none; }
+
+@media (max-width: 900px) { .pins, .dock .pin-add { display: none; } .dock { gap: 16px; } }
+
+/* ---------- colour modes (2026-10-10; base.njk, the dock): dark, and random ----------
+   The paper goes to near-black and the ink to the paper's colour; the city is drawn in light ink
+   (city.js) and shows a little stronger. The black notes turn to paper so they still read as notes. */
+:root[data-theme="dark"]{
+  --paper:#0D0D0B; --paper-2:#171714; --ink:#ECEAE3; --ink-2:#D2D0C8; --ink-soft:#B2B0A8; --mute:#94928A;
+  --faint:#8C8A82; --faint-2:#7C7A71; --line:#3A3933; --accent:#A9B8DC;
+  --note:#ECEAE3; --note-2:#D9D6CC; --note-ink:#1C1B18; --note-shadow:rgba(0,0,0,.6);
+  --stripe:repeating-linear-gradient(135deg,#1D1D1A 0px,#1D1D1A 1px,#141412 1px,#141412 11px);
+  color-scheme:dark;}
+:root[data-theme="dark"] .eco{--ed:#2A2640; --ed-ink:#A99FE6; --ec:#1B2C23; --ec-ink:#7CC79C; --wire:rgba(236,234,227,.34);}
+:root[data-theme="dark"] .city{opacity:.62;}
+:root[data-theme="dark"] .head, :root[data-mode="random"] .head{background:color-mix(in srgb, var(--paper) 72%, transparent);}
+:root[data-theme="dark"] .card__overlay, :root[data-mode="random"] .card__overlay{background:color-mix(in srgb, var(--paper) 55%, transparent);}
+:root[data-theme="dark"] .card__q{color:var(--ink);}
+:root[data-theme="dark"] .card__fig, :root[data-mode="random"] .card__fig,
+:root[data-theme="dark"] .frame__fig, :root[data-mode="random"] .frame__fig,
+:root[data-theme="dark"] .kmap__tag, :root[data-mode="random"] .kmap__tag,
+:root[data-theme="dark"] .kmap__out, :root[data-mode="random"] .kmap__out{background:color-mix(in srgb, var(--paper) 85%, transparent);}
+:root[data-theme="dark"] .pv__backdrop, :root[data-mode="random"] .pv__backdrop{background:color-mix(in srgb, var(--paper) 75%, transparent);}
+:root[data-theme="dark"] .pv__bar, :root[data-mode="random"] .pv__bar{background:color-mix(in srgb, var(--paper) 75%, transparent);}
+:root[data-theme="dark"] .lb__backdrop, :root[data-mode="random"] .lb__backdrop{background:color-mix(in srgb, var(--paper) 96%, transparent);}
+:root[data-theme="dark"] .postit::before, :root[data-theme="dark"] .card__note::before, :root[data-theme="dark"] .eco__callout::before{background:rgba(28,27,24,.06);}
+:root[data-theme="dark"] .cv-item, :root[data-theme="dark"] .pv__method .m{border-top-color:rgba(236,234,227,.1);}
+:root[data-mode="random"]:not([data-theme="dark"]) .city{opacity:.5;}
+body{transition:background-color .4s ease, color .4s ease;}

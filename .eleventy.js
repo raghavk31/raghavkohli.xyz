@@ -30,6 +30,9 @@ module.exports = function (eleventyConfig) {
     api.getFilteredByGlob("src/thoughts/*.md").sort((a, b) => b.date - a.date)
   );
 
+  // a stamp per build, on the CSS and JS links, so a browser never keeps a stale copy after a change or a deploy
+  eleventyConfig.addGlobalData("v", () => Date.now().toString(36));
+
   // "21 september 2026" — the journal's date, lowercase like every label on the site
   eleventyConfig.addFilter("day", (d) => {
     const x = d ? new Date(d) : new Date();

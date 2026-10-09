@@ -106,6 +106,12 @@
     }
 
     function applyFilter(topic) {
+      // boxes arranged by hand (pins.js, .is-free) stay where he put them: the matches stay, the rest recede
+      if (grid.classList.contains("is-free")) {
+        grid.classList.toggle("filtering", !!topic);
+        cards.forEach(function (c) { c.classList.toggle("match", !!topic && topicsOf(c).indexOf(topic) !== -1); });
+        return;
+      }
       // FLIP: measure, mutate, invert, play — so the reflow animates smoothly
       var first = cards.map(function (c) { return c.getBoundingClientRect(); });
 
@@ -186,6 +192,8 @@
       else if (shape && shape.getAttribute("data-anchor") === "end") x = r.left - box.left - cw + 28;
       else x = r.right - box.left - 28;
       var y = r.top - box.top - ch + 4;   // touching the pill's top edge, never over its label
+      // the lead sits on the top rail: its box goes beside it, so it never climbs over the statement
+      if (shape && shape.getAttribute("data-anchor") === "middle") { x = r.right - box.left + 10; y = r.top - box.top + r.height / 2 - ch / 2; }
       // the phone's column stacks the pills tight: there the box sits beside its pill, over the wires
       if (node.closest(".eco__svg--tall") && !shape.classList.contains("eco__band")) { x = r.right - box.left + 10; y = r.top - box.top + r.height / 2 - ch / 2; }
       x = Math.max(0, Math.min(box.width - cw, x));
@@ -252,21 +260,38 @@
       });
     });
 
-    // pills are sized at build time by an estimate; fit them to the real text once the font is in
+    // the label chips are sized at build time by an estimate; fit them to the real text once the
+    // font is in (the text keeps its place and anchor, the chip wraps it)
     function fitPills() {
       eco.querySelectorAll(".eco__pill").forEach(function (r) {
         var t = r.nextElementSibling;
         if (!t || !t.getComputedTextLength || !t.getComputedTextLength()) return;
-        var w = Math.ceil(t.getBBox().width + 30);
-        var x = r.getAttribute("data-anchor") === "end" ? +r.getAttribute("data-x") - w : +r.getAttribute("x");
-        r.setAttribute("width", w); r.setAttribute("x", x); t.setAttribute("x", x + 15);
+        var bb = t.getBBox();
+        r.setAttribute("x", (bb.x - 12).toFixed(1)); r.setAttribute("width", Math.ceil(bb.width + 24));
       });
     }
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitPills); else fitPills();
 
     // the loop, moving: dots run along every wire in its direction (resource → ecology → education
     // → economy → back out). The node under the pointer, or the chosen one, runs faster. Paused
-    // offscreen; under reduced motion the dots are placed once and stay still.
+    // offscreen; under reduced motion the dots are placed once and stay still. A wire's data-tint
+    // names the dots' colours from its start to its end, so they change as they go round.
+    var css = getComputedStyle(eco);
+    function rgb(v) {
+      v = (v || "").trim().replace("#", "");
+      if (v.length === 3) v = v.replace(/./g, "$&$&");
+      var n = parseInt(v, 16) || 0;
+      return [n >> 16 & 255, n >> 8 & 255, n & 255];
+    }
+    var TINT = { ink: rgb(css.getPropertyValue("--ink")), ed: rgb(css.getPropertyValue("--ed-ink")), ec: rgb(css.getPropertyValue("--ec-ink")) };
+    document.addEventListener("themechange", function () {   // css is live: read the new colours into the same arrays
+      [["ink", "--ink"], ["ed", "--ed-ink"], ["ec", "--ec-ink"]].forEach(function (k) { var v = rgb(css.getPropertyValue(k[1])); TINT[k[0]].splice(0, 3, v[0], v[1], v[2]); });
+      flows.forEach(function (f) { if (f.one) f.dots.forEach(function (c) { c.style.fill = tintAt([f.one, f.one], 0); }); });
+    });
+    function tintAt(stops, t) {
+      var s = t * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(s)), f = s - i, a = stops[i], b = stops[i + 1];
+      return "rgb(" + Math.round(a[0] + (b[0] - a[0]) * f) + "," + Math.round(a[1] + (b[1] - a[1]) * f) + "," + Math.round(a[2] + (b[2] - a[2]) * f) + ")";
+    }
     var flows = [];
     eco.querySelectorAll(".eco__svg").forEach(function (svg) {
       svg.querySelectorAll(".eco__wire").forEach(function (w) {
@@ -279,16 +304,16 @@
         try { len = w.getTotalLength(); } catch (e) { len = 0; }   // 0 while its drawing is hidden: measured on first show
         var owner = w.closest("[data-topic]");
         var topic = owner ? owner.getAttribute("data-topic") : (w.getAttribute("data-of") || "");
-        var cls = topic === "education" ? "ed" : (topic === "economy" ? "ec" : "");
+        var tint = (w.getAttribute("data-tint") || "ink").split(" ").map(function (k) { return TINT[k] || TINT.ink; });
         var n = Math.max(1, Math.round((len || 400) / 110)), dots = [];
         for (var i = 0; i < n; i++) {
           var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           c.setAttribute("r", "2.2");
-          if (cls) c.setAttribute("class", cls);
+          if (tint.length === 1) c.style.fill = tintAt([tint[0], tint[0]], 0);
           layer.appendChild(c);
           dots.push(c);
         }
-        flows.push({ svg: svg, w: w, len: len, topic: topic, dots: dots, p: Math.random() * (len || 400) });
+        flows.push({ svg: svg, w: w, len: len, topic: topic, dots: dots, tint: tint.length > 1 ? tint : null, one: tint.length === 1 ? tint[0] : null, p: Math.random() * (len || 400) });
       });
     });
 
@@ -303,6 +328,7 @@
         c.setAttribute("cy", pt.y.toFixed(1));
         c.setAttribute("r", fast ? "2.9" : "2.2");
         c.style.opacity = (dim * Math.min(1, t * 8, (1 - t) * 8)).toFixed(2);
+        if (f.tint) c.style.fill = tintAt(f.tint, t);
       });
     }
 
