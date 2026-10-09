@@ -5,6 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <!-- flag JS so scroll-reveal only hides content when it can be revealed again -->
     <script>document.documentElement.classList.add('js')</script>
+    {#- the colour mode (2026-10-10): light, dark, or random (any colour of paper, the ink light or dark
+        to suit it). Chosen in the dock at the foot of the homepage, or ?theme=light|dark|random, and
+        remembered by the browser. Set here, before the styles and scripts read the colours; a change
+        fires "themechange" on document so the city and the diagram redraw. -#}
+    <script>(function () {
+      var d = document.documentElement;
+      function store(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) {} }
+      function read(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
+      function roll() {   // any hue; a dark paper or a light one, never so mid-grey the ink cannot read on it
+        var h = Math.floor(Math.random() * 360), dark = Math.random() < .5, s = Math.round(30 + Math.random() * 45);
+        var l = dark ? Math.round(8 + Math.random() * 14) : Math.round(76 + Math.random() * 14);
+        return { h: h, s: s, l: l, dark: dark };
+      }
+      function apply(mode, c) {
+        ["--paper", "--paper-2", "--line", "--stripe"].forEach(function (k) { d.style.removeProperty(k); });
+        d.dataset.mode = mode;
+        if (mode === "dark" || (mode === "random" && c.dark)) d.dataset.theme = "dark"; else delete d.dataset.theme;
+        if (mode !== "random") return;
+        var p = "hsl(" + c.h + " " + c.s + "% " + c.l + "%)", p2 = "hsl(" + c.h + " " + c.s + "% " + (c.l + (c.dark ? 4 : -4)) + "%)";
+        d.style.setProperty("--paper", p); d.style.setProperty("--paper-2", p2);
+        d.style.setProperty("--line", "hsl(" + c.h + " " + Math.round(c.s / 2) + "% " + (c.dark ? c.l + 16 : c.l - 22) + "%)");
+        d.style.setProperty("--stripe", "repeating-linear-gradient(135deg," + p2 + " 0px," + p2 + " 1px," + p + " 1px," + p + " 11px)");
+      }
+      window.setTheme = function (mode) {
+        var c = null;
+        if (mode === "random") { c = roll(); store("theme-colour", JSON.stringify(c)); }   // every (random) is a new colour
+        store("theme", mode === "light" ? null : mode);
+        apply(mode, c);
+        document.dispatchEvent(new Event("themechange"));
+      };
+      var q = new URLSearchParams(location.search).get("theme");
+      if (q === "light" || q === "dark" || q === "random") store("theme", q === "light" ? null : q);
+      var mode = read("theme") || "light", c = null;
+      if (mode === "random") { try { c = JSON.parse(read("theme-colour")); } catch (e) {} if (!c || q === "random") { c = roll(); store("theme-colour", JSON.stringify(c)); } }
+      apply(mode, c);
+    })()</script>
     {#- a project page names itself "<title> · Raghav Kohli", describes itself by its research question,
         and previews with its card thumbnail: these are the links that go out in emails -#}
     {%- set isProject = ((page.url or "") | string).startsWith("/work/") and question -%}
@@ -50,6 +86,22 @@
     <script src="/assets/js/story.js?v={{ v }}" defer></script>
     <script src="/assets/js/main.js?v={{ v }}" defer></script>
     {%- if page.url == "/" %}
+    {#- the dock: the page's own controls at the foot of the screen. city.js puts the city's name first,
+        pins.js the owner's tools after it; the colour modes are for everyone. -#}
+    <nav class="dock" data-dock aria-label="page options">
+      <span class="dock__tools" data-dock-tools></span>
+      <span class="dock__modes">
+        <button type="button" data-mode="light">(light)</button>
+        <button type="button" data-mode="dark">(dark)</button>
+        <button type="button" data-mode="random" title="a new colour every time">(random)</button>
+      </span>
+    </nav>
+    <script>(function () {
+      var bs = document.querySelectorAll(".dock__modes [data-mode]");
+      function mark() { bs.forEach(function (b) { b.setAttribute("aria-pressed", b.dataset.mode === (document.documentElement.dataset.mode || "light")); }); }
+      bs.forEach(function (b) { b.addEventListener("click", function () { window.setTheme(b.dataset.mode); }); });
+      document.addEventListener("themechange", mark); mark();
+    })()</script>
     <script src="/assets/js/city.js?v={{ v }}" defer></script>
     <script src="/assets/js/pins.js?v={{ v }}" data-api="{{ site.thoughtsApi }}" defer></script>
     {%- endif %}

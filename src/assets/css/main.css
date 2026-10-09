@@ -1197,14 +1197,19 @@ body.lb-open{overflow:hidden;}
 .sama-feeder{margin-top:clamp(56px,8vw,96px);}
 
 /* ── the city behind the homepage (city.js) ── */
-.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .5; transition: opacity .28s ease; }
+.city { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .43; transition: opacity .28s ease; }
 .city.is-out { opacity: 0; }
-body:has(> .city) > *:not(.city):not(.city-pick):not(.head):not(.pv):not(.lb):not(.pins):not(.pin-add):not(script) { position: relative; z-index: 1; }
-/* the map's name, top right under the bar, on the page's right edge; a click moves to the next city */
-.city-pick { position: fixed; z-index: 40; top: 66px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
-  padding: 4px 0; border: 0; background: none; cursor: pointer;
+body:has(> .city) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pins):not(script) { position: relative; z-index: 1; }
+/* the dock: the homepage's controls in one line at the foot of the screen, on the page's right edge:
+   the city's name (a click moves to the next city), the owner's tools, the colour modes */
+.dock { position: fixed; z-index: 40; bottom: 14px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
+  display: flex; align-items: center; gap: 22px; padding: 2px 10px; margin-right: -10px;
+  background: color-mix(in srgb, var(--paper) 86%, transparent); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+.dock__tools, .dock__modes { display: flex; gap: 14px; }
+.dock__tools:empty { display: none; }
+.dock button { padding: 4px 0; border: 0; background: none; cursor: pointer;
   font: 400 12px/1.4 var(--mono); letter-spacing: .02em; color: var(--mute); transition: color .3s ease; }
-.city-pick:hover, .city-pick:focus-visible { color: var(--ink); }
+.dock button:hover, .dock button:focus-visible, .dock button[aria-pressed="true"] { color: var(--ink); }
 .city-pick__r { display: inline-block; transition: transform .5s ease; }
 .city-pick:hover .city-pick__r { transform: rotate(180deg); }
 @media (prefers-reduced-motion: reduce) { .city, .city-pick__r { transition: none; } }
@@ -1234,11 +1239,8 @@ body:has(.pin-add) .pin:not(.is-editing) { cursor: grab; }
 .pin__bar { display: flex; gap: 12px; margin-top: 10px; font-family: var(--nh); font-size: 11px; letter-spacing: .04em; position: relative; }
 .pin__bar [data-save] { margin-left: auto; }
 .pin__msg { display: block; margin-top: 6px; font-size: 11px; opacity: .7; position: relative; }
-/* the owner's (+ note), under the city's name; while placing, the page takes a crosshair */
-.pin-add { position: fixed; z-index: 40; top: 88px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
-  padding: 4px 0; border: 0; background: none; cursor: pointer;
-  font: 400 12px/1.4 var(--mono); letter-spacing: .02em; color: var(--mute); transition: color .3s ease; }
-.pin-add:hover, body.is-pinning .pin-add { color: var(--ink); }
+/* the owner's tools sit in the dock; while placing a note, the page takes a crosshair */
+body.is-pinning .pin-add:first-child, body.is-arranging .pin-add { color: var(--ink); }
 body.is-pinning, body.is-pinning * { cursor: crosshair !important; }
 
 /* the corner that scales a note or a box (owner only) */
@@ -1265,4 +1267,30 @@ body.is-arranging .work__grid .card.is-dragging { cursor: grabbing; outline-colo
 body.is-arranging .work__grid .card { opacity: 1 !important; filter: none !important; }
 body.is-arranging .card__note { display: none; }
 
-@media (max-width: 900px) { .pins, .pin-add { display: none; } }
+@media (max-width: 900px) { .pins, .dock .pin-add { display: none; } .dock { gap: 16px; } }
+
+/* ---------- colour modes (2026-10-10; base.njk, the dock): dark, and random ----------
+   The paper goes to near-black and the ink to the paper's colour; the city is drawn in light ink
+   (city.js) and shows a little stronger. The black notes turn to paper so they still read as notes. */
+:root[data-theme="dark"]{
+  --paper:#0D0D0B; --paper-2:#171714; --ink:#ECEAE3; --ink-2:#D2D0C8; --ink-soft:#B2B0A8; --mute:#94928A;
+  --faint:#8C8A82; --faint-2:#7C7A71; --line:#3A3933; --accent:#A9B8DC;
+  --note:#ECEAE3; --note-2:#D9D6CC; --note-ink:#1C1B18; --note-shadow:rgba(0,0,0,.6);
+  --stripe:repeating-linear-gradient(135deg,#1D1D1A 0px,#1D1D1A 1px,#141412 1px,#141412 11px);
+  color-scheme:dark;}
+:root[data-theme="dark"] .eco{--ed:#2A2640; --ed-ink:#A99FE6; --ec:#1B2C23; --ec-ink:#7CC79C; --wire:rgba(236,234,227,.34);}
+:root[data-theme="dark"] .city{opacity:.62;}
+:root[data-theme="dark"] .head, :root[data-mode="random"] .head{background:color-mix(in srgb, var(--paper) 72%, transparent);}
+:root[data-theme="dark"] .card__overlay, :root[data-mode="random"] .card__overlay{background:color-mix(in srgb, var(--paper) 55%, transparent);}
+:root[data-theme="dark"] .card__q{color:var(--ink);}
+:root[data-theme="dark"] .card__fig, :root[data-mode="random"] .card__fig,
+:root[data-theme="dark"] .frame__fig, :root[data-mode="random"] .frame__fig,
+:root[data-theme="dark"] .kmap__tag, :root[data-mode="random"] .kmap__tag,
+:root[data-theme="dark"] .kmap__out, :root[data-mode="random"] .kmap__out{background:color-mix(in srgb, var(--paper) 85%, transparent);}
+:root[data-theme="dark"] .pv__backdrop, :root[data-mode="random"] .pv__backdrop{background:color-mix(in srgb, var(--paper) 75%, transparent);}
+:root[data-theme="dark"] .pv__bar, :root[data-mode="random"] .pv__bar{background:color-mix(in srgb, var(--paper) 75%, transparent);}
+:root[data-theme="dark"] .lb__backdrop, :root[data-mode="random"] .lb__backdrop{background:color-mix(in srgb, var(--paper) 96%, transparent);}
+:root[data-theme="dark"] .postit::before, :root[data-theme="dark"] .card__note::before, :root[data-theme="dark"] .eco__callout::before{background:rgba(28,27,24,.06);}
+:root[data-theme="dark"] .cv-item, :root[data-theme="dark"] .pv__method .m{border-top-color:rgba(236,234,227,.1);}
+:root[data-mode="random"]:not([data-theme="dark"]) .city{opacity:.5;}
+body{transition:background-color .4s ease, color .4s ease;}

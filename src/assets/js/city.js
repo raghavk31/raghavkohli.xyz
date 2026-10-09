@@ -223,7 +223,17 @@
   function focus() { var on = hover || ((document.querySelector(".eco__node.on") || {}).dataset || {}).topic; return MAP[on] || 0; }
 
   // ---------- drawing ----------
-  var INK = "28,27,24", ACC = "46,58,87", TINT = { 2: "60,88,150", 7: "58,110,66" };
+  var INK, ACC, TINT;
+  // the ink and accent come from the page's colours; water and green are lighter on a dark page
+  function palette() {
+    var css = getComputedStyle(document.documentElement), dark = document.documentElement.dataset.theme === "dark";
+    function rgb(v) { var m = (v || "").match(/\d+/g); if (m && /rgb/.test(v)) return m.slice(0, 3).join(",");
+      v = (v || "").trim().replace("#", ""); if (v.length === 3) v = v.replace(/./g, "$&$&"); var n = parseInt(v, 16) || 0; return [n >> 16 & 255, n >> 8 & 255, n & 255].join(","); }
+    INK = rgb(css.getPropertyValue("--ink")); ACC = rgb(css.getPropertyValue("--accent"));
+    TINT = dark ? { 2: "122,162,232", 7: "128,190,136" } : { 2: "60,88,150", 7: "58,110,66" };
+  }
+  palette();
+  document.addEventListener("themechange", function () { palette(); draw(); });
   var ALPHA = [.1, .2, .42, .4, .13, .13, .14, .26];
   function rgba(c, a) { return "rgba(" + c + "," + a.toFixed(3) + ")"; }
   function draw() {
@@ -283,7 +293,7 @@
   }
 
   // the city stays out from under the words and the work: it shows in the margins and the gaps between
-  var CLEAR = [[".work__head .eyebrow, .work__name, .work__why, .work__index, .work__filterbar, .work__break, .card__frame, .card figcaption, .about .reveal > *, .contact__row, .contact__fine, .city-pick, .pin-add, .pin", 1], [".eco", .7]];
+  var CLEAR = [[".work__head .eyebrow, .work__name, .work__why, .work__index, .work__filterbar, .work__break, .card__frame, .card figcaption, .about .reveal > *, .contact__row, .contact__fine, .dock, .pin", 1], [".eco", .7]];
   function clear(ih) {
     ctx.save(); ctx.globalCompositeOperation = "destination-out";
     if ("filter" in ctx) ctx.filter = "blur(12px)";
@@ -298,7 +308,8 @@
   var cities = [], deck = [], texts = {}, busy = false;
   var pick = document.createElement("button");
   pick.type = "button"; pick.className = "city-pick";
-  document.body.appendChild(pick);
+  var dock = document.querySelector("[data-dock]");
+  if (dock) dock.insertBefore(pick, dock.firstChild); else document.body.appendChild(pick);
   function label() {
     var ns = city.lat >= 0 ? "N" : "S", ew = city.lon >= 0 ? "E" : "W";
     pick.innerHTML = "(" + city.name + " <span class=\"city-pick__r\" aria-hidden=\"true\">↻</span>)";

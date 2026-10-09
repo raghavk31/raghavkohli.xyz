@@ -284,6 +284,10 @@
       return [n >> 16 & 255, n >> 8 & 255, n & 255];
     }
     var TINT = { ink: rgb(css.getPropertyValue("--ink")), ed: rgb(css.getPropertyValue("--ed-ink")), ec: rgb(css.getPropertyValue("--ec-ink")) };
+    document.addEventListener("themechange", function () {   // css is live: read the new colours into the same arrays
+      [["ink", "--ink"], ["ed", "--ed-ink"], ["ec", "--ec-ink"]].forEach(function (k) { var v = rgb(css.getPropertyValue(k[1])); TINT[k[0]].splice(0, 3, v[0], v[1], v[2]); });
+      flows.forEach(function (f) { if (f.one) f.dots.forEach(function (c) { c.style.fill = tintAt([f.one, f.one], 0); }); });
+    });
     function tintAt(stops, t) {
       var s = t * (stops.length - 1), i = Math.min(stops.length - 2, Math.floor(s)), f = s - i, a = stops[i], b = stops[i + 1];
       return "rgb(" + Math.round(a[0] + (b[0] - a[0]) * f) + "," + Math.round(a[1] + (b[1] - a[1]) * f) + "," + Math.round(a[2] + (b[2] - a[2]) * f) + ")";
@@ -309,7 +313,7 @@
           layer.appendChild(c);
           dots.push(c);
         }
-        flows.push({ svg: svg, w: w, len: len, topic: topic, dots: dots, tint: tint.length > 1 ? tint : null, p: Math.random() * (len || 400) });
+        flows.push({ svg: svg, w: w, len: len, topic: topic, dots: dots, tint: tint.length > 1 ? tint : null, one: tint.length === 1 ? tint[0] : null, p: Math.random() * (len || 400) });
       });
     });
 

@@ -104,13 +104,14 @@
   var add = document.createElement("button"), draft = null;
   add.type = "button"; add.className = "pin-add"; add.textContent = "(+ note)";
   add.title = "click, then click an empty spot on the page";
-  document.body.appendChild(add);
+  var tools = document.querySelector("[data-dock-tools]") || document.body;
+  tools.appendChild(add);
   add.addEventListener("click", function (e) { e.stopPropagation(); document.body.classList.toggle("is-pinning"); });
-  var arr = tool("(arrange)", "drag a box to move it, its corner to scale it", 110), back = tool("(back to grid)", "forget the arrangement", 132);
+  var arr = tool("(arrange)", "drag a box to move it, its corner to scale it"), back = tool("(back to grid)", "forget the arrangement");
   back.hidden = true;
-  function tool(label, title, top) {
-    var b = document.createElement("button"); b.type = "button"; b.className = "pin-add"; b.textContent = label; b.title = title; b.style.top = top + "px";
-    if (grid) document.body.appendChild(b); return b; }
+  function tool(label, title) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "pin-add"; b.textContent = label; b.title = title;
+    if (grid) tools.appendChild(b); return b; }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { document.body.classList.remove("is-pinning"); if (draft) cancel(); } });
   document.addEventListener("click", function (e) {
     if (!document.body.classList.contains("is-pinning") || e.target.closest(".pin, .pin-add")) return;
