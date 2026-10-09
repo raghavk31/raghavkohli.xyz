@@ -1,17 +1,21 @@
-/* Notes pinned on the homepage's empty spaces: Raghav's workspace on the page, sketches, thoughts and
-   opinions on black post-its, seen by everyone. They come from the thoughts worker (/pins).
-   With the owner key (typed once on /thoughts/ via (key), kept in localStorage as "thoughts-key"):
-   (+ note) by the city label, then click an empty spot to write there; drag a note to move it; (edit)
-   and (×) on each. Images go up through the worker's /images, downscaled here first.
-   A note hangs from the nearest section above it (the top, (selected work), a group break, about,
-   contact), x measured from the page's centre line, so it stays by the same content at another width.
-   Under 900px there is no free space, so the notes hide. */
+/* The homepage as Raghav's workspace, seen by everyone, changed only with the owner key (typed once on
+   /thoughts/ via (key), kept in localStorage as "thoughts-key").
+   Notes: sketches, thoughts and opinions on black post-its, from the thoughts worker (/pins). (+ note)
+   by the city label, then click an empty spot to write there; drag a note to move it, its corner to
+   scale it; (edit) and (×) on each. Images go up through the worker's /images, downscaled here first.
+   Project boxes: once he has arranged them, the grid's rows and breaks give way to his arrangement
+   (worker /layout, ids home-<slug>, in ten-thousandths of the grid's width so it holds at any width).
+   (arrange) to drag a box or scale it by its corner, each change kept as it is made; (back to grid)
+   forgets the arrangement.
+   A note stays exactly where it was dropped on the page: y from the top of the page, x from the page's
+   centre line (so it keeps its place beside the content at another width). Nothing else moves it.
+   Under 900px there is no free space: the notes hide and the boxes stack as before. */
 (function () {
   "use strict";
   var me = document.currentScript, api = me && me.dataset.api;
   if (!api) return;
   var key = ""; try { key = localStorage.getItem("thoughts-key") || ""; } catch (e) {}
-  var owner = !!key, pins = [], layer = document.createElement("div");
+  var owner = !!key, pins = [], layer = document.createElement("div"), wide = window.matchMedia("(min-width: 901px)");
   layer.className = "pins";
   document.body.appendChild(layer);
 
@@ -24,23 +28,42 @@
     });
   }
 
-  // ---------- where things hang ----------
-  function anchors() {
-    var out = [{ key: "top", top: 0 }];
-    var w = document.getElementById("work"); if (w) out.push({ key: "work", top: docTop(w) });
-    document.querySelectorAll(".work__break").forEach(function (b) { out.push({ key: "break:" + b.textContent.trim(), top: docTop(b) }); });
-    ["about", "contact"].forEach(function (id) { var el = document.getElementById(id); if (el) out.push({ key: id, top: docTop(el) }); });
-    return out.sort(function (a, b) { return a.top - b.top; });
+  // ---------- the project boxes, where he put them ----------
+  var grid = document.querySelector("[data-grid]"), boxes = grid ? Array.prototype.slice.call(grid.querySelectorAll(".card")) : [];
+  var U = 10000, spots = {}, arranging = false;
+  function idOf(c) { var a = c.querySelector("[data-project]"); return "home-" + ((a && a.getAttribute("data-project")) || "").replace(/^\/work\//, "").replace(/\/$/, "").replace(/[^A-Za-z0-9_-]/g, "-"); }
+  function hasSpots() { return boxes.some(function (c) { return spots[idOf(c)]; }); }
+  function arrange() {
+    if (!grid) return;
+    var on = wide.matches && (arranging || hasSpots());
+    grid.classList.toggle("is-free", on);
+    if (!on) { boxes.forEach(function (c) { c.style.left = c.style.top = c.style.width = c.style.zIndex = ""; }); grid.style.height = ""; return; }
+    var W = grid.clientWidth, bottom = 0, loose = [];
+    boxes.forEach(function (c) { var s = spots[idOf(c)]; if (!s) { loose.push(c); return; }
+      c.style.left = s.x / U * W + "px"; c.style.top = s.y / U * W + "px"; c.style.width = s.w / U * W + "px"; c.style.zIndex = 1 + (s.z || 0); });
+    boxes.forEach(function (c) { if (spots[idOf(c)]) bottom = Math.max(bottom, c.offsetTop + c.offsetHeight); });
+    // a project added since he arranged them waits in rows of three under the rest until it is moved
+    loose.forEach(function (c, i) { c.style.width = W * .3 + "px"; c.style.left = (i % 3) * W * .35 + "px"; c.style.top = bottom + 80 + Math.floor(i / 3) * W * .35 + "px"; c.style.zIndex = 1; });
+    var end = 0; boxes.forEach(function (c) { end = Math.max(end, c.offsetTop + c.offsetHeight); });
+    grid.style.height = end + 40 + "px";
   }
-  function docTop(el) { return el.getBoundingClientRect().top + window.scrollY; }
+  if (grid) {
+    // visitors on a wide screen: hold the grid back until the arrangement is known, so it does not jump
+    var unwait = function () { grid.classList.remove("board-wait"); };
+    if (wide.matches) { grid.classList.add("board-wait"); setTimeout(unwait, 1500); }
+    fetch(api + "/layout").then(function (r) { return r.json(); }).then(function (j) {
+      var L = j.layout || {}; Object.keys(L).forEach(function (k) { spots[k] = L[k]; }); arrange(); unwait(); position();
+    }, unwait);
+    window.addEventListener("resize", arrange);
+    if (wide.addEventListener) wide.addEventListener("change", arrange);
+  }
+
+  // ---------- where a note sits ----------
   function place(docX, docY) {   // a point on the page -> {anchor, x, y}
-    var A = anchors(), a = A[0];
-    A.forEach(function (c) { if (c.top <= docY) a = c; });
-    return { anchor: a.key, x: Math.round(docX - innerWidth / 2), y: Math.round(docY - a.top) };
+    return { anchor: "top", x: Math.round(docX - innerWidth / 2), y: Math.round(docY) };
   }
   function at(p) {   // {anchor, x, y} -> a point on the page
-    var A = anchors(), a = A.filter(function (c) { return c.key === p.anchor; })[0] || A[0];
-    return { left: innerWidth / 2 + p.x, top: a.top + p.y };
+    return { left: innerWidth / 2 + p.x, top: p.y };
   }
 
   // ---------- drawing the notes ----------
@@ -54,17 +77,17 @@
     el.className = "pin postit" + (t.alt ? " alt" : "");
     el.dataset.id = p.id;
     el.style.setProperty("--r", t.r + "deg");
-    el.style.width = p.w + "px";
+    el.style.setProperty("--s", ((p.w || 220) / 220).toFixed(3));
     el.innerHTML = (p.images || []).map(function (i) { return '<img class="pin__img" src="' + api + "/images/" + i + '" alt="" loading="lazy" />'; }).join("") +
       (p.body ? "<p>" + esc(p.body) + "</p>" : "") +
-      (owner ? '<span class="pin__tools"><a href="#" data-edit>(edit)</a> <a href="#" data-del>(×)</a></span>' : "");
+      (owner ? '<span class="pin__tools"><a href="#" data-edit>(edit)</a> <a href="#" data-del>(×)</a></span><span class="grip" title="drag to scale"></span>' : "");
     el.querySelectorAll("img").forEach(function (im) { im.addEventListener("load", position); });
     return el;
   }
   function position() {
     layer.querySelectorAll(".pin").forEach(function (el) {
       var p = byId(el.dataset.id) || draft; if (!p) return;
-      var q = at(p), w = el.offsetWidth;
+      var q = at(p), w = p.w || 220;
       el.style.left = Math.round(Math.min(Math.max(8, q.left), innerWidth - w - 8)) + "px";
       el.style.top = Math.round(q.top) + "px";
       el.style.zIndex = 2 + (p.z || 0);
@@ -74,8 +97,6 @@
 
   fetch(api + "/pins").then(function (r) { return r.json(); }).then(function (j) { pins = j.pins || []; render(); }, function () {});
   window.addEventListener("resize", position);
-  if (window.ResizeObserver) new ResizeObserver(position).observe(document.body);
-  setInterval(position, 1500);   // the grid repacks itself when a filter is chosen; follow it
 
   if (!owner) return;
 
@@ -85,6 +106,11 @@
   add.title = "click, then click an empty spot on the page";
   document.body.appendChild(add);
   add.addEventListener("click", function (e) { e.stopPropagation(); document.body.classList.toggle("is-pinning"); });
+  var arr = tool("(arrange)", "drag a box to move it, its corner to scale it", 110), back = tool("(back to grid)", "forget the arrangement", 132);
+  back.hidden = true;
+  function tool(label, title, top) {
+    var b = document.createElement("button"); b.type = "button"; b.className = "pin-add"; b.textContent = label; b.title = title; b.style.top = top + "px";
+    if (grid) document.body.appendChild(b); return b; }
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") { document.body.classList.remove("is-pinning"); if (draft) cancel(); } });
   document.addEventListener("click", function (e) {
     if (!document.body.classList.contains("is-pinning") || e.target.closest(".pin, .pin-add")) return;
@@ -149,6 +175,7 @@
   layer.addEventListener("pointerdown", function (e) {
     var el = e.target.closest(".pin"); if (!el || el.classList.contains("is-editing") || e.target.closest("a, label") || e.button) return;
     var p = byId(el.dataset.id); if (!p) return;
+    if (e.target.classList.contains("grip")) return scale(e, el, p);
     var sx = e.pageX, sy = e.pageY, ox = parseFloat(el.style.left), oy = parseFloat(el.style.top), moved = false;
     try { el.setPointerCapture(e.pointerId); } catch (err) {}
     function move(ev) {
@@ -164,6 +191,80 @@
         .catch(function (err) { Object.assign(p, old); position(); alert("could not move it: " + err.message); });
     }
     el.addEventListener("pointermove", move); el.addEventListener("pointerup", up);
+  });
+
+  // a note's corner scales it, text and images together, 120 to 600px wide
+  function scale(e, el, p) {
+    e.preventDefault();
+    var g = e.target, sx = e.pageX, w0 = p.w || 220, w = w0;
+    try { g.setPointerCapture(e.pointerId); } catch (err) {}
+    function move(ev) { w = Math.round(Math.min(600, Math.max(120, w0 + ev.pageX - sx))); el.style.setProperty("--s", (w / 220).toFixed(3)); }
+    function up() {
+      g.removeEventListener("pointermove", move); g.removeEventListener("pointerup", up);
+      if (w === w0) return;
+      p.w = w; position();
+      send("PUT", "/pins/" + p.id, JSON.stringify({ w: w }), "application/json")
+        .catch(function (err) { p.w = w0; el.style.setProperty("--s", (w0 / 220).toFixed(3)); position(); alert("could not scale it: " + err.message); });
+    }
+    g.addEventListener("pointermove", move); g.addEventListener("pointerup", up);
+  }
+
+  // ---------- arranging the boxes ----------
+  var fresh = false;   // the first arrangement is the grid as it stood; it is saved whole on the first change
+  arr.addEventListener("click", function (e) {
+    e.stopPropagation();
+    arranging = !arranging;
+    document.body.classList.toggle("is-arranging", arranging);
+    arr.textContent = arranging ? "(done arranging)" : "(arrange)";
+    if (arranging && !hasSpots()) { snapshot(); fresh = true; }
+    if (!arranging && fresh) { spots = {}; fresh = false; }   // nothing was moved: the grid stays a grid
+    back.hidden = !arranging || fresh || !hasSpots();
+    boxes.forEach(function (c) { var g = c.querySelector(":scope > .grip");
+      if (arranging && !g) { g = document.createElement("span"); g.className = "grip"; g.title = "drag to scale"; c.appendChild(g); }
+      if (!arranging && g) g.remove(); });
+    arrange(); position();
+  });
+  back.addEventListener("click", function (e) {
+    e.stopPropagation();
+    if (!confirm("put every box back in the grid?")) return;
+    Promise.all(Object.keys(spots).map(function (id) { return send("DELETE", "/layout/" + id); })).then(function () {
+      spots = {}; fresh = false; arr.click();
+    }, function (err) { alert("could not reset: " + err.message); });
+  });
+  function snapshot() {
+    var g = grid.getBoundingClientRect(), W = grid.clientWidth;
+    boxes.forEach(function (c) { var r = c.getBoundingClientRect();
+      spots[idOf(c)] = { x: Math.max(0, Math.round((r.left - g.left) / W * U)), y: Math.max(0, Math.round((r.top - g.top) / W * U)), w: Math.round(r.width / W * U), z: 0 }; });
+  }
+  function save(ids) {
+    return Promise.all(ids.map(function (id) { return send("PUT", "/layout/" + id, JSON.stringify(spots[id]), "application/json"); }))
+      .catch(function (err) { alert("could not keep that: " + err.message); });
+  }
+  // while arranging, a click on a box does not open it
+  document.addEventListener("click", function (e) { if (arranging && e.target.closest && e.target.closest(".work__grid .card")) { e.preventDefault(); e.stopPropagation(); } }, true);
+  if (grid) grid.addEventListener("pointerdown", function (e) {
+    if (!arranging || e.button) return;
+    var c = e.target.closest(".card"); if (!c) return;
+    e.preventDefault();
+    var id = idOf(c), W = grid.clientWidth, sizing = e.target.classList.contains("grip");
+    var sx = e.pageX, sy = e.pageY, ox = c.offsetLeft, oy = c.offsetTop, ow = c.offsetWidth, moved = false;
+    try { c.setPointerCapture(e.pointerId); } catch (err) {}
+    c.classList.add("is-dragging"); c.style.zIndex = 9998;
+    function move(ev) {
+      var dx = ev.pageX - sx, dy = ev.pageY - sy; if (!moved && Math.hypot(dx, dy) < 3) return; moved = true;
+      if (sizing) c.style.width = Math.min(Math.max(W * .05, ow + dx), W - ox) + "px";
+      else { c.style.left = Math.min(Math.max(0, ox + dx), W - ow) + "px"; c.style.top = Math.max(0, oy + dy) + "px"; }
+    }
+    function up() {
+      c.removeEventListener("pointermove", move); c.removeEventListener("pointerup", up); c.removeEventListener("pointercancel", up);
+      c.classList.remove("is-dragging");
+      var z = 0; Object.keys(spots).forEach(function (k) { z = Math.max(z, spots[k].z || 0); });
+      if (moved) spots[id] = { x: Math.round(c.offsetLeft / W * U), y: Math.round(c.offsetTop / W * U), w: Math.round(c.offsetWidth / W * U), z: z + 1 };
+      arrange(); position();
+      if (!moved) return;
+      save(fresh ? Object.keys(spots) : [id]); fresh = false; back.hidden = false;
+    }
+    c.addEventListener("pointermove", move); c.addEventListener("pointerup", up); c.addEventListener("pointercancel", up);
   });
 
   // the long edge to 1600px, JPEG at .85 (as the thoughts board does); a small gif goes up as it is

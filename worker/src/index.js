@@ -6,6 +6,8 @@
    DELETE /thoughts/<id>                    its images and layout go with it   - X-Owner-Key
    PUT    /layout/<id>  {x, y, w, z}        where a note sits; <id> is a live id or a markdown slug
    DELETE /layout/<id>                      the note flows again
+   GET    /layout                           where the homepage's project boxes sit: {layout: {home-<slug>: {x, y, w, z}}},
+                                            x, y, w in ten-thousandths of the grid's width (pins.js arranges them)
    POST   /images      <image bytes>        an image for a note; Content-Type is the mime; returns {id}
    GET    /images/<id>                      the image, cached for a year
    GET    /pins                             the notes pinned on the homepage (id, body, images, anchor, x, y, w, z)
@@ -120,6 +122,12 @@ export default {
     }
 
     /* ---------- layout: where a note sits ---------- */
+    if (route === "layout" && !id && req.method === "GET") {
+      const { results } = await env.DB.prepare("SELECT id, x, y, w, z FROM layout WHERE id LIKE 'home-%'").all();
+      const layout = {};
+      for (const r of results) layout[r.id] = { x: r.x, y: r.y, w: r.w, z: r.z };
+      return json({ layout });
+    }
     if (route === "layout" && id && (req.method === "PUT" || req.method === "DELETE")) {
       if (!ownerHeader()) return json({ error: "no" }, 403);
       if (req.method === "DELETE") {
@@ -130,7 +138,9 @@ export default {
       try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
       const n = (v, lo, hi) => Math.min(Math.max(Number(v) || 0, lo), hi);
       // the board keeps every note whole and inside itself (main.js clamps the drag), so x starts at 0
-      const pos = { x: n(data.x, 0, 20000), y: n(data.y, 0, 200000), w: n(data.w, 120, 2000), z: Math.round(n(data.z, 0, 1e9)) };
+      // a homepage box (home-<slug>) is measured in ten-thousandths of the grid's width instead
+      const home = id.startsWith("home-");
+      const pos = { x: n(data.x, 0, 20000), y: n(data.y, 0, 200000), w: n(data.w, home ? 500 : 120, home ? 10000 : 2000), z: Math.round(n(data.z, 0, 1e9)) };
       await env.DB.prepare(
         "INSERT INTO layout (id, x, y, w, z, updated) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET x = excluded.x, y = excluded.y, w = excluded.w, z = excluded.z, updated = excluded.updated"
       ).bind(id, pos.x, pos.y, pos.w, pos.z, Date.now()).run();

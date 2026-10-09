@@ -106,6 +106,12 @@
     }
 
     function applyFilter(topic) {
+      // boxes arranged by hand (pins.js, .is-free) stay where he put them: the matches stay, the rest recede
+      if (grid.classList.contains("is-free")) {
+        grid.classList.toggle("filtering", !!topic);
+        cards.forEach(function (c) { c.classList.toggle("match", !!topic && topicsOf(c).indexOf(topic) !== -1); });
+        return;
+      }
       // FLIP: measure, mutate, invert, play — so the reflow animates smoothly
       var first = cards.map(function (c) { return c.getBoundingClientRect(); });
 

@@ -13,7 +13,7 @@
   //   a  halftone: green and river glyphs sized by how green / how wet the satellite saw each cell
   //   b  contours: the ground's height as dashed hairlines, every fifth one darker
   //   c  one colour: only water keeps its tint, the green goes to ink
-  //   d  flowing water: the river as streamlines along its current, the sea and lakes in short rocking swell strokes
+  //   d  flowing water: every water cell a short bowed stroke, along the current on the river, rocking on the sea
   var LOOK = (new URLSearchParams(location.search).get("look") || "abcd").toLowerCase();
   var HALF = LOOK.indexOf("a") >= 0, CONT = LOOK.indexOf("b") >= 0, MONO = LOOK.indexOf("c") >= 0, FLOWY = LOOK.indexOf("d") >= 0;
   var FIELDS = HALF || CONT;
@@ -81,7 +81,6 @@
     }
     X0 = Math.round(Math.min(Math.max(0, cols - innerWidth / cw), Math.max(0, city.fx * cols - innerWidth / cw / 2)));
     OX = Math.max(0, (innerWidth - cols * cw) / 2);   // a screen wider than the map: the map sits in the middle
-    streamlines();
     seedFlows();
   }
 
@@ -156,77 +155,41 @@
     return "~";
   }
 
-  // flowing water: streamlines traced through the river's current, kept a few pixels apart, with dashes that
-  // slide downstream along them: long and quick mid-stream, short and slow by the banks. Lines are in map
-  // pixels: [points, class, top, bottom]. The sea and lakes are hatched cell by cell instead (swell, below).
-  var LINES = [];
-  var CLASS = [   // dash, gap, pixels a tick, line width, strength, ripple height (px)
-    [14, 6, .7, .7, .7, 1], [22, 6, 1.5, .85, .9, 1.6], [34, 5, 2.6, 1.1, 1.15, 2.2]];   // by the bank, between, mid-stream
-  function streamlines() {
-    LINES = []; if (!FLOWY) return;
-    var G = 4, gw = Math.ceil(cols * cw / G) + 2, gh = Math.ceil(rows * LH / G) + 2, occ = new Int32Array(gw * gh).fill(-1);
-    function cellAt(px, py) { var x = Math.floor(px / cw), y = Math.floor(py / LH);
-      if (x < 0 || y < 0 || x >= cols || y >= rows) return -1; var k = y * cols + x; return riv[k] === 1 && BANK[k] > MX ? k : -1; }
-    function free(px, py, id) { var gx = Math.floor(px / G), gy = Math.floor(py / G);
-      for (var dy = -1; dy <= 1; dy++) for (var dx = -1; dx <= 1; dx++) { var o = occ[(gy + dy) * gw + gx + dx]; if (o >= 0 && o !== id) return false; }
-      return true; }
-    function trace(px, py, dir, id, pts) {
-      for (var n = 0; n < 160; n++) { var k = cellAt(px, py); if (k < 0 || !free(px, py, id)) return;
-        occ[Math.floor(py / G) * gw + Math.floor(px / G)] = id; pts.push(px, py);
-        var vx = FX[k] * cw / MX, vy = FY[k] * LH / MY, l = Math.hypot(vx, vy) || 1;
-        px += dir * vx / l * 3; py += dir * vy / l * 3; }
-    }
-    var seeds = []; for (var k = 0; k < cols * rows; k++) if (riv[k] === 1 && BANK[k] > MX) seeds.push(k);
-    seeds.sort(function (a, b) { return BANK[b] - BANK[a] || hash(a, 3) - hash(b, 3); });   // mid-stream first, so the long lines claim the middle
-    seeds.forEach(function (k, id) {
-      var px = (k % cols + .5) * cw, py = (((k / cols) | 0) + .5) * LH;
-      if (!free(px, py, id)) return;
-      var fwd = [], back = []; trace(px, py, 1, id, fwd); trace(px, py, -1, id, back);
-      var pts = []; for (var b = back.length - 2; b >= 2; b -= 2) pts.push(back[b], back[b + 1]);   // back[0..1] is the seed, already in fwd
-      pts = pts.concat(fwd); if (pts.length < 8) return;
-      var sp = Math.min(1, BANK[k] / 150); add(pts, sp < .35 ? 0 : sp < .7 ? 1 : 2);
-    });
-    function add(pts, c) { var lo = Infinity, hi = -Infinity; for (var i = 1; i < pts.length; i += 2) { lo = Math.min(lo, pts[i]); hi = Math.max(hi, pts[i]); } LINES.push([pts, c, lo, hi]); }
-  }
-  // the sea and lakes: a short bowed stroke in some cells, the bow rocking and rows of brighter swell rolling
-  // slowly through; strokes go into buckets by brightness, one path each
+  // all water, cell by cell. The river: a short stroke along its current, bowed a little to one side; bands of
+  // brightness travel downstream, fastest mid-stream and slack by the banks, and the bow ripples as a band
+  // passes, so strokes in line read as streamlines (its edge cells stay dots). The sea and lakes: a sparse
+  // short bowed stroke, the bow rocking and rows of brighter swell rolling slowly through. Strokes go into
+  // buckets by brightness and weight, one path each.
   function swell(x, y, k, cx, cy, out) {
-    var still = riv[k] === 2;
-    if (hash(x, y) > (still ? .5 : .42)) return;   // the sea is sparse
-    var sw = Math.sin(y * .45 + x * .06 - t * (still ? .03 : .06));
-    var ay = .12 * Math.sin(x * .2 + y), len = still ? 6 : 9, bow = (still ? .8 : 1.6) * Math.sin(x * .35 + y * .9 - t * .09);
-    var a = (still ? .3 : .22) + (still ? .2 : .35) * Math.max(0, sw), lv = Math.min(4, Math.round(a * 4));
-    var b = out[lv] || (out[lv] = []), hx = len / 2, hy = ay * len / 2;
-    b.push(cx - hx, cy - hy, cx - ay * bow, cy + bow, cx + hx, cy + hy);
+    var ax, ay, len, bow, a, wt = .8;
+    if (riv[k] === 1) {
+      var bank = BANK[k], mX = x * MX, mY = y * MY, along = mX * FX[k] + mY * FY[k], across = mX * FY[k] - mY * FX[k];
+      var sp = Math.min(1, bank / 150), ph = (along - t * 14 * sp) / 140 * 2 * Math.PI + hash(Math.round(across / 40), 7) * 6.283;
+      var w = .5 + .5 * Math.sin(ph);
+      ax = FX[k]; ay = FY[k];
+      len = (6 + 8 * sp) * (HALF ? .7 + .45 * WV[k] / 9 : 1);
+      bow = 1.8 * Math.sin(ph * .5 + across / 60);
+      a = .22 + .78 * w * w; wt = .7 + .5 * sp;
+    } else {
+      var still = riv[k] === 2;
+      if (hash(x, y) > (still ? .5 : .42)) return;   // the sea is sparse
+      var sw = Math.sin(y * .45 + x * .06 - t * (still ? .03 : .06));
+      ax = 1; ay = .12 * Math.sin(x * .2 + y);
+      len = still ? 6 : 9; bow = (still ? .8 : 1.6) * Math.sin(x * .35 + y * .9 - t * .09);
+      a = (still ? .3 : .22) + (still ? .2 : .35) * Math.max(0, sw);
+    }
+    var key = Math.min(4, Math.round(a * 4)) + "|" + (wt > .95 ? 1 : 0), b = out[key] || (out[key] = []);
+    var hx = ax * len / 2, hy = ay * len / 2;
+    b.push(cx - hx, cy - hy, cx - ay * bow, cy + ax * bow, cx + hx, cy + hy);
   }
   function swellLines(out, f) {
-    ctx.save(); ctx.lineCap = "round"; ctx.lineWidth = .75;
-    for (var lv in out) { var b = out[lv], m = .15 + .85 * lv / 4;
+    ctx.save(); ctx.lineCap = "round";
+    for (var key in out) { var b = out[key], m = .15 + .85 * key[0] / 4;
+      ctx.lineWidth = key[2] === "1" ? 1.1 : .75;
       ctx.strokeStyle = f === 2 ? rgba(ACC, .5 * m) : rgba(TINT[2], ALPHA[2] * m * (f ? .45 : 1));
       ctx.beginPath();
       for (var j = 0; j < b.length; j += 6) { ctx.moveTo(b[j], b[j + 1]); ctx.quadraticCurveTo(b[j + 2], b[j + 3], b[j + 4], b[j + 5]); }
       ctx.stroke(); }
-    ctx.restore();
-  }
-  function flowLines(r0, vis, off, f) {
-    var top = r0 * LH - 30, bot = (r0 + vis) * LH + 30, dx = OX - X0 * cw, dy = off - r0 * LH;
-    ctx.save(); ctx.lineCap = "round";
-    CLASS.forEach(function (C, c) {
-      ctx.beginPath();
-      for (var i = 0; i < LINES.length; i++) { var L = LINES[i]; if (L[1] !== c || L[3] < top || L[2] > bot) continue;
-        var P = L[0], R = C[5];
-        if (!R) { ctx.moveTo(P[0] + dx, P[1] + dy); for (var j = 2; j < P.length; j += 2) ctx.lineTo(P[j] + dx, P[j + 1] + dy); continue; }
-        // a ripple that travels down the line: each point pushed sideways by a wave moving with the water
-        for (var j = 0; j < P.length; j += 2) {
-          var a = j ? j - 2 : 0, b = j + 2 < P.length ? j + 2 : j, tx = P[b] - P[a], ty = P[b + 1] - P[a + 1], tl = Math.hypot(tx, ty) || 1;
-          var w = R * Math.sin(j * 1.5 / 26 * 2 * Math.PI / 2 - t * C[2] * .12 + i);
-          var qx = P[j] + dx - ty / tl * w, qy = P[j + 1] + dy + tx / tl * w;
-          if (j) ctx.lineTo(qx, qy); else ctx.moveTo(qx, qy); } }
-      ctx.setLineDash([C[0], C[1]]); ctx.lineDashOffset = -t * C[2];
-      ctx.lineWidth = C[3];
-      ctx.strokeStyle = f === 2 ? rgba(ACC, .55 * C[4]) : rgba(TINT[2], ALPHA[2] * C[4] * (f ? .45 : 1));
-      ctx.stroke();
-    });
     ctx.restore();
   }
 
@@ -280,8 +243,7 @@
       var py = r * LH + off, base = y * cols;
       for (var x = X0; x < x1; x++) { var k = base + x, c = ch[k]; if (c === " ") continue;
         var m = c === "·" ? .5 : 1;   // a lane is lighter than the blocks either side of it
-        if (sea && riv[k] > 1) { swell(x, y, k, OX + (x - X0 + .5) * cw, py + LH / 2, sea); continue; }
-        if (FLOWY && riv[k] === 1 && BANK[k] > MX) continue;   // drawn as streamlines; the river's edge stays dots
+        if (sea && (riv[k] > 1 || (riv[k] === 1 && BANK[k] > MX))) { swell(x, y, k, OX + (x - X0 + .5) * cw, py + LH / 2, sea); continue; }
         if (riv[k]) { c = water(x, y, k); if (!c) continue; m = WA; }
         var s = style(ly[k], m);
         if (half && (ly[k] === 7 || riv[k] === 1)) {   // halftone: the same glyph, bigger where greener or wetter
@@ -295,7 +257,7 @@
         for (var j = 0; j < b.length; j += 4) { if (b[j + 3] !== last) { ctx.fillStyle = b[j + 3]; last = b[j + 3]; } ctx.fillText(b[j], b[j + 1], b[j + 2]); } });
       ctx.textAlign = "start"; ctx.textBaseline = "top"; ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
     }
-    if (FLOWY) { flowLines(r0, vis, off, f); swellLines(sea, f); }
+    if (FLOWY) swellLines(sea, f);
     walkers.forEach(function (w) { var y = (w.k / cols) | 0; if (y < r0 || y >= r0 + vis) return;
       ctx.fillStyle = f === 1 ? rgba(ACC, .9) : rgba(INK, f ? .15 : .38);
       ctx.fillText("•", OX + (w.k % cols - X0) * cw, (y - r0) * LH + off); });

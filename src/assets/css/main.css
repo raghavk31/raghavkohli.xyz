@@ -1197,7 +1197,9 @@ body:has(> .city) > *:not(.city):not(.city-pick):not(.head):not(.pv):not(.lb):no
 
 /* ── notes pinned on the homepage's empty spaces (pins.js): the site's black post-it, placed by hand ── */
 .pins { position: absolute; left: 0; top: 0; width: 0; height: 0; }
-.pin { position: absolute; padding: 20px 14px 12px; transform: rotate(var(--r, 1deg)); transform-origin: 50% 0; }
+/* a note is laid out at 220px and scaled to its width (--s = w / 220), so its text and images grow with it */
+.pin { position: absolute; width: 220px; padding: 20px 14px 12px; transform-origin: 0 0; }
+.pins .pin, .pins .pin:hover { transform: rotate(var(--r, 1deg)) scale(var(--s, 1)); }
 .pin p { white-space: pre-wrap; overflow-wrap: anywhere; }
 .pin__img { display: block; width: calc(100% + 28px); margin: -20px -14px 12px; height: auto; position: relative; }
 .pin__img + .pin__img { margin-top: 0; }
@@ -1206,8 +1208,8 @@ body:has(> .city) > *:not(.city):not(.city-pick):not(.head):not(.pv):not(.lb):no
 .pin__tools a:hover, .pin__bar a:hover, .pin__pick:hover { opacity: 1; }
 .pin:hover .pin__tools { opacity: 1; }
 body:has(.pin-add) .pin:not(.is-editing) { cursor: grab; }
-.pin.is-dragging { cursor: grabbing; transform: rotate(0deg) scale(1.02); }
-.pin.is-editing { transform: none; z-index: 60 !important; }
+.pins .pin.is-dragging { cursor: grabbing; transform: rotate(0deg) scale(var(--s, 1)); }
+.pins .pin.is-editing { transform: none; z-index: 60 !important; }
 .pin textarea { display: block; width: 100%; min-height: 84px; resize: vertical; border: 0; outline: none; padding: 0; background: transparent;
   color: var(--note-ink); font: inherit; position: relative; }
 .pin textarea::placeholder { color: var(--note-ink); opacity: .45; }
@@ -1224,4 +1226,29 @@ body:has(.pin-add) .pin:not(.is-editing) { cursor: grab; }
   font: 400 12px/1.4 var(--mono); letter-spacing: .02em; color: var(--mute); transition: color .3s ease; }
 .pin-add:hover, body.is-pinning .pin-add { color: var(--ink); }
 body.is-pinning, body.is-pinning * { cursor: crosshair !important; }
+
+/* the corner that scales a note or a box (owner only) */
+.grip { position: absolute; right: -6px; bottom: -6px; width: 14px; height: 14px; cursor: nwse-resize; z-index: 3; touch-action: none;
+  border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; opacity: 0; transition: opacity .2s ease; }
+.pin .grip { color: var(--note-ink); right: 4px; bottom: 4px; }
+.pin:hover .grip, body.is-arranging .card .grip { opacity: .7; }
+.pin.is-editing .grip { display: none; }
+
+/* the project boxes placed by hand (pins.js): no rows, no breaks; each box sits at its own spot and
+   width, inline. Visitors see the same arrangement; under 900px the boxes stack as before. */
+.work__grid.is-free { display: block; position: relative; }
+.work__grid.is-free .work__row, .work__grid.is-free .work__rest { display: contents; }
+.work__grid.is-free .work__break { display: none; }
+.work__grid.is-free .card { position: absolute; margin: 0; max-width: none; }
+.work__grid.is-free .card:has(.card__click:hover, .card__click:focus-within) { z-index: 9999 !important; }
+.work__grid.is-free .card.flip { transition: opacity .45s ease, filter .45s ease; }
+.work__grid.board-wait { opacity: 0; }
+.work__grid { transition: opacity .3s ease; }
+body.is-arranging .work__grid .card { cursor: grab; outline: 1px dashed var(--line); outline-offset: 6px; touch-action: none; user-select: none; -webkit-user-select: none; }
+body.is-arranging .work__grid .card * { pointer-events: none; }
+body.is-arranging .work__grid .card .grip { pointer-events: auto; color: var(--ink); }
+body.is-arranging .work__grid .card.is-dragging { cursor: grabbing; outline-color: var(--ink); }
+body.is-arranging .work__grid .card { opacity: 1 !important; filter: none !important; }
+body.is-arranging .card__note { display: none; }
+
 @media (max-width: 900px) { .pins, .pin-add { display: none; } }
