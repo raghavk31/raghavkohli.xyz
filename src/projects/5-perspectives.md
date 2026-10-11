@@ -9,7 +9,7 @@ subtitle: Perspectives. Offline conversation circles in Delhi and Bangalore, co-
 desc: conversation circles · delhi, bangalore
 topics: [education]
 card: M
-qsize: 18px
+qsize: 21px
 fig: 250+ circles · 1,000+ people
 role: co-founder · participatory systems design
 period: mar 2025 to apr 2026

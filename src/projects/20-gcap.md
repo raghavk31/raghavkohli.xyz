@@ -6,7 +6,7 @@ desc: iclei · imt-gt · four green city action plans
 topics: [energy, mobility, buildings, waste, air]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.11 · langkawi · land use 2022
 role: co-author · gis analysis · ghg inventory · sector diagrams · book design
 period: 2023–2024

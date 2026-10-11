@@ -6,7 +6,7 @@ desc: majuli · assam · measured drawing
 topics: [water, food]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.01 · a homestead, in axonometric
 role: winter school · fieldwork · measured drawing
 period: december 2017 · two weeks
