@@ -6,7 +6,7 @@ desc: ambli · participatory systems mapping
 topics: [buildings, education]
 size: md
 offset: ""
-qsize: 25px
+qsize: 18.75px
 fig: fig.01 · the village, whole · ambli
 role: embedded fieldwork · participatory systems mapping
 period: 2019–2020

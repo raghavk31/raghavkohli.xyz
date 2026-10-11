@@ -6,7 +6,7 @@ desc: khadia · stepwell theatre · performance
 topics: [education]
 size: md
 offset: ""
-qsize: 22px
+qsize: 16.5px
 fig: fig.08 · the screen
 role: performance · set-up · documentation
 period: 2018 · one evening

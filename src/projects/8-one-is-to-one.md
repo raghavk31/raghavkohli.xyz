@@ -6,7 +6,7 @@ desc: cept · construction technology
 topics: [buildings]
 size: md
 offset: ""
-qsize: 22px
+qsize: 16.5px
 fig: fig.01 · the tower, drawn
 role: student builder · drawing and site
 period: 2018

@@ -6,7 +6,7 @@ desc: p2p rooftop solar · india energy stack
 topics: [energy, economy]
 size: lg
 offset: off-70
-qsize: 26px
+qsize: 19.5px
 fig: one feeder, and the two prices on it
 role: research · systems design · python
 period: 2026, ongoing

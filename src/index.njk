@@ -20,7 +20,7 @@ title: "Raghav Kohli · invisible systems, made visible"
 {%- else %}{% set car = r | round(3) %}{% set contain = (p.data.thumbfit == 'contain') %}{% endif -%}
 <figure class="card w{{ w }}"
         data-topics="{{ (p.data.topics or []) | join(' ') }}" data-weight="{{ w }}"
-        style="--span:{{ span }};--car:{{ car }};--cpad:{{ 36 if w == 1 else (30 if w == 2 else 22) }}px;--cq:{{ p.data.qsize or '24px' }};">
+        style="--span:{{ span }};--car:{{ car }};--cpad:{{ 27 if w == 1 else (22.5 if w == 2 else 16.5) }}px;--cq:{{ p.data.qsize or '18px' }};">
   <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}" aria-label="{{ p.data.title }}">
     {#- the post-it: one or two lines of story, stuck to the card's edge on hover (main.js flips it to
         the side with room). `snippet_rot` tilts it (default 3°), `snippet_alt` takes the second paper.

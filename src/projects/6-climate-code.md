@@ -5,7 +5,7 @@ desc: rapid prototyping · streamlit
 topics: [energy, air]
 size: sm
 offset: off-70
-qsize: 19px
+qsize: 14.25px
 fig: fig.05 · 30 tools in 30 days
 role: rapid prototyping
 period: 2026

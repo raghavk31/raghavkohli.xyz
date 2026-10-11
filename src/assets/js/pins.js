@@ -15,7 +15,7 @@
   var me = document.currentScript, api = me && me.dataset.api;
   if (!api) return;
   var key = ""; try { key = localStorage.getItem("thoughts-key") || ""; } catch (e) {}
-  var owner = !!key, pins = [], layer = document.createElement("div"), wide = window.matchMedia("(min-width: 901px)");
+  var owner = !!key, pins = [], layer = document.createElement("div"), wide = window.matchMedia("(min-width: 676px)");
   layer.className = "pins";
   document.body.appendChild(layer);
 
@@ -59,11 +59,13 @@
   }
 
   // ---------- where a note sits ----------
+  // the site went to 75% of its first size (2026-10-11); notes are stored at the old size, drawn at S of it
+  var S = .75;
   function place(docX, docY) {   // a point on the page -> {anchor, x, y}
-    return { anchor: "top", x: Math.round(docX - innerWidth / 2), y: Math.round(docY) };
+    return { anchor: "top", x: Math.round((docX - innerWidth / 2) / S), y: Math.round(docY / S) };
   }
   function at(p) {   // {anchor, x, y} -> a point on the page
-    return { left: innerWidth / 2 + p.x, top: p.y };
+    return { left: innerWidth / 2 + p.x * S, top: p.y * S };
   }
 
   // ---------- drawing the notes ----------
@@ -87,7 +89,7 @@
   function position() {
     layer.querySelectorAll(".pin").forEach(function (el) {
       var p = byId(el.dataset.id) || draft; if (!p) return;
-      var q = at(p), w = p.w || 220;
+      var q = at(p), w = (p.w || 220) * S;
       el.style.left = Math.round(Math.min(Math.max(8, q.left), innerWidth - w - 8)) + "px";
       el.style.top = Math.round(q.top) + "px";
       el.style.zIndex = 2 + (p.z || 0);
@@ -199,7 +201,7 @@
     e.preventDefault();
     var g = e.target, sx = e.pageX, w0 = p.w || 220, w = w0;
     try { g.setPointerCapture(e.pointerId); } catch (err) {}
-    function move(ev) { w = Math.round(Math.min(600, Math.max(120, w0 + ev.pageX - sx))); el.style.setProperty("--s", (w / 220).toFixed(3)); }
+    function move(ev) { w = Math.round(Math.min(600, Math.max(120, w0 + (ev.pageX - sx) / S))); el.style.setProperty("--s", (w / 220).toFixed(3)); }
     function up() {
       g.removeEventListener("pointermove", move); g.removeEventListener("pointerup", up);
       if (w === w0) return;

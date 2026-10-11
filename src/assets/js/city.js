@@ -6,6 +6,10 @@
    The ecology diagram's nodes bring one system forward; the map stays out from under the words. */
 (function () {
   "use strict";
+  // the map is drawn in its own units (a 13px glyph on a 16px line) and the canvas is scaled by K: .75 with the
+  // rest of the site (2026-10-11; 1 on a phone, which keeps the first size), more when the screen is wider or
+  // taller than the map, so it always covers it
+  var PHONE = window.matchMedia("(max-width: 540px)"), Z = .75, K = Z;
   var FONT = 13, LH = 16, TICK = 150, SEED = 20261005, BASE = "/assets/js/cities/";
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   // three looks after the references (2026-10-09), all on by default; ?look= picks some of them to compare
@@ -79,8 +83,11 @@
       var j = i + s * cols; if (j >= 0 && j < n) b = Math.min(b, BANK[j] + MY);
       BANK[i] = b;
     }
-    X0 = Math.round(Math.min(Math.max(0, cols - innerWidth / cw), Math.max(0, city.fx * cols - innerWidth / cw / 2)));
-    OX = Math.max(0, (innerWidth - cols * cw) / 2);   // a screen wider than the map: the map sits in the middle
+    Z = PHONE.matches ? 1 : .75;
+    K = Math.max(Z, innerWidth / (cols * cw), innerHeight / (rows * LH));
+    var vw = innerWidth / K;
+    X0 = Math.round(Math.min(Math.max(0, cols - vw / cw), Math.max(0, city.fx * cols - vw / cw / 2)));
+    OX = Math.max(0, (vw - cols * cw) / 2);
     seedFlows();
   }
 
@@ -237,15 +244,15 @@
   var ALPHA = [.1, .2, .42, .4, .13, .13, .14, .26];
   function rgba(c, a) { return "rgba(" + c + "," + a.toFixed(3) + ")"; }
   function draw() {
-    var dpr = window.devicePixelRatio || 1, iw = innerWidth, ih = innerHeight;
-    if (cv.width !== Math.round(iw * dpr) || cv.height !== Math.round(ih * dpr)) { cv.width = Math.round(iw * dpr); cv.height = Math.round(ih * dpr); cv.style.width = iw + "px"; cv.style.height = ih + "px"; }
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var dpr = window.devicePixelRatio || 1, sw = innerWidth, sh = innerHeight, iw = sw / K, ih = sh / K;
+    if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = Math.round(sw * dpr); cv.height = Math.round(sh * dpr); cv.style.width = sw + "px"; cv.style.height = sh + "px"; }
+    ctx.setTransform(dpr * K, 0, 0, dpr * K, 0, 0);
     ctx.clearRect(0, 0, iw, ih);
     if (!rows) return;
     ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
     ctx.textBaseline = "top";
     var f = focus(), sy = window.scrollY, vis = Math.ceil(ih / LH) + 1, last = null;
-    var top = Math.min(1, sy / Math.max(1, document.documentElement.scrollHeight - ih)) * Math.max(0, rows - ih / LH);
+    var top = Math.min(1, sy / Math.max(1, document.documentElement.scrollHeight - sh)) * Math.max(0, rows - ih / LH);
     var r0 = Math.floor(top), off = -(top - r0) * LH, x1 = Math.min(cols, X0 + Math.ceil(iw / cw) + 1);
     function style(l, m) { var a = ALPHA[l] * m, c = (MONO && l === 7 ? INK : TINT[l]) || INK; if (!f) return rgba(c, a); if (l === f) return rgba(ACC, .5 * m); return rgba(c, a * .45); }
     if (CONT && SEGS.length) contourLines(r0, vis, off, x1, f);
@@ -299,8 +306,8 @@
     if ("filter" in ctx) ctx.filter = "blur(12px)";
     CLEAR.forEach(function (c) { ctx.globalAlpha = c[1];
       document.querySelectorAll(c[0]).forEach(function (el) { var r = el.getBoundingClientRect();
-        if (!r.width || r.bottom < -40 || r.top > ih + 40) return;
-        ctx.fillRect(r.left - 18, r.top - 14, r.width + 36, r.height + 28); }); });
+        if (!r.width || r.bottom < -40 || r.top > innerHeight + 40) return;
+        ctx.fillRect(r.left / K - 18, r.top / K - 14, r.width / K + 36, r.height / K + 28); }); });
     ctx.restore();
   }
 
