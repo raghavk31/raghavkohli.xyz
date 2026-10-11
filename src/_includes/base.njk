@@ -65,6 +65,8 @@
     {#- the र. mark keeps the face it has always had: Fraunces, subset to just its two glyphs -#}
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500&text=%E0%A4%B0.&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="/assets/css/main.css?v={{ v }}" />
+    {#- phones keep the first size: the same sheet at 4/3, built by src/phone-css.11ty.js -#}
+    <link rel="stylesheet" href="/assets/css/main.phone.css?v={{ v }}" media="(max-width: 540px)" />
   </head>
   <body>
     <header class="head">

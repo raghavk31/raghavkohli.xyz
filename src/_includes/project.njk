@@ -24,7 +24,7 @@ layout: base.njk
 {% macro tiles(t) %}
 <figure class="plate">
   {%- set f = t.items[0] -%}
-  <div class="tiles{% if t.fit == 'contain' %} tiles--contain{% endif %}" style="--tar:{{ (t.ar or ((f.tw or f.w) / (f.th or f.h))) | round(3) }}{% if t.min %};--tmin:{{ t.min }}px{% endif %}">{% for it in t.items %}<div{% if it.cap %} data-cap="{{ it.cap }}"{% endif %}><img src="{{ it.tile or it.src }}" data-full="{{ it.src }}" data-w="{{ it.w }}" data-h="{{ it.h }}" alt="{{ it.alt or it.cap or '' }}"{% if it.tw and it.th %} width="{{ it.tw }}" height="{{ it.th }}"{% elif it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
+  <div class="tiles{% if t.fit == 'contain' %} tiles--contain{% endif %}" style="--tar:{{ (t.ar or ((f.tw or f.w) / (f.th or f.h))) | round(3) }}{% if t.min %};--tmin:{{ t.min * 0.75 }}px{% endif %}">{% for it in t.items %}<div{% if it.cap %} data-cap="{{ it.cap }}"{% endif %}><img src="{{ it.tile or it.src }}" data-full="{{ it.src }}" data-w="{{ it.w }}" data-h="{{ it.h }}" alt="{{ it.alt or it.cap or '' }}"{% if it.tw and it.th %} width="{{ it.tw }}" height="{{ it.th }}"{% elif it.w and it.h %} width="{{ it.w }}" height="{{ it.h }}"{% endif %} loading="lazy" /></div>{% endfor %}</div>
   {% if t.fig or t.cap %}<figcaption class="plate__cap">{% if t.fig %}<span class="n">{{ t.fig }}</span>{% endif %}{% if t.cap %}<span>{{ t.cap }}</span>{% endif %}</figcaption>{% endif %}
 </figure>
 {% endmacro %}
@@ -377,13 +377,13 @@ layout: base.njk
   {% endif %}
 
   {% if method %}
-  <div class="reveal" style="margin-top:clamp(56px,8vw,96px)">
+  <div class="method reveal">
     <span class="eyebrow">(method)</span>
-    <div style="display:flex;flex-direction:column;margin-top:36px">
+    <div class="method__list">
       {% for m in method %}
-      <div style="display:flex;gap:24px;padding:24px 0;border-top:1px solid rgba(28,27,24,.09)">
-        <span class="mono" style="font-size:12px;color:var(--line);min-width:28px">{{ m.n }}</span>
-        <div><div style="font-size:15px;font-weight:500;color:var(--ink);margin-bottom:6px">{{ m.title }}</div><div style="font-size:14px;color:var(--faint);max-width:34em">{{ m.body }}</div></div>
+      <div class="method__row">
+        <span class="mono method__n">{{ m.n }}</span>
+        <div><div class="method__t">{{ m.title }}</div><div class="method__b">{{ m.body }}</div></div>
       </div>
       {% endfor %}
     </div>

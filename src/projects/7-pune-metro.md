@@ -6,7 +6,7 @@ desc: ccba · line 3 stations
 topics: [mobility]
 size: md
 offset: ""
-qsize: 22px
+qsize: 16.5px
 fig: fig.01 · a typical station, in section
 role: intern · station drawings · massing study · presentation
 period: january–july 2021 · internship

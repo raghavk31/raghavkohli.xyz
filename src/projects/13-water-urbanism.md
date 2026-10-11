@@ -6,7 +6,7 @@ desc: rajgir · aahar-pyne · wetland urbanism
 topics: [water]
 size: md
 offset: ""
-qsize: 24px
+qsize: 18px
 fig: fig.01 · rajgir across the centuries
 role: urban design studio · gis analysis · masterplan
 period: 2021 · one semester

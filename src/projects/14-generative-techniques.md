@@ -6,7 +6,7 @@ desc: ahmedabad · evolutionary computation
 topics: [buildings]
 size: md
 offset: ""
-qsize: 24px
+qsize: 18px
 fig: fig.01 · density as a rule
 role: computational urban design · grasshopper · evolutionary search
 period: 2020 · one semester

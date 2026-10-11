@@ -6,7 +6,7 @@ desc: bhadra · narrative cartography
 topics: [education]
 size: md
 offset: ""
-qsize: 24px
+qsize: 18px
 fig: fig.01 · life in boxes
 role: narrative cartography · performance · design
 period: 2018 · 14 weeks

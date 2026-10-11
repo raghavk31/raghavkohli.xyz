@@ -6,7 +6,7 @@ desc: surat · migrant housing · linking and stacking
 topics: [buildings]
 size: md
 offset: ""
-qsize: 24px
+qsize: 18px
 fig: fig.01 · the clusters, in model
 role: urban design studio · housing · model
 period: 2019 · one semester

@@ -16,6 +16,7 @@ layout: base.njk
 {%- macro empty(what) %}<div class="psp-empty" role="note"><span>(no data)</span> perspectives.json has no rows, so {{ what }} has nothing to draw. It is built from the attendance records and nothing else.</div>{% endmacro -%}
 <article class="detail psp">
   <link rel="stylesheet" href="/assets/css/perspectives.css" />
+  <link rel="stylesheet" href="/assets/css/perspectives.phone.css" media="(max-width: 540px)" />
   <a class="detail__back" href="/#work">(&larr; selected work)</a>
 
   <span class="detail__qlabel">(research question)</span>
