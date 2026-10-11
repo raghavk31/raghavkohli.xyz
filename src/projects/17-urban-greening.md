@@ -6,7 +6,7 @@ desc: amc · iclei · policy book
 topics: [air, water]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.16 · heritage trees
 role: book design · illustration · maps and infographics, studio commons
 period: 2024–2025

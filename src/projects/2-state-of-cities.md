@@ -6,7 +6,7 @@ desc: niua · fifteen cities · one template
 topics: [air, water, energy, waste]
 size: wide
 offset: ""
-qsize: 12.75px
+qsize: 14.88px
 fig: fig.01 · cities at crossroads, drawn · niua
 role: co-author · data · design
 period: 2023

@@ -15,7 +15,7 @@
   var me = document.currentScript, api = me && me.dataset.api;
   if (!api) return;
   var key = ""; try { key = localStorage.getItem("thoughts-key") || ""; } catch (e) {}
-  var owner = !!key, pins = [], layer = document.createElement("div"), wide = window.matchMedia("(min-width: 676px)");
+  var owner = !!key, pins = [], layer = document.createElement("div"), wide = window.matchMedia("(min-width: 788px)");
   layer.className = "pins";
   document.body.appendChild(layer);
 
@@ -59,8 +59,8 @@
   }
 
   // ---------- where a note sits ----------
-  // the site went to 75% of its first size (2026-10-11); notes are stored at the old size, drawn at S of it
-  var S = .75;
+  // the site went to 87.5% of its first size (2026-10-11); notes are stored at the old size, drawn at S of it
+  var S = .875;
   function place(docX, docY) {   // a point on the page -> {anchor, x, y}
     return { anchor: "top", x: Math.round((docX - innerWidth / 2) / S), y: Math.round(docY / S) };
   }

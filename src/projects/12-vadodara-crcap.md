@@ -7,7 +7,7 @@ snippet: Nineteen maps at ward level, in three passes
 topics: [energy, buildings, mobility, waste, water, air]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.35 · the sector goals, drawn
 role: co-author · sector strategies · book design
 period: 2023–2024

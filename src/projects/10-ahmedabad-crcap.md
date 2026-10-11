@@ -7,7 +7,7 @@ snippet: Forty-five action sheets, one format throughout
 topics: [energy, buildings, mobility, waste, water, air]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.17 · feel-like temperature, may 2021
 role: co-author · sector strategies · book design
 period: 2022–2023

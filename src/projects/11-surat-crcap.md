@@ -7,7 +7,7 @@ snippet: Surat chose the harder target
 topics: [water, energy, buildings, mobility, waste, air]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.26 · every hazard against every fragile system
 role: co-author · sector strategies · book design
 period: 2024–2025

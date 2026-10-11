@@ -5,7 +5,7 @@ desc: iclei–niua · carbon accounting
 topics: [energy, air]
 size: wide
 offset: off-130
-qsize: 18.75px
+qsize: 21.88px
 fig: fig.04 · city-scale carbon accounting · iclei–niua
 role: research
 period: 2022–2024

@@ -32,7 +32,7 @@
       // keep the note's foot above the frame's foot, so its overlap never reaches the strip below a
       // short landscape card; on a short card it rides up over the top edge instead
       var frame = card.querySelector(".card__frame");
-      if (frame && window.matchMedia("(min-width: 676px)").matches) meta.style.top = Math.max(-18, Math.min(16.5, frame.offsetHeight - meta.offsetHeight - 9)) + "px";
+      if (frame && window.matchMedia("(min-width: 788px)").matches) meta.style.top = Math.max(-21, Math.min(19.25, frame.offsetHeight - meta.offsetHeight - 10.5)) + "px";
     });
   });
 
@@ -193,9 +193,9 @@
       else x = r.right - box.left - 28;
       var y = r.top - box.top - ch + 4;   // touching the pill's top edge, never over its label
       // the lead sits on the top rail: its box goes beside it, so it never climbs over the statement
-      if (shape && shape.getAttribute("data-anchor") === "middle") { x = r.right - box.left + 7.5; y = r.top - box.top + r.height / 2 - ch / 2; }
+      if (shape && shape.getAttribute("data-anchor") === "middle") { x = r.right - box.left + 8.75; y = r.top - box.top + r.height / 2 - ch / 2; }
       // the phone's column stacks the pills tight: there the box sits beside its pill, over the wires
-      if (node.closest(".eco__svg--tall") && !shape.classList.contains("eco__band")) { x = r.right - box.left + 7.5; y = r.top - box.top + r.height / 2 - ch / 2; }
+      if (node.closest(".eco__svg--tall") && !shape.classList.contains("eco__band")) { x = r.right - box.left + 8.75; y = r.top - box.top + r.height / 2 - ch / 2; }
       x = Math.max(0, Math.min(box.width - cw, x));
       c.style.left = x + "px";
       c.style.top = y + "px";
@@ -1247,10 +1247,10 @@
       var d = new Date(ms);
       return d.getDate() + " " + d.toLocaleString("en-GB", { month: "long" }).toLowerCase() + " " + d.getFullYear();
     };
-    var NOTE_W = 186, GAP = 30, MIN_W = 120, MAX_W = 540;   // the flow width (matches .board columns), the gap, the scale limits
+    var NOTE_W = 217, GAP = 35, MIN_W = 140, MAX_W = 630;   // the flow width (matches .board columns), the gap, the scale limits
     var layout = {}, maxZ = 0;                                // id -> {x, y, w, z}, from the worker
     var notes = {};                                           // id -> the thought as the worker has it
-    var free = window.matchMedia("(min-width: 616px)");      // the free canvas; below it, columns
+    var free = window.matchMedia("(min-width: 718px)");      // the free canvas; below it, columns
     var idOf = function (art) { return art.dataset.id; };
     var imgUrl = function (id) { return api + "/images/" + id; };
 
@@ -1378,9 +1378,9 @@
     }
     function load() {
       fetch(api + "/thoughts?limit=100").then(function (r) { return r.json(); }).then(function (j) {
-        // layouts are stored at the site's first size; the site is drawn at 75% of it since 2026-10-11
+        // layouts are stored at the site's first size; the site is drawn at 87.5% of it since 2026-10-11
         layout = {}; var J = j.layout || {};
-        Object.keys(J).forEach(function (id) { var L = J[id]; layout[id] = { x: L.x * .75, y: L.y * .75, w: L.w * .75, z: L.z }; });
+        Object.keys(J).forEach(function (id) { var L = J[id]; layout[id] = { x: L.x * .875, y: L.y * .875, w: L.w * .875, z: L.z }; });
         Object.keys(layout).forEach(function (id) { maxZ = Math.max(maxZ, layout[id].z || 0); });
         (j.thoughts || []).forEach(function (t) { if (!wall.querySelector('[data-id="' + t.id + '"]')) place(render(t)); else notes[t.id] = t; });
         wall.querySelectorAll(".thought").forEach(tools);
@@ -1446,7 +1446,7 @@
     var drag = null;
     function savePos(id) {
       var L = layout[id];
-      fetch(api + "/layout/" + id, { method: "PUT", headers: { "Content-Type": "application/json", "X-Owner-Key": key }, body: JSON.stringify({ x: L.x / .75, y: L.y / .75, w: L.w / .75, z: L.z }) })
+      fetch(api + "/layout/" + id, { method: "PUT", headers: { "Content-Type": "application/json", "X-Owner-Key": key }, body: JSON.stringify({ x: L.x / .875, y: L.y / .875, w: L.w / .875, z: L.z }) })
         .then(function (r) { if (!r.ok) throw 0; })
         .catch(function () { if (msg) msg.textContent = "that move did not save"; });
     }

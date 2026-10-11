@@ -11,7 +11,7 @@
 (function () {
   "use strict";
 
-  var WIDE = "(min-width: 616px)";
+  var WIDE = "(min-width: 718px)";
   var OVERHANG = 30;   // px a post-it may hang past the frame's edge
   var slice = function (l) { return Array.prototype.slice.call(l); };
   var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };

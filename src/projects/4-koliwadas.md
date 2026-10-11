@@ -6,7 +6,7 @@ desc: worli · open source urbanism
 topics: [water, food, economy]
 size: md
 offset: ""
-qsize: 16.5px
+qsize: 19.25px
 fig: fig.15 · worli tip, the commons drawn
 role: directed research · fieldwork · cartography · strategy
 period: 2022 · spring semester

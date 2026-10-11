@@ -6,10 +6,10 @@
    The ecology diagram's nodes bring one system forward; the map stays out from under the words. */
 (function () {
   "use strict";
-  // the map is drawn in its own units (a 13px glyph on a 16px line) and the canvas is scaled by K: .75 with the
-  // rest of the site (2026-10-11; 1 on a phone, which keeps the first size), more when the screen is wider or
+  // the map is drawn in its own units (a 13px glyph on a 16px line) and the canvas is scaled by K: .875 with the
+  // rest of the site (87.5%, 2026-10-11; 1 on a phone, which keeps the first size), more when the screen is wider or
   // taller than the map, so it always covers it
-  var PHONE = window.matchMedia("(max-width: 540px)"), Z = .75, K = Z;
+  var PHONE = window.matchMedia("(max-width: 540px)"), Z = .875, K = Z;
   var FONT = 13, LH = 16, TICK = 150, SEED = 20261005, BASE = "/assets/js/cities/";
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   // three looks after the references (2026-10-09), all on by default; ?look= picks some of them to compare
@@ -83,7 +83,7 @@
       var j = i + s * cols; if (j >= 0 && j < n) b = Math.min(b, BANK[j] + MY);
       BANK[i] = b;
     }
-    Z = PHONE.matches ? 1 : .75;
+    Z = PHONE.matches ? 1 : .875;
     K = Math.max(Z, innerWidth / (cols * cw), innerHeight / (rows * LH));
     var vw = innerWidth / K;
     X0 = Math.round(Math.min(Math.max(0, cols - vw / cw), Math.max(0, city.fx * cols - vw / cw / 2)));

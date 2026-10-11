@@ -6,7 +6,7 @@ desc: mumbai · eastern waterfront · living infrastructure
 topics: [water, waste]
 size: md
 offset: ""
-qsize: 18px
+qsize: 21px
 fig: fig.01 · the eco-machine
 role: research · systems design · urban design
 period: 2020 · one semester
