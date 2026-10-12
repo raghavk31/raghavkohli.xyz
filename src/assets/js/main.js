@@ -237,6 +237,14 @@
       var on = !!topic && !active;
       grid.classList.toggle("peek", on);
       cards.forEach(function (c) { c.classList.toggle("hint", on && topicsOf(c).indexOf(topic) !== -1); });
+      years();
+    }
+    // the timeline under the loop: the hovered topic, else the chosen one, lights its projects' years
+    var yrs = Array.prototype.slice.call(eco.querySelectorAll(".eco__yr"));
+    function years() {
+      var t = hot || active;
+      eco.querySelectorAll(".eco__time").forEach(function (s) { s.classList.toggle("has-topic", !!t); });
+      yrs.forEach(function (d) { d.classList.toggle("match", !!t && (" " + d.dataset.topics + " ").indexOf(" " + t + " ") !== -1); });
     }
 
     nodes.forEach(function (b) {
@@ -350,9 +358,10 @@
         f.cur[i] = pt;
         c.setAttribute("cx", pt.x.toFixed(1));
         c.setAttribute("cy", pt.y.toFixed(1));
-        c.setAttribute("r", parked ? "4.4" : f.work ? (fast ? "3.2" : "2.6") : (fast ? "2.4" : "1.8"));
+        var on = lit && c.dataset.url === lit;
+        c.setAttribute("r", parked ? (on ? "5.6" : "4.4") : on ? "4.4" : f.work ? (fast ? "3.2" : "2.6") : (fast ? "2.4" : "1.8"));
         c.classList.toggle("is-parked", parked);
-        c.style.opacity = parked ? "1" : ((f.work ? dim : dim * 0.6) * Math.min(1, t * 8, (1 - t) * 8)).toFixed(2);
+        c.style.opacity = parked || on ? "1" : ((f.work ? (lit ? 0.35 : dim) : dim * 0.6) * Math.min(1, t * 8, (1 - t) * 8)).toFixed(2);
         if (f.tint) c.style.fill = tintAt(f.tint, parked ? 0 : t);
       });
     }
@@ -361,21 +370,40 @@
     tip.className = "eco__tip";
     tip.setAttribute("aria-hidden", "true");
     eco.appendChild(tip);
+    // a project lit (a parked dot or its year under the pointer): its resources, its dots on every
+    // wire and its year, all at once, so one piece of work is seen crossing the drawing
+    var lit = null;
+    function light(url) {
+      if (url === lit) return;
+      lit = url;
+      var t = [];
+      yrs.forEach(function (d) { var on = d.dataset.url === url; d.classList.toggle("is-lit", on); if (on) t = d.dataset.topics.split(" "); });
+      eco.classList.toggle("has-lit", !!url);
+      nodes.forEach(function (n) { n.classList.toggle("is-lit", !!url && t.indexOf(n.getAttribute("data-topic")) !== -1); });
+      flows.forEach(function (f) { f.dots.forEach(function (c) { c.classList.toggle("is-lit", !!url && c.dataset.url === url); }); });
+      if (reduce) flows.forEach(function (f) { place(f, false, 1); });
+    }
     eco.addEventListener("mouseover", function (e) {
-      var c = e.target.closest && e.target.closest(".eco__proj.is-parked");
-      if (!c) { tip.classList.remove("on"); return; }
-      var r = c.getBoundingClientRect(), box = eco.getBoundingClientRect();
-      tip.textContent = c.dataset.title;
-      tip.style.left = (r.left + r.width / 2 - box.left) + "px";
-      tip.style.top = (r.bottom - box.top + 7) + "px";   // under the dot: the topic's note sits above
+      var c = e.target.closest && e.target.closest(".eco__proj.is-parked, .eco__yr");
+      if (!c) { tip.classList.remove("on"); light(null); return; }
+      var r = c.getBoundingClientRect(), box = eco.getBoundingClientRect(), yr = c.classList.contains("eco__yr");
+      tip.textContent = c.dataset.title + (yr ? "  ·  " + c.dataset.year : "");
+      // kept inside the figure: the first and last years sit at its edges
+      var w = tip.offsetWidth || 120, x = r.left + r.width / 2 - box.left;
+      tip.style.left = Math.max(w / 2, Math.min(box.width - w / 2, x)) + "px";
+      // under a parked dot (the topic's note sits above); over a year (its label sits below)
+      tip.style.top = (yr ? r.top - box.top - 7 : r.bottom - box.top + 7) + "px";
+      tip.classList.toggle("up", yr);
       tip.classList.add("on");
+      light(c.dataset.url);
     });
-    eco.addEventListener("mouseleave", function () { tip.classList.remove("on"); });
+    eco.addEventListener("mouseleave", function () { tip.classList.remove("on"); light(null); });
     eco.addEventListener("click", function (e) {
-      var c = e.target.closest && e.target.closest(".eco__proj.is-parked");
+      var c = e.target.closest && e.target.closest(".eco__proj.is-parked, .eco__yr");
       if (!c) return;
       e.stopPropagation();   // not the node's click: that would unchoose the topic
       tip.classList.remove("on");
+      light(null);
       var card = document.querySelector('a.card__click[href="' + c.dataset.url + '"]');
       if (card) card.click(); else location.href = c.dataset.url;
     }, true);

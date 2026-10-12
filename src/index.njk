@@ -93,6 +93,8 @@ title: "Raghav Kohli · invisible systems, made visible"
     <figure class="eco" data-eco>
       {{ ecologyViz.wide | safe }}
       {{ ecologyViz.tall | safe }}
+      {{ ecologyViz.timeWide | safe }}
+      {{ ecologyViz.timeTall | safe }}
       <div class="eco__callouts" aria-live="polite">
         {%- for n in ecology.resources.concat(ecology.threads) %}
         <div class="eco__callout{% if not n.note %} is-draft{% endif %}{% if loop.index % 3 == 0 %} alt{% endif %}" data-for="{{ n.id }}" style="--r:{{ 2.5 if loop.index % 2 else -2 }}deg">
