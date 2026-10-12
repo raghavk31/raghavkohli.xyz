@@ -7,7 +7,7 @@ topics: [buildings]
 size: md
 offset: ""
 qsize: 21px
-fig: fig.01 · density as a rule
+fig: fig.1 · density as a rule
 role: computational urban design · grasshopper · evolutionary search
 period: 2020 · one semester
 context: sabarmati · north ahmedabad · cept L2 studio
@@ -29,30 +29,30 @@ next: Eco-Machine · mumbai's eastern waterfront as a living machine
 # Story and figures follow the studio portfolio, images/CEPT/Generative Techniques/
 # UD2817_Kohli_Portfolio_Generative.pdf (34 spreads). 27–54 are cut from it; 00–26 were already here.
 # Left out: the two Getty Images photographs of Hong Kong (spreads 10–11), and the population charts.
-open: { src: /assets/projects/generative-techniques/27.jpg, w: 1777, h: 1800, fig: fig.01, tall: true, cap: "Twenty-five blocks from one procedure. The portfolio's cover: individuals from the evolutionary search, each a different answer to the same rules." }
+open: { src: /assets/projects/generative-techniques/27.jpg, w: 1777, h: 1800, fig: fig.1, tall: true, cap: "Twenty-five blocks from one procedure. The portfolio's cover: individuals from the evolutionary search, each a different answer to the same rules." }
 chapters:
   - n: "00"
     name: the problem
     title: Sprawl, or floors stacked on floors
     pair:
-      - { src: /assets/projects/generative-techniques/32.jpg, w: 1755, h: 1703, fig: fig.02, blend: true, cap: "The current response to urbanisation: unplanned growth past the existing city boundary, which brings urban sprawl." }
-      - { src: /assets/projects/generative-techniques/33.jpg, w: 1800, h: 1780, fig: fig.03, blend: true, cap: "The current response to densification: floors stacked up and up on the same footprint to keep pace with the population." }
+      - { src: /assets/projects/generative-techniques/32.jpg, w: 1755, h: 1703, fig: fig.2, blend: true, cap: "The current response to urbanisation: unplanned growth past the existing city boundary, which brings urban sprawl." }
+      - { src: /assets/projects/generative-techniques/33.jpg, w: 1800, h: 1780, fig: fig.3, blend: true, cap: "The current response to densification: floors stacked up and up on the same footprint to keep pace with the population." }
   - n: "01"
     name: site
     title: A retention basin in the middle of the city
     side: left
     plates:
-      - { src: /assets/projects/generative-techniques/30.jpg, w: 1800, h: 1252, fig: fig.04, blend: true, cap: "The entities that give the site its historical, cultural and resource identity: the green patch, Kalam Kush, the swale, the sewage treatment plant, Gandhi Ashram, the Sabarmati and its riverfront." }
-      - { src: /assets/projects/generative-techniques/31.jpg, w: 1800, h: 1778, fig: fig.05, blend: true, cap: "Landscape. The larger green belt, and a section from upland through the network to the shoreline: the site functions as a retention basin, or would have before development." }
+      - { src: /assets/projects/generative-techniques/30.jpg, w: 1800, h: 1252, fig: fig.4, blend: true, cap: "The entities that give the site its historical, cultural and resource identity: the green patch, Kalam Kush, the swale, the sewage treatment plant, Gandhi Ashram, the Sabarmati and its riverfront." }
+      - { src: /assets/projects/generative-techniques/31.jpg, w: 1800, h: 1778, fig: fig.5, blend: true, cap: "Landscape. The larger green belt, and a section from upland through the network to the shoreline: the site functions as a retention basin, or would have before development." }
     pair:
-      - { src: /assets/projects/generative-techniques/28.jpg, w: 1800, h: 1731, fig: fig.06, blend: true, cap: "The site, in the central north of Ahmedabad." }
-      - { src: /assets/projects/generative-techniques/29.jpg, w: 1800, h: 1535, fig: fig.07, blend: true, cap: "Overlapping layers: transport, interconnectivity, street, identity." }
+      - { src: /assets/projects/generative-techniques/28.jpg, w: 1800, h: 1731, fig: fig.6, blend: true, cap: "The site, in the central north of Ahmedabad." }
+      - { src: /assets/projects/generative-techniques/29.jpg, w: 1800, h: 1535, fig: fig.7, blend: true, cap: "Overlapping layers: transport, interconnectivity, street, identity." }
   - n: "02"
     name: the workshop
     title: The method, learned on a test block
     plates:
-      - { src: /assets/projects/generative-techniques/06.jpg, w: 1552, h: 1610, fig: fig.08, blend: true, cap: "The test block as a procedure. A constant 200 × 120 m plot; offsets, divisions, staggering, heights and non-uniform scaling each given a range rather than a value. Every range is a gene." }
-      - { src: /assets/projects/generative-techniques/08.jpg, w: 1640, h: 1570, fig: fig.09, blend: true, cap: "Pareto fronts. The individuals no other solution beats on every objective, each with its radar of density, sunlight, open space and shade; below them, the most and least fit of the population." }
+      - { src: /assets/projects/generative-techniques/06.jpg, w: 1552, h: 1610, fig: fig.8, blend: true, cap: "The test block as a procedure. A constant 200 × 120 m plot; offsets, divisions, staggering, heights and non-uniform scaling each given a range rather than a value. Every range is a gene." }
+      - { src: /assets/projects/generative-techniques/08.jpg, w: 1640, h: 1570, fig: fig.9, blend: true, cap: "Pareto fronts. The individuals no other solution beats on every objective, each with its radar of density, sunlight, open space and shade; below them, the most and least fit of the population." }
     strip:
       col: true
       fig: fig.10
@@ -82,25 +82,17 @@ chapters:
     title: 2025, 2035, 2050
     side: left
     plates:
-      - { src: /assets/projects/generative-techniques/anim-horizons.mp4, poster: /assets/projects/generative-techniques/anim-horizons.jpg, w: 1400, h: 1316, fig: fig.15a, cap: "The three horizons in one loop: the same attractors as the population grows from 65,873 in 2025 to 92,921 in 2035 and 1,55,676 in 2050. [draft caption]" }
-      - { src: /assets/projects/generative-techniques/05.jpg, w: 1726, h: 1623, fig: fig.15, cap: "T(2) 2050. 1,55,676 people, 38,91,900 sq m of built space required; low 33 %, medium 24 %, high 43 %. The high-density attractors at their widest: 250 m around bus and metro stops." }
-    strip:
-      col: true
-      fig: fig.16–17
-      cap: "The same attractors at T(0) 2025 and T(1) 2035. The population rising from 65,873 to 92,921, the high-density share of the built area from 24 to 33 per cent."
-      items:
-        - { src: /assets/projects/generative-techniques/03.jpg, w: 1650, h: 1623, cap: "T(0) 2025. 65,873 people; built required 16,46,825 sq m; low 45 %, medium 31 %, high 24 %." }
-        - { src: /assets/projects/generative-techniques/04.jpg, w: 1651, h: 1623, cap: "T(1) 2035. 92,921 people; built required 23,23,025 sq m; low 38 %, medium 29 %, high 33 %." }
+      - { src: /assets/projects/generative-techniques/anim-horizons.mp4, poster: /assets/projects/generative-techniques/anim-horizons.jpg, w: 1400, h: 1316, fig: fig.15, cap: "The three horizons in one loop: the same attractors as the population grows from 65,873 in 2025 to 92,921 in 2035 and 1,55,676 in 2050. [draft caption]" }
   - n: "06"
     name: desire lines
     title: Every destination, connected to every other
     plates:
-      - { src: /assets/projects/generative-techniques/42.jpg, w: 1800, h: 1496, fig: fig.18, blend: true, cap: "All connections overlapped, bundled." }
+      - { src: /assets/projects/generative-techniques/42.jpg, w: 1800, h: 1496, fig: fig.16, blend: true, cap: "All connections overlapped, bundled." }
     tiles:
       ar: 1.12
       min: 260
       fit: contain
-      fig: fig.19–24
+      fig: fig.17–22
       cap: "One set of nodes at a time, drawn first as direct connections and then bundled up: street nodes, residential, commercial, social amenities, green open space, public transport."
       items:
         - { src: /assets/projects/generative-techniques/36.jpg, w: 1800, h: 1539, tile: /assets/projects/generative-techniques/36-t.jpg, tw: 640, th: 547, cap: "Street node connections across the site." }
@@ -114,19 +106,19 @@ chapters:
     title: A foreground, and a woven grid behind it
     side: left
     plates:
-      - { src: /assets/projects/generative-techniques/46.jpg, w: 1800, h: 1622, fig: fig.25, blend: true, cap: "Foreground and background network together." }
-      - { src: /assets/projects/generative-techniques/45.jpg, w: 1686, h: 1800, fig: fig.26, blend: true, cap: "Background: the secondary and tertiary network as a grid woven at 130 m, each strand carrying a different mobility type." }
+      - { src: /assets/projects/generative-techniques/46.jpg, w: 1800, h: 1622, fig: fig.23, blend: true, cap: "Foreground and background network together." }
+      - { src: /assets/projects/generative-techniques/45.jpg, w: 1686, h: 1800, fig: fig.24, blend: true, cap: "Background: the secondary and tertiary network as a grid woven at 130 m, each strand carrying a different mobility type." }
     pair:
-      - { src: /assets/projects/generative-techniques/43.jpg, w: 1800, h: 1690, fig: fig.27, blend: true, cap: "Foreground: the primary network." }
-      - { src: /assets/projects/generative-techniques/44.jpg, w: 1582, h: 1800, fig: fig.28, blend: true, cap: "Foreground: space syntax betweenness of the generated network." }
+      - { src: /assets/projects/generative-techniques/43.jpg, w: 1800, h: 1690, fig: fig.25, blend: true, cap: "Foreground: the primary network." }
+      - { src: /assets/projects/generative-techniques/44.jpg, w: 1582, h: 1800, fig: fig.26, blend: true, cap: "Foreground: space syntax betweenness of the generated network." }
   - n: "08"
     name: land use
     title: Where people live, trade and rest
     plates:
-      - { src: /assets/projects/generative-techniques/47.jpg, w: 1800, h: 1667, fig: fig.29, blend: true, cap: "Residential, 85 %. High density toward the TOD edge, the bus and metro stops and the major nodes; low density along the STP, Kalam Kush and Gandhi Ashram. Dots for 87, 57 and 27 people." }
+      - { src: /assets/projects/generative-techniques/47.jpg, w: 1800, h: 1667, fig: fig.27, blend: true, cap: "Residential, 85 %. High density toward the TOD edge, the bus and metro stops and the major nodes; low density along the STP, Kalam Kush and Gandhi Ashram. Dots for 87, 57 and 27 people." }
     strip:
       col: true
-      fig: fig.30–31
+      fig: fig.28–29
       cap: "Commercial, 25 %, and open and green space, 35 %."
       items:
         - { src: /assets/projects/generative-techniques/48.jpg, w: 1800, h: 1641, cap: "Commercial, 25 %. High along the bus and metro stops, the major nodes and the primary junction; medium along the primary network; low up to 100 m from the primary node." }
@@ -136,20 +128,20 @@ chapters:
     title: What residents add when no one is watching
     side: left
     pair:
-      - { src: /assets/projects/generative-techniques/50.jpg, w: 1800, h: 1755, fig: fig.32, blend: true, cap: "Case study: Ciudad Bachué, Bogotá. Settlement, super block, block, plot cluster, unit; housing, housing with shops and commercial areas; parks and natural reserve. Source: Eliana Silva, thesis." }
-      - { src: /assets/projects/generative-techniques/51.jpg, w: 1800, h: 1745, fig: fig.33, blend: true, cap: "The house types A1 to F, from their initial provision through planned to unplanned expansion. The largest grew by 280 %." }
+      - { src: /assets/projects/generative-techniques/50.jpg, w: 1800, h: 1755, fig: fig.30, blend: true, cap: "Case study: Ciudad Bachué, Bogotá. Settlement, super block, block, plot cluster, unit; housing, housing with shops and commercial areas; parks and natural reserve. Source: Eliana Silva, thesis." }
+      - { src: /assets/projects/generative-techniques/51.jpg, w: 1800, h: 1745, fig: fig.31, blend: true, cap: "The house types A1 to F, from their initial provision through planned to unplanned expansion. The largest grew by 280 %." }
   - n: "10"
     name: typologies
     title: Eight neighbourhoods from one intention
     plates:
-      - { src: /assets/projects/generative-techniques/09.jpg, w: 1800, h: 1240, fig: fig.34, cap: "The typology rules. Residential and mixed-use: staggered units so that they merge, courtyards for sunlight, voids for wind and communal open space, small parcels merged incrementally, stepped forms from low to high." }
+      - { src: /assets/projects/generative-techniques/09.jpg, w: 1800, h: 1240, fig: fig.32, cap: "The typology rules. Residential and mixed-use: staggered units so that they merge, courtyards for sunlight, voids for wind and communal open space, small parcels merged incrementally, stepped forms from low to high." }
     pair:
-      - { src: /assets/projects/generative-techniques/52.jpg, w: 1714, h: 1800, fig: fig.35, blend: true, cap: "Four primitives (single courtyard, L, U, tower), each with a residential and a commercial body." }
-      - { src: /assets/projects/generative-techniques/53.jpg, w: 1800, h: 1757, fig: fig.36, blend: true, cap: "Body plan, residential type 1. Genes against fitness criteria; plot size and the number of open spaces held constant." }
+      - { src: /assets/projects/generative-techniques/52.jpg, w: 1714, h: 1800, fig: fig.33, blend: true, cap: "Four primitives (single courtyard, L, U, tower), each with a residential and a commercial body." }
+      - { src: /assets/projects/generative-techniques/53.jpg, w: 1800, h: 1757, fig: fig.34, blend: true, cap: "Body plan, residential type 1. Genes against fitness criteria; plot size and the number of open spaces held constant." }
     tiles:
       ar: 1.46
       min: 200
-      fig: fig.37–44
+      fig: fig.35–42
       cap: "Eight typologies from the same rule set. Each shown as its axonometric and the grid, floor plates and unit cells that generate it."
       items:
         - { src: /assets/projects/generative-techniques/10.jpg, w: 794, h: 545, cap: "Type 1. Perimeter block on a coarse grid, staggered slabs." }
@@ -165,11 +157,11 @@ chapters:
     title: Four generations
     side: left
     plates:
-      - { src: /assets/projects/generative-techniques/18.jpg, w: 1650, h: 1620, fig: fig.45, blend: true, cap: "Type 1, pseudo-code. A 60 m block; offset 12–18 m for a court; divide into 3 to 7.5 m cells; stack plates at 3 m; cull cells at eight points to make voids; scale non-uniformly; extrude." }
+      - { src: /assets/projects/generative-techniques/18.jpg, w: 1650, h: 1620, fig: fig.43, blend: true, cap: "Type 1, pseudo-code. A 60 m block; offset 12–18 m for a court; divide into 3 to 7.5 m cells; stack plates at 3 m; cull cells at eight points to make voids; scale non-uniformly; extrude." }
     tiles:
       ar: 2.15
       min: 300
-      fig: fig.46–51
+      fig: fig.44–49
       cap: "Generations two to four, and the individuals ranked. Each block beside its radar of eight fitness criteria. Click a sheet to read the numbers."
       items:
         - { src: /assets/projects/generative-techniques/19.jpg, w: 1800, h: 835, tile: /assets/projects/generative-techniques/19-t.jpg, tw: 640, th: 293, cap: "Generations two and three. The population, each individual with its fitness radar and the gene that changed." }
@@ -182,9 +174,8 @@ chapters:
     name: the street
     title: What the rules feel like
     plates:
-      - { src: /assets/projects/generative-techniques/25.jpg, w: 1800, h: 900, fig: fig.52, cap: "A street inside the block. Private terraces, cluster access, large communal voids; soft scape, street furniture, a street for walking and cycling." }
-      - { src: /assets/projects/generative-techniques/26.jpg, w: 1800, h: 900, fig: fig.53, cap: "A court. Incremental spaces, community terraces, voids for ventilation and connection, and a courtyard for the community to gather in." }
-      - { src: /assets/projects/generative-techniques/54.jpg, w: 1800, h: 1116, fig: fig.54, cap: "The portfolio's last page: the blocks at the end of a long street, in the haze." }
+      - { src: /assets/projects/generative-techniques/25.jpg, w: 1800, h: 900, fig: fig.50, cap: "A street inside the block. Private terraces, cluster access, large communal voids; soft scape, street furniture, a street for walking and cycling." }
+      - { src: /assets/projects/generative-techniques/26.jpg, w: 1800, h: 900, fig: fig.51, cap: "A court. Incremental spaces, community terraces, voids for ventilation and connection, and a courtyard for the community to gather in." }
 outcome:
   built: "A rule-based neighbourhood for north Ahmedabad. Density attractors at three horizons, a street network drawn from bundled desire lines, a land use distribution, eight typologies and a four-generation evolutionary search across eight fitness criteria. L2 studio, Bachelor of Urban Design, CEPT University, with Radhika Amin, Arpi Maheshwari and Anuradha Ramchandani. May 2020."
   next: "The fitness criteria were spatial: sunlight, shade, open space, volume. The next version of this search should carry a carbon and a water number for each option, so the algorithm weighs the same things the climate plans do."
