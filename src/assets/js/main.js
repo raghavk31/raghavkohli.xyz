@@ -223,6 +223,7 @@
       peek(null);
       setNote(null);
       applyFilter(active);
+      document.dispatchEvent(new Event("ecotopic"));
       // the grid starts below the diagram: bring it up so the change is seen
       if (active && bar && bar.getBoundingClientRect().top > window.innerHeight * 0.6) {
         bar.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
@@ -305,32 +306,80 @@
         var owner = w.closest("[data-topic]");
         var topic = owner ? owner.getAttribute("data-topic") : (w.getAttribute("data-of") || "");
         var tint = (w.getAttribute("data-tint") || "ink").split(" ").map(function (k) { return TINT[k] || TINT.ink; });
-        var n = Math.max(1, Math.round((len || 400) / 110)), dots = [];
+        // a topic's wire carries its projects, one dot each (data-p); the down wire carries the loop
+        var work = null;
+        try { work = w.hasAttribute("data-p") ? JSON.parse(w.getAttribute("data-p")) : null; } catch (e) { work = null; }
+        var n = work ? work.length : Math.max(1, Math.round((len || 400) / 110)), dots = [];
         for (var i = 0; i < n; i++) {
           var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           c.setAttribute("r", "2.2");
+          c.setAttribute("class", work ? "eco__proj" : "eco__flow");
+          if (work) { c.dataset.title = work[i][0]; c.dataset.url = work[i][1]; }
           if (tint.length === 1) c.style.fill = tintAt([tint[0], tint[0]], 0);
           layer.appendChild(c);
           dots.push(c);
         }
-        flows.push({ svg: svg, w: w, len: len, topic: topic, dots: dots, tint: tint.length > 1 ? tint : null, one: tint.length === 1 ? tint[0] : null, p: Math.random() * (len || 400) });
+        var park = (w.getAttribute("data-park") || "0.2 0.8").split(" ").map(Number), pp = w;
+        if (w.hasAttribute("data-ppath")) {   // parked somewhere other than its own wire
+          pp = document.createElementNS("http://www.w3.org/2000/svg", "path");
+          pp.setAttribute("d", w.getAttribute("data-ppath"));
+          pp.setAttribute("class", "eco__ppath");
+          w.parentNode.insertBefore(pp, w);
+        }
+        flows.push({ svg: svg, w: w, pp: pp, len: len, topic: topic, dots: dots, work: work, park: park, cur: [],
+          tint: tint.length > 1 ? tint : null, one: tint.length === 1 ? tint[0] : null, p: Math.random() * (len || 400) });
       });
     });
 
-    function place(f, fast) {
+    // a chosen topic's projects stop and line up along the quiet stretch of their wire (data-park),
+    // larger, each one naming itself on hover and opening on click; the rest keep running
+    function place(f, fast, dt) {
       if (!f.len) { try { f.len = f.w.getTotalLength(); } catch (e) {} if (!f.len) return; }
       var gap = f.len / f.dots.length;
       var dim = (hot || active) && !fast ? 0.35 : 1;
+      var parked = !!f.work && !!active && f.topic === active;
+      var ease = reduce ? 1 : Math.min(1, (dt || 0) * 7);
       f.dots.forEach(function (c, i) {
-        var d = (f.p + i * gap) % f.len, t = d / f.len;
-        var pt = f.w.getPointAtLength(d);
+        var d = (f.p + i * gap) % f.len, t = d / f.len, pt;
+        if (parked) {
+          var a = f.park[0], b = f.park[1], pl = f.pp === f.w ? f.len : f.pp.getTotalLength();
+          var q = f.pp.getPointAtLength(pl * (a + (b - a) * (i + 0.5) / f.dots.length));
+          var o = f.cur[i] || q;
+          pt = { x: o.x + (q.x - o.x) * ease, y: o.y + (q.y - o.y) * ease };
+        } else pt = f.w.getPointAtLength(d);
+        f.cur[i] = pt;
         c.setAttribute("cx", pt.x.toFixed(1));
         c.setAttribute("cy", pt.y.toFixed(1));
-        c.setAttribute("r", fast ? "2.9" : "2.2");
-        c.style.opacity = (dim * Math.min(1, t * 8, (1 - t) * 8)).toFixed(2);
-        if (f.tint) c.style.fill = tintAt(f.tint, t);
+        c.setAttribute("r", parked ? "4.4" : f.work ? (fast ? "3.2" : "2.6") : (fast ? "2.4" : "1.8"));
+        c.classList.toggle("is-parked", parked);
+        c.style.opacity = parked ? "1" : ((f.work ? dim : dim * 0.6) * Math.min(1, t * 8, (1 - t) * 8)).toFixed(2);
+        if (f.tint) c.style.fill = tintAt(f.tint, parked ? 0 : t);
       });
     }
+    // a parked dot: its project's name over it, and a click opens it the way its card would
+    var tip = document.createElement("div");
+    tip.className = "eco__tip";
+    tip.setAttribute("aria-hidden", "true");
+    eco.appendChild(tip);
+    eco.addEventListener("mouseover", function (e) {
+      var c = e.target.closest && e.target.closest(".eco__proj.is-parked");
+      if (!c) { tip.classList.remove("on"); return; }
+      var r = c.getBoundingClientRect(), box = eco.getBoundingClientRect();
+      tip.textContent = c.dataset.title;
+      tip.style.left = (r.left + r.width / 2 - box.left) + "px";
+      tip.style.top = (r.bottom - box.top + 7) + "px";   // under the dot: the topic's note sits above
+      tip.classList.add("on");
+    });
+    eco.addEventListener("mouseleave", function () { tip.classList.remove("on"); });
+    eco.addEventListener("click", function (e) {
+      var c = e.target.closest && e.target.closest(".eco__proj.is-parked");
+      if (!c) return;
+      e.stopPropagation();   // not the node's click: that would unchoose the topic
+      tip.classList.remove("on");
+      var card = document.querySelector('a.card__click[href="' + c.dataset.url + '"]');
+      if (card) card.click(); else location.href = c.dataset.url;
+    }, true);
+    document.addEventListener("ecotopic", function () { if (reduce) flows.forEach(function (f) { place(f, false, 1); }); });
 
     var running = false, last = 0;
     function frame(now) {
@@ -343,7 +392,7 @@
         if (!f.svg.getClientRects().length) return;      // the drawing not shown at this width
         var fast = (hot && f.topic === hot) || (active && f.topic === active);
         f.p = (f.p + dt * (fast ? 110 : 34)) % (f.len || 1);
-        place(f, fast);
+        place(f, fast, dt);
       });
       requestAnimationFrame(frame);
     }

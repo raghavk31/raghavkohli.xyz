@@ -126,22 +126,22 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 .eco__svg--tall{display:none;max-width:385px;}
 @media(max-width:630px){ .eco__svg--wide{display:none;} .eco__svg--tall{display:block;} }
 .eco text{font-family:var(--sans);fill:var(--ink);}
-.eco__wire{fill:none;stroke:var(--wire);stroke-width:1.1;stroke-linecap:round;transition:stroke .35s ease,stroke-width .35s ease;}
+.eco__wire{fill:none;stroke:var(--wire);stroke-width:var(--w,1.1);stroke-linecap:round;transition:stroke .35s ease,stroke-width .35s ease;}
 .eco__wire[data-grad]{stroke:var(--g);}
 .eco__wire--rail{stroke-width:1.4;}
 .eco__wire[data-flow="band"]{stroke:var(--ed-ink);stroke-opacity:.45;}
 .eco__end{fill:var(--ink);}
 /* labels sit on their wires: a paper chip under the words hides the wire, no outline */
 .eco__pill{fill:var(--paper);transition:fill .3s ease;}
-.eco__label{font-size:13.5px;font-weight:500;letter-spacing:.005em;pointer-events:none;}
-.eco__label--lead{font-size:19px;letter-spacing:-0.015em;}
-.eco .eco__count{font-size:10.5px;font-weight:500;letter-spacing:.06em;fill:var(--faint-2);font-variant-numeric:tabular-nums;}
-.eco .eco__label--lead .eco__count{font-size:12px;}
+.eco__label{font-size:15.5px;font-weight:500;letter-spacing:.005em;pointer-events:none;}
+.eco__label--lead{font-size:21px;letter-spacing:-0.015em;}
+.eco .eco__count{font-size:11.5px;font-weight:500;letter-spacing:.06em;fill:var(--faint-2);font-variant-numeric:tabular-nums;}
+.eco .eco__label--lead .eco__count{font-size:13px;}
 .eco__svg--tall .eco__label--lead{font-size:17px;}
 /* the threads: lanes the loop runs inside; only their words at rest, the lane fills on hover */
 .eco__band{fill:transparent;transition:fill .35s ease;}
-.eco__blabel{font-size:11.81px;font-weight:500;}
-.eco__bnote{font-size:12px;fill:var(--ink-soft);}
+.eco__blabel{font-size:13.5px;font-weight:500;}
+.eco__bnote{font-size:13px;fill:var(--ink-soft);}
 .eco__band--ed ~ .eco__blabel{fill:var(--ed-ink);} .eco__band--ec ~ .eco__blabel{fill:var(--ec-ink);}
 /* the threads' words sit over their wires, with a paper halo (the lane's colour once it fills) */
 .eco__blabel, .eco__bnote{paint-order:stroke;stroke:var(--paper);stroke-width:10px;stroke-linejoin:round;transition:stroke .35s ease;}
@@ -159,7 +159,7 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 /* hover or a chosen node: its wire and label come forward, the rest step back */
 .eco:has(.eco__node:hover) .eco__node:not(:hover):not(.on),
 .eco.has-active .eco__node:not(.on):not(:hover){opacity:.4;}
-.eco__node:hover .eco__wire, .eco__node.on .eco__wire, .eco__node:focus-visible .eco__wire{stroke:var(--ink);stroke-width:1.5;}
+.eco__node:hover .eco__wire, .eco__node.on .eco__wire, .eco__node:focus-visible .eco__wire{stroke:var(--ink);stroke-width:calc(var(--w,1.1) + .5px);}
 .eco__node--band:hover .eco__wire, .eco__node--band.on .eco__wire{stroke-opacity:1;}
 .eco__node--band:hover .eco__wire[data-flow="band"], .eco__node--band.on .eco__wire[data-flow="band"]{stroke:var(--ed-ink);}
 .eco__node--band:hover .eco__wire--rail, .eco__node--band.on .eco__wire--rail{stroke:var(--ec-ink);}
@@ -168,6 +168,23 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
 .eco__node:focus-visible .eco__pill, .eco__node:focus-visible .eco__band{stroke:var(--accent);stroke-width:1.5;}
 /* the moving dots: ink by default, tinted along the loop by main.js */
 .eco__dots{pointer-events:none;}
+.eco__ppath{fill:none;stroke:none;}
+/* the dots that are projects: a paper ring keeps them apart from the wire; parked, they take the pointer */
+.eco__proj{stroke:var(--paper);stroke-width:1.2;}
+.eco__proj.is-parked{pointer-events:all;cursor:pointer;stroke-width:1.6;}
+.eco__proj.is-parked:hover{fill:var(--accent) !important;}
+.eco__tip{position:absolute;z-index:4;pointer-events:none;transform:translateX(-50%);white-space:nowrap;
+  padding:4px 8px;border-radius:2px;background:var(--ink);color:var(--paper);font-size:11.5px;font-weight:500;
+  opacity:0;transition:opacity .15s ease;}
+.eco__tip.on{opacity:1;}
+/* the loop's joints, the economy rail's direction, the phone's spine, and the way back to all work */
+.eco__joint--ed{fill:var(--ed-ink);} .eco__joint--ec{fill:var(--ec-ink);}
+.eco__chev{fill:none;stroke:var(--ec-ink);stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;opacity:.7;}
+.eco__spine{fill:none;stroke:var(--wire);stroke-width:1.4;}
+.eco__hint{font-size:11px;font-weight:500;letter-spacing:.02em;fill:var(--mute);opacity:0;transition:opacity .3s ease;}
+.eco.has-active .eco__hint, .eco__tile:focus-visible .eco__hint{opacity:1;}
+/* a random paper: the two lanes take their tint from it rather than sitting on it */
+:root[data-mode="random"]:not([data-theme="dark"]) .eco{--ed:color-mix(in oklab, var(--paper) 70%, #8A80D0); --ec:color-mix(in oklab, var(--paper) 70%, #6FB08A);}
 .eco__dots circle{fill:var(--ink);}
 /* every node's callout box: its note on post-it paper (the paper rule is under "post-its"), stuck
    onto the node by main.js placeCallout. Up on hover / focus, and kept up for the chosen node. It
