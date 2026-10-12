@@ -21,13 +21,15 @@ const groups = require("./groups.js");
 // ---- counts: projects on the homepage grid, by topic ----
 const onGrid = new Set(groups.flatMap((g) => g[1]));
 const dir = path.join(__dirname, "..", "projects");
-const count = {}, work = {};
+const count = {}, work = {}, projs = [];
 const order = groups.flatMap((g) => g[1]);
 for (const f of fs.readdirSync(dir).filter((f) => f.endsWith(".md"))) {
   const d = matter(fs.readFileSync(path.join(dir, f), "utf8")).data;
   if (!onGrid.has(d.title)) continue;
   const url = `/work/${f.replace(/\.md$/, "").replace(/^\d+-/, "")}/`;
   for (const t of d.topics || []) { count[t] = (count[t] || 0) + 1; (work[t] = work[t] || []).push([d.title, url]); }
+  const dt = new Date(d.date);
+  if (!isNaN(dt)) projs.push({ title: d.title, url, topics: d.topics || [], at: dt.getUTCFullYear() + (dt - Date.UTC(dt.getUTCFullYear(), 0, 1)) / 31557600000 });
 }
 for (const t in work) work[t].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
 // a resource's wire weight: 1.1 for none, up to 3.4 for the most-told topic
@@ -199,4 +201,33 @@ function tall() {
   return s + `</svg>`;
 }
 
-module.exports = { wide: wide(), tall: tall(), count, work };
+// ---- the work over time (2026-10-13): under the loop, one dot per project at its date, stacked
+// where they fall close. Linked both ways in main.js: a chosen or hovered topic lights its years, and
+// a dot under the pointer names its project and lights its resources and its dots on every wire. ----
+function time(W, x0, x1, step, gap, short) {
+  const y0 = Math.floor(Math.min(...projs.map((p) => p.at))), y1 = Math.floor(Math.max(...projs.map((p) => p.at))) + 1;
+  const X = (a) => x0 + (x1 - x0) * (a - y0) / (y1 - y0);
+  // stack: each dot takes the lowest level with no neighbour closer than `gap`
+  const placed = [];
+  projs.slice().sort((a, b) => a.at - b.at).forEach((p) => {
+    const x = X(p.at); let k = 0;
+    while (placed.some((q) => q.k === k && Math.abs(q.x - x) < gap)) k++;
+    placed.push({ p, x, k });
+  });
+  const top = Math.max(...placed.map((q) => q.k)), ax = 18 + (top + 1) * step, H = ax + 24;
+  let s = `<svg class="eco__time eco__time--${short ? "tall" : "wide"}" viewBox="0 0 ${W} ${H}" role="img" ` +
+    `aria-label="the work by year: ${projs.length} projects, ${y0} to ${y1 - 1}">`;
+  s += `<text class="eco__tlabel" x="${x0}" y="11">(by year)</text>`;
+  s += `<path class="eco__axis" d="M${x0} ${ax}H${x1}"/>`;
+  for (let y = y0; y <= y1; y++) {
+    s += `<path class="eco__tick" d="M${X(y).toFixed(1)} ${ax - 3}V${ax + 3}"/>`;
+    if (y < y1) s += `<text class="eco__year" x="${X(y + 0.5).toFixed(1)}" y="${ax + 17}" text-anchor="middle">${short ? "’" + String(y).slice(2) : y}</text>`;
+  }
+  placed.forEach(({ p, x, k }) => {
+    s += `<circle class="eco__yr" cx="${x.toFixed(1)}" cy="${ax - 9 - k * step}" r="4.4" data-title="${esc(p.title)}" data-url="${p.url}" ` +
+      `data-topics="${p.topics.join(" ")}" data-year="${Math.floor(p.at)}"/>`;
+  });
+  return s + `</svg>`;
+}
+
+module.exports = { wide: wide(), tall: tall(), timeWide: time(960, 24, 936, 11, 10.5), timeTall: time(360, 14, 346, 11, 10.5, true), count, work };
