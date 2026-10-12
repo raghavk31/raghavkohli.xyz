@@ -5,6 +5,9 @@
    Also: post-its on the frames drag (pointer events, held inside the frame with a little overhang,
    reset when the beat changes, never saved), and a beat marked `interaction: true` mounts the
    project's interaction module from /assets/js/interactions/<name>.js.
+   On a wide screen the stage is also a slideshow (2026-10-12): a pager under the picture, ← / →
+   on the keyboard and (play) step through the beats, and the text on the left scrolls along with it.
+   A beat's video (an animation of the work) plays only while it is on stage.
 
    Runs on the standalone /work/<slug>/ page by itself, and inside the homepage overlay when main.js
    calls Story.init(article, { root: panel }). Init returns { destroy }. */
@@ -101,7 +104,7 @@
     var inner = frame && frame.querySelector(".frame__fit");
     if (!inner || !stage.offsetHeight) return;
     inner.style.transform = "";
-    var k = Math.min(1, stage.clientHeight / Math.max(1, inner.scrollHeight));
+    var k = Math.min(1, (frame.clientHeight || stage.clientHeight) / Math.max(1, inner.scrollHeight));
     if (k < 1) inner.style.transform = "scale(" + k.toFixed(4) + ")";
   }
 
@@ -113,6 +116,10 @@
     var stage = article.querySelector(".story__stage");
     var mq = window.matchMedia(WIDE);
     var active = -1, shown = -1, io = null;
+    var scroller = opts.root || null, ctl = null, pos = null, segs = [], playBtn = null;
+    var lock = -1, lockT = 0, timer = 0;
+    var STEP = 6000;   // (play): one beat every six seconds
+    var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     mountAll(article);
     dragNotes(article);
@@ -122,6 +129,7 @@
       var wide = mq.matches && !!stage;
       article.classList.add("story--js");
       article.classList.toggle("story--staged", wide);
+      if (wide) pager(); else stop();
       frames.forEach(function (f, i) {
         if (!f) return;
         if (wide) { if (f.parentNode !== stage) stage.appendChild(f); }
@@ -138,7 +146,98 @@
       shown = show;
       frames.forEach(function (f, k) { if (f) f.classList.toggle("on", k === show); });
       if (frames[show]) { stick(frames[show]); if (stage) fit(frames[show], stage); }
+      // only the picture on stage moves; the rest wait at their first frame
+      frames.forEach(function (f, k) {
+        if (!f) return;
+        slice(f.querySelectorAll("video")).forEach(function (v) {
+          if (k === show && !still) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+          else { v.pause(); if (k !== show) v.currentTime = 0; }
+        });
+      });
+      if (pos) pos.textContent = pad(i + 1) + " / " + pad(beats.length);
+      segs.forEach(function (g, k) { g.classList.toggle("on", k === i); });
+      if (timer) { ctl.classList.remove("is-auto"); void ctl.offsetWidth; ctl.classList.add("is-auto"); }
     }
+    function pad(n) { return n < 10 ? "0" + n : "" + n; }
+
+    /* ---------- the slideshow: a pager under the stage, the text scrolling along ---------- */
+    function pager() {
+      if (ctl || !stage || beats.length < 2) return;
+      ctl = document.createElement("div");
+      ctl.className = "story__ctl";
+      var rule = document.createElement("div");
+      rule.className = "story__rule";
+      beats.forEach(function (b, k) {
+        var g = document.createElement("button");
+        g.type = "button";
+        g.setAttribute("aria-label", "to " + pad(k + 1));
+        g.addEventListener("click", function () { go(k); });
+        rule.appendChild(g); segs.push(g);
+      });
+      var nav = document.createElement("div");
+      nav.className = "story__nav";
+      nav.innerHTML = '<button type="button" class="story__play" aria-pressed="false">(play)</button>' +
+        '<button type="button" data-step="-1" aria-label="previous">(&larr;)</button>' +
+        '<span class="story__pos"></span>' +
+        '<button type="button" data-step="1" aria-label="next">(&rarr;)</button>';
+      nav.addEventListener("click", function (e) {
+        var t = e.target.closest("button");
+        if (!t) return;
+        if (t.dataset.step) go(active + +t.dataset.step);
+        else if (timer) stop(); else play();
+      });
+      ctl.appendChild(rule); ctl.appendChild(nav);
+      stage.appendChild(ctl);
+      pos = nav.querySelector(".story__pos");
+      playBtn = nav.querySelector(".story__play");
+      pos.textContent = pad(active + 1) + " / " + pad(beats.length);
+      segs.forEach(function (g, k) { g.classList.toggle("on", k === active); });
+    }
+    // step to a beat: the stage changes now, and the text scrolls so that beat sits in the reading band
+    function go(i) {
+      i = clamp(i, 0, beats.length - 1);
+      if (i === active) return;
+      setActive(i);
+      lock = i; hold(500);
+      var vh = scroller ? scroller.clientHeight : window.innerHeight;
+      var top0 = scroller ? scroller.getBoundingClientRect().top : 0;
+      var y = (scroller ? scroller.scrollTop : window.pageYOffset) + beats[i].getBoundingClientRect().top - top0 - vh * 0.3;
+      (scroller || window).scrollTo({ top: Math.max(0, y), behavior: still ? "auto" : "smooth" });
+      if (timer) { clearInterval(timer); timer = setInterval(tick, STEP); }
+    }
+    // while a step's scroll runs, the beats it passes do not take the stage
+    function hold(ms) { clearTimeout(lockT); lockT = setTimeout(function () { lock = -1; }, ms); }
+    function tick() { if (active >= beats.length - 1) stop(); else go(active + 1); }
+    function play() {
+      if (!ctl) return;
+      if (active >= beats.length - 1) go(0);
+      timer = setInterval(tick, STEP);
+      ctl.classList.add("is-auto");
+      playBtn.textContent = "(pause)"; playBtn.setAttribute("aria-pressed", "true");
+    }
+    function stop() {
+      if (!timer) return;
+      clearInterval(timer); timer = 0;
+      ctl.classList.remove("is-auto");
+      playBtn.textContent = "(play)"; playBtn.setAttribute("aria-pressed", "false");
+    }
+    var onScroll = function () {
+      if (lock >= 0) hold(160);
+      else if (timer) stop();   // reading at your own pace takes over from (play)
+    };
+    (scroller || window).addEventListener("scroll", onScroll, { passive: true });
+    var onKey = function (e) {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+      if (!ctl || !article.classList.contains("story--staged") || !article.isConnected) return;
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;   // a swap or carousel in focus keeps its own arrows
+      var b = document.body.classList;
+      if (b.contains("lb-open") || (scroller && !b.contains("pv-open"))) return;
+      var t = e.target;
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+      e.preventDefault();
+      go(active + (e.key === "ArrowRight" ? 1 : -1));
+    };
+    window.addEventListener("keydown", onKey);
 
     place();
     setActive(0);
@@ -146,6 +245,7 @@
       // the beat crossing a band a third of the way down is the one on stage: the pictures sit at the
       // top of the stage now, so the text that names one is read level with it, not at mid-screen
       io = new IntersectionObserver(function (entries) {
+        if (lock >= 0) return;
         entries.forEach(function (e) { if (e.isIntersecting) setActive(beats.indexOf(e.target)); });
       }, { root: opts.root || null, rootMargin: "-28% 0px -62% 0px" });
       beats.forEach(function (b) { io.observe(b); });
@@ -162,6 +262,9 @@
     return {
       destroy: function () {
         if (io) io.disconnect();
+        stop(); clearTimeout(lockT);
+        (scroller || window).removeEventListener("scroll", onScroll);
+        window.removeEventListener("keydown", onKey);
         window.removeEventListener("resize", onResize);
         if (mq.removeEventListener) mq.removeEventListener("change", onChange); else mq.removeListener(onChange);
       }

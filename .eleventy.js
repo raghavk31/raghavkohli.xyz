@@ -101,7 +101,7 @@ module.exports = function (eleventyConfig) {
     (chapters || []).forEach((c, ci) => {
       const media = [];
       const img = (x, fig, cap) => {
-        if (x && x.src) media.push({ src: x.src, w: x.w, h: x.h, fig: x.fig || fig, cap: x.cap || cap, blend: x.blend });
+        if (x && x.src) media.push({ src: x.src, video: x.video, poster: x.poster, w: x.w, h: x.h, fig: x.fig || fig, cap: x.cap || cap, blend: x.blend });
       };
       (c.plates || []).forEach((p) => img(p));
       (c.pair || []).forEach((p) => img(p));
