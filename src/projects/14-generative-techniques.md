@@ -82,6 +82,7 @@ chapters:
     title: 2025, 2035, 2050
     side: left
     plates:
+      - { src: /assets/projects/generative-techniques/anim-horizons.mp4, poster: /assets/projects/generative-techniques/anim-horizons.jpg, w: 1400, h: 1316, fig: fig.15a, cap: "The three horizons in one loop: the same attractors as the population grows from 65,873 in 2025 to 92,921 in 2035 and 1,55,676 in 2050. [draft caption]" }
       - { src: /assets/projects/generative-techniques/05.jpg, w: 1726, h: 1623, fig: fig.15, cap: "T(2) 2050. 1,55,676 people, 38,91,900 sq m of built space required; low 33 %, medium 24 %, high 43 %. The high-density attractors at their widest: 250 m around bus and metro stops." }
     strip:
       col: true

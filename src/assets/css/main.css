@@ -36,7 +36,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;font-size:87.5%;}   /* the site at 87.5% of its first size (2026-10-11): every px in this file was scaled by .875, rem follows from here */
-body{background:var(--paper);color:var(--ink);font-family:var(--sans);font-weight:400;
+body{background:var(--paper) var(--wash,none) fixed;color:var(--ink);font-family:var(--sans);font-weight:400;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden;line-height:1.6;
   overflow-wrap:break-word;}
 a{color:var(--accent);text-decoration:none;transition:color .3s ease;}
@@ -117,7 +117,7 @@ img{display:block;width:100%;height:100%;object-fit:cover;}
   --ed:#E6E3F4; --ed-ink:#6F67B0; --ec:#DDEDE3; --ec-ink:#3F7D5A; --wire:rgba(28,27,24,.36);}
 /* a quiet zone: the city fades out behind the drawing, so its streets never read as its wires */
 .eco::before{content:"";position:absolute;z-index:-1;pointer-events:none;
-  inset:-31.5px calc(-1 * var(--gutter));background:var(--paper);opacity:.94;
+  inset:-31.5px calc(-1 * var(--gutter));background:var(--paper) var(--wash,none) fixed;opacity:.94;
   -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(transparent,#000 16%,#000 84%,transparent);
   -webkit-mask-composite:source-in;
   mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent),linear-gradient(transparent,#000 16%,#000 84%,transparent);
@@ -638,6 +638,7 @@ body.note-open{overflow:hidden;}
 .pv__nextname{flex:1;font-size:13.12px;color:var(--ink-soft);}
 .pv__arrow{color:var(--accent);}
 body.pv-open{overflow:hidden;}
+body.pv-open .dock{visibility:hidden;}   /* a project open: its pager has the foot of the screen */
 /* the scrollbar's gutter stays when the overlay locks the page, so the grid never reflows under it */
 html{scrollbar-gutter:stable;}
 /* a story's bar: the (meta) line on the left, (close) esc on the right */
@@ -680,7 +681,7 @@ html{scrollbar-gutter:stable;}
 .frame{margin:0;}
 .frame__box{position:relative;aspect-ratio:var(--ar,1.333);background:var(--paper-2);width:100%;}
 .frame__box.is-missing{background:var(--stripe);}
-.frame__box > img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;}
+.frame__box > img,.frame__box > video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;}
 .frame--blend .frame__box{background:none;}
 .frame--blend .frame__box > img{mix-blend-mode:multiply;}
 .frame__fig{position:absolute;left:10.5px;bottom:8.75px;z-index:1;padding:3.5px 7px;background:rgba(250,250,248,.88);
@@ -720,7 +721,26 @@ html{scrollbar-gutter:stable;}
 .story--split .story__stage .frame{align-items:center;}
 /* every picture inside one screen: as wide as the column allows, never taller than the stage less
    two lines of caption */
-.story--split .story__stage .frame__box,.story--split .story__stage .plate__cap{width:min(100%, calc((var(--stage-h) - 63px) * var(--ar,1.333)));}
+.story--split .story__stage .frame__box,.story--split .story__stage .plate__cap{width:min(100%, calc((var(--stage-h) - 63px - var(--ctl-h)) * var(--ar,1.333)));}
+/* the slideshow (story.js): a pager along the stage's foot, the pictures held above it */
+.story--split{--ctl-h:0px;}
+.story--split.story--staged:has(.story__ctl){--ctl-h:31.5px;}
+.story--split .story__stage .frame{bottom:var(--ctl-h);}
+.story__ctl{position:absolute;left:0;right:0;bottom:0;height:var(--ctl-h);display:flex;align-items:center;justify-content:center;gap:28px;
+  font-family:var(--mono);font-size:9.62px;font-weight:500;letter-spacing:.04em;font-variant-numeric:tabular-nums;color:var(--faint-2);}
+.story__rule{flex:0 1 360px;display:flex;gap:2.62px;height:14px;}
+.story__rule button{flex:1;position:relative;padding:0;border:0;background:none;cursor:pointer;}
+.story__rule button::after{content:"";position:absolute;left:0;right:0;top:6px;height:1.75px;background:var(--line);opacity:.55;}
+.story__rule button:hover::after,.story__rule button:focus-visible::after{opacity:1;}
+.story__rule button.on::after{background:var(--accent);opacity:1;}
+.story__rule button:focus-visible{outline:none;} .story__rule button:focus-visible::after{height:3.5px;top:5px;}
+.story__ctl.is-auto .story__rule button.on::after{transform-origin:left;animation:carfill 6s linear;}
+@media (prefers-reduced-motion:reduce){.story__ctl.is-auto .story__rule button.on::after{animation:none;}}
+.story__nav{display:flex;align-items:baseline;gap:12.25px;white-space:nowrap;}
+.story__nav button{font:inherit;letter-spacing:inherit;color:var(--mute);background:none;border:0;padding:0;cursor:pointer;}
+.story__nav button:hover,.story__nav button:focus-visible{color:var(--ink);}
+.story__play{margin-right:8.75px;}
+.story__pos{color:var(--ink);}
 .story--split .story__stage .frame > .plate__cap{max-width:none;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 /* the notes sit on the picture's corners, hanging a little off its edge, clear of the work */
 .story--split .frame .postit{left:auto;top:auto;}

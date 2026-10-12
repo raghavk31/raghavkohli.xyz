@@ -136,6 +136,10 @@ layout: base.njk
       <script type="application/json">{{ (interactions[interaction] or null) | dump | safe }}</script>
       <span class="frame__nojs">(interactive · needs javascript)</span>
     </div>
+    {%- elif b.video or (b.src and (b.src | lower).endsWith(".mp4")) or (b.src and (b.src | lower).endsWith(".webm")) %}
+    {#- an animation of the work: a silent loop, played only while its beat is on stage (story.js);
+        `poster:` is the still it opens on, and what shows with reduced motion -#}
+    <video src="{{ b.video or b.src }}"{% if b.poster %} poster="{{ b.poster }}"{% endif %}{% if b.w and b.h %} width="{{ b.w }}" height="{{ b.h }}"{% endif %} muted loop playsinline preload="metadata" aria-label="{{ b.alt or b.cap or '' }}"></video>
     {%- elif b.src %}
     <img src="{{ b.src }}" alt="{{ b.alt or b.cap or '' }}"{% if b.w and b.h %} width="{{ b.w }}" height="{{ b.h }}"{% endif %} loading="lazy" decoding="async" onerror="this.parentNode.classList.add('is-missing');this.remove()" />
     {%- endif %}
