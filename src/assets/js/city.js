@@ -226,7 +226,10 @@
   // ---------- the diagram brings a system forward ----------
   var MAP = { mobility: 1, water: 2, buildings: 3, air: 7 };
   var hover = null;
-  document.addEventListener("mouseover", function (e) { var nd = e.target.closest && e.target.closest("[data-topic]"); hover = nd ? nd.getAttribute("data-topic") : null; draw(); });
+  // redraw only when the system in front changes, and not under an open project
+  document.addEventListener("mouseover", function (e) { var nd = e.target.closest && e.target.closest("[data-topic]"), was = hover;
+    hover = nd ? nd.getAttribute("data-topic") : null;
+    if (hover !== was && !document.body.classList.contains("pv-open") && !raf) raf = requestAnimationFrame(function () { raf = 0; draw(); }); });
   function focus() { var on = hover || ((document.querySelector(".eco__node.on") || {}).dataset || {}).topic; return MAP[on] || 0; }
 
   // ---------- drawing ----------
@@ -301,13 +304,18 @@
 
   // the city stays out from under the words and the work: it shows in the margins and the gaps between
   var CLEAR = [[".work__head .eyebrow, .work__name, .work__why, .work__index, .work__filterbar, .work__break, .card__frame, .card figcaption, .about .reveal > *, .contact__row, .contact__fine, .dock, .pin", 1], [".eco", .7]];
+  // The soft edge is a shadow, not ctx.filter: a filter blurs a whole-canvas layer for every box (about
+  // half a second a draw, seven draws a second, 2026-10-14), a rect's shadow is cheap. Each box is drawn
+  // far off the canvas and only its shadow, shifted back into place, cuts the hole.
+  var FAR = 1e4;
   function clear(ih) {
+    var s = ctx.getTransform().a;   // canvas units to device pixels; shadows ignore the transform
     ctx.save(); ctx.globalCompositeOperation = "destination-out";
-    if ("filter" in ctx) ctx.filter = "blur(12px)";
+    ctx.shadowColor = "#000"; ctx.shadowBlur = 24 * s; ctx.shadowOffsetX = FAR * s;
     CLEAR.forEach(function (c) { ctx.globalAlpha = c[1];
       document.querySelectorAll(c[0]).forEach(function (el) { var r = el.getBoundingClientRect();
         if (!r.width || r.bottom < -40 || r.top > innerHeight + 40) return;
-        ctx.fillRect(r.left / K - 18, r.top / K - 14, r.width / K + 36, r.height / K + 28); }); });
+        ctx.fillRect(r.left / K - 18 - FAR, r.top / K - 14, r.width / K + 36, r.height / K + 28); }); });
     ctx.restore();
   }
 
