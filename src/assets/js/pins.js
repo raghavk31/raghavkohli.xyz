@@ -42,7 +42,23 @@
     boxes.forEach(function (c) { var s = spots[idOf(c)]; if (!s) { loose.push(c); return; }
       c.style.left = s.x / U * W + "px"; c.style.top = s.y / U * W + "px"; c.style.width = s.w / U * W + "px"; c.style.zIndex = 1 + (s.z || 0); });
     boxes.forEach(function (c) { if (spots[idOf(c)]) bottom = Math.max(bottom, c.offsetTop + c.offsetHeight); });
-    // a project added since he arranged them waits in rows of three under the rest until it is moved
+    // a project added since he arranged them takes the free space to the right of the box before it in
+    // the grid's order (its place in the rows); with no room there it waits in rows of three under the
+    // rest until it is moved
+    var rects = boxes.filter(function (c) { return spots[idOf(c)]; }).map(function (c) { return [c.offsetLeft, c.offsetTop, c.offsetWidth, c.offsetHeight]; });
+    var hits = function (r) { return rects.some(function (q) { return r[0] < q[0] + q[2] && q[0] < r[0] + r[2] && r[1] < q[1] + q[3] && q[1] < r[1] + r[3]; }); };
+    var gap = W * .035, placed = boxes.filter(function (c) { return spots[idOf(c)]; });
+    loose = loose.filter(function (c) {
+      var prev = boxes[boxes.indexOf(c) - 1];
+      if (placed.indexOf(prev) < 0) return true;
+      var left = prev.offsetLeft + prev.offsetWidth + gap, width = W - left;
+      if (width < W * .3) return true;
+      c.style.left = left + "px"; c.style.top = prev.offsetTop + "px"; c.style.width = width + "px"; c.style.zIndex = 1;
+      var r = [c.offsetLeft, c.offsetTop, c.offsetWidth, c.offsetHeight];
+      if (hits(r)) return true;
+      rects.push(r); placed.push(c);
+      return false;
+    });
     loose.forEach(function (c, i) { c.style.width = W * .3 + "px"; c.style.left = (i % 3) * W * .35 + "px"; c.style.top = bottom + 80 + Math.floor(i / 3) * W * .35 + "px"; c.style.zIndex = 1; });
     var end = 0; boxes.forEach(function (c) { end = Math.max(end, c.offsetTop + c.offsetHeight); });
     grid.style.height = end + 40 + "px";
