@@ -582,9 +582,14 @@
         var depth = history.state && history.state.pv ? history.state.d : 0;
         history.pushState({ pv: url, d: depth + 1 }, "", url);
       }
+      // a page not fetched yet (no hover on a phone, a slow line): open the overlay at once with "(loading)",
+      // so the click shows and (close), Esc and Back work while it comes
+      var shell = setTimeout(function () { if (my === want && !pv.classList.contains("open")) loading(d.name, card); }, 120);
       fetchPage(url).then(function (art) {
+        clearTimeout(shell);
         if (my === want) showPage(art, d.name, card);
       }).catch(function () {
+        clearTimeout(shell);
         if (my !== want) return;
         // fallback: JSON reconstruction, or plain navigation if even that is missing
         pageBody.hidden = true;
@@ -630,6 +635,25 @@
         pageCache[url].catch(function () { delete pageCache[url]; });
       }
       return pageCache[url];
+    }
+
+    function loading(name, originEl) {
+      pageBody.innerHTML = '<p class="pv__loading">(loading)</p>';
+      pageBody.hidden = false;
+      if (jsonBody) jsonBody.hidden = true;
+      pv.classList.remove("pv--story");
+      setField("meta", ""); setField("name", name);
+      if (originEl) {
+        var r = originEl.getBoundingClientRect();
+        panel.style.setProperty("--pv-origin", (r.left + r.width / 2) + "px " + (r.top + r.height / 2) + "px");
+      }
+      document.body.classList.add("pv-open");
+      pv.setAttribute("aria-hidden", "false");
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        pv.classList.add("open");
+        var closeBtn = pv.querySelector(".pv__close");
+        if (closeBtn) { try { closeBtn.focus({ preventScroll: true }); } catch (e) {} }
+      }); });
     }
 
     function showPage(art, name, originEl) {

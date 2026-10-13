@@ -36,8 +36,9 @@
   var cw = 8, cols = 0, rows = 0, ch = [], ly, riv, FX, FY, BANK, roads = [], X0 = 0, OX = 0, city = null;
   var HEX = "0123456789ABCDEF";
   var GV, WV, SEGS = [], MX = 30, MY = 60;
+  var gen = 0;   // which build the cached still layer belongs to
   function build(data) {
-    var txt = data.t, F = data.f;
+    var txt = data.t, F = data.f; gen++;
     ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
     cw = ctx.measureText("M").width;
     var L = txt.split(/\r?\n/); rows = L.length; cols = L[0].length;
@@ -246,43 +247,64 @@
   document.addEventListener("themechange", function () { palette(); draw(); });
   var ALPHA = [.1, .2, .42, .4, .13, .13, .14, .26];
   function rgba(c, a) { return "rgba(" + c + "," + a.toFixed(3) + ")"; }
+  // The map is drawn in two layers. The still one (blocks, streets, green, contours) is drawn into SC only when the
+  // view changes: a scroll, a resize, a new city or theme, the system in front. Each tick then copies it and draws
+  // only what moves on top: the water and the walkers. Redrawing all ten thousand glyphs every 150 ms kept the
+  // page busy (2026-10-14).
+  var SC = document.createElement("canvas"), sctx = SC.getContext("2d"), skey = "", wet = [];
   function draw() {
     var dpr = window.devicePixelRatio || 1, sw = innerWidth, sh = innerHeight, iw = sw / K, ih = sh / K;
-    if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = Math.round(sw * dpr); cv.height = Math.round(sh * dpr); cv.style.width = sw + "px"; cv.style.height = sh + "px"; }
-    ctx.setTransform(dpr * K, 0, 0, dpr * K, 0, 0);
-    ctx.clearRect(0, 0, iw, ih);
+    if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = SC.width = Math.round(sw * dpr); cv.height = SC.height = Math.round(sh * dpr); cv.style.width = sw + "px"; cv.style.height = sh + "px"; skey = ""; }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, cv.width, cv.height);
     if (!rows) return;
-    ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
-    ctx.textBaseline = "top";
-    var f = focus(), sy = window.scrollY, vis = Math.ceil(ih / LH) + 1, last = null;
+    var f = focus(), sy = window.scrollY, vis = Math.ceil(ih / LH) + 1;
     var top = Math.min(1, sy / Math.max(1, document.documentElement.scrollHeight - sh)) * Math.max(0, rows - ih / LH);
     var r0 = Math.floor(top), off = -(top - r0) * LH, x1 = Math.min(cols, X0 + Math.ceil(iw / cw) + 1);
     function style(l, m) { var a = ALPHA[l] * m, c = (MONO && l === 7 ? INK : TINT[l]) || INK; if (!f) return rgba(c, a); if (l === f) return rgba(ACC, .5 * m); return rgba(c, a * .45); }
-    if (CONT && SEGS.length) contourLines(r0, vis, off, x1, f);
-    var half = HALF ? [[], [], [], []] : null, sea = FLOWY ? {} : null;
-    for (var r = 0; r < vis; r++) { var y = r0 + r; if (y >= rows) break;
-      var py = r * LH + off, base = y * cols;
-      for (var x = X0; x < x1; x++) { var k = base + x, c = ch[k]; if (c === " ") continue;
-        var m = c === "·" ? .5 : 1;   // a lane is lighter than the blocks either side of it
-        if (sea && (riv[k] > 1 || (riv[k] === 1 && BANK[k] > MX))) { swell(x, y, k, OX + (x - X0 + .5) * cw, py + LH / 2, sea); continue; }
-        if (riv[k]) { c = water(x, y, k); if (!c) continue; m = WA; }
-        var s = style(ly[k], m);
-        if (half && (ly[k] === 7 || riv[k] === 1)) {   // halftone: the same glyph, bigger where greener or wetter
-          var v = ly[k] === 7 ? GV[k] : WV[k] * Math.min(1, BANK[k] / 60);
-          half[v < 3 ? 0 : v < 5 ? 1 : v < 7 ? 2 : 3].push(c, OX + (x - X0 + .5) * cw, py + LH / 2, s); continue; }
-        if (s !== last) { ctx.fillStyle = s; last = s; }
-        ctx.fillText(c, OX + (x - X0) * cw, py); } }
-    if (half) {
-      ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      [7, 10, 13, 17].forEach(function (px, i) { var b = half[i]; ctx.font = px + "px 'IBM Plex Mono', ui-monospace, monospace";
-        for (var j = 0; j < b.length; j += 4) { if (b[j + 3] !== last) { ctx.fillStyle = b[j + 3]; last = b[j + 3]; } ctx.fillText(b[j], b[j + 1], b[j + 2]); } });
-      ctx.textAlign = "start"; ctx.textBaseline = "top"; ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
-    }
-    if (FLOWY) swellLines(sea, f);
+    var key = [gen, cv.width, cv.height, r0, off.toFixed(2), x1, f, INK, ACC, TINT[2]].join();
+    if (key !== skey) { var main = ctx; ctx = sctx; skey = key; wet = []; layer(true); ctx = main; }
+    ctx.drawImage(SC, 0, 0);
+    layer(false);
     walkers.forEach(function (w) { var y = (w.k / cols) | 0; if (y < r0 || y >= r0 + vis) return;
       ctx.fillStyle = f === 1 ? rgba(ACC, .9) : rgba(INK, f ? .15 : .38);
       ctx.fillText("•", OX + (w.k % cols - X0) * cw, (y - r0) * LH + off); });
     clear(ih);
+
+    // still: every dry cell, and a note of where the wet ones are; moving: the wet cells from that note
+    function layer(still) {
+      ctx.setTransform(dpr * K, 0, 0, dpr * K, 0, 0);
+      if (still) ctx.clearRect(0, 0, iw, ih);
+      ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
+      ctx.textBaseline = "top";
+      var last = null, half = HALF ? [[], [], [], []] : null, sea = !still && FLOWY ? {} : null;
+      function cell(x, y, k, py) {
+        var c = ch[k], m = c === "·" ? .5 : 1;   // a lane is lighter than the blocks either side of it
+        if (sea && (riv[k] > 1 || (riv[k] === 1 && BANK[k] > MX))) { swell(x, y, k, OX + (x - X0 + .5) * cw, py + LH / 2, sea); return; }
+        if (riv[k]) { c = water(x, y, k); if (!c) return; m = WA; }
+        var s = style(ly[k], m);
+        if (half && (ly[k] === 7 || riv[k] === 1)) {   // halftone: the same glyph, bigger where greener or wetter
+          var v = ly[k] === 7 ? GV[k] : WV[k] * Math.min(1, BANK[k] / 60);
+          half[v < 3 ? 0 : v < 5 ? 1 : v < 7 ? 2 : 3].push(c, OX + (x - X0 + .5) * cw, py + LH / 2, s); return; }
+        if (s !== last) { ctx.fillStyle = s; last = s; }
+        ctx.fillText(c, OX + (x - X0) * cw, py);
+      }
+      if (still) {
+        if (CONT && SEGS.length) contourLines(r0, vis, off, x1, f);
+        for (var r = 0; r < vis; r++) { var y = r0 + r; if (y >= rows) break;
+          var py = r * LH + off, base = y * cols;
+          for (var x = X0; x < x1; x++) { var k = base + x; if (ch[k] === " ") continue;
+            if (riv[k]) { wet.push(x, y, k, py); continue; }
+            cell(x, y, k, py); } }
+      } else for (var i = 0; i < wet.length; i += 4) cell(wet[i], wet[i + 1], wet[i + 2], wet[i + 3]);
+      if (half) {
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        [7, 10, 13, 17].forEach(function (px, i) { var b = half[i]; ctx.font = px + "px 'IBM Plex Mono', ui-monospace, monospace";
+          for (var j = 0; j < b.length; j += 4) { if (b[j + 3] !== last) { ctx.fillStyle = b[j + 3]; last = b[j + 3]; } ctx.fillText(b[j], b[j + 1], b[j + 2]); } });
+        ctx.textAlign = "start"; ctx.textBaseline = "top"; ctx.font = FONT + "px 'IBM Plex Mono', ui-monospace, monospace";
+      }
+      if (sea) swellLines(sea, f);
+    }
   }
 
   // the contours: dashed hairlines through the cell centres, under the glyphs, every fifth longer and darker

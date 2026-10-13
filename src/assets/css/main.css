@@ -622,6 +622,7 @@ body.note-open{overflow:hidden;}
 .pv__nav{background:none;border:none;padding:0;cursor:pointer;font-size:11.38px;color:var(--mute);}
 .pv__nav:hover{color:var(--ink);}
 .pv__barname{font-size:11.38px;color:var(--faint-2);}
+.pv__loading{max-width:980px;margin:0 auto;padding:clamp(42px,8vw,96.25px) var(--gutter);font-size:11.38px;color:var(--mute);}
 .pv__body{max-width:980px;margin:0 auto;padding:clamp(42px,8vw,96.25px) var(--gutter) clamp(78.75px,12vw,131.25px);}
 /* the fetched project page inside the overlay: the bar already carries the back link */
 .pv__page .detail__back{display:none;}
