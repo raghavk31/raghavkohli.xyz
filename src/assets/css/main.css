@@ -1261,6 +1261,8 @@ body:has(> .city) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pi
 
 /* ── notes pinned on the homepage's empty spaces (pins.js): the site's black post-it, placed by hand ── */
 .pins { position: absolute; left: 0; top: 0; width: 0; height: 0; }
+/* the notes live outside <main>, whose stacking context traps the project overlay and lightbox: hide them while either is open */
+body.pv-open .pins, body.lb-open .pins { visibility: hidden; }
 /* a note is laid out at 220px and scaled to its width (--s = w / 220), so its text and images grow with it */
 .pin { position: absolute; width: 192.5px; padding: 17.5px 12.25px 10.5px; transform-origin: 0 0; }
 .pins .pin, .pins .pin:hover { transform: rotate(var(--r, 1deg)) scale(var(--s, 1)); }
