@@ -646,7 +646,7 @@
       // a link to another project (a story's (next)) opens that project's overlay in place
       clone.querySelectorAll('a[href^="/work/"]').forEach(function (a) {
         var u = a.getAttribute("href");
-        if (!DATA[u]) return;
+        if (!DATA[u] || DATA[u].app) return;   // an app page (Climate Code) is followed as a plain link
         a.addEventListener("click", function (ev) {
           if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;
           ev.preventDefault();

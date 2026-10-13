@@ -31,7 +31,7 @@
   // ---------- the project boxes, where he put them ----------
   var grid = document.querySelector("[data-grid]"), boxes = grid ? Array.prototype.slice.call(grid.querySelectorAll(".card")) : [];
   var U = 10000, spots = {}, arranging = false;
-  function idOf(c) { var a = c.querySelector("[data-project]"); return "home-" + ((a && a.getAttribute("data-project")) || "").replace(/^\/work\//, "").replace(/\/$/, "").replace(/[^A-Za-z0-9_-]/g, "-"); }
+  function idOf(c) { var a = c.querySelector(".card__click"); return "home-" + ((a && a.getAttribute("href")) || "").replace(/^\/work\//, "").replace(/\/$/, "").replace(/[^A-Za-z0-9_-]/g, "-"); }
   function hasSpots() { return boxes.some(function (c) { return spots[idOf(c)]; }); }
   function arrange() {
     if (!grid) return;
