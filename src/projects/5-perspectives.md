@@ -49,7 +49,7 @@ photos:
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
-next: Climate Code India · 30 tools in 30 days
+next: Climate Code · sixteen tools, one map
 ---
 
 ## 01 the verdict
