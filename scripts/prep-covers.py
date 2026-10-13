@@ -51,6 +51,10 @@ COVERS = {
     "urban-performances":    (1.0,   ["04", "06", "07", "09"]),
     "majuli":                (1.362, ["02", "03", "04", "06"]),
     "gcap":                  (0.8, ["02", "03", "04", "05", "13"]),
+    # the CityScope tile grids, screenshotted from /work/climate-code/ at 2x (map pane only, legend hidden):
+    # 01 ahmedabad mobility · 02 bengaluru proximity · 03 ahmedabad stormwater · 04 mumbai mobility.
+    # The window is the middle band, full width, so the grid's edge and the streets past it stay in frame.
+    "climate-code":          (1.905, ["01@0,.2,1,.6", "02@0,.2,1,.6", "03@0,.2,1,.6", "04@0,.2,1,.6"]),
 }
 
 

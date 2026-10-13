@@ -181,10 +181,17 @@ body:has(.cc){overflow:hidden;}
   .cc{display:flex;flex-direction:column;height:auto;}
   .cc__map{order:-1;position:sticky;top:var(--cc-head,52px);z-index:4;height:44vh;border-bottom:1px solid var(--line);}
   .cc__panel{overflow:visible;border-right:0;}
-  .cc__bar{position:static;padding:10px 16px;}
-  .cc-ch{padding:32px 16px 48px;min-height:64vh;scroll-margin-top:calc(var(--cc-head,52px) + 44vh + 8px);}
+  /* the bar stays under the map, so the index and the (place) search are in reach from any chapter;
+     its index is one row that scrolls sideways, to keep the bar short */
+  .cc__bar{top:calc(var(--cc-head,52px) + 44vh);padding:8px 16px;}
+  .cc__index{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;}
+  .cc__index::-webkit-scrollbar{display:none;}
+  .cc-ch{padding:32px 16px 48px;min-height:64vh;scroll-margin-top:calc(var(--cc-head,52px) + 44vh + 72px);}
   .cc-ch__title{font-size:34px;}
   .cc__legend{top:8px;bottom:auto;left:8px;width:calc(100% - 64px);padding:6px 8px 5px;}
   .cc-lg__ticks,.cc-lg__nd{display:none;}
+  .cc__legend .cc-lg__t{margin-bottom:3px;font-size:10.5px;}
+  .cc__legend .cc-sk{display:inline-flex;gap:2px 8px;margin:0 8px 0 0;vertical-align:top;}
+  .cc__legend .cc-sk + .cc-sk{padding-top:0;border-top:0;}
   .cc-form,.cc-checks{grid-template-columns:1fr;}
 }

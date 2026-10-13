@@ -2,7 +2,7 @@
 // Order inside a group = the media lab plan's order. Shared by index.njk (the grid) and project.njk
 // (a story's (next) link follows this order, wrapping at the end).
 module.exports = [
-  ["(energy & systems)",       ["Sama"]],
+  ["(energy & systems)",       ["Sama", "Climate Code"]],
   ["(plans & policy)",          ["Malaysia GCAP", "Ahmedabad Climate Action Plan", "State of Cities", "Urban Greening Policy", "Vadodara Climate Action Plan", "Surat Climate Action Plan"]],
   ["(participatory)",           ["Perspectives", "Koliwadas", "Living Heritage", "Rebel Bodies Rebel Cities", "Urban Performances"]],
   ["(computational & spatial)", ["Generative Techniques", "One is to One", "Water Urbanism", "Eco-Machine"]],
