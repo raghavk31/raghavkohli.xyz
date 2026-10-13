@@ -21,7 +21,8 @@ title: "Raghav Kohli · invisible systems, made visible"
 <figure class="card w{{ w }}"
         data-topics="{{ (p.data.topics or []) | join(' ') }}" data-weight="{{ w }}"
         style="--span:{{ span }};--car:{{ car }};--cpad:{{ 31.5 if w == 1 else (26.25 if w == 2 else 19.25) }}px;--cq:{{ p.data.qsize or '21px' }};">
-  <a class="card__click" href="{{ p.url }}" data-project="{{ p.url }}" aria-label="{{ p.data.title }}">
+  {#- a page that is an app of its own (Climate Code) opens as itself, not in the overlay -#}
+  <a class="card__click" href="{{ p.url }}"{% if p.data.layout != "climate-code.njk" %} data-project="{{ p.url }}"{% endif %} aria-label="{{ p.data.title }}">
     {#- the post-it: one or two lines of story, stuck to the card's edge on hover (main.js flips it to
         the side with room). `snippet_rot` tilts it (default 3°), `snippet_alt` takes the second paper.
         On the phone a corner of it peeks from the card's top right all the time. -#}
@@ -286,6 +287,7 @@ title: "Raghav Kohli · invisible systems, made visible"
 {%- for p in collections.projects %}
   {{ p.url | dump | safe }}: {
     "name": {{ p.data.title | dump | safe }},
+    "app": {{ (p.data.layout == "climate-code.njk") | dump | safe }},
     "question": {{ p.data.question | dump | safe }},
     "subtitle": {{ (p.data.subtitle or "") | dump | safe }},
     "gallery": {{ (p.data.gallery or []) | dump | safe }},
