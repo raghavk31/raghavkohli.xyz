@@ -559,6 +559,7 @@
     }
 
     function closeProject() {
+      want++;   // a project still loading when the overlay closed does not open it afterwards
       if (!pv.classList.contains("open")) return;
       pv.classList.remove("open");
       document.body.classList.remove("pv-open");
@@ -571,9 +572,10 @@
     /* URLs. Opening pushes the project's own /work/<slug>/ (the links Raghav sends out); the state
        carries how many overlay entries deep we are, so (close), Esc and the margin all walk history
        back to the page the first one was opened from, and Back / Forward close and reopen it. */
-    var homeTitle = document.title, storyCtl = null;
+    var homeTitle = document.title, storyCtl = null, want = 0;
     function go(url, originEl, push) {
-      var d = DATA[url] || {};
+      var d = DATA[url] || {}, my = ++want;
+      if (push && history.state && history.state.pv === url) push = false;   // a second click on the same card
       var card = originEl || document.querySelector('.card__click[data-project="' + url + '"]');
       if (!pv.classList.contains("open")) lastFocus = card || document.activeElement;
       if (push) {
@@ -581,8 +583,9 @@
         history.pushState({ pv: url, d: depth + 1 }, "", url);
       }
       fetchPage(url).then(function (art) {
-        showPage(art, d.name, card);
+        if (my === want) showPage(art, d.name, card);
       }).catch(function () {
+        if (my !== want) return;
         // fallback: JSON reconstruction, or plain navigation if even that is missing
         pageBody.hidden = true;
         if (jsonBody) jsonBody.hidden = false;
