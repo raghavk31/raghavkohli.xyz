@@ -86,7 +86,7 @@ async function start() {
     const u = new URL(location.href);
     u.searchParams.set("c", S.iso);
     if (S.place !== DEFAULT_PLACE) u.searchParams.set("p", `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)},${S.place.name}`);
-    u.hash = S.ch && S.ch !== "top" ? S.ch : "";
+    if (S.ch) u.hash = S.ch !== "top" ? S.ch : "";   // before the first chapter is active, keep the deep link the page opened with
     history.replaceState(null, "", u);
   }
 
@@ -226,7 +226,10 @@ async function start() {
 
   /* ── a place ──────────────────────────────────────────────────────────────────────────────────── */
   const rendered = {}, pts = {}, grids = {};
-  const showGrid = (spec) => { tiles.set(spec); root.querySelector("[data-legend]").innerHTML = spec.legend || ""; };
+  const showGrid = (spec) => {
+    tiles.set(spec); root.querySelector("[data-legend]").innerHTML = spec.legend || "";
+    if (mq.matches) { const g = S.ch === "home" ? GRID : steps[S.ch]?.grid; if (g) fitGrid(g, 600); }   // reframe under the legend
+  };
   const placeKey = () => `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)}`;
   const nameEl = root.querySelector("[data-place-name]");
   const showPlaceName = () => { nameEl.textContent = placeName(); };
@@ -245,10 +248,16 @@ async function start() {
     else if (kind === "home") { view("home"); runHome(); }
   }
   const fly = (zoom) => map.flyTo({ center: [S.place.lon, S.place.lat], zoom, duration: 1400, essential: true });
+  // on phones the legend sits over the top of the map, so the grid is framed in the space below it
+  const fitGrid = (g, duration) => {
+    const lg = root.querySelector("[data-legend]");
+    const top = lg.offsetHeight ? lg.offsetTop + lg.offsetHeight + 8 : 12;
+    map.fitBounds(gridBounds(S.place, g), { padding: mq.matches ? { top, bottom: 12, left: 12, right: 12 } : 28, duration, essential: true });
+  };
   // a chapter with a grid frames the grid; the rest fly to their zoom
   const view = (id) => {
     const g = id === "home" ? GRID : steps[id]?.grid;
-    if (g) map.fitBounds(gridBounds(S.place, g), { padding: mq.matches ? 12 : 28, duration: 1400, essential: true });
+    if (g) fitGrid(g, 1400);
     else fly(steps[id]?.zoom || 10);
   };
   function ctxFor(id) {
@@ -321,6 +330,8 @@ async function start() {
     S.ch = id;
     root.dataset.kind = kind;
     root.querySelectorAll("[data-go]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.go === id));
+    const idx = root.querySelector("[data-index]"), cur = idx.querySelector("[aria-current]");   // phones: the index is one row that scrolls
+    if (cur && idx.scrollWidth > idx.clientWidth) idx.scrollLeft = cur.parentElement.offsetLeft - idx.clientWidth / 2;
     const src = el.querySelector("[data-src]");
     if (!local(kind)) tiles.clear();
     if (L[id]) {
@@ -346,10 +357,10 @@ async function start() {
     writeUrl();
   }
   const mq = matchMedia("(max-width: 760px)");
-  let io;
+  let io, jumping = false;
   function observe() {
     io?.disconnect();
-    io = new IntersectionObserver((es) => es.forEach((e) => e.isIntersecting && activate(e.target.dataset.ch)),
+    io = new IntersectionObserver((es) => es.forEach((e) => !jumping && e.isIntersecting && activate(e.target.dataset.ch)),
       // on a phone the map covers the top of the screen, so the band that picks the chapter sits lower
       { root: mq.matches ? null : panel, rootMargin: mq.matches ? "-72% 0px -24% 0px" : "-38% 0px -58% 0px" });
     chapters.forEach((el) => io.observe(el));
@@ -360,10 +371,29 @@ async function start() {
     const a = e.target.closest("[data-go]");
     if (!a) return;
     e.preventDefault();
+    // a jump skips the chapters it passes: each one would render its readout on the way, the column
+    // would grow above the target, and the scroll would stop a chapter short (seen on phones)
+    jumping = true;
+    activate(a.dataset.go);
+    const done = () => { jumping = false; window.removeEventListener("scrollend", done); panel.removeEventListener("scrollend", done); };
+    window.addEventListener("scrollend", done); panel.addEventListener("scrollend", done);
+    setTimeout(done, 2000);   // scrollend is missing in older Safari
     byId[a.dataset.go].scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
   });
   const first = location.hash.slice(1);
-  if (byId[first]) { byId[first].scrollIntoView({ block: "start" }); activate(first); } else activate("top");
+  if (byId[first]) {
+    // a deep link: the chapters above it fill in as their data arrives and push it down, so it is
+    // re-aligned each time a chapter changes size while the page settles, until the reader scrolls
+    jumping = true;
+    activate(first);
+    const go = () => byId[first].scrollIntoView({ block: "start", behavior: "instant" });   // the site's html is scroll-behavior:smooth   // the site's html is scroll-behavior:smooth
+    const ro = new ResizeObserver(go);
+    const stop = () => { ro.disconnect(); clearTimeout(t); jumping = false; ["wheel", "touchstart", "keydown"].forEach((ev) => removeEventListener(ev, stop)); };
+    const t = setTimeout(stop, 8000);
+    ["wheel", "touchstart", "keydown"].forEach((ev) => addEventListener(ev, stop, { passive: true }));
+    chapters.forEach((el) => ro.observe(el));   // the panel itself is fixed-height on wide screens
+    go();
+  } else activate("top");
 
   /* a chapter's switches */
   panel.addEventListener("click", (e) => {

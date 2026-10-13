@@ -288,7 +288,9 @@ layout: base.njk
   </section>
 
   {% if next %}
-  <a class="detail__next reveal" href="/#work">
+  {#- `next:` is "Title · tagline": link to that project when the title names one, else back to the grid -#}
+  {%- set nextnamed = collections.projects | find("title", next.split(" · ")[0]) -%}
+  <a class="detail__next reveal" href="{{ nextnamed.url if nextnamed else '/#work' }}">
     <span class="lbl">(next)</span>
     <span class="nm">{{ next }}</span>
     <span style="color:var(--accent)">&rarr;</span>

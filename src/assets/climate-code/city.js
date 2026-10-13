@@ -305,7 +305,7 @@ export const steps = {
         + stat(`${fmt(all)}%`, `of built cells reach all eight daily needs within ${NEAR} minutes on foot`, `density ${fmt(sum(G.floor) / (G.area * N), 2)} · diversity ${fmt(mixMean, 2)} · proximity ${fmt(meanOf(people.map((i) => near[i])), 1)} of 8`)
         + `<p class="cc-sub">(share of built cells within ${NEAR} minutes of …)</p>`
         + bars(need.map(([k, m]) => [k, share(people, (i) => m[i] <= NEAR), "%"]))
-        + note("City Science reads a district by three numbers: density (how much is built), diversity (how mixed it is) and proximity (how much of daily life is a short walk away). The fifteen-minute city is the same idea; here the walk is five minutes, about 300 m, because at ten nearly every cell of a city centre reaches everything. Chapter 10 read every country at once; this reads every cell.") + thin(G);
+        + note("Density is how much is built, diversity how mixed it is, proximity how much of daily life is a short walk away. The fifteen-minute city is the same idea; here the walk is five minutes, about 300 m, because at ten nearly every cell of a city centre reaches everything. Chapter 10 read every country at once; this reads every cell.") + thin(G);
       ctx.grid(layer());
       el.querySelector("[data-dims]").addEventListener("click", (e) => {
         const b = e.target.closest("[data-dim-v]"); if (!b) return;
