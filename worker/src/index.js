@@ -20,6 +20,8 @@
    MAX_TITLE / MAX_NAME cap those fields (the body has no cap). Images live in D1 as blobs (R2 is not
    enabled on the account); the browser downscales them first and MAX_IMAGE caps what the worker takes. */
 
+import { climateAI } from "./climate-ai.js";
+
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_IMAGES = 6;
 
@@ -40,6 +42,8 @@ export default {
     const isOwner = (key) => !!env.OWNER_KEY && key === env.OWNER_KEY;
     const ownerHeader = () => isOwner(req.headers.get("X-Owner-Key"));
 
+    // Climate Code's AI notes (/work/climate-code/); the route answers its own OPTIONS
+    if (url.pathname === "/climate/ai") return climateAI(req, env, cors);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const m = url.pathname.match(/^\/(thoughts|layout|images|pins)(?:\/([A-Za-z0-9_-]+))?\/?$/);
     if (!m) return json({ error: "not found" }, 404);

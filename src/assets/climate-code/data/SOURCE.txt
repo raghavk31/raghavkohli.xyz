@@ -1,0 +1,2 @@
+raghavk31/resilience-stack 96145ec 2026-06-19 fix: Day 15 â€” consistent deficits, potable split, honest costs (+ uncommitted changes)
+Built files. Do not edit here: change climate-30, rerun explorer/build_atlas.py, then scripts/sync-climate-code.py.

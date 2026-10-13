@@ -1,0 +1,75 @@
+---
+layout: base.njk
+---
+{#- Climate Code (/work/climate-code/): the sixteen Resilience Stack tools as one explorer. The words
+    come from src/_data/climateCode.js; the left column scrolls through them and the map on the right
+    follows (src/assets/climate-code/cc.js). Country data is built in climate-30 and synced into
+    src/assets/climate-code/data/ by scripts/sync-climate-code.py. The AI notes go through the
+    thoughts worker (/climate/ai), which holds the OpenRouter key. -#}
+{%- set C = climateCode -%}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
+<link rel="stylesheet" href="/assets/climate-code/cc.css?v={{ v }}" />
+<div class="cc" data-cc data-kind="intro"
+     data-atlas="/assets/climate-code/data/atlas.json?v={{ v }}"
+     data-geo="/assets/climate-code/data/countries.geojson?v={{ v }}"
+     data-ai="{{ site.thoughtsApi }}/climate/ai">
+  <aside class="cc__panel" data-panel aria-label="chapters">
+    <div class="cc__bar">
+      <ol class="cc__index" data-index aria-label="chapters">
+        <li><a href="#top" data-go="top" title="climate code">00</a></li>
+        {%- for c in C.chapters %}
+        <li><a href="#{{ c.id }}" data-go="{{ c.id }}" title="{{ c.name }}">{{ c.n }}</a></li>
+        {%- endfor %}
+      </ol>
+      <div class="cc__pick cc__pick--country">
+        <label for="cc-country">(country)</label>
+        <select id="cc-country" data-country></select>
+      </div>
+      <form class="cc__pick cc__pick--place" data-place-form autocomplete="off">
+        <label for="cc-place">(place)</label>
+        <input id="cc-place" name="q" type="search" placeholder="search a town or city" data-place-input />
+        <span class="cc__placename" data-place-name></span>
+        <ul class="cc__hits" data-place-hits hidden></ul>
+      </form>
+    </div>
+
+    <header class="cc-ch cc-ch--intro" id="top" data-ch="top" data-kind="intro">
+      <p class="cc-ch__lbl">(selected work · 2026)</p>
+      <h1 class="cc-ch__title">{{ C.title }}</h1>
+      <p class="cc-ch__q">{{ C.question }}</p>
+      <p class="cc-ch__text">{{ C.lead }}</p>
+      <dl class="cc-meta">
+        <div><dt>(role)</dt><dd>{{ role }}</dd></div>
+        <div><dt>(method)</dt><dd>sixteen streamlit tools · a cityscope grid · one static explorer</dd></div>
+        <div><dt>(data)</dt><dd>world bank · nasa · open-meteo · copernicus · openstreetmap · ipcc ar6</dd></div>
+        <div><dt>(source)</dt><dd><a href="https://github.com/raghavk31/resilience-stack" target="_blank" rel="noopener">resilience-stack &rarr;</a></dd></div>
+      </dl>
+      <p class="cc-ch__how">{{ C.how }} <span class="cc-ch__down" aria-hidden="true">&darr;</span></p>
+    </header>
+
+    {%- for c in C.chapters %}
+    <section class="cc-ch cc-ch--{{ c.kind }}" id="{{ c.id }}" data-ch="{{ c.id }}" data-kind="{{ c.kind }}">
+      <p class="cc-ch__lbl">({{ c.n }}) {{ c.name }} <span>· {% if c.day %}day {{ c.day }}{% else %}{{ c.tag }}{% endif %}</span></p>
+      <h2 class="cc-ch__q">{{ c.q }}</h2>
+      <p class="cc-ch__text">{{ c.text }}</p>
+      <div class="cc-ch__ctl" data-ctl></div>
+      <div class="cc-ch__body" data-body></div>
+      <p class="cc-ch__src" data-src></p>
+    </section>
+    {%- endfor %}
+
+    <footer class="cc-ch cc-ch--end" data-ch="end" data-kind="end">
+      <p class="cc-ch__lbl">(method)</p>
+      <p class="cc-ch__text">Each chapter is one of the sixteen tools of the Resilience Stack, built as a Streamlit app in May and June 2026. The country layers are rebuilt ahead of time by <code>explorer/build_atlas.py</code>, which reads each day's own tables and repeats its own formula; the city, place and household chapters run in your browser against the same live services the apps used. The city grid reads OpenStreetMap from OpenFreeMap's vector tiles, the same tiles the basemap draws, and borrows its frame from MIT City Science's CityScope. Every city layer is drawn as CityScope draws its table: one square tile a cell. The AI notes are written by Claude through OpenRouter.</p>
+      <p class="cc-ch__src" data-built></p>
+      <noscript><p class="cc-ch__text">The map and the tools on this page are drawn in the browser and need JavaScript.</p></noscript>
+    </footer>
+  </aside>
+
+  <div class="cc__map" data-map role="region" aria-label="map">
+    <div class="cc__legend" data-legend aria-live="polite"></div>
+    <div class="cc__tip" data-tip hidden></div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script type="module" src="/assets/climate-code/cc.js?v={{ v }}"></script>
