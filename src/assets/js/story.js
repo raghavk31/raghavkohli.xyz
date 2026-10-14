@@ -263,6 +263,7 @@
       destroy: function () {
         if (io) io.disconnect();
         stop(); clearTimeout(lockT);
+        slice(article.querySelectorAll("video")).forEach(function (v) { v.pause(); });   // closed, nothing plays on
         (scroller || window).removeEventListener("scroll", onScroll);
         window.removeEventListener("keydown", onKey);
         window.removeEventListener("resize", onResize);

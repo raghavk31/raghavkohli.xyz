@@ -610,6 +610,10 @@ body.note-open{overflow:hidden;}
 /* ---------- project overlay (zoom-open from card) ---------- */
 .pv{position:fixed;inset:0;z-index:100;visibility:hidden;}
 .pv.open{visibility:visible;}
+/* closed, nothing in it may catch the mouse: a story's picture on stage sets its own visibility:visible, which
+   beat the overlay's hidden and left a see-through picture over the page, eating its scroll and hover */
+.pv:not(.open){pointer-events:none;}
+.pv:not(.open) .story__stage .frame.on{visibility:hidden;}
 .pv__backdrop{position:absolute;inset:0;background:rgba(244,243,239,.7);
   backdrop-filter:blur(5.25px);-webkit-backdrop-filter:blur(5.25px);opacity:0;transition:opacity .48s ease;}
 .pv.open .pv__backdrop{opacity:1;}
