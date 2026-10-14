@@ -1249,7 +1249,7 @@ body.lb-open{overflow:hidden;}
 /* ── the city behind the homepage (city.js) ── */
 .city { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .43; transition: opacity .28s ease; }
 .city.is-out { opacity: 0; }
-body:has(> .city) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pins):not(script) { position: relative; z-index: 1; }
+body:has(> .city) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pins):not(.pin-zoom):not(.board__scrim):not(script) { position: relative; z-index: 1; }
 /* the dock: the homepage's controls in one line at the foot of the screen, on the page's right edge:
    the city's name (a click moves to the next city), the owner's tools, the colour modes */
 .dock { position: fixed; z-index: 40; bottom: 12.25px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
@@ -1301,6 +1301,20 @@ body.is-pinning, body.is-pinning * { cursor: crosshair !important; }
 .pin .grip { color: var(--note-ink); right: 3.5px; bottom: 3.5px; }
 .pin:hover .grip, body.is-arranging .card .grip { opacity: .7; }
 .pin.is-editing .grip { display: none; }
+/* a note opened (pins.js zoom): a big square of the same paper over the thoughts board's scrim, grown from where
+   the note sits, the way a note opens on /thoughts/. The note stays on the board, hidden, until it shrinks back. */
+.pins .pin.is-open { visibility: hidden; }
+.pin-zoom { position: fixed; inset: 0; margin: auto; z-index: 9600; width: min(86vw, 74vh, 542.5px); height: min(86vw, 74vh, 542.5px);
+  padding: 38.5px 33.25px 29.75px; overflow: auto; overscroll-behavior: contain; cursor: zoom-out;
+  background: var(--note); color: var(--note-ink); font-family: var(--hand); font-size: 17.5px; line-height: 1.45; letter-spacing: -.01em;
+  box-shadow: 0 1.75px 1.75px var(--note-shadow), 0 24.5px 38.5px -10.5px var(--note-shadow), 0 61.25px 78.75px -35px var(--note-shadow); }
+.pin-zoom.alt { background: var(--note-2); }
+.pin-zoom:focus { outline: none; }
+.pin-zoom p { white-space: pre-wrap; overflow-wrap: anywhere; margin: 0; }
+/* a picture shares the square with the words instead of filling it */
+.pin-zoom__imgs { display: flex; gap: 3.5px; height: 42%; margin: -38.5px -33.25px 21px; }
+.pin-zoom__imgs:only-child { height: calc(100% + 68.25px); margin-bottom: -29.75px; }
+.pin-zoom__imgs img { flex: 1; min-width: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 
 /* the project boxes placed by hand (pins.js): no rows, no breaks; each box sits at its own spot and
    width, inline. Visitors see the same arrangement; under 900px the boxes stack as before. */
@@ -1343,6 +1357,10 @@ body.is-arranging .card__note { display: none; }
 :root[data-theme="dark"] .pv__bar, :root[data-mode="random"] .pv__bar{background:color-mix(in srgb, var(--paper) 75%, transparent);}
 :root[data-theme="dark"] .lb__backdrop, :root[data-mode="random"] .lb__backdrop{background:color-mix(in srgb, var(--paper) 96%, transparent);}
 :root[data-theme="dark"] .postit::before, :root[data-theme="dark"] .card__note::before, :root[data-theme="dark"] .eco__callout::before{background:rgba(28,27,24,.06);}
+/* the (thoughts) board's notes stay white paper in the dark, so they keep the light page's ink: the page's
+   own ink turns pale here and left their titles and words white on white */
+:root[data-theme="dark"] .board .thought{--ink:#1C1B18; --ink-2:#3B3A34; --ink-soft:#57564F; --mute:#6B6A64;
+  --faint:#67665E; --faint-2:#757467; --line:#C2C0B7; --accent:#2E3A57;}
 :root[data-theme="dark"] .cv-item, :root[data-theme="dark"] .pv__method .m{border-top-color:rgba(236,234,227,.1);}
 :root[data-mode="random"]:not([data-theme="dark"]) .city{opacity:.5;}
 body{transition:background-color .4s ease, color .4s ease;}
