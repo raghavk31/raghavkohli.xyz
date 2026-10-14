@@ -116,6 +116,70 @@
   fetch(api + "/pins").then(function (r) { return r.json(); }).then(function (j) { pins = j.pins || []; render(); }, function () {});
   window.addEventListener("resize", position);
 
+  // ---------- opening a note ----------
+  // A click opens it the way a note opens on /thoughts/: a big square of the same paper grows from where it
+  // sits, over a scrim; the scrim, Escape and a click on it close it, and it shrinks back to its spot. The
+  // square is a copy (the note on the board keeps its tilt, scale and place, hidden meanwhile).
+  var open = null, scrim = null, MORPH = 420, EASE = "cubic-bezier(.32,.72,.32,1)";
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  // the note's own box on screen, as if untilted: its centre and its laid-out size times its scale
+  function box(el) {
+    var r = el.getBoundingClientRect(), s = parseFloat(el.style.getPropertyValue("--s")) || 1;
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2, w: el.offsetWidth * s, h: el.offsetHeight * s };
+  }
+  // the big square's transform that puts it over the note
+  function over(z, el) {
+    var a = box(el), b = z.getBoundingClientRect();
+    return "translate(" + (a.x - b.left - b.width / 2) + "px," + (a.y - b.top - b.height / 2) + "px) rotate(" + (el.style.getPropertyValue("--r") || "0deg") +
+      ") scale(" + a.w / b.width + "," + a.h / b.height + ")";
+  }
+  function openNote(el) {
+    var p = byId(el.dataset.id); if (!p) return;
+    if (!scrim) {
+      scrim = document.createElement("div");
+      scrim.className = "board__scrim";
+      scrim.addEventListener("click", closeNote);
+      document.body.appendChild(scrim);
+    }
+    var z = document.createElement("div");
+    z.className = "pin-zoom" + (el.classList.contains("alt") ? " alt" : "");
+    z.setAttribute("role", "dialog"); z.setAttribute("aria-modal", "true"); z.setAttribute("aria-label", "note");
+    z.tabIndex = -1;
+    z.innerHTML = ((p.images || []).length ? '<div class="pin-zoom__imgs">' + p.images.map(function (i) { return '<img src="' + api + "/images/" + i + '" alt="" />'; }).join("") + "</div>" : "") +
+      (p.body ? "<p>" + esc(p.body) + "</p>" : "");
+    z.addEventListener("click", closeNote);
+    document.body.appendChild(z);
+    if (z.animate) z.animate([{ transform: over(z, el) }, { transform: "none" }], { duration: still ? 0 : MORPH, easing: EASE });
+    el.classList.add("is-open");
+    scrim.offsetWidth; scrim.classList.add("on");
+    document.body.classList.add("note-open");
+    open = { el: el, z: z, focus: document.activeElement };
+    z.focus({ preventScroll: true });
+  }
+  function closeNote() {
+    if (!open) return;
+    var o = open; open = null;
+    scrim.classList.remove("on");
+    document.body.classList.remove("note-open");
+    var done = function () { if (!o.z.isConnected) return; o.z.remove(); o.el.classList.remove("is-open"); };
+    if (o.z.animate && o.el.isConnected && !still) {
+      o.z.style.pointerEvents = "none";
+      o.z.animate([{ transform: "none" }, { transform: over(o.z, o.el) }], { duration: MORPH, easing: EASE, fill: "forwards" }).onfinish = done;
+      setTimeout(done, MORPH + 150);   // a busy or hidden tab can hold the finish back
+    } else done();
+    if (o.focus && o.focus.focus) { try { o.focus.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  layer.addEventListener("click", function (e) {
+    var el = e.target.closest(".pin");
+    if (!el || el.dataset.id === "draft" || el.classList.contains("is-editing") || e.target.closest("a, label, textarea, .grip")) return;
+    if (el.dataset.moved) { delete el.dataset.moved; return; }   // the end of a drag, not a click
+    openNote(el);
+  });
+  // capture, so Escape closes the note before the diagram or the overlay hear it
+  window.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && open) { e.stopPropagation(); closeNote(); }
+  }, true);
+
   if (!owner) return;
 
   // ---------- the owner's tools ----------
@@ -204,6 +268,7 @@
     function up() {
       el.removeEventListener("pointermove", move); el.removeEventListener("pointerup", up); el.classList.remove("is-dragging");
       if (!moved) return;
+      el.dataset.moved = "1"; setTimeout(function () { delete el.dataset.moved; }, 80);   // swallows the click this drag ends with
       var q = place(parseFloat(el.style.left), parseFloat(el.style.top)), old = { anchor: p.anchor, x: p.x, y: p.y, z: p.z };
       Object.assign(p, q, { z: maxZ() + 1 }); position();
       send("PUT", "/pins/" + p.id, JSON.stringify({ anchor: p.anchor, x: p.x, y: p.y, z: p.z }), "application/json")
