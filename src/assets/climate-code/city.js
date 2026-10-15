@@ -190,7 +190,7 @@ export const steps = {
       el.innerHTML = loading("stops and streets in the map tiles");
       const G = await cityGrid(p, GRID), m = nearest(G, ["transit", "rail"]), people = builtCells(G);
       const len = (k) => sum(G.road[k]) / 1000, km2 = G.n * G.n * G.area / 1e6;
-      ctx.grid(gridLayer({ G, vals: m, mask: peopled(G), title: "walk to the nearest bus, tram, train or metro", unit: "minutes",
+      ctx.grid(gridLayer({ G, vals: m, mask: peopled(G), title: "walk to the nearest bus, tram, train or metro", unit: "minutes", weigh: true,
         breaks: MIN_BREAKS, labels: MIN_LABELS,
         pts: [...ptsOf(G, ["transit"], ORANGE()), ...ptsOf(G, ["rail"], GREEN())], ptsKey: [[ORANGE(), "bus or tram stop"], [GREEN(), "rail or metro station"]],
         tip: (i) => `<b>${minTip(G, i, "transit", "a bus or tram stop")}</b><br>${minTip(G, i, "rail", "a station")}` }));
@@ -211,7 +211,7 @@ export const steps = {
       el.innerHTML = loading("grocers and markets in the map tiles");
       const G = await cityGrid(p, GRID), m = G.minutes.food || new Float32Array(G.n * G.n).fill(Infinity), people = builtCells(G);
       const desert = people.filter((i) => m[i] > 15);
-      ctx.grid(gridLayer({ G, vals: m, mask: peopled(G), title: "walk to fresh food: a grocer, market, baker or butcher", unit: "minutes",
+      ctx.grid(gridLayer({ G, vals: m, mask: peopled(G), title: "walk to fresh food: a grocer, market, baker or butcher", unit: "minutes", weigh: true,
         breaks: MIN_BREAKS, labels: MIN_LABELS,
         pts: ptsOf(G, ["food"], ORANGE()), ptsKey: [[ORANGE(), "grocer, market, baker, butcher"]],
         tip: (i) => `<b>${minTip(G, i, "food", "fresh food")}</b><br>${fmt(G.farm[i] * 100)}% farmland · ${fmt(G.green[i] * 100)}% green` }));
@@ -251,7 +251,7 @@ export const steps = {
       el.innerHTML = loading("bins and recycling points in the map tiles");
       const G = await cityGrid(p, GRID), m = G.minutes.recycle || new Float32Array(G.n * G.n).fill(Infinity), people = builtCells(G);
       const bins = (G.pts.bin || []).length, rec = (G.pts.recycle || []).length, streets = (sum(G.road[1]) + sum(G.road[2]) + sum(G.road[3])) / 1000;
-      ctx.grid(gridLayer({ G, vals: m, mask: peopled(G), title: "walk to the nearest recycling point", unit: "minutes",
+      ctx.grid(gridLayer({ G, vals: m, mask: peopled(G), title: "walk to the nearest recycling point", unit: "minutes", weigh: true,
         breaks: [5, 10, 15, 20], labels: ["under 5 min", "5–10", "10–15", "15–20", "over 20, or none in view"],
         pts: [...ptsOf(G, ["recycle"], ORANGE()), ...ptsOf(G, ["bin"], GREEN())], ptsKey: [[ORANGE(), "recycling point"], [GREEN(), "public bin"]],
         tip: (i) => `<b>${minTip(G, i, "recycle", "recycling")}</b><br>${minTip(G, i, "bin", "a public bin")}` }));
@@ -269,7 +269,7 @@ export const steps = {
       el.innerHTML = loading("roads in the map tiles, and the week's air from copernicus");
       const [G, aq] = await Promise.all([cityGrid(p, GRID), air(p).catch(() => null)]);
       const e = exposure(G), land = landOf(G), br = quintiles(e, land), people = builtCells(G);
-      ctx.grid(gridLayer({ G, vals: e, mask: land, title: "traffic near each cell", unit: "fifths of this window, quietest to busiest",
+      ctx.grid(gridLayer({ G, vals: e, mask: land, title: "traffic near each cell", unit: "fifths of this window, quietest to busiest", weigh: true,
         breaks: br, labels: ["quietest fifth", "second", "middle", "fourth", "busiest fifth"],
         tip: (i) => `<b>${["quietest fifth", "second fifth", "middle fifth", "fourth fifth", "busiest fifth"][br.filter((b) => e[i] >= b).length]}</b><br>${fmt(G.road[0][i] + G.road[1][i])} m of main road in the cell · ${fmt(G.green[i] * 100)}% green` }));
       const pm = meanOf(aq?.hourly?.pm2_5), no2 = meanOf(aq?.hourly?.nitrogen_dioxide);
@@ -289,11 +289,11 @@ export const steps = {
       const people = builtCells(G), need = needs(G);
       let dim = "near";
       const layer = () => dim === "near"
-        ? gridLayer({ G, vals: near, mask: peopled(G), title: `daily needs within a ${NEAR}-minute walk`, unit: "of eight",
+        ? gridLayer({ G, vals: near, mask: peopled(G), title: `daily needs within a ${NEAR}-minute walk`, unit: "of eight", good: "high", weigh: true,
             breaks: [3, 5, 7, 8], labels: ["0–2", "3–4", "5–6", "7", "all 8"],
             tip: (i) => `<b>${near[i]} of 8 within ${NEAR} min</b><br>${need.some(([, m]) => m[i] > NEAR) ? "missing: " + esc(need.filter(([, m]) => m[i] > NEAR).map(([k]) => k).join(", ")) : "everything"}` })
         : dim === "mix"
-          ? gridLayer({ G, vals: mix, mask: peopled(G), title: "diversity: how mixed the places within 400 m are", unit: "shannon entropy, 0–1",
+          ? gridLayer({ G, vals: mix, mask: peopled(G), title: "diversity: how mixed the places within 400 m are", unit: "shannon entropy, 0–1", good: "high", weigh: true,
               breaks: [.4, .55, .7, .85], labels: ["under 0.4: one kind of place", "0.4–0.55", "0.55–0.7", "0.7–0.85", "over 0.85: everything"],
               tip: (i) => `<b>diversity ${fmt(mix[i], 2)}</b>` })
           : gridLayer({ G, vals: far, mask: (i) => G.foot[i] > 0, title: "density: floor area ratio", unit: "floor area ÷ ground area",

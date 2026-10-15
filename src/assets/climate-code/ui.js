@@ -30,16 +30,20 @@ export function classColour(i, n, diverging = false) {
   const k = n === 1 ? 3 : Math.round(i * 6 / (n - 1));
   return dark() ? SEQ[6 - k] : SEQ[k];
 }
-/* The city tiles' ramp. A tile sits on paper next to empty table squares, so its palest class must still
-   clear 2:1 against the paper: on light the ramp runs step 250 → 700, on dark step 600 → 100. Evenly
-   picked, five classes is the most that keeps every adjacent pair ≥ 0.06 apart in lightness in both
-   modes (checked with the dataviz validator, --ordinal, against #FAFAF8 and #0D0D0B). */
+/* The city tiles' ramp. The class where nothing is wrong is a near-neutral paper grey, so the eye goes to
+   the exceptions: the cells that miss a bus, flood, or have no food near. The other classes are blue, on
+   light from step 300 to 700, on dark from step 600 up to 100, so "worse" is always the strongest colour.
+   Five classes at most. `good` says which end is fine: "low" (minutes, runoff, traffic: the first class
+   is neutral) or "high" (daily needs reached: the last class is). */
 const TILE = ["#86b6ef", "#6da7ec", "#5598e7", "#3987e5", "#2a78d6", "#256abf", "#1c5cab", "#184f95", "#104281", "#0d366b"];
 const TILE_DARK = ["#184f95", "#1c5cab", "#256abf", "#2a78d6", "#3987e5", "#5598e7", "#6da7ec", "#86b6ef", "#9ec5f4", "#b7d3f6", "#cde2fb"];
-export function cellRamp(n) {
+const FINE = "#dcd9cf", FINE_DARK = "#3a3936";
+export function cellRamp(n, good = "low") {
   if (n > 5) throw new Error(`a tile layer holds five classes, not ${n}`);
-  const r = dark() ? TILE_DARK : TILE;
-  return n === 1 ? [r[Math.floor(r.length / 2)]] : Array.from({ length: n }, (_, i) => r[Math.round(i * (r.length - 1) / (n - 1))]);
+  const r = (dark() ? TILE_DARK : TILE).slice(dark() ? 2 : 1), fine = dark() ? FINE_DARK : FINE;
+  if (n === 1) return [r[Math.floor(r.length / 2)]];
+  const blues = Array.from({ length: n - 1 }, (_, i) => r[n === 2 ? r.length - 1 : Math.round(i * (r.length - 1) / (n - 2))]);
+  return good === "high" ? [...blues.reverse(), fine] : [fine, ...blues];
 }
 /* class index of v against ascending breaks: below breaks[0] → 0 */
 export const classOf = (v, breaks) => breaks.filter((b) => v >= b).length;

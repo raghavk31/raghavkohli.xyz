@@ -38,6 +38,18 @@ const ROAD = { motorway: 0, trunk: 0, primary: 0, secondary: 1, tertiary: 1, min
 const ROAD_W = [20, 12, 7, 3];   // a typical paved width, metres, per road group
 const GREEN = new Set(["grass", "wood", "forest", "park", "scrub", "wetland", "meadow", "garden", "recreation_ground", "shrubbery", "allotments", "village_green"]);
 
+/* the place names worth printing on the grid: suburbs before neighbourhoods, at most five, never crowding */
+const PLACE_RANK = { suburb: 1, quarter: 2, neighbourhood: 3, town: 1, village: 2 };
+function namesToShow(all, most = 5, apart = 7) {
+  const out = [];
+  for (const p of all.sort((a, b) => a.k - b.k)) {
+    if (out.length >= most) break;
+    if (out.some((o) => o.name === p.name || Math.hypot(o.c - p.c, o.r - p.r) < apart)) continue;
+    out.push(p);
+  }
+  return out;
+}
+
 const grids = new Map();
 export function cityGrid(p, { n = 32, size = 150, z = 14 } = {}) {
   const key = `${p.lat.toFixed(4)},${p.lon.toFixed(4)},${n},${size},${z}`;
@@ -58,13 +70,16 @@ async function build(p, n, size, z) {
     roof: new Float32Array(N),
     road: [0, 1, 2, 3].map(() => new Float32Array(N)), rail: new Float32Array(N),
     green: new Float32Array(N), water: new Float32Array(N), farm: new Float32Array(N), built: new Float32Array(N),
-    pts: {}, classes: [], tilesRead: 0, tilesMissed: 0 };
+    pts: {}, classes: [], tilesRead: 0, tilesMissed: 0,
+    // what the city is read by, kept as drawn geometry in cell units so tiles.js can ink it over the grid:
+    // main roads [group, line], rail and metro lines, drains and streams, water [tile clip, rings], place names
+    ink: { roads: [], rail: [], waterway: [], water: [] }, places: [] };
 
   // the tiles that cover the window
   const T = 2 ** z, tx0 = Math.floor(x0 * T), tx1 = Math.floor((x0 + step * n) * T), ty0 = Math.floor(y0 * T), ty1 = Math.floor((y0 + step * n) * T);
   const jobs = [];
   for (let tx = tx0; tx <= tx1; tx++) for (let ty = ty0; ty <= ty1; ty++) jobs.push([tx, ty]);
-  const layers = ["building", "poi", "transportation", "landcover", "landuse", "park", "water"];
+  const layers = ["building", "poi", "transportation", "landcover", "landuse", "park", "water", "waterway", "place"];
   const read = await Promise.allSettled(jobs.map(([tx, ty]) => getTile(z, tx, ty, layers)));
 
   // cover rasters at R sub-pixels a cell, so a park's edge lands where it is, not on a whole cell
@@ -123,6 +138,8 @@ async function build(p, n, size, z) {
       const cls = f.props.class, g = cls === "rail" || cls === "transit" ? -1 : ROAD[cls];
       if (g === undefined) continue;
       const arr = g < 0 ? G.rail : G.road[g];
+      if (g < 0 && f.props.brunnel !== "tunnel") for (const line of f.rings) G.ink.rail.push(line.map(cc));
+      else if (g === 0 || cls === "secondary") for (const line of f.rings) G.ink.roads.push([g, line.map(cc)]);
       for (const line of f.rings) for (let i = 0; i < line.length - 1; i++) {
         const a = line[i], b = line[i + 1], mid = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
         if (!inside(mid)) continue;
@@ -154,8 +171,19 @@ async function build(p, n, size, z) {
       if (c === "residential" || c === "commercial" || c === "industrial" || c === "retail") fill(cover.built[1], f);
       else if (c === "pitch" || c === "playground" || c === "cemetery" || c === "recreation_ground") fill(cover.green[1], f);
     }
-    for (const f of L.water || []) if (f.type === 3 && f.props.class !== "swimming_pool") fill(cover.water[1], f);
+    for (const f of L.water || []) if (f.type === 3 && f.props.class !== "swimming_pool") {
+      fill(cover.water[1], f);
+      G.ink.water.push([[cc([0, 0]), cc([ex, ex])], f.rings.map((ring) => ring.map(cc))]);
+    }
+    for (const f of L.waterway || []) if (f.type === 2 && f.props.brunnel !== "tunnel") for (const line of f.rings) G.ink.waterway.push(line.map(cc));
+    for (const f of L.place || []) {
+      const q = f.rings[0]?.[0], name = f.props["name:en"] || f.props.name;
+      if (!q || !name || !inside(q) || !PLACE_RANK[f.props.class]) continue;
+      const [c, r] = cc(q);
+      if (c >= 2 && r >= 2 && c < n - 2 && r < n - 2) G.places.push({ c, r, name, k: PLACE_RANK[f.props.class] * 100 + (+f.props.rank || 50) });
+    }
   });
+  G.places = namesToShow(G.places);
   if (!G.tilesRead) throw new Error("the map tiles did not load");
 
   for (const [k, [c, g]] of Object.entries(cover)) {
