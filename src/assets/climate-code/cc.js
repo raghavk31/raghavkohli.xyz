@@ -1,20 +1,22 @@
 /* cc.js — Climate Code (/work/climate-code/): the sixteen Resilience Stack tools as one explorer.
    The left column is the story; whichever chapter sits in the middle of it drives the map on the right.
-   Ten country chapters paint the world (layers.js), eight city chapters read one place as a grid of
-   150 m cells after MIT City Science's CityScope (grid.js, city.js), six place chapters run live tools for
-   one point (place.js), the last audits a household (home.js). The city grids are drawn as CityScope
-   draws its table, a square tile a cell (tiles.js). The basemap is OpenFreeMap's vector planet in a
+   The story runs in five acts: four country chapters paint the world (layers.js; the other six layers
+   stay in the all-at-once score), then one place is read as a grid of 150 m cells after MIT City
+   Science's CityScope (grid.js, city.js): what it stands on and is made of, where it fails its people
+   (with Meta's population grid, pop.js), what one change would do, and one building. The place tools of
+   the Resilience Stack (place.js) run inside those chapters. The city grids are drawn as CityScope draws its table, a square tile a cell, with
+   McHarg's sheets over them (tiles.js); the square can be dragged and resized, and the place follows it. The basemap is OpenFreeMap's vector planet in a
    minimal style drawn from the site's own colour tokens, so it follows (light) (dark) and (random). */
 import { esc, fmt, ok, ordinal, classColour, classOf, dark, note, failed, CAT } from "./ui.js";
 import { makeLayers, breaksOf, labelsOf, nameOf } from "./layers.js";
 import { steps as placeSteps, geocode, placeHeat } from "./place.js";
-import { steps as citySteps, nearCount, needs, NEAR, GRID } from "./city.js";
-import { cityGrid, gridBounds } from "./grid.js";
-import { TileGrid, gridLayer } from "./tiles.js";
-import { renderHome } from "./home.js";
+import { steps as citySteps } from "./city.js";
+import { gridBounds, GRID, SIZES } from "./grid.js";
+import { TileGrid } from "./tiles.js";
+import { setPopBase } from "./pop.js";
 
 const steps = { ...placeSteps, ...citySteps };
-const local = (kind) => kind === "place" || kind === "city" || kind === "home";
+const local = (kind) => kind === "place" || kind === "city";
 
 const root = document.querySelector("[data-cc]");
 const WORLD = [[-168, -56], [190, 76]];
@@ -30,15 +32,17 @@ const PLACE_SRC = {
   "p-crop": "era5 via open-meteo, 2019–23 · ec-earth3p-hr (cmip6 highresmip) via open-meteo · day 13's crop envelopes",
   "p-water": "era5 rainfall via open-meteo, 2019–23 · day 15's tank model",
   "p-grid": "nasa power · era5 via open-meteo · day 14's sizing · roofs from openstreetmap via openfreemap",
-  "home": "day 11's audit · the plan is written by claude through openrouter · daily needs from openstreetmap via openfreemap",
-  "c-build": "building footprints and heights from openstreetmap, via openfreemap's vector tiles",
+  "c-build": "building footprints, heights and land use from openstreetmap, via openfreemap's vector tiles · local climate zones after stewart and oke (2012)",
+  "c-heat": "openstreetmap via openfreemap · open-meteo forecast · era5 via open-meteo, 2019–23 · climate zones after stewart and oke (2012)",
+  "c-people": "meta data for good, high resolution settlement layer v1.5 (2020) · the hazards of the chapters before · risk after ipcc ar6",
+  "c-park": "openstreetmap · srtm elevation · era5 rainfall · meta hrsl · park cooling after bowler et al. (2010)",
+  "p-home": "nasa power · era5 via open-meteo · days 02, 14 and 15 · roofs and buildings from openstreetmap via openfreemap",
   "c-energy": "roofs from openstreetmap via openfreemap · nasa power irradiance, 2020–23 · day 02's panel model",
   "c-move": "stops, stations and streets from openstreetmap via openfreemap",
-  "c-food": "shops and land cover from openstreetmap via openfreemap",
-  "c-water": "copernicus glo-90 elevation via open-meteo · era5 rainfall, 2019–23 · land cover from openstreetmap",
-  "c-waste": "recycling points and bins from openstreetmap via openfreemap",
-  "c-air": "cams global air quality via open-meteo · roads from openstreetmap via openfreemap",
-  "c-near": "every point of interest in openstreetmap via openfreemap · after mit city science's cityscope indicators",
+  "c-street": "streets from openstreetmap via openfreemap · angular segment analysis after hillier and iida (2005), normalised after hillier, yang and turner (2012)",
+  "c-food": "land cover, roofs and shops from openstreetmap via openfreemap · srtm elevation · yields and diet after icmr-nin",
+  "c-water": "srtm elevation via the tilezen terrain tiles on aws open data · era5 rainfall, 2019–23 · drains, lakes and land cover from openstreetmap · after ian mcharg, design with nature (1969)",
+  "c-near": "every point of interest in openstreetmap via openfreemap",
 };
 for (const id of ["p-heat", "p-cool", "p-sun", "p-water"]) PLACE_SRC[id] += " · the grid from openstreetmap via openfreemap";
 PLACE_SRC["p-crop"] += " · land cover from openstreetmap via openfreemap";
@@ -55,6 +59,7 @@ async function start() {
   // the explorer fills the window under the site's header: tell the CSS how tall that header is
   const head = document.querySelector(".head"), fit = () => root.style.setProperty("--cc-head", `${head ? head.offsetHeight : 0}px`);
   fit(); addEventListener("resize", fit);
+  if (/^https?:/.test(root.dataset.ai || "")) setPopBase(new URL(root.dataset.ai).origin);   // the worker also passes Meta's population grid
   const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(`${r.status} for ${u}`); return r.json(); });
   const [atlas, geo] = await Promise.all([get(root.dataset.atlas), get(root.dataset.geo)]);
   const C = atlas.countries, T = atlas.tools, L = makeLayers(atlas);
@@ -74,6 +79,8 @@ async function start() {
     P: { warm: 0, ssp: "SSP2-4.5", year: 2100, ndvi: false, ndviYear: 2022, when: "now", dim: "all" },
     place: parsePlace(q.get("p")) || DEFAULT_PLACE,
   };
+  const gq = +q.get("g");
+  if (gq >= SIZES.min && gq <= SIZES.max && gq % SIZES.step === 0) GRID.n = gq;
   const household = { people: 4, perCapita: 130, roof: 100, roofType: "Tile (clay/concrete)", garden: 20,
     gw: "Simple diversion → garden", kwh: 250, land: 50, autonomy: 2 };
   function parsePlace(s) {
@@ -86,6 +93,7 @@ async function start() {
     const u = new URL(location.href);
     u.searchParams.set("c", S.iso);
     if (S.place !== DEFAULT_PLACE) u.searchParams.set("p", `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)},${S.place.name}`);
+    if (GRID.n !== 32) u.searchParams.set("g", GRID.n); else u.searchParams.delete("g");
     if (S.ch) u.hash = S.ch !== "top" ? S.ch : "";   // before the first chapter is active, keep the deep link the page opened with
     history.replaceState(null, "", u);
   }
@@ -116,6 +124,22 @@ async function start() {
     "circle-stroke-color": k.paper, "circle-stroke-width": 1.5 } });
 
   const tiles = new TileGrid(map, map.getContainer());
+  // McHarg's sheets: the (layers) list over the map, for every chapter with a grid
+  const sheetsEl = root.querySelector("[data-layers]");
+  tiles.onsheets = () => {
+    const list = tiles.spec ? tiles.sheetList() : [];
+    sheetsEl.hidden = !list.length;
+    sheetsEl.querySelector("ul").innerHTML = list.map((x) => `<li><label><input type="checkbox" data-sheet="${x.id}"${x.on ? " checked" : ""}>
+      ${esc(x.name)}${x.loading ? ` <span>(reading ${x.needs === "ground" ? "the ground" : "the streets"} …)</span>` : ""}</label></li>`).join("");
+  };
+  sheetsEl.addEventListener("change", (e) => { const id = e.target.dataset.sheet; if (id) tiles.toggle(id); });
+  // the square, dragged or resized: the place moves to its centre and every chapter reads it again
+  tiles.onmove = ({ lon, lat, n, size, moved }) => {
+    if (size === GRID.size) GRID.n = n;
+    if (!moved) { setPlace({ ...S.place }); return; }   // only resized: the same place, a bigger or smaller square
+    setPlace({ lat, lon, name: `${Math.abs(lat).toFixed(3)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lon).toFixed(3)}° ${lon >= 0 ? "E" : "W"}`,
+      admin1: S.place.admin1, country: S.place.country, moved: true });
+  };
   const pin = document.createElement("div");
   pin.className = "cc-pin"; pin.setAttribute("aria-hidden", "true");
   const marker = new maplibregl.Marker({ element: pin }).setLngLat([S.place.lon, S.place.lat]);
@@ -184,6 +208,7 @@ async function start() {
   // every country chapter's readout is drawn up front and redrawn on a change, never on arrival: a
   // readout that appeared as its chapter scrolled in would push the chapters below it out of place
   function detail(id) {
+    if (!byId[id]) return;   // a layer kept for the all-at-once score, with no chapter of its own
     const l = L[id], el = byId[id].querySelector("[data-body]"), c = C[S.iso], values = valuesOf(id);
     const html = c && l.detail(c, S.P, { rank: rankOf(id, values), all: L, P: S.P });
     el.innerHTML = `<p class="cc-who">${esc(c ? c.n : S.iso)}</p>`
@@ -198,6 +223,7 @@ async function start() {
     });
   }
   function controls(id) {
+    if (!byId[id]) return;
     const l = L[id], el = byId[id].querySelector("[data-ctl]");
     el.innerHTML = l.controls ? l.controls(S.P) : "";
   }
@@ -228,11 +254,18 @@ async function start() {
   const rendered = {}, pts = {}, grids = {};
   const showGrid = (spec) => {
     tiles.set(spec); root.querySelector("[data-legend]").innerHTML = spec.legend || "";
+    // a place reached by dragging the square takes the name of the neighbourhood nearest its middle
+    const G = spec.G;
+    if (S.place.moved && G?.places?.length && G.size === GRID.size) {
+      const mid = G.n / 2, near = [...G.places].sort((a, b) => Math.hypot(a.c - mid, a.r - mid) - Math.hypot(b.c - mid, b.r - mid))[0];
+      S.place = { ...S.place, name: `near ${near.name}`, moved: false };
+      showPlaceName(); writeUrl();
+    }
     // the legend sits off the grid: reframe when it changes height, not on every redraw of the same key
-    const g = S.ch === "home" ? GRID : steps[S.ch]?.grid;
+    const g = steps[S.ch]?.grid;
     if (g && root.querySelector("[data-legend]").offsetHeight !== fitLg) fitGrid(g, 600);
   };
-  const placeKey = () => `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)}`;
+  const placeKey = () => `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)},${GRID.n}`;
   const nameEl = root.querySelector("[data-place-name]");
   const showPlaceName = () => { nameEl.textContent = placeName(); };
   showPlaceName();
@@ -243,11 +276,9 @@ async function start() {
     Object.keys(pts).forEach((id) => delete pts[id]);
     Object.keys(grids).forEach((id) => delete grids[id]);
     tiles.clear(); root.querySelector("[data-legend]").innerHTML = "";
-    homeGrid = null;
     writeUrl();
     const el = byId[S.ch], kind = el?.dataset.kind;
     if (kind === "place" || kind === "city") { setPoints([]); view(S.ch); runStep(S.ch); }
-    else if (kind === "home") { view("home"); runHome(); }
   }
   const fly = (zoom) => map.flyTo({ center: [S.place.lon, S.place.lat], zoom, duration: 1400, essential: true });
   // the legend never covers the grid: on phones it sits over the top of the map and the grid is framed
@@ -262,13 +293,13 @@ async function start() {
   };
   // a chapter with a grid frames the grid; the rest fly to their zoom
   const view = (id) => {
-    const g = id === "home" ? GRID : steps[id]?.grid;
+    const g = steps[id]?.grid;
     if (g) fitGrid(g, 1400);
     else fly(steps[id]?.zoom || 10);
   };
   function ctxFor(id) {
     const key = placeKey();
-    return { T, ai, household, placeName, placeHeat: () => placeHeat(S.place),
+    return { T, ai, household, placeName, placeHeat: () => placeHeat(S.place), sheet: (id) => tiles.on(id),
       points: (arr) => { pts[id] = arr; if (S.ch === id) setPoints(arr); },
       grid: (spec) => { if (key !== placeKey()) return; grids[id] = spec; if (S.ch === id) showGrid(spec); } };
   }
@@ -282,24 +313,6 @@ async function start() {
       if (rendered[id] === key) { delete rendered[id]; body.innerHTML = failed(`The service for ${esc(placeName())}`); }
     });
   }
-  let homeDone = false, homeGrid = null;
-  function runHome() {
-    // the household's map: the daily needs within a short walk of every cell around it
-    if (homeGrid !== placeKey()) {
-      homeGrid = placeKey();
-      const c = ctxFor("home");
-      cityGrid(S.place, GRID).then((G) => {
-        const near = nearCount(G), need = needs(G);
-        c.grid(gridLayer({ G, vals: near, mask: (i) => G.water[i] < .6 && G.foot[i] > 0, title: `around the household: daily needs within ${NEAR} minutes on foot`,
-          unit: "of eight", good: "high", weigh: true, breaks: [3, 5, 7, 8], labels: ["0–2", "3–4", "5–6", "7", "all 8"],
-          tip: (i) => `<b>${near[i]} of 8</b>${need.some(([, m]) => m[i] > NEAR) ? "<br>missing: " + esc(need.filter(([, m]) => m[i] > NEAR).map(([x]) => x).join(", ")) : ""}` }));
-      }).catch((e) => { console.warn("grid", e); homeGrid = null; });
-    } else if (grids.home) showGrid(grids.home);
-    if (homeDone) return;
-    homeDone = true;
-    renderHome(byId.home.querySelector("[data-body]"), ctxFor("home")).catch((e) => { console.error(e); homeDone = false; });
-  }
-
   // the search: Open-Meteo's geocoder, as every place tool used
   const form = root.querySelector("[data-place-form]"), input = form.querySelector("[data-place-input]"), hits = form.querySelector("[data-place-hits]");
   let found = [], timer;
@@ -334,6 +347,7 @@ async function start() {
     if (id === S.ch || !byId[id]) return;
     const prev = byId[S.ch]?.dataset.kind, el = byId[id], kind = el.dataset.kind;
     S.ch = id;
+    tiles.chapter();
     root.dataset.kind = kind;
     root.querySelectorAll("[data-go]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.go === id));
     const idx = root.querySelector("[data-index]"), cur = idx.querySelector("[aria-current]");   // phones: the index is one row that scrolls
@@ -354,7 +368,7 @@ async function start() {
       setPoints(pts[id] || []);
       marker.setLngLat([S.place.lon, S.place.lat]).addTo(map);
       view(id);
-      if (kind === "home") runHome(); else runStep(id);
+      runStep(id);
     } else {   // the opening and the method: the last layer, all at once, as the cover
       marker.remove();
       const keep = S.P.dim; S.P.dim = "all"; paint("poly"); S.P.dim = keep;
@@ -438,6 +452,7 @@ async function start() {
   map.on("mousemove", (e) => {
     if (!local(byId[S.ch]?.dataset.kind)) return;
     const spec = tiles.spec, i = tiles.cellAt(e.point);
+    map.getCanvas().style.cursor = spec?.click && i >= 0 ? "crosshair" : "";
     if (!spec || i < 0 || !spec.tip || !spec.cell(i)) { tip.hidden = true; tiles.hover(-1); return; }
     tiles.hover(i);
     showTip(e, spec.tip(i));
@@ -447,6 +462,9 @@ async function start() {
   map.on("click", (e) => {
     const kind = byId[S.ch]?.dataset.kind;
     if (local(kind)) {
+      // a chapter with something picked to put on the grid takes the click; otherwise it moves the place
+      const i = tiles.spec?.click ? tiles.cellAt(e.point) : -1;
+      if (i >= 0) { tiles.spec.click(i); return; }
       const f = map.queryRenderedFeatures(e.point, { layers: ["cc-fill"] })[0];
       const { lat, lng } = e.lngLat;
       setPlace({ lat, lon: lng, name: `${Math.abs(lat).toFixed(2)}° ${lat >= 0 ? "N" : "S"}, ${Math.abs(lng).toFixed(2)}° ${lng >= 0 ? "E" : "W"}`,
@@ -470,9 +488,9 @@ async function start() {
     // a grid's colours were fixed when it was made: forget them and remake the one on screen
     Object.keys(grids).forEach((id) => delete grids[id]);
     Object.keys(rendered).forEach((id) => delete rendered[id]);
-    homeGrid = null; tiles.clear();
+    tiles.clear();
     const kind = byId[S.ch]?.dataset.kind;
-    if (kind === "place" || kind === "city") runStep(S.ch); else if (kind === "home") runHome();
+    if (kind === "place" || kind === "city") runStep(S.ch);
   });
   root.querySelector("[data-built]").textContent = `(data rebuilt ${atlas.built} from the sixteen apps' own tables and formulas)`;
 }

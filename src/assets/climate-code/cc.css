@@ -98,6 +98,17 @@ body:has(.cc){overflow:hidden;}
 .cc-pills button{all:unset;cursor:pointer;font:500 9.62px/1.7 var(--mono);letter-spacing:.04em;color:var(--mute);}
 .cc-pills button:hover{color:var(--ink);}
 .cc-pills button[aria-pressed="true"]{color:var(--ink);text-decoration:underline;text-underline-offset:3px;}
+.cc-whatif{margin:26px 0 0;padding-top:14px;border-top:1px solid var(--line);}
+.cc-ask__q{margin:0 0 2px;font-size:19.25px;line-height:1.25;letter-spacing:-.01em;color:var(--ink);}
+.cc-ask{list-style:none;display:grid;gap:2px;margin:6px 0 10px;padding:0;}
+.cc-ask button{all:unset;box-sizing:border-box;display:grid;grid-template-columns:150px 1fr 40px;align-items:center;gap:10px;width:100%;padding:3px 0;cursor:pointer;font-size:12.25px;color:var(--ink-soft);}
+.cc-ask button:hover,.cc-ask button:focus-visible{color:var(--ink);}
+.cc-ask button:focus-visible{outline:1px solid var(--ink);outline-offset:2px;}
+.cc-ask__t{height:6px;background:var(--line-soft,color-mix(in srgb,var(--line) 45%,transparent));}
+.cc-ask__t i{display:block;height:100%;background:var(--ink);}
+.cc-ask__v{text-align:right;font:500 11.38px var(--mono);font-variant-numeric:tabular-nums;}
+.cc-ask__a{margin:4px 0 12px;font-size:13.12px;line-height:1.5;color:var(--ink);}
+.cc-whatif:empty{display:none;}
 
 .cc-all{margin-top:20px;}
 .cc-all summary{cursor:pointer;font:500 9.62px var(--mono);letter-spacing:.04em;color:var(--mute);}
@@ -127,8 +138,6 @@ body:has(.cc){overflow:hidden;}
 .cc-range{flex-direction:row;align-items:center;gap:10px;margin:16px 0 4px;}
 .cc-range input{flex:1;accent-color:var(--cc-mark);}
 .cc-range output{min-width:2ch;font:400 12.25px var(--sans);color:var(--ink);}
-.cc-checks{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;font-size:11.38px;color:var(--ink-soft);}
-.cc-checks input,.cc-audit input{accent-color:var(--ink);}
 
 .cc-ai{margin-top:22px;padding-top:14px;border-top:1px dashed var(--line);}
 .cc-ai__go{all:unset;cursor:pointer;font:500 9.62px var(--mono);letter-spacing:.04em;color:var(--accent);}
@@ -137,14 +146,10 @@ body:has(.cc){overflow:hidden;}
 .cc-ai__out p{margin:8px 0;font-size:13px;line-height:1.55;color:var(--ink-2);}
 .cc-phase{margin-top:6px;}
 
-.cc-audit fieldset{margin:0 0 20px;padding:0;border:0;}
-.cc-audit legend{margin-bottom:4px;font:500 9.62px var(--mono);letter-spacing:.04em;color:var(--ink);}
-.cc-audit legend span{color:var(--faint-2);}
-.cc-audit__q{margin:10px 0 5px;font-size:12.25px;line-height:1.4;color:var(--ink);}
-.cc-audit__opts{display:grid;gap:3px;}
-.cc-audit__opts label{font-size:11.38px;line-height:1.35;color:var(--ink-soft);cursor:pointer;}
-.cc-audit__out{position:sticky;bottom:0;padding:14px 0 6px;background:var(--paper);border-top:1px solid var(--line);}
-.cc-plan{margin-top:10px;}
+
+/* the five parts of the story, named where each begins */
+.cc-ch__act{margin:0 0 28px;padding-top:10px;border-top:1px solid var(--ink);font:500 9.62px/1.5 var(--mono);letter-spacing:.06em;color:var(--ink);}
+.cc-sub--h{margin-top:30px;color:var(--ink-soft);}
 
 /* ---------- the map ---------- */
 .cc__map{position:relative;min-height:0;background:var(--paper);}
@@ -162,6 +167,28 @@ body:has(.cc){overflow:hidden;}
 .cc-lg__nd i{display:inline-block;width:10px;height:10px;}
 /* the city grids: a square tile a cell, CityScope's table (tiles.js) */
 .cc-tiles{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
+/* the square's handles: (move) on its top edge, a small ink square on its corner */
+.cc-grip{all:unset;position:absolute;left:0;top:0;z-index:3;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;}
+.cc-grip:active{cursor:grabbing;}
+.cc-grip:focus-visible{outline:1px solid var(--ink);outline-offset:2px;}
+.cc-grip[hidden]{display:none;}
+.cc-grip--move{padding:2px 6px 2px 0;font:500 9.62px/16px var(--mono);letter-spacing:.03em;color:var(--mute);white-space:nowrap;}
+.cc-grip--move:hover{color:var(--ink);}
+.cc-grip--size{width:16px;height:16px;cursor:nwse-resize;}
+.cc-grip--size::after{content:"";position:absolute;inset:4px;background:var(--ink);box-shadow:0 0 0 2px var(--paper);}
+/* McHarg's sheets: the (layers) list, top left of the map */
+.cc-layers{position:absolute;left:16px;top:16px;z-index:2;max-width:240px;padding:6px 10px;font:500 9.62px/1.6 var(--mono);letter-spacing:.03em;color:var(--ink-soft);
+  background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);border:1px solid var(--line);}
+.cc-layers[hidden]{display:none;}
+.cc-layers summary{cursor:pointer;color:var(--ink);list-style:none;}
+.cc-layers summary::-webkit-details-marker{display:none;}
+.cc-layers ul{list-style:none;margin:4px 0 0;padding:0;}
+.cc-layers label{display:flex;align-items:baseline;gap:6px;cursor:pointer;}
+.cc-layers input{margin:0;accent-color:var(--ink);transform:translateY(1px);}
+.cc-layers span{color:var(--faint-2);}
+.cc-sk--line{margin-top:0;}
+.cc-sk--line i{width:18px;background:var(--ink);}
+.cc-lg__s{margin:6px 0 2px;padding-top:5px;border-top:1px dashed var(--line);font:500 8.75px/1.5 var(--mono);letter-spacing:.03em;color:var(--ink-soft);}
 .cc-sk{list-style:none;display:flex;flex-wrap:wrap;gap:4px 12px;margin:2px 0 4px;font:500 8.75px/1.5 var(--mono);letter-spacing:.03em;color:var(--ink-soft);}
 .cc-sk li{display:flex;align-items:center;gap:5px;}
 .cc-sk i{display:inline-block;width:10px;height:10px;}
@@ -192,9 +219,11 @@ body:has(.cc){overflow:hidden;}
   .cc-ch{padding:32px 16px 48px;min-height:64vh;scroll-margin-top:calc(var(--cc-head,52px) + 44vh + 72px);}
   .cc-ch__title{font-size:34px;}
   .cc__legend{top:8px;bottom:auto;left:8px;width:calc(100% - 64px);padding:6px 8px 5px;}
-  .cc-lg__ticks,.cc-lg__nd,.cc-lg__w{display:none;}
+  .cc-lg__ticks,.cc-lg__nd,.cc-lg__w,.cc-sk--line{display:none;}
+  .cc-layers{top:auto;bottom:8px;left:8px;max-width:calc(100% - 16px);}
+  .cc-layers:not([open]){padding:3px 8px;}
   .cc__legend .cc-lg__t{margin-bottom:3px;font-size:10.5px;}
   .cc__legend .cc-sk{display:inline-flex;gap:2px 8px;margin:0 8px 0 0;vertical-align:top;}
   .cc__legend .cc-sk + .cc-sk{padding-top:0;border-top:0;}
-  .cc-form,.cc-checks{grid-template-columns:1fr;}
+  .cc-form{grid-template-columns:1fr;}
 }
