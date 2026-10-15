@@ -4,14 +4,14 @@
    there reaches here on the next build. Every step is `render(el, place, ctx)`; ctx carries the atlas
    tools (T), the map (ctx.points / ctx.fly) and the AI helper. */
 import { fmt, big, usd, esc, lc, ok, stat, dl, bars, columns, pills, note, loading, failed, CAT } from "./ui.js";
-import { cityGrid, walkMinutes } from "./grid.js";
+import { cityGrid, walkMinutes, GRID } from "./grid.js";
 import { gridLayer, swatchKey } from "./tiles.js";
 
 /* ── the map for each step: a tile grid over the place (grid.js, tiles.js) ─────────────────────── */
-const GRID = { n: 32, size: 150 }, REGION = { n: 36, size: 1000, z: 11 };
+const REGION = { n: 36, size: 1000, z: 11 };
 const sumOf = (a) => a.reduce((s, x) => s + x, 0);
 /* heat-island proxy: built and paved ground warms, green and water cool; 50 is a cell of neither */
-const heatIndex = (G, i) => Math.max(0, Math.min(100, 50 + 50 * (Math.min(1, G.cover[i] + G.paved[i]) - G.green[i] - G.water[i])));
+export const heatIndex = (G, i) => Math.max(0, Math.min(100, 50 + 50 * (Math.min(1, G.cover[i] + G.paved[i]) - G.green[i] - G.water[i])));
 const roofKwh = (G, i, ghi) => G.roof[i] * .6 * ghi * 365 * .2 * .8;   // city.js's arithmetic: 60% usable, 20% panels, PR 0.8
 /* draw the grid when it arrives; a map that fails leaves the chapter's numbers standing */
 const mapIt = (ctx, p, opts, make) => cityGrid(p, opts).then((G) => ctx.grid(make(G))).catch((e) => console.warn("grid", e));
@@ -313,7 +313,7 @@ export const steps = {
       mapIt(ctx, p, GRID, (G) => {
         const v = Float32Array.from({ length: G.n * G.n }, (_, i) => roofKwh(G, i, g.annual) / 1000);
         return gridLayer({ G, vals: v, mask: (i) => G.roof[i] > 0, title: "what every roof in the cell could make", unit: "MWh a year",
-          breaks: [100, 250, 500, 1000], labels: ["under 100", "100–250", "250–500", "500–1,000", "over 1,000"],
+          breaks: [500, 1000, 1500, 2000], labels: ["under 500", "500–1,000", "1,000–1,500", "1,500–2,000", "over 2,000"],
           tip: (i) => `<b>${fmt(v[i])} MWh a year</b><br>from ${fmt(G.roof[i])} m² of roof` });
       });
     },

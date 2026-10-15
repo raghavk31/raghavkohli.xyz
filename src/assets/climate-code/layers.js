@@ -169,7 +169,8 @@ export function makeLayers(atlas) {
       detail(c, P, x) {
         const p = c.poly; if (!p) return null;
         const res = T.d10.RESILIENCE_BANDS.find((b) => p.s >= b[0] && p.s <= b[1]);
-        const every = ["grid", "sun", "heat", "water", "food", "coast", "forest", "air", "move"].map((k) => {
+        // the layers still told as chapters, each by its number; the others stay in the score but not in the list
+        const every = ["grid", "sun", "heat", "water", "food", "coast", "forest", "air", "move"].filter((k) => x.all[k].n).map((k) => {
           const l = x.all[k], v = l.get(c, x.P);
           return [`(${l.n}) ${l.chapter}`, ok(v) ? `${fmt(v, l.d || 0)} · ${nameOf(l, v, x.P)}` : "no data"];
         });

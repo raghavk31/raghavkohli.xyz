@@ -40,15 +40,16 @@ layout: base.njk
       <p class="cc-ch__text">{{ C.lead }}</p>
       <dl class="cc-meta">
         <div><dt>(role)</dt><dd>{{ role }}</dd></div>
-        <div><dt>(method)</dt><dd>sixteen streamlit tools · a cityscope grid · one static explorer</dd></div>
-        <div><dt>(data)</dt><dd>world bank · nasa · open-meteo · copernicus · openstreetmap · ipcc ar6</dd></div>
+        <div><dt>(method)</dt><dd>sixteen streamlit tools · a 150 m city grid · one static explorer</dd></div>
+        <div><dt>(data)</dt><dd>world bank · nasa · open-meteo · copernicus · openstreetmap · srtm · meta hrsl · ipcc ar6</dd></div>
         <div><dt>(source)</dt><dd><a href="https://github.com/raghavk31/resilience-stack" target="_blank" rel="noopener">resilience-stack &rarr;</a></dd></div>
       </dl>
       <p class="cc-ch__how">{{ C.how }} <span class="cc-ch__down" aria-hidden="true">&darr;</span></p>
     </header>
 
     {%- for c in C.chapters %}
-    <section class="cc-ch cc-ch--{{ c.kind }}" id="{{ c.id }}" data-ch="{{ c.id }}" data-kind="{{ c.kind }}">
+    <section class="cc-ch cc-ch--{{ c.kind }}{% if c.act %} cc-ch--act{% endif %}" id="{{ c.id }}" data-ch="{{ c.id }}" data-kind="{{ c.kind }}">
+      {%- if c.act %}<p class="cc-ch__act">({{ c.act }})</p>{% endif %}
       <p class="cc-ch__lbl">({{ c.n }}) {{ c.name }} <span>· {% if c.day %}day {{ c.day }}{% else %}{{ c.tag }}{% endif %}</span></p>
       <h2 class="cc-ch__q">{{ c.q }}</h2>
       <p class="cc-ch__text">{{ c.text }}</p>
@@ -60,7 +61,7 @@ layout: base.njk
 
     <footer class="cc-ch cc-ch--end" data-ch="end" data-kind="end">
       <p class="cc-ch__lbl">(method)</p>
-      <p class="cc-ch__text">Each chapter is one of the sixteen tools of the Resilience Stack, built as a Streamlit app in May and June 2026. The country layers are rebuilt ahead of time by <code>explorer/build_atlas.py</code>, which reads each day's own tables and repeats its own formula; the city, place and household chapters run in your browser against the same live services the apps used. The city grid reads OpenStreetMap from OpenFreeMap's vector tiles, the same tiles the basemap draws, and borrows its frame from MIT City Science's CityScope. Every city layer is drawn as CityScope draws its table: one square tile a cell. The AI notes are written by Claude through OpenRouter.</p>
+      <p class="cc-ch__text">Each chapter is one of the sixteen tools of the Resilience Stack, built as a Streamlit app in May and June 2026. The country layers are rebuilt ahead of time by <code>explorer/build_atlas.py</code>, which reads each day's own tables and repeats its own formula; the city and place chapters run in your browser against the same live services the apps used. The city grid reads OpenStreetMap from OpenFreeMap's vector tiles, the same tiles the basemap draws. Every city layer is drawn one square tile a cell. Over it lie sheets of the city's systems, stacked as Ian McHarg stacked them in Design with Nature: the ground and its valleys, the water, the streets as space syntax reads them, roads and rail. The square moves and resizes, after Morphocode's Explorer. The AI notes are written by Claude through OpenRouter.</p>
       <p class="cc-ch__src" data-built></p>
       <noscript><p class="cc-ch__text">The map and the tools on this page are drawn in the browser and need JavaScript.</p></noscript>
     </footer>
@@ -68,6 +69,7 @@ layout: base.njk
 
   <div class="cc__map" data-map role="region" aria-label="map">
     <div class="cc__legend" data-legend aria-live="polite"></div>
+    <details class="cc-layers" data-layers hidden><summary>(layers)</summary><ul></ul></details>
     <div class="cc__tip" data-tip hidden></div>
   </div>
 </div>

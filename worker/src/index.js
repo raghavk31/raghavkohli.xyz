@@ -14,6 +14,7 @@
    POST   /pins  {body?, images?, anchor, x, y, w}   a new note                  - X-Owner-Key
    PUT    /pins/<id>  {any of those, z?}    move or edit one                          - X-Owner-Key
    DELETE /pins/<id>                        its images go with it                     - X-Owner-Key
+   GET    /hrsl/<file>.tif                  Climate Code: a byte range of Meta's population grid, with CORS (hrsl.js)
    Every write takes the X-Owner-Key header and nothing else; there is no login and no public path.
    Until 2026-09-25 anyone could post, guarded by a Turnstile token and a per-IP hourly limit; both
    went with the public path, so reopening the wall means bringing them back, not relaxing a check.
@@ -21,6 +22,7 @@
    enabled on the account); the browser downscales them first and MAX_IMAGE caps what the worker takes. */
 
 import { climateAI } from "./climate-ai.js";
+import { hrsl } from "./hrsl.js";
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_IMAGES = 6;
@@ -44,6 +46,8 @@ export default {
 
     // Climate Code's AI notes (/work/climate-code/); the route answers its own OPTIONS
     if (url.pathname === "/climate/ai") return climateAI(req, env, cors);
+    // Climate Code's population grid: Meta's HRSL, read a window at a time (hrsl.js)
+    if (url.pathname.startsWith("/hrsl/")) return hrsl(req, url);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
     const m = url.pathname.match(/^\/(thoughts|layout|images|pins)(?:\/([A-Za-z0-9_-]+))?\/?$/);
     if (!m) return json({ error: "not found" }, 404);
