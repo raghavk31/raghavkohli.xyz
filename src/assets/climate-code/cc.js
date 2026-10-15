@@ -228,7 +228,9 @@ async function start() {
   const rendered = {}, pts = {}, grids = {};
   const showGrid = (spec) => {
     tiles.set(spec); root.querySelector("[data-legend]").innerHTML = spec.legend || "";
-    if (mq.matches) { const g = S.ch === "home" ? GRID : steps[S.ch]?.grid; if (g) fitGrid(g, 600); }   // reframe under the legend
+    // the legend sits off the grid: reframe when it changes height, not on every redraw of the same key
+    const g = S.ch === "home" ? GRID : steps[S.ch]?.grid;
+    if (g && root.querySelector("[data-legend]").offsetHeight !== fitLg) fitGrid(g, 600);
   };
   const placeKey = () => `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)}`;
   const nameEl = root.querySelector("[data-place-name]");
@@ -248,11 +250,15 @@ async function start() {
     else if (kind === "home") { view("home"); runHome(); }
   }
   const fly = (zoom) => map.flyTo({ center: [S.place.lon, S.place.lat], zoom, duration: 1400, essential: true });
-  // on phones the legend sits over the top of the map, so the grid is framed in the space below it
+  // the legend never covers the grid: on phones it sits over the top of the map and the grid is framed
+  // below it; on wider screens it sits at the bottom left and the grid is framed above it
+  let fitLg = -1;
   const fitGrid = (g, duration) => {
-    const lg = root.querySelector("[data-legend]");
-    const top = lg.offsetHeight ? lg.offsetTop + lg.offsetHeight + 8 : 12;
-    map.fitBounds(gridBounds(S.place, g), { padding: mq.matches ? { top, bottom: 12, left: 12, right: 12 } : 28, duration, essential: true });
+    const lg = root.querySelector("[data-legend]"), h = lg.offsetHeight;
+    fitLg = h;
+    const padding = mq.matches ? { top: h ? lg.offsetTop + h + 20 : 12, bottom: 12, left: 12, right: 12 }
+      : { top: 28, left: 28, right: 28, bottom: h ? h + 32 : 28 };
+    map.fitBounds(gridBounds(S.place, g), { padding, duration, essential: true });
   };
   // a chapter with a grid frames the grid; the rest fly to their zoom
   const view = (id) => {
@@ -285,7 +291,7 @@ async function start() {
       cityGrid(S.place, GRID).then((G) => {
         const near = nearCount(G), need = needs(G);
         c.grid(gridLayer({ G, vals: near, mask: (i) => G.water[i] < .6 && G.foot[i] > 0, title: `around the household: daily needs within ${NEAR} minutes on foot`,
-          unit: "of eight", breaks: [3, 5, 7, 8], labels: ["0–2", "3–4", "5–6", "7", "all 8"],
+          unit: "of eight", good: "high", weigh: true, breaks: [3, 5, 7, 8], labels: ["0–2", "3–4", "5–6", "7", "all 8"],
           tip: (i) => `<b>${near[i]} of 8</b>${need.some(([, m]) => m[i] > NEAR) ? "<br>missing: " + esc(need.filter(([, m]) => m[i] > NEAR).map(([x]) => x).join(", ")) : ""}` }));
       }).catch((e) => { console.warn("grid", e); homeGrid = null; });
     } else if (grids.home) showGrid(grids.home);
