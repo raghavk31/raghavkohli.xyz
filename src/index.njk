@@ -59,6 +59,48 @@ title: "Raghav Kohli · invisible systems, made visible"
 </figure>
 {% endmacro %}
 
+{#- A set (src/_data/sets.js): one card for several projects. Its frame steps through the plans'
+    thumbs (the covers' crossfade in main.js), its topics are all of theirs, and a click opens the tray
+    of its plans beside it (sets.js). No href to a page of its own: #set-<id> is the tray, which
+    without JS sits as a plain list at the foot of the grid. -#}
+{% macro setcard(title, s, kids, num) %}
+{%- set sz = (s.card or '') | upper -%}
+{%- set w = 1 if sz == 'L' else (3 if sz == 'S' else 2) -%}
+{%- set span = 6 if w == 1 else (4 if w == 2 else 3) -%}
+{%- set k0 = kids[0].data -%}
+{%- set r = (k0.thumbw / k0.thumbh) if (k0.thumbw and k0.thumbh) else 1.333 -%}
+{%- set car = "0.8" if r < 0.9 else ("1" if r <= 1.1 else (r | round(3))) -%}
+{%- set topics = [] -%}
+{%- for k in kids %}{% for t in (k.data.topics or []) %}{% if not (t in topics) %}{% set topics = (topics.push(t), topics) %}{% endif %}{% endfor %}{% endfor -%}
+<figure class="card card--set w{{ w }}" data-set="{{ s.id }}" data-layout-id="home-set-{{ s.id }}"
+        data-kids="{% for k in kids %}home-{{ k.url | replace('/work/', '') | replace('/', '') }}{% if not loop.last %} {% endif %}{% endfor %}"
+        data-topics="{{ topics | join(' ') }}" data-weight="{{ w }}"
+        style="--span:{{ span }};--car:{{ car }};--cpad:{{ 31.5 if w == 1 else (26.25 if w == 2 else 19.25) }}px;--cq:21px;">
+  <a class="card__click" href="#set-{{ s.id }}" aria-controls="set-{{ s.id }}" aria-expanded="false" aria-label="{{ title }}, {{ kids.length }} plans">
+    {%- if s.snippet %}
+    <div class="card__note right" style="--r:{{ 3 if num % 2 else -2.5 }}deg">
+      <p>{{ s.snippet }}</p>
+      <span class="note__lbl">(click to open the set)</span>
+    </div>
+    {%- endif %}
+    <div class="card__frame">
+      {% for k in kids %}{% if k.data.thumb %}<img {% if not loop.first %}class="card__alt contain" data-i="{{ loop.index0 }}"{% else %}class="contain"{% endif %} src="{{ k.data.thumb }}" alt="{{ k.data.title if loop.first else '' }}" loading="lazy" />{% endif %}{% endfor %}
+      <div class="card__fig">({{ kids.length }} plans)</div>
+      <div class="card__overlay">
+        <span class="card__qlabel">(research question)</span>
+        <p class="card__q">{{ s.question }}</p>
+        <span class="card__view" data-set-view>(open the {{ kids.length }} plans &rarr;)</span>
+      </div>
+    </div>
+    <figcaption>
+      <span class="n">{{ num }}</span>
+      <h3 class="name">{{ title }}</h3>
+      <span class="desc">{{ s.desc }}{% if s.count %}<span class="set__count">({{ s.count }})</span>{% endif %}</span>
+    </figcaption>
+  </a>
+</figure>
+{% endmacro %}
+
 {#- A group break: a 12-column hairline with the (label) under it. Hidden while a chip filter is
     active (main.js adds .filtering to the grid). -#}
 {% macro brk(label) %}
@@ -82,7 +124,9 @@ title: "Raghav Kohli · invisible systems, made visible"
       </div>
       <dl class="work__index">
         {%- for g in groups %}
-        <div><dt>{{ g[0] }}</dt><dd>{{ "0" + (g[1].length | string) if g[1].length < 10 else g[1].length }}</dd></div>
+        {%- set c = 0 -%}
+        {%- for t in g[1] %}{% set c = c + (sets[t].plans.length if sets[t] else 1) %}{% endfor %}
+        <div><dt>{{ g[0] }}</dt><dd>{{ "0" + (c | string) if c < 10 else c }}</dd></div>
         {%- endfor %}
       </dl>
     </div>
@@ -123,16 +167,41 @@ title: "Raghav Kohli · invisible systems, made visible"
         width and a size is read against its neighbours. main.js repacks the same way when filtering. -#}
     {%- set fill = 0 -%}
     {%- for title in g[1] %}
+      {%- set st = sets[title] -%}
       {%- set p = P | find("title", title) -%}
-      {%- set sz = (p.data.card or '') | upper -%}
+      {%- set sz = ((st.card if st else p.data.card) or '') | upper -%}
       {%- set span = 6 if sz == 'L' else (3 if sz == 'S' else 4) -%}
       {%- if loop.first %}<div class="work__row">{% elif fill + span > 12 %}</div><div class="work__row">{% set fill = 0 %}{% endif -%}
       {%- set fill = fill + span -%}
       {%- set n = n + 1 -%}
+      {%- if st %}
+      {%- set kids = [] -%}
+      {%- for t in st.plans %}{% set kids = (kids.push(P | find("title", t)), kids) %}{% endfor -%}
+      {{ setcard(title, st, kids, ("0" + n) if n < 10 else n) }}
+      {%- else %}
       {{ card(p, ("0" + n) if n < 10 else n) }}
+      {%- endif %}
       {%- if loop.last %}</div>{% endif -%}
     {%- endfor %}
     {%- endfor %}
+
+    {#- each set's tray: its plans as ordinary cards, numbered after the set's own (03a, 03b...). Out
+        of the rows, so the filter and the free layout never move them; sets.js lays it beside the set. -#}
+    {%- set n = 0 -%}
+    {%- for g in groups %}{% for title in g[1] %}
+    {%- set n = n + 1 -%}
+    {%- set st = sets[title] -%}
+    {%- if st %}
+    <div class="set__tray" id="set-{{ st.id }}" data-tray="{{ st.id }}" aria-label="{{ title | lower }}">
+      <div class="set__head"><span>({{ title | lower }}) one method, {{ st.plans.length }} plans</span><button type="button" class="set__close" data-set-close>(close &times;)</button></div>
+      <div class="set__grid">
+        {%- for t in st.plans %}
+        {{ card(P | find("title", t), (("0" + n) if n < 10 else n) + "abcdefgh"[loop.index0]) }}
+        {%- endfor %}
+      </div>
+    </div>
+    {%- endif %}
+    {%- endfor %}{% endfor %}
   </div>
 </section>
 

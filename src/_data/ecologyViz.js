@@ -17,12 +17,13 @@ const path = require("path");
 const matter = require("gray-matter");
 const eco = require("./ecology.js");
 const groups = require("./groups.js");
+const sets = require("./sets.js");
 
-// ---- counts: projects on the homepage grid, by topic ----
-const onGrid = new Set(groups.flatMap((g) => g[1]));
+// ---- counts: projects on the homepage grid, by topic (a set counts as its plans) ----
+const order = groups.flatMap((g) => g[1]).flatMap((t) => (sets[t] ? sets[t].plans : [t]));
+const onGrid = new Set(order);
 const dir = path.join(__dirname, "..", "projects");
 const count = {}, work = {};
-const order = groups.flatMap((g) => g[1]);
 for (const f of fs.readdirSync(dir).filter((f) => f.endsWith(".md"))) {
   const d = matter(fs.readFileSync(path.join(dir, f), "utf8")).data;
   if (!onGrid.has(d.title)) continue;

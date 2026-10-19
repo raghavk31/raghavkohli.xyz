@@ -88,7 +88,8 @@
   var grid = document.querySelector("[data-grid]");
   var eco = document.querySelector("[data-eco]");
   if (grid && eco) {
-    var cards = Array.prototype.slice.call(grid.querySelectorAll(".card"));
+    // a set's plans live in its tray (sets.js), out of the rows: the set card stands for them here
+    var cards = Array.prototype.slice.call(grid.querySelectorAll(".card")).filter(function (c) { return !c.closest(".set__tray"); });
     // the authored structure: each group break followed by its cards, in resting order
     var resting = [];
     Array.prototype.forEach.call(Array.prototype.slice.call(grid.children), function (el) {
