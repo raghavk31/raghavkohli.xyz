@@ -9,10 +9,10 @@ module.exports = {
   "City Climate Action Plans": {
     id: "plans",
     card: "L",
-    desc: "iclei · capacities · c40 · imt-gt",
-    count: "4 plans · 7 cities",
-    question: "one method, seven cities: what does a city learn when its ledger can be read beside another's?",
-    snippet: "Ahmedabad, Vadodara, Surat and four Malaysian cities, all on the same instrument.",
-    plans: ["Ahmedabad Climate Action Plan", "Vadodara Climate Action Plan", "Surat Climate Action Plan", "Malaysia GCAP"],
+    desc: "iclei · capacities · c40",
+    count: "3 plans · 3 cities",
+    question: "one method, three cities: what does a city learn when its ledger can be read beside another's?",
+    snippet: "Ahmedabad, Vadodara and Surat, all on the same instrument.",
+    plans: ["Ahmedabad Climate Action Plan", "Vadodara Climate Action Plan", "Surat Climate Action Plan"],
   },
 };

@@ -4,7 +4,7 @@
 // set: one card for its plans, which (next) and the diagram walk in the set's order.
 module.exports = [
   ["(energy & systems)",       ["Sama", "Climate Code"]],
-  ["(plans & policy)",          ["City Climate Action Plans", "State of Cities", "Urban Greening Policy"]],
+  ["(plans & policy)",          ["City Climate Action Plans", "Malaysia GCAP", "State of Cities", "Urban Greening Policy"]],
   ["(participatory)",           ["Perspectives", "Koliwadas", "Living Heritage", "Rebel Bodies Rebel Cities", "Urban Performances"]],
   ["(computational & spatial)", ["Generative Techniques", "One is to One", "Water Urbanism", "Eco-Machine"]],
   ["(early work)",              ["Utopias to Heterotopias", "Exploring Majuli", "Pune Metro"]],
