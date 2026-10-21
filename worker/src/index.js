@@ -47,7 +47,7 @@ export default {
 
     // Climate Code's AI notes (/work/climate-code/); the route answers its own OPTIONS
     if (url.pathname === "/climate/ai") return climateAI(req, env, cors);
-    // the (graph) view's (ask): a question answered from the notes; owner-only (ask.js)
+    // the (graph) view's (ask): a question answered from the notes; open, rate-limited (ask.js)
     if (url.pathname === "/ask") return ask(req, env, cors, ownerHeader());
     // Climate Code's population grid: Meta's HRSL, read a window at a time (hrsl.js)
     if (url.pathname.startsWith("/hrsl/")) return hrsl(req, url);

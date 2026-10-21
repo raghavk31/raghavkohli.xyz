@@ -40,8 +40,8 @@ permalink: /thoughts/
   </div>
 
   <section class="graph" id="view-graph" role="tabpanel" aria-labelledby="tab-graph" data-graph hidden>
-    {#- owner-only: a question answered from the notes (worker /ask); graph.js shows it with the key -#}
-    <form class="graph__ask" data-ask hidden>
+    {#- anyone: a question answered from the notes (worker /ask, rate-limited) -#}
+    <form class="graph__ask" data-ask>
       <label for="ask-q">(ask)</label>
       <input id="ask-q" name="q" type="text" maxlength="500" autocomplete="off" />
       <button type="submit">(go)</button>
