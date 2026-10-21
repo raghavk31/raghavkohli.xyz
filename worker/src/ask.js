@@ -1,17 +1,26 @@
 /* ask.js — POST /ask for the (graph) view of /thoughts/: a question put to the journal, answered from
    the notes alone by Claude (through OpenRouter, the model in model.js), with the notes it drew on.
-   Owner-only: refused without the owner key, so only Raghav spends the key and nothing answers for him
-   to strangers. The page sends {question} and nothing else; the notes come from D1 here.
+   Open to anyone since 2026-10-21 (it was owner-only); visitors get PER_HOUR questions an hour, the
+   owner key none of that limit. The page sends {question} and nothing else; the notes come from D1 here.
    Plan: docs/plans/2026-10-21-thoughts-graph.md §5 (eng D2, D3). */
 import { MODEL } from "./model.js";
 
 const MAX_Q = 500;
+const PER_HOUR = 10;                          // questions per visitor per hour, per worker isolate
+
+const hits = new Map();
+function limited(ip) {
+  const now = Date.now(), h = (hits.get(ip) || []).filter((t) => now - t < 3600e3);
+  if (h.length >= PER_HOUR) return true;
+  h.push(now); hits.set(ip, h);
+  return false;
+}
 
 export async function ask(request, env, cors, owner) {
   const reply = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { ...cors, "content-type": "application/json", "Cache-Control": "no-store" } });
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (request.method !== "POST") return reply({ error: "POST only" }, 405);
-  if (!owner) return reply({ error: "no" }, 403);
+  if (!owner && limited(request.headers.get("cf-connecting-ip") || "?")) return reply({ error: "too many questions this hour; try again later" }, 429);
   if (!env.OPENROUTER_API_KEY) return reply({ error: "asking is not switched on yet" }, 503);
   let body;
   try { body = await request.json(); } catch (e) { return reply({ error: "bad request" }, 400); }

@@ -51,7 +51,7 @@
   data.thoughts.forEach(function (t) { thoughts[t.id] = t; });
   data.concepts.forEach(function (c) { concepts[c.id] = c; c.thoughts = []; });
   data.thoughts.forEach(function (t) { t.concepts.forEach(function (c) { if (concepts[c]) concepts[c].thoughts.push(t.id); }); });
-  var live = null, liveById = {}, owner = false, opened = null, returnTo = null;
+  var live = null, liveById = {}, opened = null, returnTo = null;
 
   var esc = function (s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); };
   var $$ = function (sel, el) { return Array.prototype.slice.call((el || graph).querySelectorAll(sel)); };
@@ -330,7 +330,7 @@
   });
   doc.addEventListener("keydown", function (e) { if (e.key === "Escape" && current === "graph") close(); });
 
-  /* ---------- (ask): owner-only, answered from the notes by the worker ---------- */
+  /* ---------- (ask): anyone, answered from the notes by the worker (the key only lifts its hourly limit) ---------- */
   var askForm = graph.querySelector("[data-ask]"), api = (board.dataset.api || "").replace(/\/$/, "");
   function answer(q, html, cites) {
     returnTo = askForm.querySelector("input");
@@ -359,8 +359,7 @@
 
   /* ---------- the live notes, as main.js announces them ---------- */
   doc.addEventListener("thoughts:loaded", function (e) {
-    live = e.detail.thoughts || []; owner = !!e.detail.owner;
-    if (askForm) askForm.hidden = !owner;
+    live = e.detail.thoughts || [];
     liveById = {}; live.forEach(function (t) { liveById[t.id] = t; });
     var m = merge(data.thoughts, live);
     $$(".graph__dot", svg).forEach(function (el) { el.classList.toggle("is-gone", m.hidden.indexOf(el.dataset.t) >= 0); });
