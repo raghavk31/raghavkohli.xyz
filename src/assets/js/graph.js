@@ -150,7 +150,7 @@
     $$(".graph__dot", svg).forEach(function (el) { el.classList.toggle("on", !!n.t[el.dataset.t]); });
     $$(".graph__word", svg).forEach(function (el) { el.classList.toggle("on", !!n.c[el.dataset.c]); });
     $$(".graph__edge", svg).forEach(function (el) { el.classList.toggle("on", kind === "c" ? el.dataset.c === id : el.dataset.t === id); });
-    if (kind === "t") showLabel(id); else label.textContent = "";
+    if (kind === "t") showLabel(id); else { label.textContent = ""; labelFor = null; }
   }
   // an answer lights the notes it drew on, and their words
   function lightSet(ids) {
@@ -164,13 +164,14 @@
   function unlight() {
     if (opened && opened.kind === "a") return lightSet(opened.cites);
     if (opened) return light(opened.kind, opened.id);
-    svg.classList.remove("is-lit"); label.textContent = "";
+    svg.classList.remove("is-lit"); label.textContent = ""; labelFor = null;
     $$(".on", svg).forEach(function (el) { el.classList.remove("on"); });
   }
   function showLabel(id) {
     var dot = dotOf(id), t = thoughts[id] || liveById[id];
     if (!dot || !t) return;
     var x = +dot.getAttribute("cx"), y = +dot.getAttribute("cy"), right = x > data.w * 0.62;
+    labelFor = id;
     label.textContent = t.title || "untitled";
     label.setAttribute("x", right ? x - 11 : x + 11); label.setAttribute("y", y + 4);
     label.setAttribute("text-anchor", right ? "end" : "start");
@@ -180,11 +181,87 @@
     if (!el || !svg.contains(el)) return null;
     return el.classList.contains("graph__word") ? { kind: "c", id: el.dataset.c, el: el } : { kind: "t", id: el.dataset.t, el: el };
   }
-  svg.addEventListener("pointerover", function (e) { var t = target(e); if (t) light(t.kind, t.id); });
-  svg.addEventListener("pointerout", function (e) { if (target(e)) unlight(); });
+  svg.addEventListener("pointerover", function (e) { var t = target(e); if (t && !held) light(t.kind, t.id); });
+  svg.addEventListener("pointerout", function (e) { if (target(e) && !held) unlight(); });
   svg.addEventListener("focusin", function (e) { var t = target(e); if (t) light(t.kind, t.id); });
   svg.addEventListener("focusout", function () { unlight(); });
-  svg.addEventListener("click", function (e) { var t = target(e); if (t) open(t.kind, t.id, t.el); });
+  svg.addEventListener("click", function (e) {
+    if (justDragged) { justDragged = false; return; }   // a drag ends with a click; it is not one
+    var t = target(e); if (t) open(t.kind, t.id, t.el);
+  });
+
+  /* ---------- dragging: a word or a dot follows the pointer and pulls its neighbours along; let go
+     and the graph settles and goes still. The forces are the build's own (graph-layout.js step). ---------- */
+  var sim = null, held = null, heat = 0, raf = 0, press = null, justDragged = false, labelFor = null;
+  var GL = root.GraphLayout;
+  function buildSim() {
+    var nodes = [], byKey = {}, edges = [];
+    $$(".graph__word", svg).forEach(function (el) {
+      var c = concepts[el.dataset.c], px = +el.getAttribute("font-size");
+      var n = { kind: "concept", id: el.dataset.c, el: el, px: px, half: GL.half(c ? c.name : el.textContent, px), x: +el.getAttribute("x"), y: +el.getAttribute("y"), vx: 0, vy: 0 };
+      nodes.push(n); byKey["c:" + n.id] = n;
+    });
+    $$(".graph__dots .graph__dot", svg).forEach(function (el) {
+      if (el.classList.contains("is-gone")) return;
+      var n = { kind: "thought", id: el.dataset.t, el: el, half: 6, x: +el.getAttribute("cx"), y: +el.getAttribute("cy"), vx: 0, vy: 0 };
+      nodes.push(n); byKey["t:" + n.id] = n;
+    });
+    $$(".graph__edge", svg).forEach(function (el) {
+      var t = byKey["t:" + el.dataset.t], c = byKey["c:" + el.dataset.c];
+      if (t && c) { var e = [t, c]; e.el = el; edges.push(e); }
+    });
+    return { nodes: nodes, edges: edges, byKey: byKey };
+  }
+  function draw() {
+    sim.nodes.forEach(function (n) {
+      if (n.kind === "concept") { n.el.setAttribute("x", n.x.toFixed(1)); n.el.setAttribute("y", n.y.toFixed(1)); }
+      else { n.el.setAttribute("cx", n.x.toFixed(1)); n.el.setAttribute("cy", n.y.toFixed(1)); }
+    });
+    sim.edges.forEach(function (e) {
+      e.el.setAttribute("x1", e[0].x.toFixed(1)); e.el.setAttribute("y1", e[0].y.toFixed(1));
+      e.el.setAttribute("x2", e[1].x.toFixed(1)); e.el.setAttribute("y2", e[1].y.toFixed(1));
+    });
+    if (labelFor) showLabel(labelFor);
+  }
+  function tick() {
+    raf = 0;
+    GL.step(sim.nodes, sim.edges, heat, held);
+    draw();
+    if (!held) heat *= 0.93;
+    if (held || heat > 0.015) raf = requestAnimationFrame(tick);
+  }
+  function svgPoint(e) {
+    var m = svg.getScreenCTM(); if (!m) return null;
+    var p = svg.createSVGPoint(); p.x = e.clientX; p.y = e.clientY;
+    return p.matrixTransform(m.inverse());
+  }
+  svg.addEventListener("pointerdown", function (e) {
+    var t = target(e); if (!t || e.button !== 0 || !GL) return;
+    press = { t: t, x: e.clientX, y: e.clientY, id: e.pointerId };
+  });
+  svg.addEventListener("pointermove", function (e) {
+    if (!press || e.pointerId !== press.id) return;
+    if (!held) {
+      if (Math.abs(e.clientX - press.x) + Math.abs(e.clientY - press.y) < 5) return;
+      sim = buildSim();
+      held = sim.byKey[(press.t.kind === "c" ? "c:" : "t:") + press.t.id];
+      if (!held) { press = null; return; }
+      svg.setPointerCapture(e.pointerId);
+      svg.classList.add("is-dragging");
+      light(press.t.kind, press.t.id);
+    }
+    var p = svgPoint(e); if (!p) return;
+    held.hx = Math.max(held.half, Math.min(data.w - held.half, p.x)); held.hy = Math.max(8, Math.min(data.h - 8, p.y));
+    heat = 0.5;
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
+  function release(e) {
+    if (!press || (e && e.pointerId !== press.id)) return;
+    if (held) { justDragged = true; setTimeout(function () { justDragged = false; }, 0); held = null; svg.classList.remove("is-dragging"); unlight(); if (!raf) raf = requestAnimationFrame(tick); }
+    press = null;
+  }
+  svg.addEventListener("pointerup", release);
+  svg.addEventListener("pointercancel", release);
   svg.addEventListener("keydown", function (e) {
     if (e.key !== "Enter" && e.key !== " ") return;
     var t = target(e); if (t) { e.preventDefault(); open(t.kind, t.id, t.el); }

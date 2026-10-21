@@ -4,7 +4,10 @@
    the same ideas.json always gives the same picture. Concepts (the drawn words) and thoughts (dots)
    pull along their links and push each other apart; two corners are kept empty, the top right for
    the note that opens on a click and the bottom left for (unfiled) notes posted since the compile.
+   The same step() moves the graph in the browser when a node is dragged (graph.js), so the build and
+   the page share one set of forces. Loaded both by Node (src/_data/graphViz.js, tests) and the page.
    Plan: docs/plans/2026-10-21-thoughts-graph.md §4, §6. */
+(function (root) {
 "use strict";
 
 const W = 1155, H = 660;                                  // the page edge (--maxw) by a 78vh-ish height
@@ -35,6 +38,46 @@ function outOf(p, r, m) {
   else if (least === top) p.y = r.y - m; else p.y = r.y + r.h + m;
 }
 
+// one tick of the forces: words and dots push apart and keep clear of each other, links pull, a
+// gentle pull to the middle, and both corners stay empty. `held` (a dragged node) stays where it is.
+const CX = (W - NOTE.w * 0.5) / 2, CY = H / 2;
+function step(nodes, edges, heat, held) {
+  const cx = CX, cy = CY;
+  for (let i = 0; i < nodes.length; i++) {
+    const a = nodes[i];
+    for (let j = i + 1; j < nodes.length; j++) {
+      const b = nodes[j];
+      let dx = a.x - b.x, dy = a.y - b.y;
+      if (!dx && !dy) { dx = 0.1 * (i - j); dy = 0.1; }
+      const d2 = dx * dx + dy * dy, d = Math.sqrt(d2);
+      const k = (a.kind === "concept" && b.kind === "concept" ? 9000 : a.kind === "concept" || b.kind === "concept" ? 2200 : 900) / d2;
+      a.vx += dx / d * k; a.vy += dy / d * k; b.vx -= dx / d * k; b.vy -= dy / d * k;
+      // words keep clear of each other and of dots along their width
+      const minX = a.half + b.half, minY = (a.kind === "concept" ? a.px : 8) / 2 + (b.kind === "concept" ? b.px : 8) / 2 + 10;
+      if (Math.abs(dx) < minX && Math.abs(dy) < minY) {
+        const px = (minX - Math.abs(dx)) / 2, py = (minY - Math.abs(dy)) / 2;
+        if (px < py) { const sx = dx < 0 ? -1 : 1; a.x += sx * px; b.x -= sx * px; }
+        else { const sy = dy < 0 ? -1 : 1; a.y += sy * py; b.y -= sy * py; }
+      }
+    }
+  }
+  for (const [t, c] of edges) {
+    const dx = c.x - t.x, dy = c.y - t.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
+    const f = (d - 95) * 0.02;
+    t.vx += dx / d * f; t.vy += dy / d * f; c.vx -= dx / d * f * 0.4; c.vy -= dy / d * f * 0.4;
+  }
+  for (const n of nodes) {
+    n.vx += (cx - n.x) * 0.0007; n.vy += (cy - n.y) * 0.0011;
+    n.x += Math.max(-24, Math.min(24, n.vx)) * heat; n.y += Math.max(-24, Math.min(24, n.vy)) * heat;
+    n.vx *= 0.55; n.vy *= 0.55;
+    n.x = Math.max(PAD + n.half, Math.min(W - PAD - n.half, n.x));
+    n.y = Math.max(PAD, Math.min(H - PAD, n.y));
+    outOf(n, { x: NOTE.x - n.half, y: NOTE.y, w: NOTE.w + n.half, h: NOTE.h }, 6);
+    outOf(n, { x: UNFILED.x, y: UNFILED.y, w: UNFILED.w + n.half, h: UNFILED.h }, 6);
+  }
+  if (held) { held.x = held.hx; held.y = held.hy; held.vx = 0; held.vy = 0; }
+}
+
 function layout(ideas) {
   if (!ideas || !Array.isArray(ideas.concepts) || !Array.isArray(ideas.thoughts)) return { ready: false };
   const drawn = ideas.concepts.filter((c) => c.drawn);
@@ -61,7 +104,7 @@ function layout(ideas) {
 
   // start: concepts on an ellipse in order of weight, thoughts near the middle of their concepts,
   // loose thoughts scattered round the edge
-  const cx = (W - NOTE.w * 0.5) / 2, cy = H / 2;
+  const cx = CX, cy = CY;
   drawn.forEach((c, i) => {
     const n = byId.get("c:" + c.id), a = (i / Math.max(1, drawn.length)) * Math.PI * 2 + 0.4;
     n.x = cx + Math.cos(a) * W * 0.28; n.y = cy + Math.sin(a) * H * 0.3;
@@ -80,41 +123,7 @@ function layout(ideas) {
 
   // settle
   const STEPS = 420;
-  for (let s = 0; s < STEPS; s++) {
-    const heat = 1 - s / STEPS;
-    for (let i = 0; i < nodes.length; i++) {
-      const a = nodes[i];
-      for (let j = i + 1; j < nodes.length; j++) {
-        const b = nodes[j];
-        let dx = a.x - b.x, dy = a.y - b.y;
-        if (!dx && !dy) { dx = 0.1 * (i - j); dy = 0.1; }
-        const d2 = dx * dx + dy * dy, d = Math.sqrt(d2);
-        const k = (a.kind === "concept" && b.kind === "concept" ? 9000 : a.kind === "concept" || b.kind === "concept" ? 2200 : 900) / d2;
-        a.vx += dx / d * k; a.vy += dy / d * k; b.vx -= dx / d * k; b.vy -= dy / d * k;
-        // words keep clear of each other and of dots along their width
-        const minX = a.half + b.half, minY = (a.kind === "concept" ? a.px : 8) / 2 + (b.kind === "concept" ? b.px : 8) / 2 + 10;
-        if (Math.abs(dx) < minX && Math.abs(dy) < minY) {
-          const px = (minX - Math.abs(dx)) / 2, py = (minY - Math.abs(dy)) / 2;
-          if (px < py) { const sx = dx < 0 ? -1 : 1; a.x += sx * px; b.x -= sx * px; }
-          else { const sy = dy < 0 ? -1 : 1; a.y += sy * py; b.y -= sy * py; }
-        }
-      }
-    }
-    for (const [t, c] of edges) {
-      const dx = c.x - t.x, dy = c.y - t.y, d = Math.sqrt(dx * dx + dy * dy) || 1;
-      const f = (d - 95) * 0.02;
-      t.vx += dx / d * f; t.vy += dy / d * f; c.vx -= dx / d * f * 0.4; c.vy -= dy / d * f * 0.4;
-    }
-    for (const n of nodes) {
-      n.vx += (cx - n.x) * 0.0007; n.vy += (cy - n.y) * 0.0011;
-      n.x += Math.max(-24, Math.min(24, n.vx)) * heat; n.y += Math.max(-24, Math.min(24, n.vy)) * heat;
-      n.vx *= 0.55; n.vy *= 0.55;
-      n.x = Math.max(PAD + n.half, Math.min(W - PAD - n.half, n.x));
-      n.y = Math.max(PAD, Math.min(H - PAD, n.y));
-      outOf(n, { x: NOTE.x - n.half, y: NOTE.y, w: NOTE.w + n.half, h: NOTE.h }, 6);
-      outOf(n, { x: UNFILED.x, y: UNFILED.y, w: UNFILED.w + n.half, h: UNFILED.h }, 6);
-    }
-  }
+  for (let s = 0; s < STEPS; s++) step(nodes, edges, 1 - s / STEPS);
 
   const r1 = (v) => Math.round(v * 10) / 10;
   const out = (n) => n.kind === "concept"
@@ -131,4 +140,7 @@ function layout(ideas) {
   };
 }
 
-module.exports = { layout, W, H, NOTE, UNFILED };
+const api = { layout, step, half: (name, px) => name.length * px * 0.29 + 6, W, H, NOTE, UNFILED };
+if (typeof module !== "undefined" && module.exports) module.exports = api;
+else root.GraphLayout = api;
+})(typeof window !== "undefined" ? window : globalThis);

@@ -1420,10 +1420,12 @@ body.set-on .pin { opacity: .14; pointer-events: none; transition: opacity .45s 
 .graph__stage{position:relative;}
 .graph__svg{display:block;width:100%;height:auto;max-height:78vh;overflow:visible;}
 .graph__edge{stroke:var(--line);stroke-width:.75;transition:opacity .16s ease, stroke .16s ease;}
-.graph__dot{fill:var(--ink);cursor:pointer;transition:opacity .16s ease;}
+.graph__dot{fill:var(--ink);cursor:grab;transition:opacity .16s ease;}
+.graph__svg{touch-action:none;}
+.graph__svg.is-dragging, .graph__svg.is-dragging *{cursor:grabbing !important;}
 .graph__dot--seed{fill:var(--paper);stroke:var(--ink);stroke-width:1;}
 .graph__dot--unfiled{fill:var(--faint);}
-.graph__word{fill:var(--ink);font-family:var(--sans);font-weight:400;letter-spacing:-.01em;cursor:pointer;transition:opacity .16s ease;}
+.graph__word{fill:var(--ink);font-family:var(--sans);font-weight:400;letter-spacing:-.01em;cursor:grab;user-select:none;transition:opacity .16s ease;}
 .graph__word.is-faint{fill:var(--faint);}
 .graph__label{fill:var(--ink);font-family:var(--hand);font-size:11px;pointer-events:none;}
 .graph__corner{fill:var(--faint);font-family:var(--mono);font-size:11px;}
@@ -1460,7 +1462,8 @@ body.set-on .pin { opacity: .14; pointer-events: none; transition: opacity .45s 
 .graph__note-foot{margin-top:14px;font-family:var(--mono);font-size:var(--t-small);}
 .graph__seed{color:var(--faint);font-family:var(--mono);}
 .graph__note-body--full{display:block;-webkit-line-clamp:none;}
-.graph__ask{display:flex;align-items:baseline;gap:.6em;margin-bottom:14px;font-family:var(--mono);font-size:var(--t-small);max-width:34em;}
+/* (ask) sits right of centre, over the corner where its answer opens */
+.graph__ask{display:flex;align-items:baseline;gap:.6em;margin:0 0 14px auto;font-family:var(--mono);font-size:var(--t-small);width:min(30em,100%);}
 .graph__ask[hidden]{display:none;}
 .graph__ask input{flex:1;min-width:0;background:none;border:0;border-bottom:1px solid var(--line);padding:6px 0;font:inherit;color:var(--ink);}
 .graph__ask input:focus-visible{outline:none;border-bottom-color:var(--accent);}

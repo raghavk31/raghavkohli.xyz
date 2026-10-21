@@ -108,6 +108,7 @@ permalink: /thoughts/
   <p class="journal__foot"><a href="#" data-owner-key>(key)</a></p>
   {#- before main.js (deferred scripts run in order): the board reads every page of thoughts -#}
   <script src="/assets/js/thoughts-fetch.js?v={{ v }}" defer></script>
-  {% if graphViz.ready %}<script src="/assets/js/graph.js?v={{ v }}" defer></script>{% endif %}
+  {% if graphViz.ready %}<script src="/assets/js/graph-layout.js?v={{ v }}" defer></script>
+  <script src="/assets/js/graph.js?v={{ v }}" defer></script>{% endif %}
   {% endif %}
 </section>
