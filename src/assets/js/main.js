@@ -1453,15 +1453,23 @@
       art.querySelectorAll("img").forEach(function (im) { if (!im.complete) im.addEventListener("load", schedule); });
       var empty = wall.querySelector("[data-empty]"); if (empty) empty.remove();
     }
+    // tells the graph view (graph.js) what the board now holds: after the load and every post, edit, delete
+    function announce() {
+      var list = Object.keys(notes).map(function (id) { return notes[id]; });
+      document.dispatchEvent(new CustomEvent("thoughts:loaded", { detail: { thoughts: list, owner: !!key } }));
+    }
     function load() {
-      fetch(api + "/thoughts?limit=100").then(function (r) { return r.json(); }).then(function (j) {
+      // every page, not only the newest hundred (thoughts-fetch.js)
+      var all = window.fetchAllThoughts ? window.fetchAllThoughts(api)
+        : fetch(api + "/thoughts?limit=100").then(function (r) { return r.json(); });
+      all.then(function (j) {
         // layouts are stored at the site's first size; the site is drawn at 87.5% of it since 2026-10-11
         layout = {}; var J = j.layout || {};
         Object.keys(J).forEach(function (id) { var L = J[id]; layout[id] = { x: L.x * .875, y: L.y * .875, w: L.w * .875, z: L.z }; });
         Object.keys(layout).forEach(function (id) { maxZ = Math.max(maxZ, layout[id].z || 0); });
         (j.thoughts || []).forEach(function (t) { if (!wall.querySelector('[data-id="' + t.id + '"]')) place(render(t)); else notes[t.id] = t; });
         wall.querySelectorAll(".thought").forEach(tools);
-        relayout();
+        relayout(); announce();
       }).catch(function () { relayout(); });
     }
 
@@ -1643,7 +1651,7 @@
           .then(function (res) {
             form.classList.remove("is-busy");
             if (!res.ok) { msg.textContent = res.j.error || "that did not go through"; return; }
-            var art = render(res.j.thought); place(art); art.classList.add("in"); relayout();
+            var art = render(res.j.thought); place(art); art.classList.add("in"); relayout(); announce();
             form.body.value = ""; form.title.value = ""; msg.textContent = "posted.";
             picks.forEach(function (p) { URL.revokeObjectURL(p.url); }); picks = []; showPicks();
           })
@@ -1679,7 +1687,7 @@
         art.classList.remove("is-editing");
         art.removeEventListener("pointerdown", stop);
         adds.forEach(function (a) { URL.revokeObjectURL(a.url); });
-        if (next) { notes[next.id] = next; art.innerHTML = render(next).innerHTML; }
+        if (next) { notes[next.id] = next; art.innerHTML = render(next).innerHTML; announce(); }
         else art.innerHTML = keep;
         tools(art); clip(art); schedule();
       }
@@ -1725,7 +1733,7 @@
       e.preventDefault();
       var art = a.closest(".thought"); if (!art || !confirm("delete this thought?")) return;
       fetch(api + "/thoughts/" + art.dataset.id, { method: "DELETE", headers: { "X-Owner-Key": key } })
-        .then(function (r) { if (r.ok) { delete layout[art.dataset.id]; art.remove(); relayout(); } });
+        .then(function (r) { if (r.ok) { delete layout[art.dataset.id]; delete notes[art.dataset.id]; art.remove(); relayout(); announce(); } });
     });
     // the owner key: typed once, kept on this device; with it the board is editable
     function applyKey() {

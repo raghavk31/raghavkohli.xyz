@@ -15,7 +15,7 @@
    Python (day01_heat_risk, day16_heat_mapper, day13_crop_advisor, day14_offgrid_calc,
    day15_water_security, day12_emergency_prep); change them there and here together. */
 
-const MODEL = "anthropic/claude-sonnet-4-5";   // the model the days use; change in one place
+import { MODEL } from "./model.js";              // the model the days use (shared with /ask and the compile)
 const PER_HOUR = 20;                          // AI notes per visitor per hour, per worker isolate
 
 const hits = new Map();

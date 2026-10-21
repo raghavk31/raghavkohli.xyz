@@ -10,6 +10,9 @@
   project pages consistent and lets gstack design tooling calibrate against it.
 - **Pros:** faster curation; consistent pages. **Cons:** ~30 min; must track `main.css`.
 - **Depends on:** nothing. Do after the chapter template lands (`docs/plans/2026-09-13-project-page.md`).
+- **Update 2026-10-21:** flagged again by the (thoughts) graph review (`docs/plans/2026-10-21-thoughts-graph.md`).
+  The faces listed above are out of date (main.css now runs one family `--nh` plus `--hand`/`--mark`),
+  so write it from the current tokens. Do it after the graph ships.
 
 ### Plate zoom for very large scans
 - **What:** click-to-enlarge with a native `<dialog>` (no library) for plates whose source exceeds

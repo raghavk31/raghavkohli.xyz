@@ -152,6 +152,9 @@ module.exports = function (eleventyConfig) {
   // (`viewer: { data: socCities }`) instead of inlining fifteen rows.
   eleventyConfig.addFilter("dataset", (name) => require(`./src/_data/${name}.json`));
 
+  // Data for a <script type="application/json">: JSON with "<" escaped, so no text can close the tag
+  eleventyConfig.addFilter("jsonScript", (v) => JSON.stringify(v).replace(/</g, "\\u003c"));
+
   // Fixed decimals that keep their trailing zero ("1.60"), unlike `round`
   eleventyConfig.addFilter("fixed", (n, d) => Number(n).toFixed(d));
 
