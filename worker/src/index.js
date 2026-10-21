@@ -23,6 +23,7 @@
 
 import { climateAI } from "./climate-ai.js";
 import { hrsl } from "./hrsl.js";
+import { ask } from "./ask.js";
 
 const IMAGE_TYPES = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 const MAX_IMAGES = 6;
@@ -46,6 +47,8 @@ export default {
 
     // Climate Code's AI notes (/work/climate-code/); the route answers its own OPTIONS
     if (url.pathname === "/climate/ai") return climateAI(req, env, cors);
+    // the (graph) view's (ask): a question answered from the notes; owner-only (ask.js)
+    if (url.pathname === "/ask") return ask(req, env, cors, ownerHeader());
     // Climate Code's population grid: Meta's HRSL, read a window at a time (hrsl.js)
     if (url.pathname.startsWith("/hrsl/")) return hrsl(req, url);
     if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });

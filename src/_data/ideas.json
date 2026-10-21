@@ -1,0 +1,560 @@
+{
+  "compiled": "2026-10-21",
+  "model": "anthropic/claude-sonnet-4-5",
+  "concepts": [
+    {
+      "id": "spirituality",
+      "name": "spirituality",
+      "gist": "Exploring meditation, Geeta, hermetic principles, and the nature of consciousness and soul",
+      "thoughts": [
+        "mv6ghwbb1wcqhe",
+        "mv20ryvt25edgx",
+        "mupvyu3lcjc4bd",
+        "mul1fdajl7kwnx",
+        "mui87hibuun4ef",
+        "mugkg37m0d232c",
+        "mudrpouvpw5x9o",
+        "mubp7zoajsv3zi"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "gratitude",
+      "name": "gratitude",
+      "gist": "Recognizing the collective effort behind everything experienced and feeling thankful for abundance",
+      "thoughts": [
+        "mvb8s6uqnbt72o",
+        "mv5ag1tln0f54k",
+        "mupw0acl90x190",
+        "munx8lb60zoz5q",
+        "mul1fdajl7kwnx"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "mind-killers",
+      "name": "mind killers",
+      "gist": "Struggling with anger, ego, lust, jealousy and other emotions that sabotage self-control",
+      "thoughts": [
+        "mv7wkm7c2r2gjo",
+        "mv6ghwbb1wcqhe",
+        "mv20rmcxtwag6t",
+        "muxtha0mblkwtr",
+        "mui7c4nzgaszb8"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "purpose",
+      "name": "purpose",
+      "gist": "Searching for what gets one out of bed, balancing enjoyment with meaningful contribution",
+      "thoughts": [
+        "mv5m175c8izqp3",
+        "mv20ryvt25edgx",
+        "muwhqqj7mqd6hx",
+        "munx8lb60zoz5q",
+        "mujk6pahg6mehq"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "abundance",
+      "name": "abundance",
+      "gist": "Recognizing privilege and fortune compared to others' suffering, choosing an abundance mindset",
+      "thoughts": [
+        "mv5ag1tln0f54k",
+        "munzlky33nv1pc",
+        "mul1fdajl7kwnx",
+        "muggxk52zjm0oz"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "discipline",
+      "name": "discipline",
+      "gist": "Building habits, streaks, and self-control to train the mind and resist sense gratification",
+      "thoughts": [
+        "mv6ghwbb1wcqhe",
+        "mupvyu3lcjc4bd",
+        "munx8lb60zoz5q",
+        "mui7c4nzgaszb8"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "identity",
+      "name": "identity",
+      "gist": "Defining and upgrading one's sense of self, purpose, and values across different life domains",
+      "thoughts": [
+        "mv5m175c8izqp3",
+        "mv42xfox6qplq3",
+        "muxtha0mblkwtr",
+        "mui7c4nzgaszb8"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "modes-of-nature",
+      "name": "modes of nature",
+      "gist": "Understanding actions through three modes: goodness, passion, and ignorance from Geeta",
+      "thoughts": [
+        "mv5m175c8izqp3",
+        "mui87hibuun4ef",
+        "mugkg37m0d232c",
+        "mudrpouvpw5x9o"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "startup-journey",
+      "name": "startup journey",
+      "gist": "Building and shutting down Perspectives, learning from failure, wishful thinking vs manifesting",
+      "thoughts": [
+        "mvb8s6uqnbt72o",
+        "mv5agnc91gev0k",
+        "mv5agcefyrxhr4",
+        "mui1vn8ga5tz72"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "communication",
+      "name": "communication",
+      "gist": "Understanding the complexity of human connection through thought, action, processing, and reaction",
+      "thoughts": [
+        "mvb8s6uqnbt72o",
+        "mv6hc4x3wg21yk",
+        "mui1vn8ga5tz72"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "desire",
+      "name": "desire",
+      "gist": "Wrestling with desire as both driver of ambition and source of suffering per Geeta teachings",
+      "thoughts": [
+        "mujk6pahg6mehq",
+        "mui1vn8ga5tz72",
+        "mugkg37m0d232c"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "future-of-work",
+      "name": "future of work",
+      "gist": "Envisioning human work focused on ecology, economy, education, and resource management with AI",
+      "thoughts": [
+        "munzlky33nv1pc",
+        "munzld55g6x3cm",
+        "muggxk52zjm0oz"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "reality",
+      "name": "reality",
+      "gist": "Questioning the nature of reality through physics, computation, and consciousness",
+      "thoughts": [
+        "mv9h8l2r8f8kn3",
+        "muggxk52zjm0oz",
+        "mubp7zoajsv3zi"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "geeta",
+      "name": "geeta",
+      "gist": "Repeatedly studying and applying teachings from the Bhagavad Geeta to daily life",
+      "thoughts": [
+        "mugkg37m0d232c",
+        "mudrpouvpw5x9o"
+      ],
+      "drawn": true
+    },
+    {
+      "id": "anti-disciplinary",
+      "name": "anti-disciplinary",
+      "gist": "Resisting narrow professional labels to embrace multiple interests and identities simultaneously",
+      "thoughts": [
+        "mv42xfox6qplq3"
+      ],
+      "drawn": false
+    },
+    {
+      "id": "death",
+      "name": "death",
+      "gist": "Contemplating mortality, making peace with suffering, and dealing with fear of missing out",
+      "thoughts": [
+        "mv20ryvt25edgx"
+      ],
+      "drawn": false
+    },
+    {
+      "id": "feedback",
+      "name": "feedback",
+      "gist": "Receiving and valuing critical feedback as a gift for personal growth and self-improvement",
+      "thoughts": [
+        "mvb8s6uqnbt72o"
+      ],
+      "drawn": false
+    },
+    {
+      "id": "illusion",
+      "name": "illusion",
+      "gist": "Seeing material existence as maya, a mental conception of the infinite mind",
+      "thoughts": [
+        "mubp7zoajsv3zi"
+      ],
+      "drawn": false
+    },
+    {
+      "id": "mental-transmutation",
+      "name": "mental transmutation",
+      "gist": "Applying hermetic principles to change mental states, vibrations, and polarity through will",
+      "thoughts": [
+        "mupvyu3lcjc4bd"
+      ],
+      "drawn": false
+    }
+  ],
+  "thoughts": [
+    {
+      "id": "mvb8s6uqnbt72o",
+      "title": "feedback is a gift",
+      "created": 1792171742642,
+      "seed": false,
+      "lead": "Earlier this year when we were going through a super rough time in our startup and were quite disoriented towards the next focus steps, me and my friend were in California and trying to make sense of things. Among other things, we attended a short course at stanford called 'touchy feely'. It was some version of what…",
+      "concepts": [
+        "feedback",
+        "communication",
+        "startup-journey",
+        "gratitude"
+      ]
+    },
+    {
+      "id": "mv9h8l2r8f8kn3",
+      "title": "simulating thought",
+      "created": 1792065012147,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "reality"
+      ]
+    },
+    {
+      "id": "mv7wkm7c2r2gjo",
+      "title": "the war within",
+      "created": 1791969835368,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "mind-killers"
+      ]
+    },
+    {
+      "id": "mv6hc4x3wg21yk",
+      "title": "collectively lonely",
+      "created": 1791883779303,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "communication"
+      ]
+    },
+    {
+      "id": "mv6ghwbb1wcqhe",
+      "title": "stacking streaks",
+      "created": 1791882368471,
+      "seed": false,
+      "lead": "my mind feels like the tide of a super turbulent ocean. the more i try to go against the tide, the more it keeps thrashing me back against the rocks. how do i train it, control it, calm it down and use it to serve? it feels extremely hard to break habit loops, form habit loops and stack positive reinforcement loops…",
+      "concepts": [
+        "discipline",
+        "mind-killers",
+        "spirituality"
+      ]
+    },
+    {
+      "id": "mv5m175c8izqp3",
+      "title": "upgrading identity",
+      "created": 1791831200880,
+      "seed": false,
+      "lead": "i am the most refined version of me. what does that mean? the most refined version of me is unattached. it's completely involved in the moment, without a flicker of thought about the future or the past, unless that's the core exercise. This version of me respects time, it respects every material entity, living or…",
+      "concepts": [
+        "identity",
+        "purpose",
+        "modes-of-nature"
+      ]
+    },
+    {
+      "id": "mv5agnc91gev0k",
+      "title": "Job to be done",
+      "created": 1791811766313,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "startup-journey"
+      ]
+    },
+    {
+      "id": "mv5agcefyrxhr4",
+      "title": "painkiller vs vitamin",
+      "created": 1791811752135,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "startup-journey"
+      ]
+    },
+    {
+      "id": "mv5ag1tln0f54k",
+      "title": "world is a museum",
+      "created": 1791811738425,
+      "seed": false,
+      "lead": "my sister-in-law comes from Japan, and on a recent trip together i observed her saying 'itadakimasu' right before having any meal. literally, It means \"I humbly receive\". every single thing i use, i consume, eat, drink, listen, see, read, touch- is made by the effort of millions and millions of people. Right from…",
+      "concepts": [
+        "gratitude",
+        "abundance"
+      ]
+    },
+    {
+      "id": "mv42xfox6qplq3",
+      "title": "being anti-disciplinary",
+      "created": 1791738646449,
+      "seed": false,
+      "lead": "more often than not, the identity associated with me has been about the work i do. when i was a student in school, i was a 'pcm' student (physics chemistry maths), when i went to college, i became an 'urban designer', when i went to job, i became a 'climate consultant', and it was always a mess for me. I used to love…",
+      "concepts": [
+        "anti-disciplinary",
+        "identity"
+      ]
+    },
+    {
+      "id": "mv20ryvt25edgx",
+      "title": "FOMO",
+      "created": 1791614099801,
+      "seed": false,
+      "lead": "i've been thinking about death lately, not in any morbid sense of it, but really trying to understand it. given that it is an inevitable event for every material entity, etched into the laws of the material universe. my curiosity towards spirituality started when maybe i was 3-4 years old and whenever we'd go to my…",
+      "concepts": [
+        "death",
+        "spirituality",
+        "purpose"
+      ]
+    },
+    {
+      "id": "mv20rmcxtwag6t",
+      "title": "all defeat is psychological, but what is victory?",
+      "created": 1791614083569,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "mind-killers"
+      ]
+    },
+    {
+      "id": "muxtha0mblkwtr",
+      "title": "collapsing sense of 'self' / shattering ego",
+      "created": 1791359978998,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "identity",
+        "mind-killers"
+      ]
+    },
+    {
+      "id": "muxpz1qpelvx3h",
+      "title": "cities of the past",
+      "created": 1791354089617,
+      "seed": true,
+      "lead": "",
+      "concepts": []
+    },
+    {
+      "id": "muwhqqj7mqd6hx",
+      "title": "being unreasonable",
+      "created": 1791279798739,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "purpose"
+      ]
+    },
+    {
+      "id": "musjjsstkr2o5q",
+      "title": "to err is human",
+      "created": 1791040969613,
+      "seed": true,
+      "lead": "",
+      "concepts": []
+    },
+    {
+      "id": "mupw0acl90x190",
+      "title": "gratitude is the key",
+      "created": 1790880495717,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "gratitude"
+      ]
+    },
+    {
+      "id": "mupvyu3lcjc4bd",
+      "title": "knowledge is not power, its application is",
+      "created": 1790880428001,
+      "seed": false,
+      "lead": "some of the hermetic axioms i need to apply in my life daily: to change my mood or mental state- i need to change my vibration. / effort of will- when deliberately directed by fixing my attention upon a more desirable state is how i change my reality. will directs attention, and attention changes the vibration. the…",
+      "concepts": [
+        "mental-transmutation",
+        "spirituality",
+        "discipline"
+      ]
+    },
+    {
+      "id": "munzlky33nv1pc",
+      "title": "future of work",
+      "created": 1790765595723,
+      "seed": false,
+      "lead": "this is something i've thought and read about quite a bit lately. with the incoming of AI in general lives, it's become an even important question to think about, and maybe design towards. i believe the future of human work will be more around the sustenance of ecology, economy and education. this seems obvious but…",
+      "concepts": [
+        "future-of-work",
+        "abundance"
+      ]
+    },
+    {
+      "id": "munzld55g6x3cm",
+      "title": "eco-machines",
+      "created": 1790765585609,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "future-of-work"
+      ]
+    },
+    {
+      "id": "munx8lb60zoz5q",
+      "title": "getting out my bed",
+      "created": 1790761630434,
+      "seed": false,
+      "lead": "life in a job vs life in no standard job is very much different. since i left my job in dec 2024, life has been on quite a ride and i have loved it, but it comes with its own challenges. what is it that gets me out of my bed every day. i need to understand and figure out the 'purpose', but then if death is the only…",
+      "concepts": [
+        "purpose",
+        "discipline",
+        "gratitude"
+      ]
+    },
+    {
+      "id": "mul1fdajl7kwnx",
+      "title": "children of abundance",
+      "created": 1790587266571,
+      "seed": false,
+      "lead": "this 31st may was an extraordinary one for me. not because it is when i was born (a few years ago), particularly because i went very much out of my comfort zone to a place which was not particularly a destination many know of. this is a place called tiruvenamalai in tamil nadu, india. i took an overnight bus from…",
+      "concepts": [
+        "abundance",
+        "gratitude",
+        "spirituality"
+      ]
+    },
+    {
+      "id": "mujk6pahg6mehq",
+      "title": "what do 'i' want?",
+      "created": 1790497842569,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "desire",
+        "purpose"
+      ]
+    },
+    {
+      "id": "mui87hibuun4ef",
+      "title": "be in the here and now",
+      "created": 1790417257571,
+      "seed": true,
+      "lead": "",
+      "concepts": [
+        "modes-of-nature",
+        "spirituality"
+      ]
+    },
+    {
+      "id": "mui7c4nzgaszb8",
+      "title": "letting go of my mind killers",
+      "created": 1790415794591,
+      "seed": false,
+      "lead": "since childhood, i've had a moderate temperament, very balanced. it was only in certain instances which keep rewinding in my head, when i lost it. in some of these instances, something in the external environment triggered me so much that i lost control of my mind, shouted out stuff that i cant take back. wrong or…",
+      "concepts": [
+        "mind-killers",
+        "discipline",
+        "identity"
+      ]
+    },
+    {
+      "id": "mui1vn8ga5tz72",
+      "title": "'perspectives' are powerful, but wishful thinking sucks",
+      "created": 1790406627424,
+      "seed": false,
+      "lead": "3rd june 2025, 1.30 am. I receive a text message from my friend telling me about a thesis written by a really successful indian founder on the idea of digital de-addiction and human connection. he sent the thesis and texted that it would be really amazing if we could meet this founder. march 2025. we had been running…",
+      "concepts": [
+        "startup-journey",
+        "communication",
+        "desire"
+      ]
+    },
+    {
+      "id": "mugkg37m0d232c",
+      "title": "desire is a bitch",
+      "created": 1790316881986,
+      "seed": false,
+      "lead": "for over 5 years i have been going back to reading the most powerful book i have ever read, the geeta. it is a dialogue between the 'supreme godhead' krsna and his friend 'arjuna'. the dialogue takes place on a battlefield where two factions of a family are going to war with each other. arjuna is perplexed at the…",
+      "concepts": [
+        "desire",
+        "geeta",
+        "spirituality",
+        "modes-of-nature"
+      ]
+    },
+    {
+      "id": "muggxk52zjm0oz",
+      "title": "fabric of reality",
+      "created": 1790310978614,
+      "seed": false,
+      "lead": "what is 'reality'? interestingly, any book i have picked up in the last 6 months has put ahead this question in some perspective. one of these books was called 'fabric of reality' by david deutsch. it argued how the 'reality' we perceive is made of of 4 strands: quantum physics, biology, epistemology, and computation.…",
+      "concepts": [
+        "reality",
+        "future-of-work",
+        "abundance"
+      ]
+    },
+    {
+      "id": "muex58unwwwhsi",
+      "title": "communicating grids",
+      "created": 1790217278735,
+      "seed": true,
+      "lead": "",
+      "concepts": []
+    },
+    {
+      "id": "mudrpouvpw5x9o",
+      "title": "modes of material nature",
+      "created": 1790147688727,
+      "seed": false,
+      "lead": "i come from a (slightly) difficult childhood. as a kid, i often found a conflict going on between any two people at a given point, my brother, my father and my mum. usually it was my father who was the aggressor, my brother who responded with rebel aggression and my mother holding the brunt of these two aggressors,…",
+      "concepts": [
+        "modes-of-nature",
+        "geeta",
+        "spirituality"
+      ]
+    },
+    {
+      "id": "mubp7zoajsv3zi",
+      "title": "illusion of life",
+      "created": 1790022571354,
+      "seed": false,
+      "lead": "i was reading a book called the kybalion today evening, been reading it for the past couple days while sitting alongside my mum while she's doing other work. and i discuss thoughts from it with her. today was about the principle of 'mentalism', stating how the universe is mental. now figuratively, i knew it i. but it…",
+      "concepts": [
+        "illusion",
+        "reality",
+        "spirituality"
+      ]
+    }
+  ]
+}

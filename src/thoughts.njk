@@ -30,8 +30,70 @@ permalink: /thoughts/
   </form>
   {% endif %}
 
+  {#- two views of the same notes: the board, and the graph of the ideas that run through them
+      (docs/plans/2026-10-21-thoughts-graph.md). graph.js shows the switch once it runs; without JS,
+      or before the first compile, there is only the board. -#}
+  {% if graphViz.ready %}
+  <div class="views" role="tablist" aria-label="view" data-views hidden>
+    <button type="button" role="tab" id="tab-board" aria-controls="view-board" aria-selected="true" data-view="board">(board)</button>
+    <button type="button" role="tab" id="tab-graph" aria-controls="view-graph" aria-selected="false" tabindex="-1" data-view="graph">(graph)</button>
+  </div>
+
+  <section class="graph" id="view-graph" role="tabpanel" aria-labelledby="tab-graph" data-graph hidden>
+    {#- owner-only: a question answered from the notes (worker /ask); graph.js shows it with the key -#}
+    <form class="graph__ask" data-ask hidden>
+      <label for="ask-q">(ask)</label>
+      <input id="ask-q" name="q" type="text" maxlength="500" autocomplete="off" />
+      <button type="submit">(go)</button>
+    </form>
+    <div class="graph__stage">
+      <svg class="graph__svg" viewBox="0 0 {{ graphViz.w }} {{ graphViz.h }}" role="group" aria-label="the ideas in these notes: words are ideas, dots are notes">
+        <g class="graph__edges">
+          {%- for e in graphViz.edges %}
+          <line class="graph__edge" data-t="{{ e.t }}" data-c="{{ e.c }}" x1="{{ e.x1 }}" y1="{{ e.y1 }}" x2="{{ e.x2 }}" y2="{{ e.y2 }}" />
+          {%- endfor %}
+        </g>
+        <g class="graph__dots">
+          {%- for t in graphViz.thoughts %}
+          <circle class="graph__dot{% if t.seed %} graph__dot--seed{% endif %}" data-t="{{ t.id }}" cx="{{ t.x }}" cy="{{ t.y }}" r="5" tabindex="0" role="button" aria-label="{{ t.title }}{% if t.seed %} (a seed){% endif %}" />
+          {%- endfor %}
+        </g>
+        <g class="graph__unfiled" data-unfiled></g>
+        <g class="graph__words">
+          {%- for c in graphViz.concepts %}
+          <text class="graph__word" data-c="{{ c.id }}" x="{{ c.x }}" y="{{ c.y }}" font-size="{{ c.px }}" text-anchor="middle" dominant-baseline="middle" tabindex="0" role="button" aria-label="{{ c.name }}, {{ c.n }} notes">{{ c.name }}</text>
+          {%- endfor %}
+        </g>
+        <text class="graph__label" data-label aria-hidden="true"></text>
+      </svg>
+      {#- the note that opens on a click: a post-it, pinned in the corner the layout keeps clear -#}
+      <article class="graph__note" data-graph-note aria-live="polite" hidden></article>
+    </div>
+
+    {#- the same graph as a list: what a phone shows, and what a screen reader reads -#}
+    <div class="graph__index" data-graph-index>
+      {%- for c in graphViz.index %}
+      <section class="graph__group">
+        <h2 class="graph__concept">{{ c.name }}</h2>
+        <p class="graph__gist">{{ c.gist }}</p>
+        <ul>
+          {%- for t in c.thoughts %}
+          <li><button type="button" data-open="{{ t.id }}">{{ t.title }}{% if t.seed %} <span class="graph__seed">(seed)</span>{% endif %}</button></li>
+          {%- endfor %}
+        </ul>
+      </section>
+      {%- endfor %}
+      <section class="graph__group" data-unfiled-index hidden>
+        <h2 class="graph__concept">(unfiled)</h2>
+        <ul></ul>
+      </section>
+    </div>
+    <script type="application/json" data-graph-data>{{ graphViz | jsonScript | safe }}</script>
+  </section>
+  {% endif %}
+
   {#- the board: each thought is a note — title, body, the date at its foot -#}
-  <div class="journal__list board" data-wall data-api="{{ site.thoughtsApi }}">
+  <div class="journal__list board" id="view-board"{% if graphViz.ready %} role="tabpanel" aria-labelledby="tab-board"{% endif %} data-wall data-api="{{ site.thoughtsApi }}">
     {% for t in collections.thoughts %}
     <article class="thought reveal" id="{{ t.fileSlug }}" data-id="{{ t.fileSlug }}" data-created="{{ t.date.getTime() }}">
       <h2 class="thought__title"><a href="{{ t.url }}">{{ t.data.title }}</a></h2>
@@ -44,5 +106,8 @@ permalink: /thoughts/
   </div>
   {% if site.thoughtsApi %}
   <p class="journal__foot"><a href="#" data-owner-key>(key)</a></p>
+  {#- before main.js (deferred scripts run in order): the board reads every page of thoughts -#}
+  <script src="/assets/js/thoughts-fetch.js?v={{ v }}" defer></script>
+  {% if graphViz.ready %}<script src="/assets/js/graph.js?v={{ v }}" defer></script>{% endif %}
   {% endif %}
 </section>

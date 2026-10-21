@@ -1399,3 +1399,85 @@ body.set-on .pin { opacity: .14; pointer-events: none; transition: opacity .45s 
   .js .work__grid .set__tray .card { transform: translateY(-12px); }
 }
 @media (prefers-reduced-motion: reduce) { .js .work__grid .set__tray .card { transition: opacity .2s ease !important; transform: none; } }
+
+/* ---------- (thoughts): the graph view (graph.js, docs/plans/2026-10-21-thoughts-graph.md) ----------
+   The board's other face: the ideas that run through the notes, set as words; the notes as ink dots,
+   seeds as rings; hairline links. No circles round words, no glow: it should read like a page of notes. */
+.views{display:flex;gap:1.1em;margin-top:clamp(28px,4vw,42px);font-family:var(--mono);font-size:var(--t-small);}
+.views[hidden]{display:none;}
+.views button{background:none;border:0;padding:6px 0;color:var(--faint);cursor:pointer;}
+.views button[aria-selected="true"]{color:var(--ink);}
+.views button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.composer.is-away{display:none;}
+.board[hidden]{display:none;}
+.board .thought.is-found{rotate:0deg;outline:2px solid var(--accent);outline-offset:6px;}
+.flying{z-index:60;pointer-events:none;transform-origin:center;animation:none !important;}
+
+.graph{--board-w:calc(100vw - 2 * var(--gutter));width:var(--board-w);margin-inline:calc((var(--board-w) - 100%) / -2);margin-top:clamp(21px,3vw,35px);
+  transition:opacity .24s cubic-bezier(.16,1,.3,1);}
+.graph[hidden]{display:none;}
+.graph.is-fading, .board.is-fading{opacity:0;}
+.graph__stage{position:relative;}
+.graph__svg{display:block;width:100%;height:auto;max-height:78vh;overflow:visible;}
+.graph__edge{stroke:var(--line);stroke-width:.75;transition:opacity .16s ease, stroke .16s ease;}
+.graph__dot{fill:var(--ink);cursor:pointer;transition:opacity .16s ease;}
+.graph__dot--seed{fill:var(--paper);stroke:var(--ink);stroke-width:1;}
+.graph__dot--unfiled{fill:var(--faint);}
+.graph__word{fill:var(--ink);font-family:var(--sans);font-weight:400;letter-spacing:-.01em;cursor:pointer;transition:opacity .16s ease;}
+.graph__word.is-faint{fill:var(--faint);}
+.graph__label{fill:var(--ink);font-family:var(--hand);font-size:11px;pointer-events:none;}
+.graph__corner{fill:var(--faint);font-family:var(--mono);font-size:11px;}
+.graph__dot:focus{outline:none;}
+.graph__dot:focus-visible{stroke:var(--accent);stroke-width:2;}
+.graph__word:focus{outline:none;}
+.graph__word:focus-visible{fill:var(--accent);text-decoration:underline;text-underline-offset:3px;}
+.graph .is-gone{display:none;}
+/* hover or focus: the thing, its links and its neighbours stay in ink, the rest steps back */
+.graph__svg.is-lit .graph__edge:not(.on), .graph__svg.is-lit .graph__dot:not(.on), .graph__svg.is-lit .graph__word:not(.on){opacity:.18;}
+.graph__svg.is-lit .graph__edge.on{stroke:var(--ink);}
+/* the lines draw in once the post-its have landed */
+.graph.is-drawing .graph__edge{opacity:0;}
+.graph.is-drawn .graph__edge{animation:edge-in .2s ease-out;}
+@keyframes edge-in{from{opacity:0;}to{opacity:1;}}
+
+/* the note that opens: the post-it itself, pinned in the corner the layout keeps clear */
+.graph__note{position:absolute;top:0;right:0;width:min(300px,30%);padding:21px 19.25px 15.75px;background:#fff;color:#1C1B18;rotate:1deg;
+  --ink:#1C1B18; --faint:#67665E; --line:#C2C0B7; --accent:#2E3A57;
+  box-shadow:0 1px 1px rgba(28,27,24,.06),0 5.25px 12.25px -3.5px rgba(28,27,24,.14),0 19.25px 31.5px -15.75px rgba(28,27,24,.22);}
+.graph__note[hidden]{display:none;}
+.graph__note::before{content:"";position:absolute;inset:0 0 auto;height:19.25px;background:linear-gradient(rgba(28,27,24,.045),rgba(28,27,24,0));pointer-events:none;}
+.graph__note-title{font-size:1.2rem;line-height:1.25;margin:0 1.6em 10.5px 0;font-weight:400;}
+.graph__note-gist{font-size:var(--t-small);color:var(--faint);}
+.graph__note-body{font-size:var(--t-small);line-height:1.6;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:6;overflow:hidden;}
+.graph__note-body p{margin-bottom:.8em;}
+.graph__note button, .graph__index button{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;text-align:left;}
+.graph__note button:hover, .graph__index button:hover{color:var(--accent);}
+.graph__note button:focus-visible, .graph__index button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
+.graph__close{position:absolute;top:14px;right:14px;font-family:var(--mono) !important;font-size:var(--t-small) !important;color:var(--faint) !important;}
+.graph__chips{margin-top:12px;font-family:var(--mono);font-size:var(--t-small);display:flex;flex-wrap:wrap;gap:.2em .6em;}
+.graph__note-list{list-style:none;padding:0;margin:12px 0 0;font-size:var(--t-small);}
+.graph__note-list li{padding:3px 0;}
+.graph__note-foot{margin-top:14px;font-family:var(--mono);font-size:var(--t-small);}
+.graph__seed{color:var(--faint);font-family:var(--mono);}
+.graph__note-body--full{display:block;-webkit-line-clamp:none;}
+.graph__ask{display:flex;align-items:baseline;gap:.6em;margin-bottom:14px;font-family:var(--mono);font-size:var(--t-small);max-width:34em;}
+.graph__ask[hidden]{display:none;}
+.graph__ask input{flex:1;min-width:0;background:none;border:0;border-bottom:1px solid var(--line);padding:6px 0;font:inherit;color:var(--ink);}
+.graph__ask input:focus-visible{outline:none;border-bottom-color:var(--accent);}
+.graph__ask button{background:none;border:0;padding:6px 0;font:inherit;color:var(--faint);cursor:pointer;}
+.graph__ask button:hover, .graph__ask button:focus-visible{color:var(--accent);}
+
+/* the same graph as a list: read aloud on a wide screen, shown on a phone */
+.graph__index{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);}
+.graph__group{margin-top:28px;}
+.graph__concept{font-size:1.2rem;font-weight:400;line-height:1.25;}
+.graph__gist{font-size:var(--t-small);color:var(--faint);margin-top:4px;max-width:32em;}
+.graph__group ul{list-style:none;padding:0;margin:8px 0 0;}
+.graph__group li button{display:block;width:100%;min-height:44px;padding:10px 0;border-top:1px solid var(--line);}
+@media (max-width:819px){
+  .graph{width:auto;margin-inline:0;}
+  .graph__stage{display:none;}
+  .graph__index{position:static;width:auto;height:auto;margin:0;overflow:visible;clip:auto;}
+}
+:root[data-theme="dark"] .graph__dot--seed{fill:var(--paper);}
+@media (prefers-reduced-motion:reduce){ .graph, .graph__edge, .graph__dot, .graph__word{transition:none;} .graph.is-drawn .graph__edge{animation:none;} }
