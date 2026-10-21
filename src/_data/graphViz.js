@@ -3,7 +3,7 @@
 // switch stays hidden.
 const fs = require("fs");
 const path = require("path");
-const { layout } = require("../../scripts/graph-layout.js");
+const { layout } = require("../assets/js/graph-layout.js");
 
 const file = path.join(__dirname, "ideas.json");
 module.exports = fs.existsSync(file) ? layout(JSON.parse(fs.readFileSync(file, "utf8"))) : { ready: false };

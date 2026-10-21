@@ -4,7 +4,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("fs");
 const path = require("path");
-const { layout, W, H, NOTE, UNFILED } = require("../scripts/graph-layout.js");
+const { layout, W, H, NOTE, UNFILED } = require("../src/assets/js/graph-layout.js");
 
 function fixture(nc = 14, nt = 31) {
   const concepts = Array.from({ length: nc }, (_, i) => ({ id: "c" + i, name: "concept " + i, gist: "g", thoughts: [], drawn: true }));
