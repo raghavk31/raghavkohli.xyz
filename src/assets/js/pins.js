@@ -29,9 +29,18 @@
   }
 
   // ---------- the project boxes, where he put them ----------
-  var grid = document.querySelector("[data-grid]"), boxes = grid ? Array.prototype.slice.call(grid.querySelectorAll(".card")) : [];
+  // a set's plans sit in its tray (sets.js), not on the board: the set card is the box (home-set-<id>)
+  var grid = document.querySelector("[data-grid]"), boxes = grid ? Array.prototype.slice.call(grid.querySelectorAll(".card")).filter(function (c) { return !c.closest(".set__tray"); }) : [];
   var U = 10000, spots = {}, arranging = false;
-  function idOf(c) { var a = c.querySelector(".card__click"); return "home-" + ((a && a.getAttribute("href")) || "").replace(/^\/work\//, "").replace(/\/$/, "").replace(/[^A-Za-z0-9_-]/g, "-"); }
+  function idOf(c) { if (c.dataset.layoutId) return c.dataset.layoutId; var a = c.querySelector(".card__click"); return "home-" + ((a && a.getAttribute("href")) || "").replace(/^\/work\//, "").replace(/\/$/, "").replace(/[^A-Za-z0-9_-]/g, "-"); }
+  // a set not yet placed takes the highest of the spots its plans had, until it is moved
+  function adopt() {
+    boxes.forEach(function (c) {
+      if (!c.dataset.kids || spots[idOf(c)]) return;
+      var had = c.dataset.kids.split(" ").map(function (k) { return spots[k]; }).filter(Boolean).sort(function (x, y) { return x.y - y.y; })[0];
+      if (had) spots[idOf(c)] = had;
+    });
+  }
   function hasSpots() { return boxes.some(function (c) { return spots[idOf(c)]; }); }
   function arrange() {
     if (!grid) return;
@@ -68,7 +77,7 @@
     var unwait = function () { grid.classList.remove("board-wait"); };
     if (wide.matches) { grid.classList.add("board-wait"); setTimeout(unwait, 1500); }
     fetch(api + "/layout").then(function (r) { return r.json(); }).then(function (j) {
-      var L = j.layout || {}; Object.keys(L).forEach(function (k) { spots[k] = L[k]; }); arrange(); unwait(); position();
+      var L = j.layout || {}; Object.keys(L).forEach(function (k) { spots[k] = L[k]; }); adopt(); arrange(); unwait(); position();
     }, unwait);
     window.addEventListener("resize", arrange);
     if (wide.addEventListener) wide.addEventListener("change", arrange);

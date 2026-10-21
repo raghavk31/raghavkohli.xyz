@@ -58,8 +58,10 @@ module.exports = function (eleventyConfig) {
 
   // The title after `title` in the homepage grid's order (src/_data/groups.js), wrapping at the end.
   // A project that is not on the grid gets the first card.
+  // A set (src/_data/sets.js) reads as its plans.
+  const sets = require("./src/_data/sets.js");
   eleventyConfig.addFilter("nextInGrid", (groups, title) => {
-    const flat = (groups || []).flatMap((g) => g[1]);
+    const flat = (groups || []).flatMap((g) => g[1]).flatMap((t) => (sets[t] ? sets[t].plans : [t]));
     const i = flat.indexOf(title);
     return flat[(i + 1) % flat.length];
   });

@@ -1364,3 +1364,38 @@ body.is-arranging .card__note { display: none; }
 :root[data-theme="dark"] .cv-item, :root[data-theme="dark"] .pv__method .m{border-top-color:rgba(236,234,227,.1);}
 :root[data-mode="random"]:not([data-theme="dark"]) .city{opacity:.5;}
 body{transition:background-color .4s ease, color .4s ease;}
+
+/* sets (src/_data/sets.js, sets.js): one card for several projects, and the tray of them it opens.
+   Open, the hover scrim is held: everything but the set and its plans fades to the paper. Without JS
+   the tray is a plain list at the foot of the grid. */
+.set__count { font-family: var(--mono); font-size: 9.62px; letter-spacing: .04em; color: var(--accent); margin-left: .5em; white-space: nowrap; }
+.card--set.is-open .card__note { display: none; }
+.card--set.is-open .card__frame { outline: 1px solid var(--ink); outline-offset: 6px; }
+.work__grid.set-open .card:not(.card--set) { opacity: .14; filter: saturate(.4); pointer-events: none; }
+.work__grid.set-open .work__break { opacity: .25; }
+.work__grid.set-open .card--set.is-open, .work__grid.set-open .set__tray.on .card { opacity: 1 !important; filter: none !important; pointer-events: auto; }
+body.set-on .pin { opacity: .14; pointer-events: none; transition: opacity .45s ease; }
+.set__head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 14px; font-family: var(--mono); font-size: 9.62px; letter-spacing: .04em; color: var(--mute); }
+.set__close { background: none; border: 0; padding: 0; font: inherit; color: var(--accent); cursor: pointer; }
+.set__close:hover { color: var(--ink); }
+.set__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 35px 28px; align-items: start; }
+.set__tray .card__thumbs { display: none; }
+.set__tray .card .desc { font-size: .9em; }
+.set__close { display: none; }
+.js .set__close { display: inline; }
+.js .set__tray { position: absolute; z-index: 10000; width: 500px; visibility: hidden; pointer-events: none; }
+.js .set__tray.on { visibility: visible; pointer-events: auto; }
+.js .set__head { opacity: 0; transition: opacity .3s ease; }
+.js .set__tray.on .set__head { opacity: 1; }
+.js .set__grid { grid-template-columns: 1fr 1fr; }
+.work__grid .set__tray .card { position: relative; left: auto; top: auto; width: auto; max-width: none; margin: 0; z-index: auto; }
+.js .work__grid .set__tray .card { opacity: 0 !important; transform: translateX(var(--from, -24px)) scale(.96);
+  transition: opacity .35s ease, transform .5s cubic-bezier(.16,1,.3,1) !important; transition-delay: calc(var(--i) * 55ms) !important; }
+.js .work__grid .set__tray.on .card { opacity: 1 !important; transform: none; }
+@media (max-width: 787px) {
+  .js .set__tray { position: static; width: auto !important; display: none; margin: 28px 0 0; }
+  .js .set__tray.on { display: block; }
+  .js .set__grid { grid-template-columns: 1fr; }
+  .js .work__grid .set__tray .card { transform: translateY(-12px); }
+}
+@media (prefers-reduced-motion: reduce) { .js .work__grid .set__tray .card { transition: opacity .2s ease !important; transform: none; } }
