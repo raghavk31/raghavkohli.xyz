@@ -1,17 +1,13 @@
-// The homepage diagram, drawn at build time from ecology.js. Ecology is a word in a ring at the
-// centre. One loop holds the drawing: the resources run in on wires to the ring, a wire runs down
-// out of it through education to economy, and economy runs out along the bottom and back up both
-// edges as one rail, across the top, and into the lead resource (energy), which sits on the axis
-// above the ring and drops into it. The other resources branch off the side rails. main.js runs
-// dots along every wire, tinted along the way (data-tint), so the dots go in ink, come out violet
-// through education, green along economy, and ink again by the time they are back at the top.
-// Two drawings: `wide` and `tall` (the phone). Every resource and thread is a focusable node with
-// data-topic, wired to the grid filter; the ring is the reset. Counts are the grid's own projects
-// tagged with that topic.
-// 2026-10-12, the drawing carries data: every dot on a topic's wire is one of its projects
-// (data-p, [title, url] each; main.js parks them on the wire when the topic is chosen, and a parked
-// dot names its project and opens it), and a resource's wire is as heavy as its count. The phone
-// drawing is a plain tree: a spine down from the ring, one row per resource.
+// The homepage diagram, drawn at build time from ecology.js. Two drawings: `wide` and `tall` (the
+// phone). Every resource and thread is a focusable node with data-topic, wired to the grid filter;
+// ecology is the reset. Counts are the grid's own projects tagged with that topic. main.js runs dots
+// along every wire (.eco__wire), tinted by data-tint (ink, violet for education, green for economy).
+// The wide drawing (2026-10-23) is a row of resources with the work hanging from it, down to ecology
+// at the foot; its projects are words that open them. See wide() below.
+// The phone drawing is a plain tree: the lead above the ring, a spine down from it, one row per
+// resource, each wire as long and heavy as its count; every dot on a topic's wire is one of its
+// projects (data-p, [title, url] each; main.js parks them on the wire when the topic is chosen, and
+// a parked dot names its project and opens it).
 const fs = require("fs");
 const path = require("path");
 const matter = require("gray-matter");
@@ -23,13 +19,18 @@ const sets = require("./sets.js");
 const order = groups.flatMap((g) => g[1]).flatMap((t) => (sets[t] ? sets[t].plans : [t]));
 const onGrid = new Set(order);
 const dir = path.join(__dirname, "..", "projects");
-const count = {}, work = {};
+const count = {}, work = {}, page = {};
 for (const f of fs.readdirSync(dir).filter((f) => f.endsWith(".md"))) {
   const d = matter(fs.readFileSync(path.join(dir, f), "utf8")).data;
   if (!onGrid.has(d.title)) continue;
   const url = `/work/${f.replace(/\.md$/, "").replace(/^\d+-/, "")}/`;
   for (const t of d.topics || []) { count[t] = (count[t] || 0) + 1; (work[t] = work[t] || []).push([d.title, url]); }
+  page[d.title] = { topics: d.topics || [], url };
 }
+// the wide drawing's words: every card on the grid in its order, a set as one (its plans' topics, its tray)
+const pieces = groups.flatMap((g) => g[1]).map((t) => sets[t]
+  ? { title: t, name: `${t.toLowerCase()} ×${sets[t].plans.length}`, url: `#set-${sets[t].id}`, topics: [...new Set(sets[t].plans.flatMap((q) => page[q].topics))] }
+  : { title: t, name: t.toLowerCase(), url: page[t].url, topics: page[t].topics });
 for (const t in work) work[t].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
 // a resource's wire weight: 1.1 for none, up to 3.4 for the most-told topic
 const most = Math.max(1, ...Object.values(count));
@@ -47,13 +48,14 @@ const verbs = (EC.along || []).join("  →  ");
 // a wire: the path the dots run along, in the direction they run. `tint` names the dots' colours
 // from start to end (ink, ed, ec); `grad` strokes it with one of the drawing's gradients.
 // `p` lists the projects that ride it as dots, `park` the stretch (from, to: 0–1 along the wire)
-// where they line up when the topic is chosen, clear of its label; `w` its weight.
+// where they line up when the topic is chosen, clear of its label; `w` its weight; `n` how many
+// plain dots run on it (else one every 110px); `pw` the project words it leads to (the wide drawing).
 function wire(d, flow, o = {}) {
   const st = [o.grad ? `--g:url(#${o.grad})` : "", o.w ? `--w:${o.w}` : ""].filter(Boolean).join(";");
   return `<path class="eco__wire${o.cls ? " " + o.cls : ""}" data-flow="${flow}"` +
     (o.of ? ` data-of="${o.of}"` : "") + (o.tint ? ` data-tint="${o.tint}"` : "") +
     (o.p ? ` data-p="${esc(JSON.stringify(o.p))}" data-park="${o.park || "0.2 0.8"}"` : "") +
-    (o.ppath ? ` data-ppath="${o.ppath}"` : "") +
+    (o.ppath ? ` data-ppath="${o.ppath}"` : "") + (o.n ? ` data-n="${o.n}"` : "") + (o.pw ? ` data-pw="${o.pw}"` : "") +
     (o.grad ? ` data-grad` : "") + (st ? ` style="${st}"` : "") + ` d="${d}"/>`;
 }
 
@@ -115,53 +117,91 @@ function desc() {
          `Out of it run ${eco.threads.map((t) => t.label + (t.note ? " (" + t.note + ")" : "")).join(" and ")}, and the loop returns up both edges to ${lead.label} and the resources.</desc>`;
 }
 
-// ---- wide ----
-// 960 wide (was 1148): the same page width draws everything a fifth larger, and the wires shorter
+// ---- wide: the row and what hangs from it (2026-10-23, mock C, from his environment / architecture /
+// body+mind reference). The resources in a row, the lead in the middle. Economy loops over the row and
+// back, education is a dotted axis under it, with the projects that are only education sitting on it.
+// Every project hangs from the resources it draws on: on one, it is listed off that resource's stem;
+// on more, it hangs lower the more it draws on, where a line down from each of them meets it. Ecology
+// is at the foot, where it all ends up, and is the reset. Each line is a wire inside its resource's
+// node (so the resource lights its lines and main.js runs one dot down it) and names the projects it
+// serves (data-pw), so a project word lights its own lines.
 function wide() {
-  const W = 960, H = 372, cx = W / 2, cy = 168, r = 64, top = 36, xL = 24, xR = W - 24, k = 22;
-  const eY = 290, cY = 344, gap = 62, mouth = 70;   // mouth: where the top rail stops short of the lead's label
-  const L = rest.slice(0, Math.ceil(rest.length / 2)), R = rest.slice(L.length);
+  const W = 1120, H = 700, top = 34, rowY = 118, axY = 164, xL = 40, xR = W - 40, x0 = 110, x1 = 940, k = 26;
+  const half = Math.ceil(rest.length / 2), row = rest.slice(0, half).concat([lead], rest.slice(half));
+  const rx = {}; row.forEach((r, i) => (rx[r.id] = x0 + (i * (x1 - x0)) / (row.length - 1)));
+  const on = (p) => row.map((r) => r.id).filter((t) => p.topics.includes(t));
+  const ps = pieces.map((p, i) => ({ ...p, i, res: on(p) }));
+  const fs = 12.5, tw = (s) => s.length * fs * 0.5;
+  const pw = (p, x, y, anchor) => `<a class="eco__pw" href="${p.url}" data-pw="${p.i}" data-ts="${p.topics.join(" ")}" aria-label="${esc(p.title)}">` +
+    `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}"${anchor ? ` text-anchor="${anchor}"` : ""}>${esc(p.name)}</text></a>`;
+  // a project that also runs on a thread says so after its name
+  const also = (p, x, y, anchor) => [ED, EC].filter((t) => p.topics.includes(t.id)).map((t, j) =>
+    `<text class="eco__also eco__also--${t === ED ? "ed" : "ec"}" x="${x.toFixed(1)}" y="${(y + j * 12).toFixed(1)}"${anchor ? ` text-anchor="${anchor}"` : ""}>+ ${esc(t.label)}</text>`).join("");
 
   let s = `<svg class="eco__svg eco__svg--wide" viewBox="0 0 ${W} ${H}" role="group" aria-label="what the work is for">${desc()}`;
-  s += defs([
-    ["eco-w-rail", 0, cY, 0, top, [[0, "--ec-ink", .6], [1, "--ink", .36]]],
-    ["eco-w-down", 0, cy + r, 0, cY, [[0, "--ink", .36], [.5, "--ed-ink", .6], [1, "--ec-ink", .6]]],
-  ]);
+  // economy: up from the row's ends, over the top and back, an arrow the way it returns
+  const loop = `M${xR} ${rowY}V${top + k}Q${xR} ${top} ${xR - k} ${top}H${xL + k}Q${xL} ${top} ${xL} ${top + k}V${rowY}`;
+  s += band(xL - 12, xR + 12, top, 32, EC, "eco__band--ec", verbs,
+    wire(loop, "loop", { of: EC.id, tint: "ec", cls: "eco__wire--rail" }) +
+    `<path class="eco__chev eco__chev--l" d="M${W / 2 + 4} ${top - 5}L${W / 2 - 3} ${top}L${W / 2 + 4} ${top + 5}"/>`, 40)
+    .replace('class="eco__band eco__band--ec"', 'class="eco__band eco__band--ec" data-below');   // its note goes under it, not over the statement
+  s += `<path class="eco__spine" d="M${xL} ${rowY}H${xR}"/>`;
+  // education: a dotted axis, out both ways
+  s += band(xL - 12, xR + 12, axY, 28, ED, "eco__band--ed", "",
+    wire(`M${xL} ${axY}H${xR}`, "band", { of: ED.id, tint: "ed", cls: "eco__wire--dot" }) +
+    `<path class="eco__chev eco__chev--ed" d="M${xL + 6} ${axY - 4}L${xL - 1} ${axY}L${xL + 6} ${axY + 4}M${xR - 6} ${axY - 4}L${xR + 1} ${axY}L${xR - 6} ${axY + 4}"/>`, 16);
 
-  // ecology down through education to economy, a joint where it meets each
-  s += `<g class="eco__loop">` + wire(`M${cx} ${cy + r}V${cY}`, "down", { tint: "ink ed ec", grad: "eco-w-down" }) +
-    `<circle class="eco__joint eco__joint--ed" cx="${cx}" cy="${eY}" r="3.5"/><circle class="eco__joint eco__joint--ec" cx="${cx}" cy="${cY}" r="3.5"/></g>`;
-  // education spreads out from where the down wire crosses it; its note shows on hover, like the rest
-  s += band(xL - 12, xR + 12, eY, 36, ED, "eco__band--ed", "",
-    wire(`M${cx} ${eY}H${xL + 60}`, "band", { of: ED.id, tint: "ed", p: share(ED.id, 0), park: "0.06 0.6" }) +
-    wire(`M${cx} ${eY}H${xR - 60}`, "band", { of: ED.id, tint: "ed", p: share(ED.id, 1), park: "0.06 0.9" }), 40);
-  // economy: out along the bottom, up both edges, across the top into the lead resource; a chevron
-  // half way up each edge says which way it runs
-  const rail = (x, d) => `M${cx} ${cY}H${x - d * k}Q${x} ${cY} ${x} ${cY - k}V${top + k}Q${x} ${top} ${x - d * k} ${top}H${cx + d * mouth}`;
-  const chev = (x) => { const y = (top + cY) / 2; return `<path class="eco__chev" d="M${x - 5} ${y + 3}L${x} ${y - 3}L${x + 5} ${y + 3}"/>`; };
-  s += band(xL - 12, xR + 12, cY, 36, EC, "eco__band--ec", verbs,
-    wire(rail(xL, -1), "loop", { of: EC.id, tint: "ec ink", grad: "eco-w-rail", cls: "eco__wire--rail", p: share(EC.id, 0), park: "0.06 0.2" }) +
-    wire(rail(xR, 1), "loop", { of: EC.id, tint: "ec ink", grad: "eco-w-rail", cls: "eco__wire--rail", p: share(EC.id, 1), park: "0.06 0.2" }) +
-    chev(xL) + chev(xR), 40);
+  // where every project goes
+  const single = {}, many = [], edOnly = [];
+  ps.forEach((p) => (p.res.length === 1 ? (single[p.res[0]] = single[p.res[0]] || []).push(p) : p.res.length ? many.push(p) : edOnly.push(p)));
+  const sTop = axY + 38, sGap = 19;
+  // more than one: lower the more it draws on, under the middle of its resources, kept apart on a row
+  const rows = {};
+  many.forEach((p) => { const n = p.res.length; p.y = 300 + (n - 2) * 56; p.x = p.res.reduce((a, t) => a + rx[t], 0) / n; (rows[n] = rows[n] || []).push(p); });
+  for (const n in rows) {
+    const r = rows[n].sort((a, b) => a.x - b.x);
+    for (let it = 0; it < 60; it++) for (let j = 1; j < r.length; j++) {
+      const need = (tw(r[j - 1].name) + tw(r[j].name)) / 2 + 36, gap = r[j].x - r[j - 1].x;
+      if (gap < need) { r[j - 1].x -= (need - gap) / 2; r[j].x += (need - gap) / 2; }
+    }
+  }
 
-  // the other resources branch off the side rails: a dot on the rail, the label on the wire, then a
-  // bend into the ring, spread over its height; each wire as heavy as its count
-  const side = (list, d) => list.forEach((it, i) => {
-    const y = cy + (i - (list.length - 1) / 2) * gap, x0 = d > 0 ? xL : xR;
-    const dy = (y - cy) * 0.45, ay = cy + dy, ax = cx - d * Math.sqrt(r * r - dy * dy), m = x0 + d * 236;
-    s += nodeOpen(it, "res");
-    s += `<rect class="eco__hit" x="${Math.min(x0, m)}" y="${y - 20}" width="296" height="40"/>`;
-    s += wire(`M${x0} ${y}H${m}C${m + d * 90} ${y} ${(ax - d * 70).toFixed(1)} ${ay} ${ax.toFixed(1)} ${ay}`, "in",
-      { tint: "ink", w: weight(it.id), p: share(it.id), park: "0.5 0.94" });
-    s += `<circle class="eco__end" cx="${x0}" cy="${y}" r="3.5"/>`;
-    s += label(x0 + d * 92, y, it, d > 0 ? "start" : "end");
-    s += `</g>`;
+  // the resources, each with its lines
+  row.forEach((it) => {
+    const x = rx[it.id], y0 = rowY + 16, list = single[it.id] || [];
+    s += nodeOpen(it, "res") + `<rect class="eco__hit" x="${x - 62}" y="${rowY - 20}" width="124" height="40"/>`;
+    if (list.length) {
+      const yl = sTop + (list.length - 1) * sGap;
+      s += wire(`M${x} ${y0}V${yl}`, "in", { tint: "ink", cls: "eco__edge", n: 1, pw: list.map((p) => p.i).join(" ") });
+      list.forEach((p, j) => (s += `<path class="eco__edge eco__tick" data-pw="${p.i}" d="M${x} ${sTop + j * sGap}H${x + 9}"/>`));
+    }
+    many.filter((p) => p.res.includes(it.id)).forEach((p) => {
+      const ey = p.y - 15, m = (y0 + ey) / 2;
+      s += wire(`M${x} ${y0}C${x} ${m + 20} ${p.x.toFixed(1)} ${m} ${p.x.toFixed(1)} ${ey}`, "in", { tint: "ink", cls: "eco__edge", n: 1, pw: "" + p.i });
+    });
+    s += label(x, rowY, it, "middle", it.lead) + `</g>`;
   });
-  side(L, 1);
-  side(R, -1);
 
-  s += leadNode(cx, top, cy - r, mouth);
-  s += ring(cx, cy, r, 32);
+  // the words, over every line
+  for (const t in single) single[t].forEach((p, j) => {
+    const x = rx[t] + 13, y = sTop + j * sGap + 4;
+    s += pw(p, x, y, "") + also(p, x + tw(p.name) + 12, y);
+  });
+  many.forEach((p) => (s += pw(p, p.x, p.y, "middle") + also(p, p.x, p.y + 14, "middle")));
+  const slots = [(rx[row[half - 1].id] + rx[lead.id]) / 2, (rx[lead.id] + rx[row[half + 1].id]) / 2, (rx[row[row.length - 2].id] + rx[row[row.length - 1].id]) / 2];
+  edOnly.forEach((p, j) => {
+    const x = slots[j % slots.length], w = tw(p.name) + 24;
+    s += `<rect class="eco__chip" x="${(x - w / 2).toFixed(1)}" y="${axY - 10}" width="${w.toFixed(1)}" height="20"/>` +
+      `<path class="eco__tick eco__tick--ed" d="M${(x - w / 2 + 4).toFixed(1)} ${axY - 6}V${axY + 6}M${(x + w / 2 - 4).toFixed(1)} ${axY - 6}V${axY + 6}"/>` + pw(p, x, axY + 4, "middle");
+  });
+
+  // ecology at the foot, a bracket gathering everything above into it; the way back to all work
+  const by = Math.max(...many.map((p) => p.y), sTop) + 50, fy = by + 36;
+  s += `<path class="eco__spine" d="M150 ${by - 18}V${by}Q150 ${by + 22} 172 ${by + 22}H${W / 2 - 66}M${W - 150} ${by - 18}V${by}Q${W - 150} ${by + 22} ${W - 172} ${by + 22}H${W / 2 + 66}"/>`;
+  s += `<g class="eco__tile" data-eco-home role="button" tabindex="0" aria-label="${esc(eco.root)}: show all work">` +
+    `<rect class="eco__hit" x="${W / 2 - 70}" y="${fy - 36}" width="140" height="64"/>` +
+    `<text class="eco__root" x="${W / 2}" y="${fy}" text-anchor="middle" style="font-size:30px">${esc(eco.root)}</text>` +
+    `<text class="eco__hint" x="${W / 2}" y="${fy + 20}" text-anchor="middle">(all work)</text></g>`;
   return s + `</svg>`;
 }
 
