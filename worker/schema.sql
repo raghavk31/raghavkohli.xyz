@@ -40,5 +40,8 @@ CREATE TABLE IF NOT EXISTS pins (
   w        REAL NOT NULL,
   z        INTEGER NOT NULL DEFAULT 0,
   created  INTEGER NOT NULL,
-  updated  INTEGER NOT NULL
+  updated  INTEGER NOT NULL,
+  -- 2026-10-22 (migration 0004): note | image | text; style = {size, color, bold, back} as JSON
+  kind     TEXT NOT NULL DEFAULT 'note',
+  style    TEXT
 );
