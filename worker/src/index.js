@@ -10,8 +10,10 @@
                                             x, y, w in ten-thousandths of the grid's width (pins.js arranges them)
    POST   /images      <image bytes>        an image for a note; Content-Type is the mime; returns {id}
    GET    /images/<id>                      the image, cached for a year
-   GET    /pins                             the notes pinned on the homepage (id, body, images, anchor, x, y, w, z)
-   POST   /pins  {body?, images?, anchor, x, y, w}   a new note                  - X-Owner-Key
+   GET    /pins                             the homepage collage (id, kind, body, images, style, anchor, x, y, w, z)
+   POST   /pins  {kind?, body?, images?, style?, anchor, x, y, w}   a new note, image or text   - X-Owner-Key
+                                            kind: note (the post-it) | image (a png as it is) | text;
+                                            style: {size, color, bold} for text, {back} for anything behind the page
    PUT    /pins/<id>  {any of those, z?}    move or edit one                          - X-Owner-Key
    DELETE /pins/<id>                        its images go with it                     - X-Owner-Key
    GET    /hrsl/<file>.tif                  Climate Code: a byte range of Meta's population grid, with CORS (hrsl.js)
@@ -160,8 +162,8 @@ export default {
 
     /* ---------- pins: notes on the homepage's empty spaces ---------- */
     if (route === "pins" && req.method === "GET" && !id) {
-      const { results } = await env.DB.prepare("SELECT id, body, images, anchor, x, y, w, z, created FROM pins ORDER BY z, created").all();
-      return json({ pins: results.map(withImages) });
+      const { results } = await env.DB.prepare("SELECT id, kind, body, images, style, anchor, x, y, w, z, created FROM pins ORDER BY z, created").all();
+      return json({ pins: results.map((r) => withStyle(withImages(r))) });
     }
     if (route === "pins" && (req.method === "POST" && !id || (req.method === "PUT" || req.method === "DELETE") && id)) {
       if (!ownerHeader()) return json({ error: "no" }, 403);
@@ -176,13 +178,17 @@ export default {
       try { data = await req.json(); } catch { return json({ error: "bad json" }, 400); }
       const cur = id ? await env.DB.prepare("SELECT * FROM pins WHERE id = ?").bind(id).first() : null;
       if (id && !cur) return json({ error: "not found" }, 404);
-      const row = cur ? withImages(cur) : { id: newId(), body: null, images: [], anchor: "top", x: 0, y: 0, w: 200, z: 0, created: Date.now() };
+      const row = cur ? withStyle(withImages(cur)) : { id: newId(), kind: "note", body: null, images: [], style: {}, anchor: "top", x: 0, y: 0, w: 200, z: 0, created: Date.now() };
       const n = (v, lo, hi) => Math.min(Math.max(Number(v) || 0, lo), hi);
+      // the kind is chosen once, when the pin is made
+      if (!cur && ["note", "image", "text"].includes(data.kind)) row.kind = data.kind;
       if ("body" in data) row.body = String(data.body || "").replace(/\r\n?/g, "\n").trim().slice(0, 4000) || null;
+      if ("style" in data) row.style = pinStyle(data.style);
       if ("anchor" in data) row.anchor = String(data.anchor || "top").replace(/[^a-z0-9:&\- ]/gi, "").slice(0, 60) || "top";
       if ("x" in data) row.x = n(data.x, -5000, 5000);
       if ("y" in data) row.y = n(data.y, -5000, 200000);
-      if ("w" in data) row.w = n(data.w, 120, 600);
+      // a note is a post-it, 120 to 600 wide; an image or a text runs from a small symbol to the page's width
+      if ("w" in data) row.w = row.kind === "note" ? n(data.w, 120, 600) : n(data.w, 16, 2400);
       if ("z" in data) row.z = Math.round(n(data.z, 0, 1e9));
       let dropped = [];
       if ("images" in data) {
@@ -190,13 +196,14 @@ export default {
         dropped = row.images.filter((i) => !next.includes(i));
         row.images = next;
       }
-      if (!row.body && !row.images.length) return json({ error: "write something first" }, 400);
+      if (row.kind === "image" ? !row.images.length : row.kind === "text" ? !row.body : !row.body && !row.images.length) return json({ error: "write something first" }, 400);
       const imgs = row.images.length ? JSON.stringify(row.images) : null, now = Date.now();
+      const sty = Object.keys(row.style).length ? JSON.stringify(row.style) : null;
       const stmts = [cur
-        ? env.DB.prepare("UPDATE pins SET body = ?, images = ?, anchor = ?, x = ?, y = ?, w = ?, z = ?, updated = ? WHERE id = ?")
-            .bind(row.body, imgs, row.anchor, row.x, row.y, row.w, row.z, now, row.id)
-        : env.DB.prepare("INSERT INTO pins (id, body, images, anchor, x, y, w, z, created, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
-            .bind(row.id, row.body, imgs, row.anchor, row.x, row.y, row.w, row.z, row.created, now)];
+        ? env.DB.prepare("UPDATE pins SET body = ?, images = ?, style = ?, anchor = ?, x = ?, y = ?, w = ?, z = ?, updated = ? WHERE id = ?")
+            .bind(row.body, imgs, sty, row.anchor, row.x, row.y, row.w, row.z, now, row.id)
+        : env.DB.prepare("INSERT INTO pins (id, kind, body, images, style, anchor, x, y, w, z, created, updated) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")
+            .bind(row.id, row.kind, row.body, imgs, sty, row.anchor, row.x, row.y, row.w, row.z, row.created, now)];
       if (row.images.length) stmts.push(env.DB.prepare(`UPDATE images SET thought_id = ? WHERE id IN (${row.images.map(() => "?").join(",")})`).bind(row.id, ...row.images));
       if (dropped.length) stmts.push(env.DB.prepare(`DELETE FROM images WHERE id IN (${dropped.map(() => "?").join(",")})`).bind(...dropped));
       await env.DB.batch(stmts);
@@ -257,6 +264,24 @@ function withImages(row) {
   let images = [];
   try { images = row.images ? JSON.parse(row.images) : []; } catch {}
   return { ...row, images };
+}
+
+function withStyle(row) {
+  let style = {};
+  try { style = row.style ? JSON.parse(row.style) : {}; } catch {}
+  return { ...row, kind: row.kind || "note", style };
+}
+
+// a pin's look: a text's size (px at the site's first scale), its colour (a site token or a hex) and
+// weight, and whether it sits behind the page; anything else is dropped
+function pinStyle(s) {
+  const out = {};
+  if (!s || typeof s !== "object") return out;
+  if (s.size != null) out.size = Math.round(Math.min(Math.max(Number(s.size) || 0, 8), 400));
+  if (typeof s.color === "string" && /^(ink|mute|accent|paper|#[0-9a-f]{6})$/i.test(s.color)) out.color = s.color.toLowerCase();
+  if (s.bold) out.bold = true;
+  if (s.back) out.back = true;
+  return out;
 }
 
 

@@ -1249,7 +1249,7 @@ body.lb-open{overflow:hidden;}
 /* ── the city behind the homepage (city.js) ── */
 .city { position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: .43; transition: opacity .28s ease; }
 .city.is-out { opacity: 0; }
-body:has(> .city) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pins):not(.pin-zoom):not(.board__scrim):not(script) { position: relative; z-index: 1; }
+body:is(:has(> .city), :has(> .pins--back)) > *:not(.city):not(.dock):not(.head):not(.pv):not(.lb):not(.pins):not(.pin-zoom):not(.board__scrim):not(script) { position: relative; z-index: 1; }
 /* the dock: the homepage's controls in one line at the foot of the screen, on the page's right edge:
    the city's name (a click moves to the next city), the owner's tools, the colour modes */
 .dock { position: fixed; z-index: 40; bottom: 12.25px; right: max(var(--gutter), calc((100vw - var(--maxw)) / 2 + var(--gutter)));
@@ -1292,7 +1292,7 @@ body:has(.pin-add) .pin:not(.is-editing) { cursor: grab; }
 .pin__bar [data-save] { margin-left: auto; }
 .pin__msg { display: block; margin-top: 5.25px; font-size: 9.62px; opacity: .7; position: relative; }
 /* the owner's tools sit in the dock; while placing a note, the page takes a crosshair */
-body.is-pinning .pin-add:first-child, body.is-arranging .pin-add { color: var(--ink); }
+body.is-pinning .pin-add.is-on, body.is-arranging .pin-add { color: var(--ink); }
 body.is-pinning, body.is-pinning * { cursor: crosshair !important; }
 
 /* the corner that scales a note or a box (owner only) */
@@ -1333,6 +1333,38 @@ body.is-arranging .work__grid .card.is-dragging { cursor: grabbing; outline-colo
 body.is-arranging .work__grid .card { opacity: 1 !important; filter: none !important; }
 body.is-arranging .card__note { display: none; }
 
+/* the collage's own pins (pins.js): an image placed as it is, and words at his size and colour. No
+   paper, no tilt; the width is set from the pin, the corner grip and the tools sit just outside it */
+.pins .pin.pin--img, .pins .pin.pin--img:hover, .pins .pin.pin--text, .pins .pin.pin--text:hover { transform: none; padding: 0; background: none; box-shadow: none; }
+.pin--img img { display: block; width: 100%; height: auto; user-select: none; -webkit-user-drag: none; }
+.pin--text { font-family: var(--nh); line-height: 1.02; letter-spacing: -.02em; }
+.pin--text p { margin: 0; }
+.pin--img .pin__tools, .pin--text .pin__tools { top: -15.75px; right: 0; color: var(--mute); font-size: 8.75px; font-weight: 400; letter-spacing: .04em; line-height: 1.4; white-space: nowrap; }
+.pin--img .pin__tools a, .pin--text .pin__tools a { color: var(--mute); }
+.pin.pin--img .grip, .pin.pin--text .grip { color: var(--ink); right: -5.25px; bottom: -5.25px; }
+.pins .pin.pin--img.is-dragging, .pins .pin.pin--text.is-dragging { transform: none; }
+/* a text being written: the words where they will sit, a dashed edge, and its bar underneath at the site's small size */
+.pin.pin--text.is-editing { outline: 1px dashed var(--line); outline-offset: 5.25px; }
+.pin.pin--text textarea { min-height: 0; resize: none; overflow: hidden; color: inherit; line-height: inherit; letter-spacing: inherit; font-weight: inherit; }
+.pin.pin--text textarea::placeholder { color: var(--mute); }
+.pin__bar--text { position: absolute; left: -5.25px; top: 100%; margin-top: 10.5px; padding: 3.5px 5.25px; align-items: center; white-space: nowrap;
+  font-weight: 400; letter-spacing: .04em; line-height: 1.4; color: var(--ink); background: var(--paper); }
+.pin__bar--text a, .pin__bar--text label { color: var(--ink); opacity: .7; }
+.pin__bar--text a.is-on, .pin__bar--text label.is-on { opacity: 1; }
+.pin__bar--text input[type=number] { width: 42px; font: inherit; color: inherit; background: none; border: 0; border-bottom: 1px solid var(--line); padding: 0 1.75px; }
+.pin__sw { display: inline-block; width: 10.5px; height: 10.5px; background: var(--c); outline: 1px solid var(--line); outline-offset: 1.75px; opacity: 1 !important; }
+.pin__sw.is-on { outline-color: var(--ink); }
+.pin__sw--any { position: relative; overflow: hidden; background: conic-gradient(#e8336d, #f2b632, #3f7d5a, #2e3a57, #6f67b0, #e8336d); }
+.pin__sw--any input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.pin--text .pin__msg { position: absolute; top: 100%; margin-top: 35px; font-size: 9.62px; font-weight: 400; letter-spacing: 0; color: var(--mute); }
+/* behind the page: under its content (and over the city); held up within reach while arranging */
+body.is-arranging .pins--back > .pin { z-index: 2 !important; outline: 1px dashed var(--line); outline-offset: 3.5px; cursor: grab; }
+/* the columns everything snaps to, shown while arranging or while a pin moves */
+.snap-guides { position: fixed; inset: 0; z-index: 1; pointer-events: none; opacity: 0; transition: opacity .2s ease;
+  --gl: color-mix(in srgb, var(--accent) 30%, transparent);
+  background: repeating-linear-gradient(90deg, var(--gl) 0 1px, transparent 1px calc(var(--cw, 0px) - 1px), var(--gl) calc(var(--cw, 0px) - 1px) var(--cw, 0px), transparent var(--cw, 0px) var(--pitch, 1px));
+  background-position-x: var(--gx, 0px); }
+.snap-guides.on { opacity: 1; }
 @media (max-width:787px) { .pins, .dock .pin-add { display: none; } .dock { gap: 14px; } }
 
 /* ---------- colour modes (2026-10-10; base.njk, the dock): dark, and random ----------
