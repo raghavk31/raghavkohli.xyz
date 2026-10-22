@@ -159,6 +159,9 @@
     el.innerHTML = (p.images || []).map(function (i) { return '<img class="pin__img" src="' + api + "/images/" + i + '" alt="" loading="lazy" />'; }).join("") +
       (p.body ? "<p>" + esc(p.body) + "</p>" : "") + toolsFor(p);
     el.querySelectorAll("img").forEach(function (im) { im.addEventListener("load", position); });
+    // a long note shows its first lines on the board (css clamps them); the whole of it opens on a click
+    var cut = function () { var t = el.querySelector("p"); el.classList.toggle("is-cut", !!t && t.scrollHeight > t.clientHeight + 1); };
+    requestAnimationFrame(cut); if (document.fonts) document.fonts.ready.then(cut);
     return el;
   }
   function picture(p) {

@@ -1279,6 +1279,9 @@ body.pv-open .pins, body.lb-open .pins { visibility: hidden; }
 .pin { position: absolute; width: 192.5px; padding: 17.5px 12.25px 10.5px; transform-origin: 0 0; }
 .pins .pin, .pins .pin:hover { transform: rotate(var(--r, 1deg)) scale(var(--s, 1)); }
 .pin p { white-space: pre-wrap; overflow-wrap: anywhere; }
+/* a long note: its first seven lines on the board, "(more)" under them; a click opens the whole of it */
+.pins .postit:not(.is-editing) p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 7; line-clamp: 7; overflow: hidden; }
+.pins .postit.is-cut:not(.is-editing)::after { content: "(more)"; display: block; margin-top: 5.25px; font-family: var(--nh); font-size: 8.75px; letter-spacing: .04em; opacity: .6; }
 .pin__img { display: block; width: calc(100% + 24.5px); margin: -17.5px -12.25px 10.5px; height: auto; position: relative; }
 .pin__img + .pin__img { margin-top: 0; }
 .pin__tools { position: absolute; right: 8.75px; top: 1.75px; font-family: var(--nh); font-size: 8.75px; letter-spacing: .04em; opacity: 0; transition: opacity .2s ease; z-index: 1; }
