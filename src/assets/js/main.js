@@ -193,10 +193,13 @@
       else if (shape && shape.getAttribute("data-anchor") === "end") x = r.left - box.left - cw + 28;
       else x = r.right - box.left - 28;
       var y = r.top - box.top - ch + 4;   // touching the pill's top edge, never over its label
-      // the lead sits on the top rail: its box goes beside it, so it never climbs over the statement
-      if (shape && shape.getAttribute("data-anchor") === "middle") { x = r.right - box.left + 8.75; y = r.top - box.top + r.height / 2 - ch / 2; }
+      // the wide drawing's row (every label centred on it): the box sits up over the economy loop, its
+      // corner on the pill's right end, clear of the words either side
+      if (shape && shape.getAttribute("data-anchor") === "middle") x = r.right - box.left - 28;
       // the phone's column stacks the pills tight: there the box sits beside its pill, over the wires
       if (node.closest(".eco__svg--tall") && !shape.classList.contains("eco__band")) { x = r.right - box.left + 8.75; y = r.top - box.top + r.height / 2 - ch / 2; }
+      // a band along the drawing's top (economy, on the wide one): its box hangs under it
+      if (shape && shape.hasAttribute("data-below")) y = r.bottom - box.top - 4;
       x = Math.max(0, Math.min(box.width - cw, x));
       c.style.left = x + "px";
       c.style.top = y + "px";
@@ -223,6 +226,7 @@
       if (showing) { showing.hidden = !active; showing.textContent = active ? "· " + active : ""; }
       peek(null);
       setNote(null);
+      light(null);
       applyFilter(active);
       document.dispatchEvent(new Event("ecotopic"));
       // the grid starts below the diagram: bring it up so the change is seen
@@ -246,10 +250,42 @@
       b.addEventListener("keydown", function (e) {
         if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setActive(active === t ? null : t); }
       });
-      b.addEventListener("mouseenter", function () { peek(t); setNote(t); });
-      b.addEventListener("mouseleave", function () { peek(null); setNote(null); });
-      b.addEventListener("focus", function () { peek(t); setNote(t); });
-      b.addEventListener("blur", function () { peek(null); setNote(null); });
+      b.addEventListener("mouseenter", function () { peek(t); setNote(t); light(t); });
+      b.addEventListener("mouseleave", function () { peek(null); setNote(null); light(null); });
+      b.addEventListener("focus", function () { peek(t); setNote(t); light(t); });
+      b.addEventListener("blur", function () { peek(null); setNote(null); light(null); });
+    });
+
+    // the wide drawing's projects, as words: a resource (or the chosen one) lights the words it leads
+    // to; a word lights its own lines and resources, previews its card, and opens it the way the card would
+    var words = Array.prototype.slice.call(eco.querySelectorAll(".eco__pw"));
+    function light(topic, word) {
+      var t = topic || active, p = word ? word.getAttribute("data-pw") : null, ts = word ? word.getAttribute("data-ts").split(" ") : [];
+      eco.querySelectorAll(".eco__svg--wide").forEach(function (svg) {
+        svg.classList.toggle("pw-hot", !!(t || p));
+        svg.classList.toggle("pw-one", !!p);
+        words.forEach(function (w) { w.classList.toggle("lit", p ? w === word : !!t && w.getAttribute("data-ts").split(" ").indexOf(t) !== -1); });
+        svg.querySelectorAll(".eco__edge").forEach(function (e) { e.classList.toggle("lit", !!p && (e.getAttribute("data-pw") || "").split(" ").indexOf(p) !== -1); });
+        svg.querySelectorAll(".eco__node").forEach(function (n) { n.classList.toggle("lit", !!p && ts.indexOf(n.getAttribute("data-topic")) !== -1); });
+      });
+    }
+    function cardFor(w) { return grid.querySelector('a.card__click[href="' + w.getAttribute("href") + '"]'); }
+    words.forEach(function (w) {
+      function over() {
+        light(null, w);
+        if (active) return;
+        var c = cardFor(w), card = c && c.closest(".card");
+        grid.classList.toggle("peek", !!card);
+        cards.forEach(function (k) { k.classList.toggle("hint", k === card); });
+      }
+      function out() { light(null); peek(null); }
+      w.addEventListener("mouseenter", over); w.addEventListener("focus", over);
+      w.addEventListener("mouseleave", out); w.addEventListener("blur", out);
+      w.addEventListener("click", function (e) {
+        var c = cardFor(w);
+        // stopped here: a set's tray (sets.js) shuts on any click that reaches the page outside it
+        if (c) { e.preventDefault(); e.stopPropagation(); out(); c.click(); }
+      });
     });
 
     if (resetBtn) resetBtn.addEventListener("click", function () { setActive(null); });
@@ -310,7 +346,7 @@
         // a topic's wire carries its projects, one dot each (data-p); the down wire carries the loop
         var work = null;
         try { work = w.hasAttribute("data-p") ? JSON.parse(w.getAttribute("data-p")) : null; } catch (e) { work = null; }
-        var n = work ? work.length : Math.max(1, Math.round((len || 400) / 110)), dots = [];
+        var n = work ? work.length : (+w.getAttribute("data-n") || Math.max(1, Math.round((len || 400) / 110))), dots = [];
         for (var i = 0; i < n; i++) {
           var c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
           c.setAttribute("r", "2.2");

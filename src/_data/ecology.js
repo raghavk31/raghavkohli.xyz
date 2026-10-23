@@ -7,12 +7,12 @@
 module.exports = {
   root: "ecology",
   resources: [
-    { id: "energy",    label: "energy", lead: true },   // drawn at the top of the loop, a size up
+    { id: "energy",    label: "energy", lead: true },   // drawn in the middle of the row, a size up
     { id: "food",      label: "food",      note: "no one has to be hungry" },
     { id: "water",     label: "water",     note: "no one in dearth of water, no one dying due to flooding" },
     { id: "waste",     label: "waste" },
-    { id: "mobility",  label: "mobility" },
     { id: "air",       label: "air",       note: "no one breathing in poisonous air" },
+    { id: "mobility",  label: "mobility" },
     { id: "buildings", label: "buildings", note: "buildings and materiality" },
   ],
   threads: [
