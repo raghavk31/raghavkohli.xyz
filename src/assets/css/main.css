@@ -1291,6 +1291,13 @@ body:is(:has(> .city), :has(> .pins--back)) > *:not(.city):not(.dock):not(.head)
 .dock button:hover, .dock button:focus-visible, .dock button[aria-pressed="true"] { color: var(--ink); }
 .city-pick__r { display: inline-block; transition: transform .5s ease; }
 .city-pick:hover .city-pick__r { transform: rotate(180deg); }
+.city.is-off { opacity: 0; }
+/* the dot before the city's name: filled while the city shows, a ring when it is off */
+.dock .city-dot { width: 13px; height: 13px; margin-right: -12.25px; display: inline-grid; place-items: center; }
+.city-dot::before { content: ""; width: 5.25px; height: 5.25px; border-radius: 50%; box-sizing: border-box;
+  border: 1px solid currentColor; background: currentColor; transition: background-color .3s ease; }
+.city-dot[aria-pressed="false"]::before { background: transparent; }
+.dock .city-pick.is-off { color: var(--faint); }
 @media (prefers-reduced-motion: reduce) { .city, .city-pick__r { transition: none; } }
 
 /* ── notes pinned on the homepage's empty spaces (pins.js): the site's black post-it, placed by hand ── */

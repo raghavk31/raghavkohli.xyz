@@ -16,29 +16,39 @@
       {#- (random) draws from a picked palette, not the whole wheel (2026-10-12): pastel papers that sit
           at one lightness, so any two or three of them make a soft wash; and a few deep inks for the
           dark side. The wash paints the page behind everything (--wash); --paper stays one solid
-          colour, the mean of the wash, because the diagram fills and the glass panels mix with it. -#}
+          colour, the mean of the wash, because the diagram fills and the glass panels mix with it.
+          2026-10-23: more, and louder: bright papers still light enough for the dark ink, and vivid
+          deep ones for the light ink. A wash keeps to one family, so it stays a wash. -#}
       var PASTEL = ["#F4E1DC", "#F6E3CF", "#F3ECCF", "#E2EAD8", "#D9ECE3", "#D9E6F1", "#E4E0F3", "#EEDDEB", "#EDE5D8", "#DCE4E9"];
-      var DEEP = ["#141B2B", "#13221A", "#21172A", "#2A1617", "#0F2427", "#231B15"];
+      var BRIGHT = ["#FFD84D", "#FFB38A", "#FFA8C0", "#B8F28C", "#8FE3C8", "#A3CCFF", "#C9B8FF", "#FFC36B", "#86E1E6", "#F5B0EA", "#D9F26E", "#FFA796", "#FFE9A8", "#B5F0FF"];
+      var DEEP = ["#141B2B", "#13221A", "#21172A", "#2A1617", "#0F2427", "#231B15",
+                  "#1B2F7A", "#0A4A3C", "#4A1640", "#5A1818", "#2B1C66", "#0B3F48", "#3D2A08", "#5C1F3D"];
       function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
-      function roll() {   // 2 in 5 a pastel wash, 2 in 5 one pastel paper, 1 in 5 a deep one
-        var r = Math.random();
-        if (r < .2) return { v: 2, dark: true, stops: [pick(DEEP)] };
-        if (r < .6) return { v: 2, dark: false, stops: [pick(PASTEL)] };
-        var pool = PASTEL.slice(), stops = [], k = Math.random() < .5 ? 2 : 3;
+      function some(a) {   // two or three from one family
+        var pool = a.slice(), stops = [], k = Math.random() < .5 ? 2 : 3;
         while (stops.length < k) stops.push(pool.splice(Math.floor(Math.random() * pool.length), 1)[0]);
-        return { v: 2, dark: false, stops: stops, deg: Math.floor(Math.random() * 360) };
+        return stops;
+      }
+      function roll() {   // 1 in 4 a deep paper, 3 in 10 one light one, the rest a wash
+        var r = Math.random(), deg = Math.floor(Math.random() * 360);
+        if (r < .25) return { v: 2, dark: true, stops: Math.random() < .3 ? some(DEEP) : [pick(DEEP)], deg: deg };
+        if (r < .55) return { v: 2, dark: false, stops: [pick(Math.random() < .55 ? BRIGHT : PASTEL)] };
+        return { v: 2, dark: false, stops: some(Math.random() < .55 ? BRIGHT : PASTEL), deg: deg };
       }
       function hex(c) { return [1, 3, 5].map(function (i) { return parseInt(c.slice(i, i + 2), 16); }); }
       function mix(a, b, t) { return "#" + a.map(function (x, i) { return ("0" + Math.round(x + (b[i] - x) * t).toString(16)).slice(-2); }).join(""); }
       function apply(mode, c) {
-        ["--paper", "--paper-2", "--line", "--stripe", "--wash"].forEach(function (k) { d.style.removeProperty(k); });
+        ["--paper", "--paper-2", "--line", "--stripe", "--wash", "--mute", "--faint", "--faint-2"].forEach(function (k) { d.style.removeProperty(k); });
         d.dataset.mode = mode;
         if (mode === "dark" || (mode === "random" && c.dark)) d.dataset.theme = "dark"; else delete d.dataset.theme;
         if (mode !== "random") return;
         var rgb = c.stops.map(hex), mean = rgb[0].map(function (_, i) { return rgb.reduce(function (s, x) { return s + x[i]; }, 0) / rgb.length; });
         var p = mix(mean, mean, 0), p2 = mix(mean, c.dark ? [255, 255, 255] : [0, 0, 0], c.dark ? .05 : .04);
         d.style.setProperty("--paper", p); d.style.setProperty("--paper-2", p2);
-        d.style.setProperty("--line", mix(mean, c.dark ? [236, 234, 227] : [28, 27, 24], c.dark ? .2 : .22));
+        var ink = c.dark ? [236, 234, 227] : [28, 27, 24];
+        d.style.setProperty("--line", mix(mean, ink, c.dark ? .2 : .22));
+        // the quiet greys are mixed from the paper toward the ink, so they still read on a loud paper
+        d.style.setProperty("--mute", mix(mean, ink, .62)); d.style.setProperty("--faint", mix(mean, ink, .55)); d.style.setProperty("--faint-2", mix(mean, ink, .5));
         d.style.setProperty("--stripe", "repeating-linear-gradient(135deg," + p2 + " 0px," + p2 + " 1px," + p + " 1px," + p + " 11px)");
         if (c.stops.length > 1) d.style.setProperty("--wash", "linear-gradient(" + c.deg + "deg," + c.stops.join(",") + ")");
       }
