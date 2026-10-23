@@ -209,7 +209,7 @@
   }
   var DX = [0, 0, 1, -1], DY = [-1, 1, 0, 0];
   function step() {
-    if (document.body.classList.contains("pv-open") || document.hidden) return;   // still under an open project
+    if (off || document.body.classList.contains("pv-open") || document.hidden) return;   // off, or still under an open project
     t++;
     walkers.forEach(function (w) {
       var x = w.k % cols, y = (w.k / cols) | 0, opts = [], same = null;
@@ -257,7 +257,7 @@
     if (cv.width !== Math.round(sw * dpr) || cv.height !== Math.round(sh * dpr)) { cv.width = SC.width = Math.round(sw * dpr); cv.height = SC.height = Math.round(sh * dpr); cv.style.width = sw + "px"; cv.style.height = sh + "px"; skey = ""; }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     ctx.clearRect(0, 0, cv.width, cv.height);
-    if (!rows) return;
+    if (!rows || off) return;
     var f = focus(), sy = window.scrollY, vis = Math.ceil(ih / LH) + 1;
     var top = Math.min(1, sy / Math.max(1, document.documentElement.scrollHeight - sh)) * Math.max(0, rows - ih / LH);
     var r0 = Math.floor(top), off = -(top - r0) * LH, x1 = Math.min(cols, X0 + Math.ceil(iw / cw) + 1);
@@ -347,6 +347,21 @@
   pick.type = "button"; pick.className = "city-pick";
   var dock = document.querySelector("[data-dock]");
   if (dock) dock.insertBefore(pick, dock.firstChild); else document.body.appendChild(pick);
+  // the dot before the name turns the city off and on (2026-10-23); the browser remembers
+  var off = false; try { off = localStorage.getItem("city-off") === "1"; } catch (e) {}
+  var dot = document.createElement("button");
+  dot.type = "button"; dot.className = "city-dot";
+  pick.parentNode.insertBefore(dot, pick);
+  function lit() {
+    cv.classList.toggle("is-off", off); pick.classList.toggle("is-off", off);
+    dot.setAttribute("aria-pressed", !off); dot.title = off ? "show the city behind the page" : "hide the city behind the page";
+    dot.setAttribute("aria-label", dot.title);
+  }
+  lit();
+  dot.addEventListener("click", function () {
+    off = !off; try { if (off) localStorage.setItem("city-off", "1"); else localStorage.removeItem("city-off"); } catch (e) {}
+    lit(); if (!off) draw();
+  });
   function label() {
     var ns = city.lat >= 0 ? "N" : "S", ew = city.lon >= 0 ? "E" : "W";
     pick.innerHTML = "(" + city.name + " <span class=\"city-pick__r\" aria-hidden=\"true\">↻</span>)";
