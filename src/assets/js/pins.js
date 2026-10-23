@@ -81,8 +81,12 @@
     grid.classList.toggle("is-free", on);
     if (!on) { boxes.forEach(function (c) { c.style.left = c.style.top = c.style.width = c.style.zIndex = ""; }); grid.style.height = ""; return; }
     var W = grid.clientWidth, bottom = 0, loose = [];
+    // a box's z only orders it among the boxes (it climbs by one with every move); drawn as its rank,
+    // so the stack stays under the project overlay (.pv, z-index 100) however often he rearranges
+    var rank = {}; boxes.map(function (c) { return spots[idOf(c)]; }).filter(Boolean)
+      .sort(function (a, b) { return (a.z || 0) - (b.z || 0); }).forEach(function (s, i) { rank[s.z || 0] = rank[s.z || 0] || i + 1; });
     boxes.forEach(function (c) { var s = spots[idOf(c)]; if (!s) { loose.push(c); return; }
-      c.style.left = s.x / U * W + "px"; c.style.top = s.y / U * W + "px"; c.style.width = s.w / U * W + "px"; c.style.zIndex = 1 + (s.z || 0); });
+      c.style.left = s.x / U * W + "px"; c.style.top = s.y / U * W + "px"; c.style.width = s.w / U * W + "px"; c.style.zIndex = rank[s.z || 0]; });
     boxes.forEach(function (c) { if (spots[idOf(c)]) bottom = Math.max(bottom, c.offsetTop + c.offsetHeight); });
     // a project added since he arranged them takes the free space to the right of the box before it in
     // the grid's order (its place in the rows); with no room there it waits in rows of three under the
@@ -155,6 +159,9 @@
     el.innerHTML = (p.images || []).map(function (i) { return '<img class="pin__img" src="' + api + "/images/" + i + '" alt="" loading="lazy" />'; }).join("") +
       (p.body ? "<p>" + esc(p.body) + "</p>" : "") + toolsFor(p);
     el.querySelectorAll("img").forEach(function (im) { im.addEventListener("load", position); });
+    // a long note shows its first lines on the board (css clamps them); the whole of it opens on a click
+    var cut = function () { var t = el.querySelector("p"); el.classList.toggle("is-cut", !!t && t.scrollHeight > t.clientHeight + 1); };
+    requestAnimationFrame(cut); if (document.fonts) document.fonts.ready.then(cut);
     return el;
   }
   function picture(p) {
