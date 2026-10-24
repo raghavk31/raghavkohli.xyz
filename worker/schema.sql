@@ -45,3 +45,10 @@ CREATE TABLE IF NOT EXISTS pins (
   kind     TEXT NOT NULL DEFAULT 'note',
   style    TEXT
 );
+-- what the public AI routes have spent (budget.js; migration 0005)
+CREATE TABLE IF NOT EXISTS ai_usage (
+  k    TEXT PRIMARY KEY,
+  day  TEXT NOT NULL,
+  n    INTEGER NOT NULL
+);
+CREATE INDEX IF NOT EXISTS ai_usage_day ON ai_usage (day);

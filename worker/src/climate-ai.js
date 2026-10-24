@@ -7,7 +7,9 @@
           if (url.pathname === "/climate/ai") return climateAI(request, env, corsHeaders);
         (corsHeaders = whatever headers the other routes already answer with; OPTIONS must answer too)
      2. npx wrangler secret put OPENROUTER_API_KEY      (run it yourself; the key never goes in a file)
-     3. deploy as usual.
+     3. npx wrangler d1 execute thoughts --remote --file=migrations/0005-ai-usage.sql   (the spend counters;
+        until it has run, budget.js keeps the route shut)
+     4. deploy as usual.
 
    The page never sends a prompt. It sends {tool, input}; each tool below takes only the fields it
    needs, clamps numbers, cuts strings, and builds the prompt here from the day's own template, so the
@@ -16,15 +18,11 @@
    day15_water_security, day12_emergency_prep); change them there and here together. */
 
 import { MODEL } from "./model.js";              // the model the days use (shared with /ask and the compile)
-const PER_HOUR = 20;                          // AI notes per visitor per hour, per worker isolate
-
-const hits = new Map();
-function limited(ip) {
-  const now = Date.now(), h = (hits.get(ip) || []).filter((t) => now - t < 3600e3);
-  if (h.length >= PER_HOUR) return true;
-  h.push(now); hits.set(ip, h);
-  return false;
-}
+import { spend } from "./budget.js";
+// The page is public and every note spends the key, so: PER_HOUR notes per visitor, and CLIMATE_AI_PER_DAY
+// (wrangler.toml) for everyone together, both counted in D1 (budget.js). At 150 a day the worst case is
+// about $10 (Sonnet at 4,000 tokens out, the emergency plan); most notes cost a few cents.
+const PER_HOUR = 20;
 
 /* input cleaning: every value the prompt sees passes through one of these */
 const str = (v, n = 120) => String(v ?? "").replace(/[\r\n\t]+/g, " ").replace(/[{}<>`]/g, "").slice(0, n).trim();
@@ -324,11 +322,14 @@ export async function climateAI(request, env, cors = {}) {
   if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors });
   if (request.method !== "POST") return reply({ error: "POST only" }, 405);
   if (!env.OPENROUTER_API_KEY) return reply({ error: "the AI notes are not switched on yet" }, 503);
-  if (limited(request.headers.get("cf-connecting-ip") || "?")) return reply({ error: "too many notes this hour; try again later" }, 429);
   let body;
   try { body = await request.json(); } catch (e) { return reply({ error: "bad request" }, 400); }
   const tool = TOOLS[body && body.tool];
   if (!tool || typeof body.input !== "object" || body.input === null) return reply({ error: "unknown tool" }, 400);
+  // only a well-formed request is counted, and it is counted before the key is spent
+  const no = await spend(env, "climate", request.headers.get("cf-connecting-ip") || "?",
+    { perHour: PER_HOUR, perDay: Number(env.CLIMATE_AI_PER_DAY) || 150 });
+  if (no) return reply({ error: no }, 429);
 
   const r = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
