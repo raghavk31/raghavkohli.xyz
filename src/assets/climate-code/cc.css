@@ -50,6 +50,13 @@ body:has(.cc){overflow:hidden;}
 @media(prefers-reduced-motion:reduce){.cc-ch__down{animation:none;}}
 .cc-ch__src{margin-top:24px;font:400 9.62px/1.55 var(--mono);letter-spacing:.02em;color:var(--faint-2);}
 .cc-ch__src:empty{display:none;}
+/* what a city chapter's numbers rest on (climateCode.js `data`): measured, modelled, assumed; a proxy said plainly */
+.cc-proxy{margin:14px 0 0;padding-left:10px;border-left:2px solid var(--faint-2);font-size:12.25px;line-height:1.5;color:var(--ink-soft);}
+.cc-proxy span{font:500 9.62px/1.5 var(--mono);letter-spacing:.04em;color:var(--faint-2);}
+.cc-conf{display:grid;gap:3px;margin:10px 0 0;font:400 9.62px/1.55 var(--mono);letter-spacing:.02em;color:var(--faint-2);}
+.cc-conf div{display:grid;grid-template-columns:11ch 1fr;gap:8px;}
+.cc-conf dd{margin:0;}
+.cc-conf--modelled dd,.cc-conf--assumed dd{font-style:italic;}
 .cc-ch__ctl:not(:empty){margin-top:18px;}
 .cc-ch__body:not(:empty){margin-top:24px;}
 .cc-meta{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;margin-top:26px;font-size:12.25px;}
