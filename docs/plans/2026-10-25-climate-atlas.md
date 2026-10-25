@@ -9,7 +9,7 @@ is a step-0 task in the phase that needs it, not something to build on yet.
 
 **Decided since writing (2026-10-25):** everything is non-commercial for now (sections 1.4, 5, 6.4).
 The answers to all the questions are in section 7; the plan below is updated for them. In short: the
-new repo is **EarthOS**; the library computes every syntax radius and each project shows the ones its
+new repo and the atlas are both **EarthOS**; the library computes every syntax radius and each project shows the ones its
 bounds suit; Indian first, with the cited-validation exception; DataMeet wards with their date, then
 current wards in B9; Guwahati's wards from Bhuvan; Dhaka as the non-Indian pilot; R2 for hosting;
 browser-only uploads; and **no change to Permutation City without a brief of it first**.
@@ -466,8 +466,7 @@ alongside B3 to B6.
 
 All answered on 2026-10-25.
 
-1. **Where it lives.** A new repo, as recommended, named **EarthOS**. (Whether the atlas itself takes
-   the same name is still open.)
+1. **Where it lives.** A new repo, as recommended, named **EarthOS**; the atlas is called EarthOS too.
 2. **Space syntax radii.** Keep the broader set (400 m, 800 m, 2 km, n) in the library and show the
    radii each project's bounds suit (section 1.6). Permutation City's shown metrics stay as they are.
 3. **Indian first versus most reliable.** Agreed: an Indian source drops below a global one only on a
