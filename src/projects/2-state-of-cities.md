@@ -78,6 +78,10 @@ outcome:
   recognised: "Published by NIUA's Climate Centre for Cities (C-Cube) under the Ministry of Housing and Urban Affairs."
   next: "Rebuild the fifteen profiles from the inventories themselves, with the data year and the boundary printed beside every number, so the template cannot hide what it does not know."
   link: { lbl: "published", label: "State of Cities (PDF)", href: "https://niua.in/c-cube/" }
+cites:
+  - { a: "Bettencourt, L.M.A., Lobo, J., Helbing, D., Kühnert, C. and West, G.B.", y: 2007, t: "Growth, innovation, scaling, and the pace of life in cities", in: "PNAS 104(17)", href: "https://doi.org/10.1073/pnas.0610172104" }
+  - { a: "Klopp, J.M. and Petretta, D.L. (Columbia)", y: 2017, t: "The urban sustainable development goal: Indicators, complexity and the politics of measuring cities", in: "Cities 63", href: "https://doi.org/10.1016/j.cities.2016.12.019" }
+  - { a: "Bai, X., Dawson, R.J., Ürge-Vorsatz, D., et al.", y: 2018, t: "Six research priorities for cities and climate change", in: "Nature 555", href: "https://doi.org/10.1038/d41586-018-02409-z" }
 ---
 
 ## 00 the unit

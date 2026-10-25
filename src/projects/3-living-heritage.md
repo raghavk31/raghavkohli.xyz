@@ -74,6 +74,10 @@ outcome:
   built: "Non-programmatic play structures carrying micro-climate functions, greenhouses, water harvesting, study areas, small farms, sited only in the pockets where more than one community's attachments overlapped."
   recognised: "CEPT University Student Excellence Award. The jury: “identified and mapped the invisible and virtual boundaries and thresholds that exist in our communities … through the resultant mesh, he identified pockets of potentiality and greater commonality.”"
   next: "Go back five years on, run the same exercise with the next set of children, and redraw the map. Did the pockets hold, and did the children who drew them stay in the village?"
+cites:
+  - { a: "Lynch, K. (MIT)", y: 1960, t: "The Image of the City", in: "MIT Press", href: "https://mitpressbookstore.mit.edu/book/9780262620017" }
+  - { a: "Arnstein, S.R.", y: 1969, t: "A Ladder of Citizen Participation", in: "Journal of the American Institute of Planners 35(4)", href: "https://doi.org/10.1080/01944366908977225" }
+  - { a: "Sanders, E.B.-N. and Stappers, P.J. (Ohio State, TU Delft)", y: 2008, t: "Co-creation and the new landscapes of design", in: "CoDesign 4(1)", href: "https://doi.org/10.1080/15710880701875068" }
 ---
 
 ## 00 context

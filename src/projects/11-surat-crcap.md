@@ -133,6 +133,12 @@ chapters:
 outcome:
   built: "Net-Zero Climate Resilient City Action Plan, Surat. June 2025. Published by the Surat Municipal Corporation with C40 Cities and ICLEI South Asia. The third Gujarat plan after Ahmedabad and Vadodara, and the first to commit to net zero by 2047."
   next: "Put the three cities on one instrument, the same sectors, the same baseline year, the same chart, so that a reader can see which city is furthest from its line and why."
+cites:
+  - { a: "Lwasa, S., Seto, K.C., et al.", y: 2022, t: "Urban Systems and Other Settlements", in: "IPCC AR6 Working Group III, ch. 8, Cambridge University Press", href: "https://doi.org/10.1017/9781009157926.010" }
+  - { a: "Dodman, D., Hayward, B., Pelling, M., et al.", y: 2022, t: "Cities, Settlements and Key Infrastructure", in: "IPCC AR6 Working Group II, ch. 6, Cambridge University Press", href: "https://doi.org/10.1017/9781009325844.008" }
+  - { a: "Seto, K.C., Churkina, G., Hsu, A., et al. (Yale)", y: 2021, t: "From Low- to Net-Zero Carbon Cities: The Next Global Agenda", in: "Annual Review of Environment and Resources 46", href: "https://doi.org/10.1146/annurev-environ-050120-113117" }
+  - { a: "Reckien, D., et al.", y: 2018, t: "How are cities planning to respond to climate change? Assessment of local climate plans from 885 cities in the EU-28", in: "Journal of Cleaner Production 191", href: "https://doi.org/10.1016/j.jclepro.2018.03.220" }
+  - { a: "WRI, C40 Cities and ICLEI", y: 2014, t: "Global Protocol for Community-Scale Greenhouse Gas Emission Inventories", in: "World Resources Institute", href: "https://ghgprotocol.org/ghg-protocol-cities" }
 ---
 
 ## 00 the city

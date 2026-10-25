@@ -137,6 +137,10 @@ chapters:
 outcome:
   built: "Bhadra Mela. Six urban inserts on the unused edges of Bhadra Plaza, designed to draw the crowd, and the kids living inside the karanj bagh, out across the site. L2 studio, Bachelor of Urban Design, CEPT University, with Victor Cano Ciborro and Mansi Shah."
   next: "Go back with the same cartography and redraw it: are the families still inside the karanj bagh, and which of the six edges did the plaza claim on its own, without any design at all?"
+cites:
+  - { a: "Harvey, D. (CUNY)", y: 2008, t: "The Right to the City", in: "New Left Review 53", href: "https://newleftreview.org/issues/ii53/articles/david-harvey-the-right-to-the-city" }
+  - { a: "Whyte, W.H.", y: 1980, t: "The Social Life of Small Urban Spaces", in: "The Conservation Foundation" }
+  - { a: "Smith, L.", y: 2006, t: "Uses of Heritage", in: "Routledge", href: "https://doi.org/10.4324/9780203602263" }
 ---
 
 ## 00 site

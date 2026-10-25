@@ -50,6 +50,11 @@ photos:
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
 next: Climate Code · sixteen tools, one map
+cites:
+  - { a: "Granovetter, M.S.", y: 1973, t: "The Strength of Weak Ties", in: "American Journal of Sociology 78(6)", href: "https://doi.org/10.1086/225469" }
+  - { a: "Putnam, R.D. (Harvard)", y: 2000, t: "Bowling Alone: The Collapse and Revival of American Community", in: "Simon & Schuster" }
+  - { a: "Fishkin, J.S. (Stanford)", y: 2009, t: "When the People Speak: Deliberative Democracy and Public Consultation", in: "Oxford University Press", href: "https://doi.org/10.1093/acprof:osobl/9780199604432.001.0001" }
+  - { a: "Pentland, A. (MIT Media Lab)", y: 2012, t: "The New Science of Building Great Teams", in: "Harvard Business Review, April", href: "https://hbr.org/2012/04/the-new-science-of-building-great-teams" }
 ---
 
 ## 01 the verdict

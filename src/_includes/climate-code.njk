@@ -74,6 +74,7 @@ layout: base.njk
       {#- COPY: the CityScope sentence was drafted 2026-10-25 for him to edit. -#}
       <p class="cc-ch__text">Each chapter is one of the sixteen tools of the Resilience Stack, built as a Streamlit app in May and June 2026. The country layers are rebuilt ahead of time by <code>explorer/build_atlas.py</code>, which reads each day's own tables and repeats its own formula; the city and place chapters run in your browser against the same live services the apps used. The city grid reads OpenStreetMap from OpenFreeMap's vector tiles, the same tiles the basemap draws. Every city layer is drawn one square tile a cell, after the tile grid of MIT City Science's CityScope, whose reading of a district by density, diversity and proximity the chapters follow. Over it lie sheets of the city's systems, stacked as Ian McHarg stacked them in Design with Nature: the ground and its valleys, the water, the streets as space syntax reads them, roads and rail. The square moves and resizes, after Morphocode's Explorer. The AI notes are written by Claude through OpenRouter.</p>
       <p class="cc-ch__src" data-built></p>
+      {% set cls = "cites--cc" %}{% include "cites.njk" %}
       <noscript><p class="cc-ch__text">The map and the tools on this page are drawn in the browser and need JavaScript.</p></noscript>
     </footer>
   </aside>

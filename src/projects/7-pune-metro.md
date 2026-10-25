@@ -108,6 +108,9 @@ chapters:
 outcome:
   built: "Station design drawings for Pune Metro Line 3. Typical station layouts at road, mezzanine and platform level, sections, the material isometric, and a massing study for the PMR-12 station plot. Internship at CCBA Designs, Pune, January–July 2021, in the team of Christopher Benninger, Daraius Choksi (project head), Nikhil Kalambe, Aditi Agrawal, Sanjiv Kapila, Darshan Lineswala and Bhargav Khurjekar. The stations are the office's design; the drawings shown are mine within it."
   next: "The layouts count the paid and unpaid area; they do not count the walk. The version worth doing measures how many people reach each platform on foot in ten minutes, and what the plaza and the public development do to that number."
+cites:
+  - { a: "Cervero, R. and Kockelman, K. (UC Berkeley)", y: 1997, t: "Travel demand and the 3Ds: Density, diversity, and design", in: "Transportation Research Part D 2(3)", href: "https://doi.org/10.1016/S1361-9209(97)00009-6" }
+  - { a: "Suzuki, H., Cervero, R. and Iuchi, K.", y: 2013, t: "Transforming Cities with Transit: Transit and Land-Use Integration for Sustainable Urban Development", in: "World Bank", href: "https://doi.org/10.1596/978-0-8213-9745-9" }
 ---
 
 ## 00 the line

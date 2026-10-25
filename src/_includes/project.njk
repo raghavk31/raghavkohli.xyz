@@ -232,6 +232,7 @@ layout: base.njk
         {% if outcome.link %}<div><div class="lbl">({{ outcome.link.lbl or 'published' }})</div><div class="val"><a href="{{ outcome.link.href }}"{% if outcome.link.href.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ outcome.link.label }} &rarr;</a></div></div>{% endif %}
       </section>
       {% endif %}
+      {% set cls = "cites--story" %}{% include "cites.njk" %}
     </div>
     <div class="story__stage" aria-live="polite"></div>
   </div>
@@ -336,6 +337,7 @@ layout: base.njk
     {% if outcome.link %}<div><div class="lbl">({{ outcome.link.lbl or 'published' }})</div><div class="val"><a href="{{ outcome.link.href }}"{% if outcome.link.href.startsWith('http') %} target="_blank" rel="noopener"{% endif %}>{{ outcome.link.label }} &rarr;</a></div></div>{% endif %}
   </section>
   {% endif %}
+  {% set cls = "reveal" %}{% include "cites.njk" %}
 
   {% else %}
   {#- ===== legacy layout (pages not yet curated into chapters) ===== -#}

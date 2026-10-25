@@ -1,0 +1,14 @@
+{#- (key references): the outside work a project stands on, set after (outcome). Front matter
+    `cites:` is a list of { a: authors, y: year, t: title, in: journal / publisher, href }. Every
+    entry was checked against Crossref or the publisher on 2026-10-25; keep it that way — a
+    reference goes in only once its DOI or publisher page has been opened. -#}
+{% if cites and cites.length %}
+<section class="cites{% if cls %} {{ cls }}{% endif %}" aria-label="key references">
+  <div class="lbl">(key references)</div>
+  <ol class="cites__list">
+    {%- for c in cites %}
+    <li><span class="cites__a">{{ c.a }} ({{ c.y }}).</span> {% if c.href %}<a href="{{ c.href }}" target="_blank" rel="noopener">{{ c.t }}</a>{% else %}{{ c.t }}{% endif %}{% if c["in"] %}. <span class="cites__in">{{ c["in"] }}</span>{% endif %}.</li>
+    {%- endfor %}
+  </ol>
+</section>
+{% endif %}
