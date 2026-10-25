@@ -7,6 +7,9 @@ lives, phases and estimates, risks and questions.
 Items marked **(check)** are facts I could not confirm from a primary source while writing this; each
 is a step-0 task in the phase that needs it, not something to build on yet.
 
+**Decided since writing:** everything is non-commercial for now (2026-10-25). Sections 1.4, 5 and
+6.4 and question 4 are updated for it.
+
 ---
 
 ## 0. What the audit found
@@ -131,7 +134,14 @@ lon/lat or ward names.
 
 ### 1.4 Licence-aware
 
-There is a setting with two values: **non-commercial** (the default, matching the site) and
+**Non-commercial, decided 2026-10-25.** So the atlas runs non-commercial, and FABDEM, Earth Engine
+(section 5) and any NC-licensed source are allowed. What stays from the brief's rule is the record:
+every source carries its licence and `commercial: true/false`, and the build writes a short "if this
+went commercial" list per city (which layers would swap, to what, and which would go). The live switch
+below is designed now but built only when a commercial use appears. That moves about one session out
+of B0.
+
+The switch, when built: two values, **non-commercial** (the default) and
 **commercial**. Each source has `commercial: true/false`. Switching to commercial re-runs the
 registry choice. Every layer whose source changed shows the swap ("terrain: FABDEM (CC BY-NC-SA) →
 Copernicus GLO-30 DSM; buildings and trees now raise the ground, so drainage reads worse"). Layers
@@ -351,7 +361,7 @@ A "session" is one working session like Phase A. Each phase is one PR, with smal
 
 | Phase | What | Sessions |
 |---|---|---|
-| B0 | Repo, layer spec and source registry formats, metadata card, hatch rule, licence switch; move `syntax`, `sun` and `lst` into the library with their tests; parity fixtures | 3 to 4 |
+| B0 | Repo, layer spec and source registry formats, metadata card, hatch rule, licence record (the live switch deferred); move `syntax`, `sun` and `lst` into the library with their tests; parity fixtures | 2 to 3 |
 | B1 | City build pipeline for **Bengaluru**: boundary, wards, grid, the profile layers of 2.1 that need no login; PMTiles and COGs on R2; validation pairs | 4 to 5 |
 | B2 | The atlas app: city-first first screen, zoom world → city → square, the square with live layers, the country chapters as an intro or side panel, AI notes through the existing worker | 4 to 5 |
 | B3 | Climate trends (IMD) and projections (NEX-GDDP ranges); The field gets ranges | 2 to 3 |
@@ -361,10 +371,10 @@ A "session" is one working session like Phase A. Each phase is one PR, with smal
 | B7 | AlphaEarth: informal settlements, wetlands, farmland, trees; held-out accuracy; change detection; "find places like this" | 3 to 4 |
 | B8 | Exports: PNG/PDF maps, GeoTIFF/GeoJSON layers, CSV ward tables, the one-click city profile PDF | 2 to 3 |
 | B9 | Mumbai, Delhi, Ahmedabad, Guwahati, and one global city: per-city ward work, coastal and hill layers, the global fallback | 5 to 8 |
-| | **Total** | **30 to 41** |
+| | **Total** | **29 to 40** |
 
 At about three sessions a week, that is roughly three months from 25 November. Bengaluru on its own
-is usable at the end of B2 (about 12 to 14 sessions in).
+is usable at the end of B2 (about 10 to 13 sessions in).
 
 The order matters: B0 to B2 give one city end to end before breadth. B5 needs B1's layers. B7 can run
 alongside B3 to B6.
@@ -379,11 +389,15 @@ alongside B3 to B6.
   Earth Engine's terms do not apply to the data at all. **(check)** whether the copy we read is
   requester-pays (the GCS bucket is, per the catalog page) and which years each copy holds (sources
   disagree: 2017 to 2025, or 2018 to 2024).
-- **If Earth Engine is used** (it is convenient for labelling and quick tests), it is free only for
-  registered **noncommercial** projects, with a monthly compute quota: the Community tier has 150
-  EECU-hours. Paid or contract work needs a commercial project. So under the licence switch,
-  "commercial" turns Earth Engine-computed layers off unless a commercial project is configured. The
-  file-based pipeline above keeps working in both settings.
+- **Earth Engine is usable, since the work is non-commercial.** It is free for registered
+  **noncommercial** projects, with a monthly compute quota: the Community tier has 150 EECU-hours, and
+  the Contributor tier has 1,000 (it needs a Cloud billing account, used for identity, and is not
+  charged while the project is registered noncommercial). Paid or contract work would need a
+  commercial project. So: register one noncommercial Cloud project for the atlas, and use Earth
+  Engine for the work it is quickest at (labelling, training and testing the classifiers, change
+  detection over many years). The *published* layers are still written as files (COGs and PMTiles on
+  R2) from the pipeline, so the atlas never calls Earth Engine at view time and does not depend on
+  the quota.
 - **Classification:** a few hundred labelled points per class per city, drawn on the map in the
   atlas (a labelling mode) and stored in the repo. Train a k-NN or logistic classifier on the 64-d
   vectors and **report accuracy on held-out points** (a 70/30 split by spatial blocks, so neighbours
@@ -419,8 +433,10 @@ alongside B3 to B6.
 3. **IMD data terms.** IMD's gridded data is widely used in research, but its terms for redistributing
    derived maps were not confirmable while writing. If they are restrictive, the trend layers show the
    result (a trend per decade, a count of extreme days) with a link, not the gridded data.
-4. **Earth Engine.** Covered in section 5. The main risk is building on Earth Engine and then losing it
-   under the commercial setting. Mitigation: the file-based pipeline is the default from the start.
+4. **Earth Engine.** Covered in section 5. Non-commercial use is allowed (decided 2026-10-25), so the
+   risks left are the monthly quota and a later move to commercial work. Mitigation: Earth Engine for
+   analysis only; the published layers are files, built so the same steps can run on the embedding
+   COGs without Earth Engine if either changes.
 5. **City-scale compute.** Syntax at 10⁵ segments and landform on the 30 m city DEM are heavier than
    anything Permutation City builds today. GitHub Actions runners have 6-hour job limits and modest
    memory. Mitigation: tile the city with overlap for landform; numba for syntax; measure on Bengaluru
@@ -446,8 +462,7 @@ alongside B3 to B6.
    400/800/n and have the atlas follow?
 3. **Indian first versus most reliable:** agree with the exception rule in 1.1 (an Indian source drops
    only on a cited validation)?
-4. **Default licence setting:** non-commercial by default (it lets FABDEM, and Earth Engine if used,
-   in)?
+4. ~~**Default licence setting.**~~ Decided 2026-10-25: non-commercial for now.
 5. **Ward vintages:** for Bengaluru and Delhi, current wards (more work, possibly hand-digitised) or
    the DataMeet ones with their date shown?
 6. **Guwahati wards:** is there a source you know of (GMC or GMDA), or should I digitise from the
