@@ -80,6 +80,7 @@ outcome:
 cites:
   - { a: "Pérez-Arriaga, I., Knittel, C., et al. (MIT Energy Initiative)", y: 2016, t: "Utility of the Future", in: "MIT Energy Initiative and IIT-Comillas", href: "https://energy.mit.edu/publication/utility-future-report" }
   - { a: "Parag, Y. and Sovacool, B.K.", y: 2016, t: "Electricity market design for the prosumer era", in: "Nature Energy 1", href: "https://doi.org/10.1038/nenergy.2016.32" }
+  - { a: "Yu, J., Wang, Z., Majumdar, A. and Rajagopal, R. (Stanford)", y: 2018, t: "DeepSolar: A Machine Learning Framework to Efficiently Construct a Solar Deployment Database in the United States", in: "Joule 2(12)", href: "https://doi.org/10.1016/j.joule.2018.11.021" }
   - { a: "Sousa, T., Soares, T., Pinson, P., et al. (DTU)", y: 2019, t: "Peer-to-peer and community-based markets: A comprehensive review", in: "Renewable and Sustainable Energy Reviews 104", href: "https://doi.org/10.1016/j.rser.2019.01.036" }
   - { a: "Rolnick, D., Donti, P.L., Kaack, L.H., ... Hassabis, D., Platt, J.C., Chayes, J. and Bengio, Y.", y: 2022, t: "Tackling Climate Change with Machine Learning", in: "ACM Computing Surveys 55(2)", href: "https://doi.org/10.1145/3485128" }
 ---
