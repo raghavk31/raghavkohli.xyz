@@ -7,8 +7,12 @@ lives, phases and estimates, risks and questions.
 Items marked **(check)** are facts I could not confirm from a primary source while writing this; each
 is a step-0 task in the phase that needs it, not something to build on yet.
 
-**Decided since writing:** everything is non-commercial for now (2026-10-25). Sections 1.4, 5 and
-6.4 and question 4 are updated for it.
+**Decided since writing (2026-10-25):** everything is non-commercial for now (sections 1.4, 5, 6.4).
+The answers to all the questions are in section 7; the plan below is updated for them. In short: the
+new repo is **EarthOS**; the library computes every syntax radius and each project shows the ones its
+bounds suit; Indian first, with the cited-validation exception; DataMeet wards with their date, then
+current wards in B9; Guwahati's wards from Bhuvan; Dhaka as the non-Indian pilot; R2 for hosting;
+browser-only uploads; and **no change to Permutation City without a brief of it first**.
 
 ---
 
@@ -176,10 +180,12 @@ The browser cannot run Python, and a static site cannot run a city build. So the
   uses stream burning from mapped channels, a bare-earth DEM, and flat-land handling. The window just
   reads it. Contours come from the same DEM, also precomputed into the PMTiles.
 - **`syntax-worker.js` is replaced by the library's `syntax.ts`** in a worker, for the window. The
-  city-wide syntax layer is precomputed in Python. Two decisions are needed:
-  - **Radii.** Permutation City uses 400 m, 800 m and n; the explorer uses 800 m integration and 2 km
-    choice. I propose the library computes **800 m, 2 km and n** and Permutation City adds 2 km. This
-    needs your call, because it changes Permutation City's metrics.
+  city-wide syntax layer is precomputed in Python.
+  - **Radii (decided).** The library computes the broader set, **400 m, 800 m, 2 km and n**, and each
+    project shows the radii its bounds suit: Permutation City's design sites (at most 4 km²) keep
+    400 m, 800 m and n as now, so its metrics do not change; the atlas's square shows 800 m and 2 km;
+    the city view shows 2 km and n. A radius larger than the area read is never shown, because the
+    edge would decide it.
   - **City-scale speed.** Bengaluru's network is of the order of 10⁵ segments. Exact angular choice at
     2 km in pure Python will be too slow. Options: sample origins (as the explorer does today, scaled
     up and documented); port the hot loop to a compiled extension (numba); or run depthmapX's CLI
@@ -200,8 +206,8 @@ fallback. "Conf." is the confidence the layer is shown with. Pilots: ✓ works, 
 
 | Layer | Default source (India) | Global fallback | Resolution | Period | Licence | Conf. | Pilots |
 |---|---|---|---|---|---|---|---|
-| City boundary | DataMeet municipal_spatial_data (BBMP, BMC, Delhi, AMC) | geoBoundaries / OSM admin | vector | 2017 to 2023, varies | CC BY 4.0 (DataMeet); ODbL (OSM) | measured | B ~ (see wards), M ✓, D ✓, A ✓, G ✗ in DataMeet: OSM or GMC |
-| Wards | DataMeet (`BBMP.geojson`, `BMC_Wards`, `Delhi_Wards`, `Ahmedabad/Wards`) | OSM admin_level 9 to 10 where mapped | vector | varies **(check vintage per city)** | CC BY 4.0 | measured | B ~ (boundaries redrawn 2023 and under the Greater Bengaluru Authority, 2025), D ~ (MCD redrawn 2022), M ✓, A ✓, G ✗ |
+| City boundary | DataMeet municipal_spatial_data (BBMP, BMC, Delhi, AMC) | geoBoundaries / OSM admin | vector | 2017 to 2023, varies | CC BY 4.0 (DataMeet); ODbL (OSM) | measured | B ~ (see wards), M ✓, D ✓, A ✓, G: Bhuvan **(check)** |
+| Wards | DataMeet (`BBMP.geojson`, `BMC_Wards`, `Delhi_Wards`, `Ahmedabad/Wards`) | OSM admin_level 9 to 10 where mapped | vector | varies **(check vintage per city)** | CC BY 4.0 | measured | B ~ (boundaries redrawn 2023 and under the Greater Bengaluru Authority, 2025), D ~ (MCD redrawn 2022), M ✓, A ✓, G: Bhuvan (NUIS or AMRUT ward maps) **(check)**, else traced from GMC's map |
 | Population, grid | Meta HRSL v1.5 (as now) | WorldPop constrained 100 m; GHS-POP R2023A | 30 m | 2020 | CC BY 4.0 | modelled | all ✓ |
 | Population, ward | Census 2011 ward PCA (where the ward key survives), else HRSL summed to wards | HRSL or WorldPop summed | ward | 2011 / 2020 | GODL-India; CC BY 4.0 | measured (2011) / modelled | ~ in all: 2011 wards no longer match current wards |
 | Density | derived: population ÷ land area (excluding water) | same | grid, ward | as population | derived | modelled | all ✓ |
@@ -211,7 +217,7 @@ fallback. "Conf." is the confidence the layer is shown with. Pilots: ✓ works, 
 | Terrain, Indian | CartoDEM v3 (Bhuvan) as a candidate, ranked below GLO-30 unless validation says otherwise | n/a | 30 m | 2005 to 2008 | NRSC data policy **(check redistribution)** | measured | needs a Bhuvan login |
 | Drainage, valleys, catchments | derived: `landform.py` on bare earth, burned with OSM/Overture channels and India-WRIS drainage **(check access)** | same, without WRIS | 30 m → grid | as DEM | derived | modelled | all ✓ (flat Ahmedabad: valleys from mapped water only, as landform.py already does) |
 | Building footprints | Overture buildings (conflated: OSM, Google Open Buildings, Microsoft) | same | vector | monthly releases | ODbL | measured (traced) / modelled (ML-detected) | all ✓ |
-| Building heights | Google Open Buildings 2.5D Temporal | GHSL GHS-BUILT-H (100 m) | about 4 m effective **(check)** | 2016 to 2023, annual | CC BY 4.0 | modelled | all ✓ (it covers the Global South; the non-Indian pilot must be inside its coverage, or it falls back to GHSL) |
+| Building heights | Google Open Buildings 2.5D Temporal | GHSL GHS-BUILT-H (100 m) | about 4 m effective **(check)** | 2016 to 2023, annual | CC BY 4.0 | modelled | all ✓ (it covers the Global South; Dhaka is inside its coverage **(check)**) |
 | Floor area ratio | derived: footprint × height ÷ 3.2 m a floor | same | grid, ward | as heights | derived | modelled (no longer one floor by default) | all ✓ |
 | Open space | OSM/Overture parks + WorldCover trees and grass | same | vector / 10 m | current / 2021 | ODbL; CC BY 4.0 | measured | all ✓ |
 | Land cover | ESA WorldCover 2021 | Dynamic World (annual composite, as a second opinion) | 10 m | 2021 / 2015- | CC BY 4.0 | modelled (classified) | all ✓ |
@@ -327,7 +333,7 @@ Vercel), in a new repo that also holds the shared layer library. The site keeps 
 links into the atlas.**
 
 ```
-city-layers/                 (new repo; name to decide)
+EarthOS/                     (new repo, decided 2026-10-25)
   layers/specs/*.yaml          layer specs
   layers/sources/*.yaml        source registry
   packages/layers-py/          the Python half (fetch, landform, lst, syntax, zonal), from pc/
@@ -338,7 +344,9 @@ city-layers/                 (new repo; name to decide)
 
 Permutation City then depends on `layers-py` and `layers-ts` (git dependencies: `uv` with a git URL
 and a tag; npm with a GitHub tag). Its own `pc/` modules become thin re-exports, moved over after its
-Milestone A, not during it. Sama joins later the same way.
+Milestone A, not during it. Sama joins later the same way. **Every change to Permutation City gets a
+written brief first (what changes, which files, what it does to its metrics and tests), and waits for
+your yes before it is made.**
 
 | | stay in the site repo | own repo, PC's stack (recommended) | inside the Permutation City repo |
 |---|---|---|---|
@@ -370,7 +378,7 @@ A "session" is one working session like Phase A. Each phase is one PR, with smal
 | B6 | Where to act: hotspot types, guides, the four tools, the Permutation City handoff (including the PC `new.html` change, as a PC PR) | 3 |
 | B7 | AlphaEarth: informal settlements, wetlands, farmland, trees; held-out accuracy; change detection; "find places like this" | 3 to 4 |
 | B8 | Exports: PNG/PDF maps, GeoTIFF/GeoJSON layers, CSV ward tables, the one-click city profile PDF | 2 to 3 |
-| B9 | Mumbai, Delhi, Ahmedabad, Guwahati, and one global city: per-city ward work, coastal and hill layers, the global fallback | 5 to 8 |
+| B9 | Mumbai, Delhi, Ahmedabad, Guwahati, and Dhaka: current wards for Bengaluru and Delhi, Guwahati's from Bhuvan, coastal and hill layers, the global fallback | 5 to 8 |
 | | **Total** | **29 to 40** |
 
 At about three sessions a week, that is roughly three months from 25 November. Bengaluru on its own
@@ -456,22 +464,26 @@ alongside B3 to B6.
 
 ## 7. Questions for you
 
-1. **Where it lives:** the recommended new repo plus a shared library, or something else? And a name
-   for the repo and the atlas.
-2. **Space syntax radii:** change Permutation City to 800 m, 2 km and n (adding 2 km), or keep its
-   400/800/n and have the atlas follow?
-3. **Indian first versus most reliable:** agree with the exception rule in 1.1 (an Indian source drops
-   only on a cited validation)?
-4. ~~**Default licence setting.**~~ Decided 2026-10-25: non-commercial for now.
-5. **Ward vintages:** for Bengaluru and Delhi, current wards (more work, possibly hand-digitised) or
-   the DataMeet ones with their date shown?
-6. **Guwahati wards:** is there a source you know of (GMC or GMDA), or should I digitise from the
-   corporation's map?
-7. **The non-Indian city:** which one? It should sit inside Open Buildings 2.5D coverage so heights
-   work; for example Nairobi, Jakarta, Dhaka or Lagos.
-8. **Hosting:** R2 on the existing Cloudflare account for PMTiles and COGs (my recommendation), or
-   Vercel Blob as Permutation City uses?
-9. **Permutation City changes:** OK to plan a small PR there (boundary in the URL, radii, and later
-   moving `pc/` onto the library), after its Milestone A?
-10. **Uploads:** browser-only (no storage, nothing leaves the machine), or should people be able to
-   save and share an atlas with their own layers? Sharing needs storage and moderation.
+All answered on 2026-10-25.
+
+1. **Where it lives.** A new repo, as recommended, named **EarthOS**. (Whether the atlas itself takes
+   the same name is still open.)
+2. **Space syntax radii.** Keep the broader set (400 m, 800 m, 2 km, n) in the library and show the
+   radii each project's bounds suit (section 1.6). Permutation City's shown metrics stay as they are.
+3. **Indian first versus most reliable.** Agreed: an Indian source drops below a global one only on a
+   cited validation, recorded in the registry.
+4. **Licence.** Non-commercial for now.
+5. **Ward vintages.** DataMeet's wards with their date shown to start; current wards for Bengaluru
+   and Delhi in B9.
+6. **Guwahati wards.** Look in Bhuvan first (its NUIS and AMRUT urban layers may carry GMC wards).
+   Step 0 of B9: find them, then check whether they can be downloaded and republished, or only
+   viewed. If view-only, trace from GMC's published map and say so on the card.
+7. **The non-Indian city.** Dhaka. It tests river flooding, low ground, very high density and
+   informal settlements outside India, and the global fallback for every Indian-only source. Note:
+   Dhaka is inland on the delta and almost flat, so it does not test hills or a sea coast. If a
+   contoured, coastal city is wanted instead, Chattogram has hills with landslides, a sea coast and
+   cyclones, in the same country and data coverage. Dhaka stands unless you switch.
+8. **Hosting.** Cloudflare R2.
+9. **Permutation City changes.** Yes, after its Milestone A, and each one briefed to you before it is
+   made.
+10. **Uploads.** Browser only for now: nothing stored, nothing leaves the person's machine.
