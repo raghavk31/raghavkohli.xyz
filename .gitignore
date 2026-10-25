@@ -10,3 +10,6 @@ _site/
 /images/_picks/
 # fonts fetched for scripts/make-sama-cover.py (Fraunces + Geist, Google Fonts) — see its docstring
 /scripts/_fonts/
+
+# third-party reference images, not ours to publish
+reference/
