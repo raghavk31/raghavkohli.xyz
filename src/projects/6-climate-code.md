@@ -30,6 +30,9 @@ cites:
   - { a: "Alonso, L., Zhang, Y.R., Grignard, A., et al. (MIT Media Lab)", y: 2018, t: "CityScope: A Data-Driven Interactive Simulation Tool for Urban Design. Use Case Volpe", in: "Unifying Themes in Complex Systems IX, Springer", href: "https://doi.org/10.1007/978-3-319-96661-8_27" }
   - { a: "Hillier, B. and Hanson, J. (UCL)", y: 1984, t: "The Social Logic of Space", in: "Cambridge University Press", href: "https://doi.org/10.1017/CBO9780511597237" }
   - { a: "McHarg, I.L. (Penn)", y: 1969, t: "Design with Nature", in: "Natural History Press" }
+  - { a: "Nearing, G., Cohen, D., Dube, V., Gauch, M., et al. (Google Research)", y: 2024, t: "Global prediction of extreme floods in ungauged watersheds", in: "Nature 627", href: "https://doi.org/10.1038/s41586-024-07145-1" }
+  - { a: "Sirko, W., Kashubin, S., Ritter, M., et al. (Google Research)", y: 2021, t: "Continental-Scale Building Detection from High Resolution Satellite Imagery", in: "arXiv:2107.12283", href: "https://arxiv.org/abs/2107.12283" }
+  - { a: "Rolnick, D., Donti, P.L., Kaack, L.H., ... Hassabis, D., Platt, J.C., Chayes, J. and Bengio, Y.", y: 2022, t: "Tackling Climate Change with Machine Learning", in: "ACM Computing Surveys 55(2)", href: "https://doi.org/10.1145/3485128" }
 ---
 
 {#- The page is the explorer: src/_includes/climate-code.njk lays it out from src/_data/climateCode.js
