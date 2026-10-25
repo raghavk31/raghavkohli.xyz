@@ -91,6 +91,10 @@ chapters:
 outcome:
   built: "Eco-Machine. Thirty hectares of Mumbai's eastern waterfront as a chain of living infrastructure: wetlands as flood buffer, treatment and waste-to-energy underground, public programs above, floating modules collecting the harbour's waste; designed as a module to repeat along the edge. L3 studio, Bachelor of Urban Design, CEPT University. November 2020."
   next: "Size it. The proposal set out the loops but never closed the numbers: how much of 7,025 tonnes a day a wetland cell can take, how much of a 2,142 mm monsoon thirty hectares can hold. The climate inventories built three years later are the tool for that."
+cites:
+  - { a: "Todd, J. and Josephson, B.", y: 1996, t: "The design of living technologies for waste treatment", in: "Ecological Engineering 6(1–3)", href: "https://doi.org/10.1016/0925-8574(95)00054-2" }
+  - { a: "Mathur, A. and da Cunha, D. (Penn)", y: 2009, t: "Soak: Mumbai in an Estuary", in: "Rupa & Co. / NGMA", href: "https://www.mathurdacunha.com/about" }
+  - { a: "McHarg, I.L. (Penn)", y: 1969, t: "Design with Nature", in: "Natural History Press" }
 ---
 
 ## 00 the waterfront

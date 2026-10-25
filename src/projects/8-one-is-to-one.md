@@ -91,6 +91,10 @@ chapters:
 outcome:
   built: "A two-storey tower of brick, wood, bamboo, metal and concrete, built to the drawing by its authors on the CEPT campus."
   next: "Draw the joints first. Start the next drawing from the ten places where five materials meet, and let the form follow."
+cites:
+  - { a: "Sennett, R. (LSE, NYU)", y: 2008, t: "The Craftsman", in: "Yale University Press" }
+  - { a: "Frampton, K. (Columbia)", y: 1995, t: "Studies in Tectonic Culture: The Poetics of Construction in Nineteenth and Twentieth Century Architecture", in: "MIT Press" }
+  - { a: "Evans, R.", y: 1997, t: "Translations from Drawing to Building and Other Essays", in: "Architectural Association" }
 ---
 
 ## 00 systems

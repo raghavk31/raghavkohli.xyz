@@ -139,6 +139,12 @@ chapters:
 outcome:
   built: "Urban Greening Policy, Ahmedabad. Towards a Sustainable and Resilient Future: the Urban Green Policy 2030 for the Amdavad Municipal Corporation, prepared by ICLEI South Asia, designed by Studio Commons. Nine chapters, five annexures, ward-level maps and an illustrated catalogue of every kind of urban green."
   next: "The ward maps are the part that should be live. A public map of tree cover and park access by ward, updated as the Mission Million Trees numbers come in, would make the policy checkable by the committees it creates."
+cites:
+  - { a: "Wolch, J.R., Byrne, J. and Newell, J.P. (UC Berkeley)", y: 2014, t: "Urban green space, public health, and environmental justice: The challenge of making cities 'just green enough'", in: "Landscape and Urban Planning 125", href: "https://doi.org/10.1016/j.landurbplan.2014.01.017" }
+  - { a: "Bowler, D.E., Buyung-Ali, L., Knight, T.M. and Pullin, A.S.", y: 2010, t: "Urban greening to cool towns and cities: A systematic review of the empirical evidence", in: "Landscape and Urban Planning 97(3)", href: "https://doi.org/10.1016/j.landurbplan.2010.05.006" }
+  - { a: "Ziter, C.D., Pedersen, E.J., Kucharik, C.J. and Turner, M.G. (UW–Madison)", y: 2019, t: "Scale-dependent interactions between tree canopy cover and impervious surfaces reduce daytime urban heat during summer", in: "PNAS 116(15)", href: "https://doi.org/10.1073/pnas.1817561116" }
+  - { a: "Tolan, J., Yang, H.-I., Nosarzewski, B., Couairon, G., et al. (Meta AI, WRI)", y: 2024, t: "Very high resolution canopy height maps from RGB imagery using self-supervised vision transformer and convolutional decoder trained on aerial lidar", in: "Remote Sensing of Environment 300", href: "https://doi.org/10.1016/j.rse.2023.113888" }
+  - { a: "Robinson, C., Hou, L., Malkin, K., et al. (Microsoft AI for Earth)", y: 2019, t: "Large Scale High-Resolution Land Cover Mapping With Multi-Resolution Data", in: "IEEE/CVF CVPR 2019", href: "https://doi.org/10.1109/CVPR.2019.01301" }
 ---
 
 ## 00 the commitment

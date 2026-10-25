@@ -105,6 +105,10 @@ chapters:
 outcome:
   built: "From Utopias to Heterotopias: migrant housing for Maan Darwaza, Surat: 200 units for 500 people in clusters of seven to eight, four unit types, a site model and a full section. L2 studio, Bachelor of Urban Design, CEPT University, with Imran Mansuri and Suraj Kathe; TA Jeny Dave. May 2019."
   next: "The plan left space for residents to extend their units over time. Go back to the idea with the koliwada method: document how migrant communities in Surat actually extend, and let that, not a module, set the rule."
+cites:
+  - { a: "Habraken, N.J. (MIT)", y: 1972, t: "Supports: An Alternative to Mass Housing", in: "Architectural Press; reissued Routledge 2021", href: "https://doi.org/10.4324/9781003014713" }
+  - { a: "Turner, J.F.C. and Fichter, R. (eds.)", y: 1972, t: "Freedom to Build: Dweller Control of the Housing Process", in: "Macmillan" }
+  - { a: "Foucault, M. (trans. Miskowiec, J.)", y: 1986, t: "Of Other Spaces", in: "Diacritics 16(1), Johns Hopkins University Press", href: "https://doi.org/10.2307/464648" }
 ---
 
 ## 00 site

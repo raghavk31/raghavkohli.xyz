@@ -287,6 +287,8 @@ layout: base.njk
     </div>
   </section>
 
+  {% set cls = "reveal" %}{% include "cites.njk" %}
+
   {% if next %}
   {#- `next:` is "Title · tagline": link to that project when the title names one, else back to the grid -#}
   {%- set nextnamed = collections.projects | find("title", next.split(" · ")[0]) -%}

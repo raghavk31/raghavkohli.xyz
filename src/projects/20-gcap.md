@@ -140,6 +140,11 @@ outcome:
   built: "Four Green City Action Plans, Kota Bharu, Langkawi, Kuching (Padawan Municipal Council), Penang Island, prepared by ICLEI South Asia with ICLEI Southeast Asia for IMT-GT JBC Malaysia, 2023–24. City profile, climate risk and vulnerability assessment, GHG inventory and priority sectors for each; sixteen service overview diagrams on one drawing system."
   recognised: "Named contributor on all four plans, ICLEI South Asia contributing team."
   next: "The four inventories are in four PDFs. They should be one table, the same sectors, the same years, the same per-capita line, published open, so the next city in the Triangle starts from a comparison and not from a blank page."
+cites:
+  - { a: "Bai, X., Dawson, R.J., Ürge-Vorsatz, D., et al.", y: 2018, t: "Six research priorities for cities and climate change", in: "Nature 555", href: "https://doi.org/10.1038/d41586-018-02409-z" }
+  - { a: "Lwasa, S., Seto, K.C., et al.", y: 2022, t: "Urban Systems and Other Settlements", in: "IPCC AR6 Working Group III, ch. 8, Cambridge University Press", href: "https://doi.org/10.1017/9781009157926.010" }
+  - { a: "Seto, K.C., Churkina, G., Hsu, A., et al. (Yale)", y: 2021, t: "From Low- to Net-Zero Carbon Cities: The Next Global Agenda", in: "Annual Review of Environment and Resources 46", href: "https://doi.org/10.1146/annurev-environ-050120-113117" }
+  - { a: "WRI, C40 Cities and ICLEI", y: 2014, t: "Global Protocol for Community-Scale Greenhouse Gas Emission Inventories", in: "World Resources Institute", href: "https://ghgprotocol.org/ghg-protocol-cities" }
 ---
 
 ## 00 four cities

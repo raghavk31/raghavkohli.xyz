@@ -179,6 +179,12 @@ chapters:
 outcome:
   built: "A rule-based neighbourhood for north Ahmedabad. Density attractors at three horizons, a street network drawn from bundled desire lines, a land use distribution, eight typologies and a four-generation evolutionary search across eight fitness criteria. L2 studio, Bachelor of Urban Design, CEPT University, with Radhika Amin, Arpi Maheshwari and Anuradha Ramchandani. May 2020."
   next: "The fitness criteria were spatial: sunlight, shade, open space, volume. The next version of this search should carry a carbon and a water number for each option, so the algorithm weighs the same things the climate plans do."
+cites:
+  - { a: "Alexander, C. (Harvard, UC Berkeley)", y: 1964, t: "Notes on the Synthesis of Form", in: "Harvard University Press" }
+  - { a: "Stiny, G. (MIT)", y: 1980, t: "Introduction to shape and shape grammars", in: "Environment and Planning B 7(3)", href: "https://doi.org/10.1068/b070343" }
+  - { a: "Holland, J.H. (Michigan)", y: 1992, t: "Adaptation in Natural and Artificial Systems", in: "MIT Press", href: "https://doi.org/10.7551/mitpress/1090.001.0001" }
+  - { a: "Batty, M. (UCL)", y: 2005, t: "Cities and Complexity: Understanding Cities with Cellular Automata, Agent-Based Models, and Fractals", in: "MIT Press", href: "https://mitpressbookstore.mit.edu/book/9780262524797" }
+  - { a: "Nagy, D., Lau, D., Locke, J., Stoddart, J., Villaggi, L., Wang, R., Zhao, D. and Benjamin, D. (Autodesk Research, The Living)", y: 2017, t: "Project Discover: An Application of Generative Design for Architectural Space Planning", in: "SimAUD 2017", href: "https://doi.org/10.22360/simaud.2017.simaud.007" }
 ---
 
 The studio brief opened with a number: rural migration and urban growth will demand 3,000 new

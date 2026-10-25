@@ -66,6 +66,10 @@ chapters:
 outcome:
   built: "Formgiving. A one-evening cinema in Amritvarshini Vav, Khadia, Ahmedabad: a sheet, a projector, an audience on the steps. One of three urban performances made in the walled city that term; the plaza playground at Bhadra is on the rebel bodies page, the market living room is not yet on this site."
   next: "Do it with the keepers of the vav rather than around them: a screening programme the trust runs, so that the monument's opening hours are the performance."
+cites:
+  - { a: "Smith, L.", y: 2006, t: "Uses of Heritage", in: "Routledge", href: "https://doi.org/10.4324/9780203602263" }
+  - { a: "Livingston, M.", y: 2002, t: "Steps to Water: The Ancient Stepwells of India", in: "Princeton Architectural Press" }
+  - { a: "Whyte, W.H.", y: 1980, t: "The Social Life of Small Urban Spaces", in: "The Conservation Foundation" }
 ---
 
 ## 00 the vav

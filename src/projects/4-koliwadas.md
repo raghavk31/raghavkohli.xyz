@@ -283,6 +283,10 @@ outcome:
   built: "Reverse Effect. Open Source Urbanism: a directed research project on Worli Koliwada, Mumbai. A review of the city's reclamation and the community's exclusion; the everyday practices of four commons documented in photographs, cartographies and a day's timeline; a toolkit of strategies for ecological and economic resilience at village and city scale. Bachelor of Urban Design, CEPT University, guide Bhagyashree Ramakrishna, spring 2022."
   recognised: "Undergraduate thesis, CEPT Faculty of Planning, 2022."
   next: "The manual was written about the village. The next step is to hand it over: the cartographies and the toolkit as things the mitra mandals hold and edit themselves."
+cites:
+  - { a: "Roy, A. (UC Berkeley)", y: 2009, t: "Why India Cannot Plan Its Cities: Informality, Insurgence and the Idiom of Urbanization", in: "Planning Theory 8(1)", href: "https://doi.org/10.1177/1473095208099299" }
+  - { a: "Appadurai, A.", y: 2001, t: "Deep democracy: urban governmentality and the horizon of politics", in: "Environment and Urbanization 13(2)", href: "https://doi.org/10.1177/095624780101300203" }
+  - { a: "Mehrotra, R. (Harvard GSD)", y: 2008, t: "Negotiating the Static and Kinetic Cities", in: "in Huyssen, A. (ed.), Other Cities, Other Worlds, Duke University Press", href: "https://doi.org/10.1215/9780822389361-009" }
 ---
 
 ## 00 the city

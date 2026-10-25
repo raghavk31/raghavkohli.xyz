@@ -52,6 +52,9 @@ chapters:
 outcome:
   built: "Exploring Majuli Island. Documenting Culture and Human Settlement: a CEPT winter school, December 2017. Group survey of the villages of Garmur and Chitadhar Chuk and the satras; individual measured drawing of one homestead. Plan and axonometric, pen on paper, A1."
   next: "Go back with the same drawing after a flood season and draw the compound again: what moved, what was rebuilt, what the river took."
+cites:
+  - { a: "Sarma, J.N. and Phukan, M.K.", y: 2004, t: "Origin and some geomorphological changes of Majuli Island of the Brahmaputra River in Assam, India", in: "Geomorphology 60(1–2)", href: "https://doi.org/10.1016/j.geomorph.2003.07.013" }
+  - { a: "Rapoport, A.", y: 1969, t: "House Form and Culture", in: "Prentice-Hall" }
 ---
 
 ## 00 the island

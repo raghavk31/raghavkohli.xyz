@@ -142,6 +142,12 @@ chapters:
 outcome:
   built: "Ahmedabad Climate Resilient City Action Plan. Towards a Net Zero Future, July 2023. Published by the Ahmedabad Municipal Corporation and the Government of Gujarat under CapaCities (Swiss Agency for Development and Cooperation), with ICLEI South Asia, South Pole, econcept and NIUA. One of three plans in the series, with Surat and Vadodara."
   next: "Rebuild the inventory as a living thing: the same ward maps and the same sector numbers, refreshed from the utilities' data every year, so the city can watch its own line instead of waiting for the next plan."
+cites:
+  - { a: "Lwasa, S., Seto, K.C., et al.", y: 2022, t: "Urban Systems and Other Settlements", in: "IPCC AR6 Working Group III, ch. 8, Cambridge University Press", href: "https://doi.org/10.1017/9781009157926.010" }
+  - { a: "Seto, K.C., Churkina, G., Hsu, A., et al. (Yale)", y: 2021, t: "From Low- to Net-Zero Carbon Cities: The Next Global Agenda", in: "Annual Review of Environment and Resources 46", href: "https://doi.org/10.1146/annurev-environ-050120-113117" }
+  - { a: "Knowlton, K., Kulkarni, S.P., Azhar, G.S., et al.", y: 2014, t: "Development and Implementation of South Asia's First Heat-Health Action Plan in Ahmedabad (Gujarat, India)", in: "International Journal of Environmental Research and Public Health 11(4)", href: "https://doi.org/10.3390/ijerph110403473" }
+  - { a: "Hess, J.J., Sathish, L.M., Knowlton, K., et al. (Emory)", y: 2018, t: "Building Resilience to Climate Change: Pilot Evaluation of the Impact of India's First Heat Action Plan on All-Cause Mortality", in: "Journal of Environmental and Public Health", href: "https://doi.org/10.1155/2018/7973519" }
+  - { a: "WRI, C40 Cities and ICLEI", y: 2014, t: "Global Protocol for Community-Scale Greenhouse Gas Emission Inventories", in: "World Resources Institute", href: "https://ghgprotocol.org/ghg-protocol-cities" }
 ---
 
 ## 00 the city

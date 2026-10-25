@@ -50,6 +50,14 @@ photos:
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
   - { cap: "<span class=\"tk\">TKTK · photo + caption</span>" }
 next: Climate Code · sixteen tools, one map
+cites:
+  - { a: "Granovetter, M.S.", y: 1973, t: "The Strength of Weak Ties", in: "American Journal of Sociology 78(6)", href: "https://doi.org/10.1086/225469" }
+  - { a: "Putnam, R.D. (Harvard)", y: 2000, t: "Bowling Alone: The Collapse and Revival of American Community", in: "Simon & Schuster" }
+  - { a: "Fishkin, J.S. (Stanford)", y: 2009, t: "When the People Speak: Deliberative Democracy and Public Consultation", in: "Oxford University Press", href: "https://doi.org/10.1093/acprof:osobl/9780199604432.001.0001" }
+  - { a: "Pentland, A. (MIT Media Lab)", y: 2012, t: "The New Science of Building Great Teams", in: "Harvard Business Review, April", href: "https://hbr.org/2012/04/the-new-science-of-building-great-teams" }
+  - { a: "Tessler, M.H., Bakker, M.A., Jarrett, D., Sheahan, H., et al. (Google DeepMind)", y: 2024, t: "AI can help humans find common ground in democratic deliberation", in: "Science 386", href: "https://doi.org/10.1126/science.adq2852" }
+  - { a: "Huang, S., Siddarth, D., Lovitt, L., Liao, T.I., et al. (Anthropic, Collective Intelligence Project)", y: 2024, t: "Collective Constitutional AI: Aligning a Language Model with Public Input", in: "ACM FAccT 2024", href: "https://doi.org/10.1145/3630106.3658979" }
+  - { a: "Li, C.J., Wu, J., Mo, Z., ... Zhao, J., Liang, P., Pastor, L. and Larson, K. (MIT)", y: 2025, t: "Simulating Society Requires Simulating Thought", in: "NeurIPS 2025, Position Paper Track", href: "https://arxiv.org/abs/2506.06958" }
 ---
 
 ## 01 the verdict

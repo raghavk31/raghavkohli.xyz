@@ -102,6 +102,11 @@ chapters:
 outcome:
   built: "Eco-Lab Rajgir. A masterplan for 8 sq km and a projected 1,20,000 people, with the aahar-pyne system as its primary infrastructure. L3 studio, Bachelor of Urban Design, CEPT University, with Rajiv Kadam and Piyas Choudhari; TA Vaishnavi Akilla. December 2021. Renders revisited in 2025."
   next: "The four loops were sized on paper, water, food, waste and energy for 1,20,000 people. The way to test them is the instrument built two years later for fifteen cities: a climate inventory, run on a plan instead of on a municipality."
+cites:
+  - { a: "Sengupta, N.", y: 1980, t: "The Indigenous Irrigation Organization in South Bihar", in: "The Indian Economic & Social History Review 17(2)", href: "https://doi.org/10.1177/001946468001700201" }
+  - { a: "Ostrom, E. (Indiana)", y: 1990, t: "Governing the Commons: The Evolution of Institutions for Collective Action", in: "Cambridge University Press", href: "https://doi.org/10.1017/CBO9780511807763" }
+  - { a: "Mathur, A. and da Cunha, D. (Penn)", y: 2009, t: "Soak: Mumbai in an Estuary", in: "Rupa & Co. / NGMA", href: "https://www.mathurdacunha.com/about" }
+  - { a: "McHarg, I.L. (Penn)", y: 1969, t: "Design with Nature", in: "Natural History Press" }
 ---
 
 ## 00 rajgir
