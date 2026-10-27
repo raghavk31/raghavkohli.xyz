@@ -7,13 +7,14 @@
    the Resilience Stack (place.js) run inside those chapters. The city grids are drawn as CityScope draws its table, a square tile a cell, with
    McHarg's sheets over them (tiles.js); the square can be dragged and resized, and the place follows it. The basemap is OpenFreeMap's vector planet in a
    minimal style drawn from the site's own colour tokens, so it follows (light) (dark) and (random). */
-import { esc, fmt, ok, ordinal, classColour, classOf, dark, note, failed, CAT } from "./ui.js";
+import { esc, fmt, ok, ordinal, classColour, classOf, dark, note, failed, loading, CAT } from "./ui.js";
 import { makeLayers, breaksOf, labelsOf, nameOf } from "./layers.js";
 import { steps as placeSteps, geocode, placeHeat } from "./place.js";
 import { steps as citySteps } from "./city.js";
 import { gridBounds, GRID, SIZES } from "./grid.js";
 import { TileGrid } from "./tiles.js";
 import { setPopBase } from "./pop.js";
+import { CityLayers, loadCity, allFields, legendHtml, cardHtml, pickerHtml, value as eoValue } from "./earthos.js";
 
 const steps = { ...placeSteps, ...citySteps };
 const local = (kind) => kind === "place" || kind === "city";
@@ -78,6 +79,7 @@ async function start() {
     ch: null, iso: C[(q.get("c") || "").toUpperCase()] ? q.get("c").toUpperCase() : "IND",
     P: { warm: 0, ssp: "SSP2-4.5", year: 2100, ndvi: false, ndviYear: 2022, when: "now", dim: "all" },
     place: parsePlace(q.get("p")) || DEFAULT_PLACE,
+    eo: q.get("l"),   // the whole city's layer (earthos.js)
   };
   const gq = +q.get("g");
   if (gq >= SIZES.min && gq <= SIZES.max && gq % SIZES.step === 0) GRID.n = gq;
@@ -94,6 +96,7 @@ async function start() {
     u.searchParams.set("c", S.iso);
     if (S.place !== DEFAULT_PLACE) u.searchParams.set("p", `${S.place.lat.toFixed(4)},${S.place.lon.toFixed(4)},${S.place.name}`);
     if (GRID.n !== 32) u.searchParams.set("g", GRID.n); else u.searchParams.delete("g");
+    if (S.eo) u.searchParams.set("l", S.eo);
     if (S.ch) u.hash = S.ch !== "top" ? S.ch : "";   // before the first chapter is active, keep the deep link the page opened with
     history.replaceState(null, "", u);
   }
@@ -124,6 +127,9 @@ async function start() {
     "circle-stroke-color": k.paper, "circle-stroke-width": 1.5 } });
 
   const tiles = new TileGrid(map, map.getContainer());
+  // the whole city: EarthOS's layers for a built city, under the place names (earthos.js)
+  const cityLayers = new CityLayers(map, "place-town");
+  let eoCity = null;
   // McHarg's sheets: the (layers) list over the map, for every chapter with a grid
   const sheetsEl = root.querySelector("[data-layers]");
   tiles.onsheets = () => {
@@ -342,12 +348,52 @@ async function start() {
     return d;
   }
 
+  /* ── the whole city: EarthOS's layers, ward by ward, then cell by cell ────────────────────────── */
+  async function wholeCity(id) {
+    const body = byId[id].querySelector("[data-body]");
+    if (!eoCity) {
+      body.innerHTML = loading("the city");
+      try { eoCity = await loadCity("bengaluru"); }
+      catch (e) { console.error(e); body.innerHTML = failed("The city's data"); return; }
+    }
+    if (S.ch !== id) return;
+    const fs = allFields(eoCity), f = fs.find((x) => x.id === S.eo) || fs.find((x) => x.id === "lst_hot_season") || fs[0];
+    S.eo = f.id;
+    cityLayers.show(eoCity, f, k);
+    drawCity(id);
+    fitCity(1600);
+    writeUrl();
+  }
+  function drawCity(id) {
+    const f = cityLayers.field, [[w, s], [e, n]] = eoCity.bounds;
+    const away = S.place.lon < w || S.place.lon > e || S.place.lat < s || S.place.lat > n;
+    byId[id].querySelector("[data-body]").innerHTML =
+      (away ? note(`EarthOS has built ${esc(eoCity.name)} so far, not ${esc(S.place.name)}: this chapter reads ${esc(eoCity.name)}.`) : "")
+      + pickerHtml(eoCity, f) + cardHtml(eoCity, f);
+    cityLegend();
+  }
+  let eoUnit = null;
+  function cityLegend() {
+    eoUnit = cityLayers.unit();
+    root.querySelector("[data-legend]").innerHTML = legendHtml(eoCity, cityLayers.field, eoUnit);
+  }
+  // the city is framed above the legend, as a grid is
+  function fitCity(duration) {
+    const lg = root.querySelector("[data-legend]"), h = lg.offsetHeight;
+    const padding = mq.matches ? { top: h ? lg.offsetTop + h + 20 : 12, bottom: 12, left: 12, right: 12 }
+      : { top: 28, left: 28, right: 28, bottom: h ? h + 32 : 28 };
+    map.fitBounds(eoCity.bounds, { padding, duration, essential: true });
+  }
+  map.on("zoomend", () => { if (byId[S.ch]?.dataset.kind === "atlas" && eoCity && cityLayers.unit() !== eoUnit) cityLegend(); });
+
   /* ── chapters: the one in the middle of the column drives the map ────────────────────────────── */
   function activate(id) {
     if (id === S.ch || !byId[id]) return;
     const prev = byId[S.ch]?.dataset.kind, el = byId[id], kind = el.dataset.kind;
     S.ch = id;
     tiles.chapter();
+    if (kind !== "atlas") cityLayers.hide();
+    if (prev === "atlas" && kind !== "atlas") root.querySelector("[data-tip]").hidden = true;   // the city's last reading
     root.dataset.kind = kind;
     root.querySelectorAll("[data-go]").forEach((a) => a.toggleAttribute("aria-current", a.dataset.go === id));
     const idx = root.querySelector("[data-index]"), cur = idx.querySelector("[aria-current]");   // phones: the index is one row that scrolls
@@ -369,6 +415,12 @@ async function start() {
       marker.setLngLat([S.place.lon, S.place.lat]).addTo(map);
       view(id);
       runStep(id);
+    } else if (kind === "atlas") {
+      if (src) src.textContent = "(source) earthos, from the sources on each layer's card · github.com/raghavk31/earthos-data";
+      marker.remove(); setPoints([]); ndvi(false);
+      map.setPaintProperty("cc-fill", "fill-opacity", 0);
+      root.querySelector("[data-legend]").innerHTML = "";
+      wholeCity(id);
     } else {   // the opening and the method: the last layer, all at once, as the cover
       marker.remove();
       const keep = S.P.dim; S.P.dim = "all"; paint("poly"); S.P.dim = keep;
@@ -420,6 +472,11 @@ async function start() {
     const b = e.target.closest("button");
     if (!b) return;
     if (b.dataset.iso) { choose(b.dataset.iso, true); return; }
+    if (b.dataset.eo && eoCity) {
+      const f = allFields(eoCity).find((x) => x.id === b.dataset.eo);
+      if (f) { S.eo = f.id; cityLayers.field = f; cityLayers.paint(); drawCity(S.ch); writeUrl(); }
+      return;
+    }
     const d = b.dataset, P = S.P;
     if ("warm" in d) P.warm = +d.warm; else if ("ssp" in d) P.ssp = d.ssp; else if ("year" in d) P.year = +d.year;
     else if ("ndvi" in d) P.ndvi = d.ndvi === "1"; else if ("ndviYear" in d) P.ndviYear = +d.ndviYear;
@@ -439,7 +496,7 @@ async function start() {
   const hideTip = () => { tip.hidden = true; if (hov) map.setFeatureState({ source: "countries", id: hov }, { hov: false }); hov = null; };
   map.on("mousemove", "cc-fill", (e) => {
     const kind = byId[S.ch]?.dataset.kind;
-    if (local(kind)) return;
+    if (local(kind) || kind === "atlas") return;
     if (!e.features.length) return hideTip();
     const iso = e.features[0].id, l = L[painted];
     if (hov !== iso) { if (hov) map.setFeatureState({ source: "countries", id: hov }, { hov: false }); hov = iso; map.setFeatureState({ source: "countries", id: iso }, { hov: true }); }
@@ -457,10 +514,26 @@ async function start() {
     tiles.hover(i);
     showTip(e, spec.tip(i));
   });
-  map.on("mouseout", () => { tip.hidden = true; tiles.hover(-1); });
+  map.on("mousemove", (e) => {
+    if (byId[S.ch]?.dataset.kind !== "atlas" || !eoCity) return;
+    const h = cityLayers.at(e.point);
+    map.getCanvas().style.cursor = h ? "pointer" : "";
+    if (!h) { tip.hidden = true; return; }
+    showTip(e, `<b>${esc(h.name || "this 150 m cell")}</b><br>${esc(eoValue(cityLayers.field, h.v))}`);
+  });
+  map.on("mouseout", () => { tip.hidden = true; tiles.hover(-1); if (eoCity && byId[S.ch]?.dataset.kind === "atlas") cityLayers.at({ x: -1, y: -1 }); });
   map.on("mouseleave", "pts", hideTip);
   map.on("click", (e) => {
     const kind = byId[S.ch]?.dataset.kind;
+    if (kind === "atlas") {
+      // a ward or cell of the city becomes the place the square reads in the chapters after
+      const h = eoCity && cityLayers.at(e.point);
+      if (!h) return;
+      const { lat, lng } = e.lngLat;
+      setPlace({ lat, lon: lng, name: h.name || `${lat.toFixed(3)}° N, ${lng.toFixed(3)}° E`, admin1: "Karnataka", country: "India" });
+      drawCity(S.ch);
+      return;
+    }
     if (local(kind)) {
       // a chapter with something picked to put on the grid takes the click; otherwise it moves the place
       const i = tiles.spec?.click ? tiles.cellAt(e.point) : -1;
@@ -485,6 +558,8 @@ async function start() {
       ["cc-sel", "line-color", k.ink], ["pts", "circle-stroke-color", k.paper]]) map.setPaintProperty(id, prop, v);
     map.setPaintProperty("cc-fill", "fill-color", ["to-color", ["coalesce", ["feature-state", "c"], k.none]]);
     if (painted) paint(painted);
+    cityLayers.restyle(k);
+    if (eoCity && byId[S.ch]?.dataset.kind === "atlas") drawCity(S.ch);
     // a grid's colours were fixed when it was made: forget them and remake the one on screen
     Object.keys(grids).forEach((id) => delete grids[id]);
     Object.keys(rendered).forEach((id) => delete rendered[id]);

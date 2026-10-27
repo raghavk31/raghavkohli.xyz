@@ -5,7 +5,8 @@ layout: base.njk
     come from src/_data/climateCode.js; the left column scrolls through them and the map on the right
     follows (src/assets/climate-code/cc.js). Country data is built in climate-30 and synced into
     src/assets/climate-code/data/ by scripts/sync-climate-code.py. The AI notes go through the
-    thoughts worker (/climate/ai), which holds the OpenRouter key. -#}
+    thoughts worker (/climate/ai), which holds the OpenRouter key. The whole city (c-city) reads
+    EarthOS's archive for the city from github.com/raghavk31/earthos-data (earthos.js). -#}
 {%- set C = climateCode -%}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" />
 <link rel="stylesheet" href="/assets/climate-code/cc.css?v={{ v }}" />
@@ -86,4 +87,5 @@ layout: base.njk
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pmtiles@4.5.0/dist/pmtiles.js"></script>
 <script type="module" src="/assets/climate-code/cc.js?v={{ v }}"></script>

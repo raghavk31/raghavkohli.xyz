@@ -172,6 +172,14 @@ body:has(.cc){overflow:hidden;}
 .cc-lg__ends{display:flex;justify-content:space-between;gap:12px;font:500 8.75px var(--mono);letter-spacing:.03em;color:var(--faint-2);}
 .cc-lg__nd{display:flex;align-items:center;gap:6px;margin-top:6px;font:500 8.75px var(--mono);color:var(--faint-2);}
 .cc-lg__nd i{display:inline-block;width:10px;height:10px;}
+/* the whole city (earthos.js): an estimate is hatched in the key as on the map, with the paper's stripe */
+.cc-lg__bar--est i{background-image:repeating-linear-gradient(135deg,color-mix(in srgb,var(--paper) 55%,transparent) 0 1.7px,transparent 1.7px 5.5px);}
+.cc-lg__est{background:repeating-linear-gradient(135deg,var(--ink-soft) 0 1.4px,transparent 1.4px 4px);border-radius:2px;}
+.cc-eo{display:grid;gap:6px;margin:4px 0 2px;}
+.cc-eo__row{display:grid;grid-template-columns:11ch 1fr;gap:8px;align-items:baseline;}
+.cc-eo__theme{font:500 9.62px/1.9 var(--mono);letter-spacing:.04em;color:var(--faint-2);}
+.cc-eo .cc-pills{flex-wrap:wrap;}
+.cc-conf--eo{margin-top:14px;}
 /* the city grids: a square tile a cell, CityScope's table (tiles.js) */
 .cc-tiles{position:absolute;inset:0;z-index:1;width:100%;height:100%;pointer-events:none;}
 /* the square's handles: (move) on its top edge, a small ink square on its corner */
