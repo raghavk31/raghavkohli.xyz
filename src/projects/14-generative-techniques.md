@@ -25,7 +25,7 @@ covers:
   - { t: /assets/projects/generative-techniques/c4.jpg, f: /assets/projects/generative-techniques/c4-f.jpg, w: 900, h: 636 }
   - { t: /assets/projects/generative-techniques/c5.jpg, f: /assets/projects/generative-techniques/c5-f.jpg, w: 1200, h: 848 }
 lead: "India will hold most of its population growth inside cities that already exist, and the usual answer, more floors on the same plan, gives up the ground. This studio took a 1.45 sq km site beside the Sabarmati, between Gandhi Ashram and a sewage treatment plant, and asked what densification would look like if the design were written as relationships instead of drawn as a masterplan: what should be dense, what should stay quiet, what must be kept open. Then it let an evolutionary algorithm search the blocks those rules allow."
-next: Eco-Machine · mumbai's eastern waterfront as a living machine
+next: Water Urbanism · the water drawn before the city
 # Story and figures follow the studio portfolio, images/CEPT/Generative Techniques/
 # UD2817_Kohli_Portfolio_Generative.pdf (34 spreads). 27–54 are cut from it; 00–26 were already here.
 # Left out: the two Getty Images photographs of Hong Kong (spreads 10–11), and the population charts.

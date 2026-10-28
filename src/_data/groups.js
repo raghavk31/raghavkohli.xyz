@@ -6,6 +6,6 @@ module.exports = [
   ["(energy & systems)",       ["Sama", "Climate Code"]],
   ["(plans & policy)",          ["City Climate Action Plans", "Malaysia GCAP", "State of Cities", "Urban Greening Policy"]],
   ["(participatory)",           ["Perspectives", "Koliwadas", "Living Heritage", "Rebel Bodies Rebel Cities", "Urban Performances"]],
-  ["(computational & spatial)", ["Generative Techniques", "One is to One", "Water Urbanism", "Eco-Machine"]],
+  ["(computational & spatial)", ["Permutation City", "Generative Techniques", "Water Urbanism", "One is to One", "Eco-Machine"]],
   ["(early work)",              ["Utopias to Heterotopias", "Exploring Majuli", "Pune Metro"]],
 ];

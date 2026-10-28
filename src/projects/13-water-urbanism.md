@@ -25,7 +25,7 @@ covers:
   - { t: /assets/projects/water-urbanism/c4.jpg, f: /assets/projects/water-urbanism/c4-f.jpg, w: 1200, h: 814 }
   - { t: /assets/projects/water-urbanism/c5.jpg, f: /assets/projects/water-urbanism/c5-f.jpg, w: 1200, h: 814 }
 lead: "Rajgir was the first capital of Magadha: a valley ringed by five hills, walled in cyclopean stone, where the Buddha preached and Mahavira taught, and where the hot springs still draw pilgrims. Today it is a small town in Nalanda district under heavy development pressure: a new Nalanda University, a sports stadium, a highway, and a floodplain between the hills and the railway that floods every monsoon and dries every summer. The studio's premise was Ian McHarg's, water and the city as one constructed ecosystem, and the site had a precedent already in the ground: the aahar-pyne, south Bihar's centuries-old network of channels and catchment basins. This plan reverses the usual order. The water is drawn first; streets, food and built fabric are negotiated around it."
-next: Generative Techniques · a neighbourhood as rules, not a plan
+next: One is to One · cept · construction technology
 open: { src: /assets/projects/water-urbanism/02.jpg, w: 1800, h: 637, fig: fig.01, cap: "Rajgir across the centuries. The cyclopean walls of Magadha, the Buddha at Griddhakuta, the Jain shrines on the hills, the hot springs, the ropeway and the stupa, the new university: a collage of what the valley has been asked to hold." }
 chapters:
   - n: "00"
