@@ -176,6 +176,9 @@ layout: base.njk
           {% if period %}<div><dt>(period)</dt><dd>{{ period }}</dd></div>{% endif %}
           {% if context %}<div><dt>(context)</dt><dd>{{ context }}</dd></div>{% endif %}
           {% if status %}<div><dt>(status)</dt><dd class="status{% if live %} live{% endif %}">{{ status }}</dd></div>{% endif %}
+          {#- a project that is itself a working tool: `tool: { href, label, also: [{ path, label }] }`, each
+              `path` read against `href`, so the address lives in one place in the front matter -#}
+          {% if tool %}<div><dt>(live)</dt><dd><a href="{{ tool.href }}" target="_blank" rel="noopener">{{ tool.label }} &rarr;</a>{% for a in tool.also %}<br><a href="{{ tool.href }}{{ a.path }}" target="_blank" rel="noopener">{{ a.label }} &rarr;</a>{% endfor %}</dd></div>{% endif %}
         </dl>
         {% if not story and not open %}
         {% if subtitle %}<p class="story__sub">{{ subtitle }}</p>{% endif %}
@@ -265,6 +268,7 @@ layout: base.njk
       <div><dt>(period)</dt><dd>{{ period }}</dd></div>
       <div><dt>(context)</dt><dd>{{ context }}</dd></div>
       <div><dt>(status)</dt><dd class="status{% if live %} live{% endif %}">{{ status }}</dd></div>
+      {% if tool %}<div><dt>(live)</dt><dd><a href="{{ tool.href }}" target="_blank" rel="noopener">{{ tool.label }} &rarr;</a>{% for a in tool.also %}<br><a href="{{ tool.href }}{{ a.path }}" target="_blank" rel="noopener">{{ a.label }} &rarr;</a>{% endfor %}</dd></div>{% endif %}
     </dl>
   </div>
 
