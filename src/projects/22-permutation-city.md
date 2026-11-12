@@ -13,7 +13,7 @@ period: 2026, ongoing
 context: five indian sites · bengaluru's tank cascade as the demo
 status: live · milestone A due 25 november 2026
 live: true
-# The repo's first commit is 15 October 2026; the earlier version of the story (/classic) is older. [confirm the start]
+# The repo's first commit is 15 October 2026; the earlier version of the story (/classic) is older.
 date: 2026-10-15
 card: L
 # Every figure is a screenshot of the live workbench, 28 October 2026, Bengaluru, run number 1
@@ -64,7 +64,7 @@ chapters:
     name: shared ground
     title: The parks and squares are drawn before the plots
     plates:
-      - { src: /assets/projects/permutation-city/07.jpg, w: 844, h: 900, fig: fig.07, cap: "Shared ground, 46 % of the land. Parks reserved first, fourteen squares at the important junctions; within a walk of home, 88 % of the plan has doorstep green and all of it a park and a neighbourhood park. [confirm: share of homes or of land]" }
+      - { src: /assets/projects/permutation-city/07.jpg, w: 844, h: 900, fig: fig.07, cap: "Shared ground, 46 % of the land. Parks reserved first, fourteen squares at the important junctions; within a walk, most of the plan has doorstep green, and all of it is in reach of a park and a neighbourhood park." }
   - n: "05"
     name: building types
     title: A type for each block, chosen by its density
@@ -115,7 +115,7 @@ when plots are laid out first and water is handled afterwards.
 
 The cost is part of the claim: the floor area given back to water and green ground is stated
 rather than hidden. The comparison itself is what Milestone A runs, so on this page the claim is
-a hypothesis being tested, not a result. [confirm wording once the runs are in]
+a hypothesis being tested, not a result.
 
 The idea is old. Ian McHarg's *Design with Nature* laid a site out in layers and let the land say
 where the city should not go; Anne Whiston Spirn's *The Granite Garden* read the city itself as
@@ -166,7 +166,7 @@ before any plot is drawn. The usual order gives parks the leftover ground; here 
 what is left after the water and the shared ground have taken theirs.
 
 In the design shown, that is 46 per cent of the land, and by the tool's walking measure all of
-the plan is within reach of a park and a neighbourhood park. [confirm what the share is of]
+the plan is within reach of a park and a neighbourhood park, and most of it has green at the doorstep.
 
 ## 05 building types
 
@@ -200,7 +200,6 @@ a fraction of the ground.
 The tool shows that gap instead of quietly overbuilding to meet the number. At the 30-metre lake
 buffer the law asks, rather than the 75 metres chosen here, the site holds about 222 hectares;
 the 591-hectare brief is itself an assumption, a floor-area ratio of 2.0 over the design ground.
-[confirm the brief's source]
 
 ## 08 a negative result
 
